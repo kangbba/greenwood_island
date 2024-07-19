@@ -3,12 +3,12 @@ using TMPro;
 using System;
 using System.Collections;
 
-namespace Ensayne.TextDisplaySystem
+namespace Ensayne.TextDisplayerSystem
 {
     public class TextDisplayer : MonoBehaviour
     {
         [SerializeField] private TMP_Text _textDisplay;
-        [SerializeField] private TextDisplaySettings _settings;
+        [SerializeField] private TextDisplayerSettings _settings;
 
         private string[] _textsToDisplay;
         private int _currentIndex = 0;

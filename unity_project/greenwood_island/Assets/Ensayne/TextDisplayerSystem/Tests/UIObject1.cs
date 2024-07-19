@@ -1,5 +1,5 @@
 using UnityEngine;
-using Ensayne.TextDisplaySystem;
+using Ensayne.TextDisplayerSystem;
 using TMPro;
 
 public class UIObject1 : MonoBehaviour

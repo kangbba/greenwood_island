@@ -26,6 +26,12 @@ namespace Ensayne.TextDisplayerSystem
             OnSystemStarted?.Invoke();
             if (_settings.ShowCallbackLog)
                 Debug.Log("System started");
+
+            OnStartTyping += OnStartTyping;
+            OnFinishTypingSentence += OnFinishTypingSentence;
+            OnFinishAllSentences += OnFinishAllSentences;
+            OnSystemDestroyed += OnSystemDestroyed;
+            OnSystemStarted += OnSystemStarted;
         }
 
         private void OnDestroy()
@@ -35,7 +41,7 @@ namespace Ensayne.TextDisplayerSystem
                 Debug.Log("System destroyed");
         }
 
-        public void StartDisplay(string[] texts)
+        public void Init(string[] texts)
         {
             if (_displayCoroutine != null)
             {
@@ -102,5 +108,6 @@ namespace Ensayne.TextDisplayerSystem
                     Debug.Log("All sentences typing finished");
             }
         }
+
     }
 }

@@ -9,7 +9,7 @@ public class UIObject2 : MonoBehaviour
     void Start()
     {
         string[] texts = { "안녕?", "난 UI 객체 2야", "만나서 반가워" };
-        _textDisplayer.StartDisplay(texts);
+        _textDisplayer.Init(texts);
 
         _textDisplayer.OnStartTyping += OnStartTyping;
         _textDisplayer.OnFinishTypingSentence += OnFinishTypingSentence;

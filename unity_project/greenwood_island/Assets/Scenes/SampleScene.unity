@@ -202,8 +202,8 @@ GameObject:
   - component: {fileID: 455765076}
   - component: {fileID: 455765080}
   - component: {fileID: 455765079}
-  - component: {fileID: 455765078}
   - component: {fileID: 455765077}
+  - component: {fileID: 455765078}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged

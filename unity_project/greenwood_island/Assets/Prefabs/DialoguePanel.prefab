@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _textDisplayer: {fileID: 1468870133282544042}
+  _panelRectTransform: {fileID: 8219515785612320796}
 --- !u!1 &5227870559912104620
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +368,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uADF8\uB54C\uC600\uB2E4. "
+  m_text: "\uAC11\uC790\uAE30 \uC65C\uADF8\uB798?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 668518d7125e14050ade7b90fb97aba0, type: 2}
   m_sharedMaterial: {fileID: 4626242773714902045, guid: 668518d7125e14050ade7b90fb97aba0, type: 2}

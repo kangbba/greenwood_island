@@ -21,7 +21,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public DialoguePanel DialoguePanel { get => _dialoguePanel; }
 
     // Awake method to ensure only one instance exists
     private void Awake()
@@ -38,9 +37,10 @@ public class UIManager : MonoBehaviour
     }
 
     // Serialized fields for UI elements
-    [SerializeField] private Canvas _worldCanvas;
-    [SerializeField] private Canvas _systemCanvas;
-    [SerializeField] private DialoguePanel _dialoguePanel;
+    [SerializeField] private WorldCanvas _worldCanvas;
+    [SerializeField] private SystemCanvas _systemCanvas;
+    public WorldCanvas WorldCanvas { get => _worldCanvas; }
+    public SystemCanvas SystemCanvas { get => _systemCanvas; }
 
     // Additional methods for UIManager can be added here...
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5043553933719852903}
   - component: {fileID: 8584031999050825053}
   m_Layer: 5
-  m_Name: Kate
+  m_Name: Lisa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 1882805499953900167}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -23, y: -287}
-  m_SizeDelta: {x: 1280, y: 3810.2324}
+  m_SizeDelta: {x: 762, y: 3018.5222}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4679146932676477584
 CanvasRenderer:
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b3065939a3b4d46779d21d11a1a09cbe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -94,27 +94,22 @@ MonoBehaviour:
   _emotionPlans:
   - _emotionID: 0
     _emotionSprites:
-    - {fileID: 21300000, guid: b3065939a3b4d46779d21d11a1a09cbe, type: 3}
-    - {fileID: 21300000, guid: 0cd793af3ea6448ad81d2b4853bacd15, type: 3}
-    - {fileID: 21300000, guid: 2140e59f3577c4f349620d45239d2b16, type: 3}
-    - {fileID: 21300000, guid: 9d53a47939aa44d38b23a628c15ede19, type: 3}
-    - {fileID: 21300000, guid: f8d12d2548cb04a4293ed9f4dffb546c, type: 3}
-    - {fileID: 21300000, guid: 5f68cd1b47cff4530855b8d28b164be1, type: 3}
+    - {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
+  - _emotionID: 2
+    _emotionSprites:
+    - {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
+  - _emotionID: 1
+    _emotionSprites:
+    - {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
   - _emotionID: 6
     _emotionSprites:
-    - {fileID: 21300000, guid: 79c045933010f44ea8e742924a51253b, type: 3}
-    - {fileID: 21300000, guid: 552fbc20c9f194e70ac270cf0daeb48b, type: 3}
+    - {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
   - _emotionID: 5
     _emotionSprites:
-    - {fileID: 21300000, guid: 6f841591bfd0f4f4dabd1d366663bb88, type: 3}
-    - {fileID: 21300000, guid: 6e5e27aae1456447ebb8bce2d296f4b9, type: 3}
-    - {fileID: 21300000, guid: 9fc6ac674c1874d70a4207d176ec7db0, type: 3}
-    - {fileID: 21300000, guid: c438c80e518ef449299fdf3e2a3e0b6e, type: 3}
-    - {fileID: 21300000, guid: 6fed5e455ddf3432193f8bdc341babc6, type: 3}
-  - _emotionID: 4
+    - {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
+  - _emotionID: 3
     _emotionSprites:
-    - {fileID: 21300000, guid: 84454c8dc5e7543ff8abb222cd6c0768, type: 3}
-    - {fileID: 21300000, guid: d7e624ec11a5d41ae9e0eaf33fa82afd, type: 3}
+    - {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
   _img: {fileID: 8109460112451840439}
 --- !u!225 &8584031999050825053
 CanvasGroup:

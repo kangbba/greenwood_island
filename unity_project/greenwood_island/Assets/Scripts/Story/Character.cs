@@ -15,87 +15,79 @@ public enum EEmotionID
     Panic,
     Stumped,
 } 
-
+//스스로 설명 가능한 코드를 짜라
 public class Character : MonoBehaviour
 {
     [System.Serializable]
     public class EmotionPlan
     {
-        public EEmotionID _emotionID; // 감정 키 (예: "happy", "sad")
-        public Sprite[] _emotionSprites; // 감정에 해당하는 스프라이트 배열
+        public EEmotionID _emotionID; // Emotion ID (e.g., "Happy", "Sad")
+        public Sprite[] _emotionSprites; // Array of sprites corresponding to the emotion
     }
 
     [SerializeField] private CanvasGroup _graphic;
     [SerializeField] private RectTransform _rectTransform;
-    [SerializeField] private List<EmotionPlan> _emotionPlans; // 감정 플랜 리스트
-    [SerializeField] private Image _img; // 캐릭터의 SpriteRenderer
+    [SerializeField] private List<EmotionPlan> _emotionPlans; // List of emotion plans
+    [SerializeField] private Image _img; // Image component for the character sprite
 
-    private Vector3 _originalPos = Vector3.zero; // 기준 위치를 (0, 0, 0)으로 정의
+    private Vector3 _originalPos = Vector3.zero; // Define the original position as (0, 0, 0)
 
     protected List<EmotionPlan> EmotionPlans { get => _emotionPlans; }
 
-    public void Init(EEmotionID initialEmotionID, int initialIndex, float duration)
+    private void Start()
     {
-        // 초기 감정 상태를 설정
-        ChangeEmotion(initialEmotionID, initialIndex, 0f); // 이미지 즉시 변경
-        
-        // 캐릭터를 부드럽게 나타냄
-        ShowCharacter(false, 0f);
-        ShowCharacter(true, duration);
-
-        Debug.Log($"Character initialized with emotion '{initialEmotionID}' and duration {duration}s.");
+        SetVisibility(false, 0f);
     }
-
-    public void ShowCharacter(bool visible, float duration)
+    public void SetVisibility(bool visible, float duration)
     {
         float targetAlpha = visible ? 1f : 0f;
 
-        // 투명도를 애니메이션으로 조정
+        // Animate the alpha value
         _graphic.DOFade(targetAlpha, duration).SetEase(Ease.OutQuad);
     }
-public void ChangeEmotion(EEmotionID emotionID, int index, float duration)
-{
-    EmotionPlan selectedPlan = EmotionPlans.Find(plan => plan._emotionID == emotionID);
 
-    if (selectedPlan == null)
+    public void ChangeEmotion(EEmotionID emotionID, int index, float duration)
     {
-        Debug.LogWarning($"Emotion '{emotionID}' not found in the emotion plans.");
-        return;
+        EmotionPlan selectedPlan = EmotionPlans.Find(plan => plan._emotionID == emotionID);
+
+        if (selectedPlan == null)
+        {
+            Debug.LogWarning($"Emotion '{emotionID}' not found in the emotion plans.");
+            return;
+        }
+
+        if (index < 0 || index >= selectedPlan._emotionSprites.Length)
+        {
+            Debug.LogWarning($"Invalid sprite index '{index}' for emotion '{emotionID}'.");
+            return;
+        }
+
+        if (duration <= 0f)
+        {
+            // Change the sprite immediately
+            _img.sprite = selectedPlan._emotionSprites[index];
+            _graphic.alpha = 1f;
+        }
+        else
+        {
+            // Fade to 0.3, then change sprite, and fade back to 1
+            Sequence transitionSequence = DOTween.Sequence();
+
+            transitionSequence.Append(_graphic.DOFade(0.3f, duration * 0.4f).SetEase(Ease.InQuad)) // Fade from 1 -> 0.3
+                              .AppendInterval(0.1f) // Wait for 0.1 seconds for a smooth transition
+                              .AppendCallback(() =>
+                              {
+                                  _img.sprite = selectedPlan._emotionSprites[index]; // Change the sprite
+                              })
+                              .Append(_graphic.DOFade(1f, duration * 0.6f).SetEase(Ease.OutQuad)); // Fade from 0.3 -> 1
+
+            transitionSequence.Play();
+        }
+
+        Debug.Log($"Emotion changed to '{emotionID}' with sprite index {index}, duration: {duration}s.");
     }
 
-    if (index < 0 || index >= selectedPlan._emotionSprites.Length)
-    {
-        Debug.LogWarning($"Invalid sprite index '{index}' for emotion '{emotionID}'.");
-        return;
-    }
-
-    if (duration <= 0f)
-    {
-        // 즉각적으로 변경
-        _img.sprite = selectedPlan._emotionSprites[index];
-        _graphic.alpha = 1f;
-    }
-    else
-    {
-        // 투명도 1에서 0.3으로 감소 후 0.7에서 스프라이트를 변경, 그리고 다시 1로 증가
-        Sequence transitionSequence = DOTween.Sequence();
-
-        transitionSequence.Append(_graphic.DOFade(0.3f, duration * 0.4f).SetEase(Ease.InQuad)) // 투명도 1 -> 0.3
-                          .AppendInterval(0.1f) // 0.1초 대기 (부드러운 전환을 위해)
-                          .AppendCallback(() =>
-                          {
-                              _img.sprite = selectedPlan._emotionSprites[index]; // 스프라이트 변경
-                          })
-                          .Append(_graphic.DOFade(1f, duration * 0.6f).SetEase(Ease.OutQuad)); // 투명도 0.7 -> 1
-
-        transitionSequence.Play();
-    }
-
-    Debug.Log($"Emotion changed to '{emotionID}' with sprite index {index}, duration: {duration}s.");
-}
-
-
-    public void JumpEffect()
+    public void ApplyJumpEffect()
     {
         float jumpHeight = 30f;
 
@@ -103,19 +95,19 @@ public void ChangeEmotion(EEmotionID emotionID, int index, float duration)
             .OnComplete(() => _rectTransform.DOAnchorPosY(_originalPos.y, 0.2f).SetEase(Ease.InQuad));
     }
 
-    public void ShakeEffect(float duration, float strength)
+    public void ApplyShakeEffect(float duration, float strength)
     {
         _rectTransform.DOShakePosition(duration, strength, 10, 90, false, true);
     }
 
-    public void HighlightCharacter(float duration = 0.5f)
+    public void Highlight(float duration = 0.5f)
     {
         Sequence highlightSequence = DOTween.Sequence();
 
         highlightSequence.Append(_graphic.DOFade(1.2f, duration / 2).SetEase(Ease.OutQuad)) 
-                        .Join(_rectTransform.DOScale(1.1f, duration / 2).SetEase(Ease.OutQuad))
-                        .Append(_graphic.DOFade(1f, duration / 2).SetEase(Ease.InQuad))
-                        .Join(_rectTransform.DOScale(1f, duration / 2).SetEase(Ease.InQuad));
+                         .Join(_rectTransform.DOScale(1.1f, duration / 2).SetEase(Ease.OutQuad))
+                         .Append(_graphic.DOFade(1f, duration / 2).SetEase(Ease.InQuad))
+                         .Join(_rectTransform.DOScale(1f, duration / 2).SetEase(Ease.InQuad));
 
         highlightSequence.Play();
     }

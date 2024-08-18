@@ -5,22 +5,35 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
 
+public enum DialogueState
+{
+    Inactive,
+    Typing,
+    Waiting,
+    Completed
+}
+
 public class DialoguePlayer : MonoBehaviour
 {
     [SerializeField] private RectTransform _panelRectTransform;
     [SerializeField] private TextMeshProUGUI _characterText;
     [SerializeField] private TextMeshProUGUI _lineText;
     [SerializeField] private Image _waitingMarkImage;
-    [SerializeField] private float _typingSpeed = 0.05f;
+    private float _typingSpeed = 0.05f;
+    private bool _isTyping = false;
+
+    public float TypingSpeed
+    {
+        get => _typingSpeed;
+        set => _typingSpeed = Mathf.Clamp(value, 0.01f, 1f);
+    }
 
     private List<string> _sentences;
     private int _currentSentenceIndex;
     private Coroutine _typingCoroutine;
-    private bool _isTyping;
+    private DialogueState _state = DialogueState.Inactive;
 
-    public bool IsTyping => _isTyping;
-
-    public bool IsLastLine => _currentSentenceIndex >= _sentences.Count - 1;
+    public DialogueState CurrentState => _state;
 
     void Start()
     {
@@ -49,6 +62,7 @@ public class DialoguePlayer : MonoBehaviour
             _sentences.Add(line.Sentence);
         }
         _currentSentenceIndex = 0;
+        _state = DialogueState.Typing;
         DisplayCurLine();
     }
 
@@ -63,11 +77,11 @@ public class DialoguePlayer : MonoBehaviour
             _isTyping = true;
             ShowWaitingMark(false);
             _typingCoroutine = StartCoroutine(TypeSentence(_sentences[_currentSentenceIndex]));
-            Debug.Log($"문장 {_currentSentenceIndex + 1}/{_sentences.Count}");
         }
         else
         {
             Debug.Log("모든 대화를 완료했습니다.");
+            _state = DialogueState.Completed;
         }
     }
 
@@ -80,6 +94,7 @@ public class DialoguePlayer : MonoBehaviour
             _typingCoroutine = null;
             _isTyping = false;
             ShowWaitingMark(true);
+            _state = DialogueState.Waiting;
         }
     }
 
@@ -88,10 +103,12 @@ public class DialoguePlayer : MonoBehaviour
         if (_currentSentenceIndex < _sentences.Count - 1)
         {
             _currentSentenceIndex++;
+            _state = DialogueState.Typing;
             DisplayCurLine();
         }
         else
         {
+            _state = DialogueState.Completed;
             Debug.Log("더 이상 다음 문장이 없습니다.");
         }
     }
@@ -107,5 +124,6 @@ public class DialoguePlayer : MonoBehaviour
         _typingCoroutine = null;
         _isTyping = false;
         ShowWaitingMark(true);
+        _state = DialogueState.Waiting;
     }
 }

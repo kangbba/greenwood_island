@@ -30,7 +30,7 @@ public class Story : MonoBehaviour
             new List<Line>
             {
                 new Line(EEmotionID.Panic, 0, "여기는... 어디지?"),
-                new Line(EEmotionID.Panic, 1, "모든 것이 낯설어... 뭔가 잘못되고 있어!")
+                new Line(EEmotionID.Panic, 1, "모든 것이 낯설어... 뭔가 잘못되고 있어! 너는 어떻게생각해? 리사? 내말 들려?? 정신을 차려!!")
             }
         ),
 

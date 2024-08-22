@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 public class DialoguePlayer : MonoBehaviour
 {
     private Line testLine = new Line(EEmotionID.Angry, 0, "안녕하세요. 긴 문장 테스트를 해보겠습니다 어떻게 보일지 과연 너무나 신기할것같아요 하하하. 하지만 이건 잘 작동하겠죠. 솔직하게 말하자구요");
-    private Line _currentLine; // 현재 타겟이 되는 Line을 저장하는 변수
     private List<Line> _lines;
 
     // RectMask 프리팹과 부모 객체
@@ -19,6 +18,16 @@ public class DialoguePlayer : MonoBehaviour
 
     private Regex _splitRegex = new Regex(@"\.");
 
+    public enum EDialogueState
+    {
+        NotStarted,    // 대화가 시작되지 않은 상태
+        Typing,        // 현재 텍스트가 타이핑되고 있는 상태
+        Waiting,       // 타이핑이 끝나고, 대기 중인 상태
+        Finished       // 모든 대화가 끝난 상태
+    }
+
+    private EDialogueState _dialogueState = EDialogueState.NotStarted;
+
     private void Start()
     {
         // 초기화 시 테스트 라인을 설정하고 RectMask 생성 후 ShowNext 호출
@@ -29,17 +38,26 @@ public class DialoguePlayer : MonoBehaviour
     public void InitDialogue(Dialogue dialogue)
     {
         _lines = dialogue.Lines;
+        _dialogueState = EDialogueState.NotStarted;
     }
 
     public void ShowNext()
     {
-        // 생성된 RectMask들을 순차적으로 재생하는 코루틴 시작
-        StartCoroutine(RevealRectMasks());
+        if (_dialogueState == EDialogueState.Typing || _dialogueState == EDialogueState.Finished)
+        {
+            return; // 이미 타이핑 중이거나 모든 대화가 끝난 상태에서는 새로운 ShowNext를 시작하지 않음
+        }
+
+        _dialogueState = EDialogueState.Typing;
+
+        int startIndex = _currentMaskIndex;
+        int endIndex = CalculateEndIndex(startIndex);
+
+        StartCoroutine(RevealRectMasks(startIndex, endIndex));
     }
 
     private void CreateRectMask(Line line)
     {
-        _currentLine = line; // 현재 타겟이 되는 Line을 저장
         _currentMaskIndex = 0; // 인덱스를 0으로 초기화
 
         // 기존에 생성된 RectMask들을 제거하고 리스트 초기화
@@ -145,27 +163,54 @@ public class DialoguePlayer : MonoBehaviour
         return width;
     }
 
-    private IEnumerator RevealRectMasks()
+    private IEnumerator RevealRectMasks(int startIndex, int endIndex)
     {
-        while (_currentMaskIndex < _createdRectMasks.Count)
+        for (int i = startIndex; i <= endIndex && i < _createdRectMasks.Count; i++)
         {
-            var rectMask = _createdRectMasks[_currentMaskIndex];
+            var rectMask = _createdRectMasks[i];
             yield return StartCoroutine(rectMask.RevealMask(0.05f)); // 예시로 0.05초의 딜레이를 줌
+        }
+        
+        _currentMaskIndex = endIndex + 1; // 다음 인덱스 업데이트
 
-            // 만약 현재 RectMask의 FragmentReason이 Regex라면 ShowNext를 다시 호출할 때까지 대기
-            if (rectMask.FragmentReason == SentenceRectMask.EFragmentReason.Regex)
-            {
-                _currentMaskIndex++; // 인덱스 업데이트
-                yield break; // 코루틴 종료, ShowNext를 다시 호출하면 이어서 진행
-            }
-
-            _currentMaskIndex++; // 다음 Mask로 이동
+        if (_currentMaskIndex >= _createdRectMasks.Count)
+        {
+            _dialogueState = EDialogueState.Finished; // 모든 RectMask 재생 완료
+        }
+        else if (_createdRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
+        {
+            _dialogueState = EDialogueState.Waiting; // Regex로 인한 대기 상태로 전환
+        }
+        else
+        {
+            _dialogueState = EDialogueState.Typing; // 여전히 타이핑 중인 상태로 유지
         }
     }
 
-    private void Update(){
-        if(Input.GetKeyDown(KeyCode.Space)){
-            ShowNext();
+    private int CalculateEndIndex(int startIndex)
+    {
+        int endIndex = _createdRectMasks.Count - 1;
+
+        for (int i = startIndex; i < _createdRectMasks.Count; i++)
+        {
+            if (_createdRectMasks[i].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
+            {
+                endIndex = i;
+                break;
+            }
+        }
+
+        return endIndex;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (_dialogueState == EDialogueState.Waiting)
+            {
+                ShowNext();
+            }
         }
     }
 }

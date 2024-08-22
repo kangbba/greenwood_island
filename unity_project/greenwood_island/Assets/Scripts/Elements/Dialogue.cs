@@ -44,12 +44,19 @@ public class Dialogue : Element
             Line line = _lines[i];
             DialogueManager.Instance.InitLine(line);
             DialogueManager.Instance.ShowNextSentence();
+            //연속 마우스 호출을 막기위한 한프레임 대기
+            yield return null;
             CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex);
 
             while(DialoguePlayer.DialogueState != EDialogueState.Finished){
-
                 if(Input.GetMouseButtonDown(0)){
-                    DialogueManager.Instance.ShowNextSentence();
+                    EDialogueState dialogueState = DialoguePlayer.DialogueState;
+                    if(dialogueState == EDialogueState.Typing){
+                        DialogueManager.Instance.CompleteCurSentence();
+                    }
+                    if(dialogueState == EDialogueState.Waiting){
+                        DialogueManager.Instance.ShowNextSentence();
+                    }
                 }
                 yield return null;
             }

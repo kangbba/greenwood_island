@@ -33,37 +33,34 @@ public class Dialogue : Element
         var firstLine = _lines[0];
         CharacterManager.Instance.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex);
 
-        // 대화 시작
-        DialogueManager.Instance.StartDialogue(this);
+        // // 대화 시작
+        // DialogueManager.Instance.StartDialogue(this);
 
-        // 대화 진행
-        for (int i = 0; i < _lines.Count; i++)
-        {
-            // 현재 상태가 Typing일 때는 대기
-            while (DialogueManager.Instance.DialoguePlayer.CurrentState == DialogueState.Typing)
-            {
-                yield return null;
-            }
+        // // 대화 진행
+        // for (int i = 0; i < _lines.Count; i++)
+        // {
+        //     // 현재 상태가 Typing일 때는 대기
+        //     while (DialogueManager.Instance.DialoguePlayer.CurrentDialogueState == DialogueState.Typing)
+        //     {
+        //         yield return null;
+        //     }
 
-            // 사용자의 입력을 기다림
-            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+        //     // 사용자의 입력을 기다림
+        //     yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
 
-            // 상태가 Waiting일 때 문장 완료
-            if (DialogueManager.Instance.DialoguePlayer.CurrentState == DialogueState.Waiting)
-            {
-                DialogueManager.Instance.CompleteCurrentSentence();
-            }
+        //     // 상태가 Waiting일 때 문장 완료
+        //     if (DialogueManager.Instance.DialoguePlayer.CurrentDialogueState == DialogueState.WaitingForNextRegex)
+        //     {
+        //         DialogueManager.Instance.DisplayNextColumn();
+        //     }
+        //     // 상태가 Waiting일 때 문장 완료
+        //     if (DialogueManager.Instance.DialoguePlayer.CurrentDialogueState == DialogueState.WaitingForNextLine)
+        //     {
+        //         DialogueManager.Instance.DisplayNextLine();
+        //     }
+        // }
 
-            // 다음 문장이 남아 있으면 감정 상태 변경 및 다음 문장 표시
-            if (i < _lines.Count - 1)
-            {
-                var nextLine = _lines[i + 1];
-                CharacterManager.Instance.SetCharacterEmotion(_characterID, nextLine.EmotionID, nextLine.EmotionIndex);
-                DialogueManager.Instance.DisplayNextSentence();
-            }
-        }
-
-        // 대화 종료
-        DialogueManager.Instance.EndDialogue();
+        // // 대화 종료
+        // DialogueManager.Instance.EndDialogue();
     }
 }

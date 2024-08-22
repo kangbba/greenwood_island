@@ -14,7 +14,7 @@ public enum EEmotionID
     Angry,
     Panic,
     Stumped,
-} 
+}
 //스스로 설명 가능한 코드를 짜라
 public class Character : MonoBehaviour
 {

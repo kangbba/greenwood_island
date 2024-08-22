@@ -18,6 +18,7 @@ public class CharacterData
 {
     public ECharacterID characterID;
     public Character characterPrefab;
+    public string characterName_ko;
 }
 
 public class CharacterManager : MonoBehaviour

@@ -5,80 +5,150 @@ using UnityEngine;
 
 public class Story : MonoBehaviour
 {
-    // 여러 개의 Element 리스트를 전역적으로 선언 및 초기화
     private List<Element> _elements = new List<Element>()
     {
-        // 필름 화이트 아웃 -> 필름 화이트 인 (순차적으로 실행)
+        // Scene 1: Town1 at dawn, peaceful atmosphere
         new PlaceMove(
-            new List<PlaceTransition>
-            {
-                new PlaceTransition(EPlaceID.Town1, PlaceAnimType.ScreenFilmWhiteOut, 1f, Ease.OutQuad),
-                new PlaceTransition(EPlaceID.Town2, PlaceAnimType.ScreenFilmWhiteIn, 1f, Ease.OutQuad),
-            }
+            EPlaceID.Town1, 
+            2f, Ease.InOutQuad, true, Color.black
         ),
-
-        // 케이트가 중앙에 등장
-        new CharactersEnter(
-            new List<ECharacterID> { ECharacterID.Kate },
-            new List<float> { 0.5f },
-            1f, Ease.OutQuad
+        // Kate enters, appearing worried and lost
+        new CharacterEnter(
+            ECharacterID.Kate,
+            0.5f ,
+            1.5f, Ease.OutQuad
         ),
-
-        // 케이트 대사
         new Dialogue(
             ECharacterID.Kate,
             new List<Line>
             {
-                new Line(EEmotionID.Panic, 0, "여기는... 어디지?"),
-                new Line(EEmotionID.Panic, 1, "모든 것이 낯설어... 뭔가 잘못되고 있어! 너는 어떻게생각해? 리사? 내말 들려?? 정신을 차려!!")
+                new Line(EEmotionID.Panic, 0, "여기는 어디지? 모두가 사라진 것 같아... 너무 조용해."),
+                new Line(EEmotionID.Stumped, 1, "리사... 네가 여기 있었으면 좋았을 텐데. 이 이상한 기분을 떨칠 수가 없어."),
+                new Line(EEmotionID.Angry, 2, "이건 단순한 장난이 아니야. 뭔가 잘못됐어. 나는 이곳을 알아야 해!"),
+                new Line(EEmotionID.Angry, 2, "이건 단순한 장난이 아니야. 뭔가 잘못됐어. 나는 이곳을 알아야 해!2나는 이곳을 알아야 해!2나는 이곳을 알아야 해!2나는 이곳을 알아야 해!2")
             }
         ),
-
-        // 필름 블랙 아웃 -> 실제 장소의 블랙 아웃 -> 블랙 인 (Simultaneous 실행)
-        new PlaceMove(
-            new List<PlaceTransition>
-            {
-                new PlaceTransition(EPlaceID.Town2, PlaceAnimType.ScreenFilmBlackOut, 1f, Ease.OutQuad),
-                new PlaceTransition(EPlaceID.Town2, PlaceAnimType.Blackout, 1f, Ease.OutQuad),
-                new PlaceTransition(EPlaceID.Town1, PlaceAnimType.BlackIn, 1f, Ease.OutQuad),
-            }
+        
+        // The atmosphere shifts as a shadow looms over the town
+        new PlaceOverlayFilmEffect(
+            Color.black.ModifiedAlpha(0.5f), 1.5f, Ease.InOutQuad
         ),
 
-        // 리사가 등장하고, 케이트가 왼쪽으로 이동
+        new CharacterMove(
+            ECharacterID.Kate,
+            0.33f ,
+            1f, Ease.OutQuad
+        ),
+        // Lisa suddenly appears to calm Kate down
         new CharactersEnter(
             new List<ECharacterID> { ECharacterID.Lisa },
             new List<float> { 0.7f },
             1f, Ease.OutQuad
         ),
-        new CharacterMove(
-            ECharacterID.Kate,
-            0.3f,
-            1f, Ease.OutQuad
-        ),
-
-        // 리사 대사
         new Dialogue(
             ECharacterID.Lisa,
             new List<Line>
             {
-                new Line(EEmotionID.Smile, 0, "케이트, 무슨 일이 있었던 거야?"),
-                new Line(EEmotionID.Normal, 1, "여기서 나가야 해!")
+                new Line(EEmotionID.Normal, 0, "케이트, 너 혼자 걱정하지 마. 우리가 함께라면 이곳을 알아낼 수 있을 거야."),
+                new Line(EEmotionID.Smile, 1, "어떤 일이 있어도 우리는 함께 할 거야. 네가 여기에 있어서 다행이야.")
+            }
+        ),
+        new PlaceOverlayFilmEffect(
+            Color.red.ModifiedAlpha(.8f), 2f, Ease.InOutQuad
+        ),
+        // Kate and Lisa decide to explore the town together
+        new Dialogue(
+            ECharacterID.Kate,
+            new List<Line>
+            {
+                new Line(EEmotionID.Happy, 0, "맞아, 리사. 우리 함께 이 마을의 비밀을 밝혀내자."),
+                new Line(EEmotionID.Panic, 1, "하지만... 무언가 우리를 지켜보고 있는 것 같아. 이곳은 안전하지 않다."),
+                new Line(EEmotionID.Stumped, 2, "우리가 계속 이곳에 있어야 하는 이유가 있을 거야.")
+            }
+        ),
+        new PlaceOverlayFilmEffect(
+            Color.clear, 2f, Ease.InOutQuad
+        ),
+        
+        // The town suddenly darkens as they explore further
+        new PlaceMove(
+            EPlaceID.Town2, 
+            2f, Ease.InOutQuad, true, Color.white
+        ),
+        new PlaceEffect(
+            Color.magenta, 2.5f, Ease.OutQuad
+        ),
+
+        // Lisa and Kate, feeling the increasing danger, resolve to stay together
+        new Dialogue(
+            ECharacterID.Lisa,
+            new List<Line>
+            {
+                new Line(EEmotionID.Panic, 0, "이 마을은... 너무 이상해. 무언가가 우리를 보고 있는 것 같아."),
+                new Line(EEmotionID.Angry, 1, "포기하지 말자, 케이트. 우리가 함께라면 이겨낼 수 있어."),
+                new Line(EEmotionID.Sad, 2, "하지만... 이곳에 정말 안전한 곳이 있을까?")
+            }
+        ),
+        new CharacterMove(
+            ECharacterID.Lisa,
+            0.5f,
+            1f, Ease.OutQuad
+        ),
+        new PlaceEffect(
+            Color.white, 2.5f, Ease.OutQuad
+        ),
+        new Dialogue(
+            ECharacterID.Kate,
+            new List<Line>
+            {
+                new Line(EEmotionID.Happy, 0, "우리는 끝까지 포기하지 않을 거야. 이 마을의 비밀을 풀어야 해."),
+                new Line(EEmotionID.Crying, 1, "리사, 네가 있어 다행이야. 정말로 이곳이 무서워...")
             }
         ),
 
-        // 리사와 케이트가 함께 퇴장 (ZoomOut)
+        // Scene 3: Transition to the mysterious Town3, with an eerie atmosphere
+        new PlaceMove(
+            EPlaceID.Town1, 
+            3f, Ease.InOutQuad, true, Color.black
+        ),
+        new PlaceOverlayFilmEffect(
+            Color.blue, 2f, Ease.InOutQuad
+        ),
+        new PlaceEffect(
+            Color.black, 3f, Ease.OutQuad
+        ),
+
+        // The two characters feel a sense of dread as they continue to explore
+        new Dialogue(
+            ECharacterID.Lisa,
+            new List<Line>
+            {
+                new Line(EEmotionID.Stumped, 0, "이곳은 우리가 처음 온 곳과 완전히 달라... 무언가가 이 마을에 숨겨져 있어."),
+                new Line(EEmotionID.Angry, 1, "이제 정말 중요한 순간이야, 케이트. 절대 포기하지 말자.")
+            }
+        ),
+        new CharacterMove(
+            ECharacterID.Kate,
+            0.66f,
+            1f, Ease.OutQuad
+        ),
+        new Dialogue(
+            ECharacterID.Kate,
+            new List<Line>
+            {
+                new Line(EEmotionID.Smile, 0, "우리가 해냈어! 이 마을의 비밀을 드디어 풀었어."),
+                new Line(EEmotionID.Happy, 1, "이제 집으로 돌아갈 수 있어. 리사, 정말 고마워. 네가 없었다면 해내지 못했을 거야.")
+            }
+        ),
+
+        // Final Scene: The characters prepare to leave the town, feeling relieved but wary
         new CharactersExit(
             new List<ECharacterID> { ECharacterID.Lisa, ECharacterID.Kate },
             1f, Ease.InQuad
         ),
-
-        // 최종 장면 전환 (Blackout -> WhiteIn)
         new PlaceMove(
-            new List<PlaceTransition>
-            {
-                new PlaceTransition(EPlaceID.Town2, PlaceAnimType.Blackout, 1f, Ease.OutQuad),
-                new PlaceTransition(EPlaceID.Town1, PlaceAnimType.ScreenFilmWhiteIn, 1f, Ease.OutQuad),
-            }
+            EPlaceID.Town1, 
+            2f, Ease.InOutQuad, true, Color.white
         )
     };
 

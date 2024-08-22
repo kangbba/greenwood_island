@@ -28,32 +28,20 @@ public class CharactersEnter : Element
 
     public override IEnumerator Execute()
     {
+        List<Coroutine> enterCoroutines = new List<Coroutine>();
+
+        // 각 캐릭터에 대해 CharacterEnter을 생성하여 실행
         for (int i = 0; i < _characterIDs.Count; i++)
         {
-            EnterCharacter(_characterIDs[i], _screenPeroneXs[i]);
+            CharacterEnter characterEnter = new CharacterEnter(_characterIDs[i], _screenPeroneXs[i], _duration, _easeType);
+            Coroutine enterCoroutine = CoroutineRunner.Instance.StartCoroutine(characterEnter.Execute());
+            enterCoroutines.Add(enterCoroutine);
         }
 
-        // 애니메이션 완료까지 대기
-        yield return new WaitForSeconds(_duration);
-    }
-
-    private void EnterCharacter(ECharacterID characterID, float screenPeroneX)
-    {
-        // 캐릭터 생성 및 위치 설정
-        Character character = CharacterManager.Instance.InstantiateCharacter(characterID, screenPeroneX);
-
-        if (character == null)
+        // 모든 캐릭터의 등장 코루틴이 완료될 때까지 대기
+        foreach (var coroutine in enterCoroutines)
         {
-            Debug.LogWarning($"Failed to instantiate character with ID: {characterID}");
-            return;
-        }
-
-        // 등장 애니메이션 (예: 투명도 0 -> 1)
-        CanvasGroup canvasGroup = character.GetComponent<CanvasGroup>();
-        if (canvasGroup != null)
-        {
-            canvasGroup.alpha = 0;
-            canvasGroup.DOFade(1, _duration).SetEase(_easeType);
+            yield return coroutine;
         }
     }
 }

@@ -9,6 +9,7 @@ public enum EPlaceID
     Town2,
     // 다른 장소를 여기에 추가
 }
+
 public class PlaceManager : MonoBehaviour
 {
     private static PlaceManager _instance;
@@ -30,14 +31,14 @@ public class PlaceManager : MonoBehaviour
         }
     }
 
-
     [SerializeField]
     private List<Place> _placePrefabs; // 미리 정의된 장소 프리팹 리스트
 
     private Dictionary<EPlaceID, Place> _activePlaces = new Dictionary<EPlaceID, Place>(); // 활성화된 장소를 관리할 딕셔너리
 
-    [SerializeField] private Image _screenOverlayFilm;
-    public Image ScreenOverlayFilm { get => _screenOverlayFilm; }
+    private Place _currentPlace; // 현재 활성화된 장소를 나타내는 필드
+
+    public Place CurrentPlace => _currentPlace; // 현재 장소를 반환하는 게터
 
     public Place InstantiatePlace(EPlaceID placeID)
     {
@@ -60,6 +61,7 @@ public class PlaceManager : MonoBehaviour
         Place place = Instantiate(placePrefab, placeLayer);
 
         _activePlaces.Add(placeID, place);
+        _currentPlace = place; // 생성된 장소를 현재 장소로 설정
 
         return place;
     }
@@ -75,12 +77,12 @@ public class PlaceManager : MonoBehaviour
         }
 
         place.SetVisibility(true, duration);
-        // Optionally, you can apply additional effects or animation curves using the Ease parameter.
         CanvasGroup canvasGroup = place.GetComponent<CanvasGroup>();
         if (canvasGroup != null)
         {
             canvasGroup.DOFade(1, duration).SetEase(easeType);
         }
+        _currentPlace = place; // 표시된 장소를 현재 장소로 설정
     }
 
     public void HidePlace(EPlaceID placeID, float duration, Ease easeType)
@@ -94,11 +96,16 @@ public class PlaceManager : MonoBehaviour
         }
 
         place.SetVisibility(false, duration);
-        // Optionally, you can apply additional effects or animation curves using the Ease parameter.
         CanvasGroup canvasGroup = place.GetComponent<CanvasGroup>();
         if (canvasGroup != null)
         {
             canvasGroup.DOFade(0, duration).SetEase(easeType);
+        }
+
+        // 현재 장소가 숨겨질 경우 _currentPlace를 null로 설정할 수 있음
+        if (_currentPlace == place)
+        {
+            _currentPlace = null;
         }
     }
 
@@ -108,6 +115,12 @@ public class PlaceManager : MonoBehaviour
         {
             Destroy(place.gameObject);
             _activePlaces.Remove(placeID);
+
+            // 파괴된 장소가 현재 장소와 같다면 _currentPlace를 null로 설정
+            if (_currentPlace == place)
+            {
+                _currentPlace = null;
+            }
         }
         else
         {
@@ -128,5 +141,6 @@ public class PlaceManager : MonoBehaviour
             Destroy(place.gameObject);
         }
         _activePlaces.Clear();
+        _currentPlace = null; // 모든 장소가 파괴되면 _currentPlace도 초기화
     }
 }

@@ -1,234 +1,171 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using TMPro;
-using UnityEngine.UI;
-
-public enum DialogueState
-{
-    Inactive,
-    Typing,
-    Waiting,
-    Completed
-}
+using System.Text.RegularExpressions;
 
 public class DialoguePlayer : MonoBehaviour
 {
-    [SerializeField] private RectTransform _panelRectTransform;
-    [SerializeField] private Image _waitingMarkImage;
-    [SerializeField] private GameObject _lineGroupPrefab;  // LineGroup 프리팹
-    [SerializeField] private GameObject _lineTextPrefab;   // LineText 프리팹
-    [SerializeField] private Transform _lineGroupParent;   // LineGroups의 부모가 될 트랜스폼
+    private Line testLine = new Line(EEmotionID.Angry, 0, "안녕하세요. 긴 문장 테스트를 해보겠습니다 어떻게 보일지 과연 너무나 신기할것같아요 하하하. 하지만 이건 잘 작동하겠죠. 솔직하게 말하자구요");
+    private Line _currentLine; // 현재 타겟이 되는 Line을 저장하는 변수
+    private List<Line> _lines;
 
-    private float _typingSpeed = 0.05f;
-    private bool _isTyping = false;
+    // RectMask 프리팹과 부모 객체
+    [SerializeField] private SentenceRectMask _sentenceRectMaskPrefab;
+    [SerializeField] private Transform _rectMaskParent;
 
-    public float TypingSpeed
+    private List<SentenceRectMask> _createdRectMasks = new List<SentenceRectMask>();
+    private int _currentMaskIndex = 0; // 현재 재생 중인 RectMask의 인덱스
+
+    private Regex _splitRegex = new Regex(@"\.");
+
+    private void Start()
     {
-        get => _typingSpeed;
-        set => _typingSpeed = Mathf.Clamp(value, 0.01f, 1f);
-    }
-
-    private List<string> _sentences;
-    private int _currentSentenceIndex;
-    private Coroutine _typingCoroutine;
-    private DialogueState _state = DialogueState.Inactive;
-
-    public DialogueState CurrentState => _state;
-
-    private List<RectMask2D> _lineGroups = new List<RectMask2D>(); // RectMask2D 저장소
-    private List<TextMeshProUGUI> _lineTexts = new List<TextMeshProUGUI>(); // 텍스트 컴포넌트 저장소
-
-    void Start()
-    {
-        ShowPanel(false, 0f);
-        ShowWaitingMark(false);
-    }
-
-    public void ShowPanel(bool show, float duration)
-    {
-        float offScreenY = -_panelRectTransform.rect.height;
-        Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
-        _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutCubic);
-    }
-
-    public void ShowWaitingMark(bool show)
-    {
-        _waitingMarkImage.gameObject.SetActive(show);
+        // 초기화 시 테스트 라인을 설정하고 RectMask 생성 후 ShowNext 호출
+        CreateRectMask(testLine);
+        ShowNext();
     }
 
     public void InitDialogue(Dialogue dialogue)
     {
-        ClearLineGroups();
+        _lines = dialogue.Lines;
+    }
 
-        _sentences = new List<string>();
-        foreach (var line in dialogue.Lines)
+    public void ShowNext()
+    {
+        // 생성된 RectMask들을 순차적으로 재생하는 코루틴 시작
+        StartCoroutine(RevealRectMasks());
+    }
+
+    private void CreateRectMask(Line line)
+    {
+        _currentLine = line; // 현재 타겟이 되는 Line을 저장
+        _currentMaskIndex = 0; // 인덱스를 0으로 초기화
+
+        // 기존에 생성된 RectMask들을 제거하고 리스트 초기화
+        foreach (var rectMask in _createdRectMasks)
         {
-            _sentences.Add(line.Sentence);
+            Destroy(rectMask.gameObject);
         }
-        _currentSentenceIndex = 0;
-        _state = DialogueState.Typing;
+        _createdRectMasks.Clear();
 
-        DisplayCurLine();
-    }
+        string sentence = line.Sentence;
+        float xOffset = 0f;
+        float yOffset = 0f;
+        float maxWidth = 1600f;
 
-    private void ClearLineGroups()
-    {
-        foreach (var group in _lineGroups)
+        string currentPart = "";
+        foreach (char letter in sentence)
         {
-            Destroy(group.gameObject);
-        }
-        _lineGroups.Clear();
-        _lineTexts.Clear();
-    }
+            currentPart += letter;
+            float currentWidth = GetCharacterWidth(currentPart);
 
-    private void CreateLineGroup(float yOffset)
-    {
-        GameObject lineGroupInstance = Instantiate(_lineGroupPrefab, _lineGroupParent);
-        RectMask2D mask = lineGroupInstance.GetComponent<RectMask2D>();
-
-        // LineGroup의 위치 설정 (yOffset 만큼 아래에 배치)
-        RectTransform lineGroupRect = lineGroupInstance.GetComponent<RectTransform>();
-        lineGroupRect.anchoredPosition = new Vector2(lineGroupRect.anchoredPosition.x, yOffset);
-
-        GameObject lineTextInstance = Instantiate(_lineTextPrefab, lineGroupInstance.transform);
-        TextMeshProUGUI text = lineTextInstance.GetComponent<TextMeshProUGUI>();
-
-        // TextMeshProUGUI의 로컬 포지션을 (0, 0, 0)으로 설정
-        RectTransform lineTextRect = lineTextInstance.GetComponent<RectTransform>();
-        lineTextRect.localPosition = Vector3.zero;
-
-        _lineGroups.Add(mask);
-        _lineTexts.Add(text);
-
-        // 모든 LineGroup이 생성 직후 완전히 가려지도록 초기화
-        float textWidth = 1600; // 기본적으로 큰 값으로 설정하여 전체를 가립니다.
-        mask.padding = new Vector4(mask.padding.x, mask.padding.y, textWidth, mask.padding.w);
-    }
-
-
-    public void DisplayCurLine()
-    {
-        if (_currentSentenceIndex < _sentences.Count)
-        {
-            if (_typingCoroutine != null)
+            // 다음 줄로 넘어가야 하는 경우
+            if (xOffset + currentWidth > maxWidth)
             {
-                StopCoroutine(_typingCoroutine);
-            }
-            _isTyping = true;
-            ShowWaitingMark(false);
+                float availableWidth = maxWidth - xOffset;
+                int splitIndex = FindSplitIndex(currentPart, availableWidth);
+                
+                string part1 = currentPart.Substring(0, splitIndex);
+                SentenceRectMask rectMask1 = AddRectMask(part1, ref xOffset, ref yOffset, maxWidth);
+                rectMask1.FragmentReason = SentenceRectMask.EFragmentReason.Overflow;
 
-            _typingCoroutine = StartCoroutine(TypeSentence(_sentences[_currentSentenceIndex]));
-        }
-        else
-        {
-            Debug.Log("모든 대화를 완료했습니다.");
-            _state = DialogueState.Completed;
-        }
-    }
-
-    public void CompleteCurLine()
-    {
-        if (_typingCoroutine != null)
-        {
-            StopCoroutine(_typingCoroutine);
-
-            // 모든 라인의 텍스트를 완전히 드러나게 설정
-            for (int i = 0; i < _lineGroups.Count; i++)
-            {
-                RectMask2D lineGroup = _lineGroups[i];
-                lineGroup.padding = new Vector4(lineGroup.padding.x, lineGroup.padding.y, 0, lineGroup.padding.w);
+                string part2 = currentPart.Substring(splitIndex);
+                xOffset = 0f;
+                yOffset -= 80f;
+                currentPart = part2;
             }
 
-            _typingCoroutine = null;
-            _isTyping = false;
-            ShowWaitingMark(true);
-            _state = DialogueState.Waiting;
-        }
-    }
-
-    public void DisplayNextLine()
-    {
-        if (_currentSentenceIndex < _sentences.Count - 1)
-        {
-            _currentSentenceIndex++;
-            _state = DialogueState.Typing;
-            DisplayCurLine();
-        }
-        else
-        {
-            _state = DialogueState.Completed;
-            Debug.Log("더 이상 다음 문장이 없습니다.");
-        }
-    }
-
-    private IEnumerator TypeSentence(string sentence)
-    {
-        ClearLineGroups();  // 각 문장이 출력될 때 이전 LineGroup들을 모두 제거
-
-        int currentCharIndex = 0;
-        float yOffset = 0f;  // 초기 yOffset 설정
-
-        CreateLineGroup(yOffset);  // 새로운 LineGroup 생성
-
-        while (currentCharIndex < sentence.Length)
-        {
-            TextMeshProUGUI currentLineText = _lineTexts[_lineTexts.Count - 1];
-            currentLineText.text += sentence[currentCharIndex];
-
-            currentLineText.ForceMeshUpdate();  // 메쉬 업데이트
-
-            if (currentLineText.isTextOverflowing)
+            else if (_splitRegex.IsMatch(letter.ToString()))
             {
-                string overflowText = currentLineText.text;
-                currentLineText.text = overflowText.Substring(0, overflowText.Length - 1);
+                SentenceRectMask rectMask = AddRectMask(currentPart, ref xOffset, ref yOffset, maxWidth);
+                rectMask.FragmentReason = SentenceRectMask.EFragmentReason.Regex;
+                currentPart = "";
+            }
+        }
 
-                yOffset -= currentLineText.rectTransform.rect.height;
-                CreateLineGroup(yOffset);
+        // 마지막 남은 부분 처리
+        if (!string.IsNullOrEmpty(currentPart))
+        {
+            SentenceRectMask rectMask = AddRectMask(currentPart, ref xOffset, ref yOffset, maxWidth);
+            rectMask.FragmentReason = SentenceRectMask.EFragmentReason.LastFragment;
+        }
+    }
 
-                currentLineText = _lineTexts[_lineTexts.Count - 1];
-                currentLineText.text = overflowText[overflowText.Length - 1].ToString();
+    private SentenceRectMask AddRectMask(string text, ref float xOffset, ref float yOffset, float maxWidth)
+    {
+        SentenceRectMask rectMask = Instantiate(_sentenceRectMaskPrefab, _rectMaskParent);
+        rectMask.Init(text);
 
-                // 새로 생성된 라인 그룹의 텍스트가 보이지 않도록 보장
-                RectMask2D currentMask = _lineGroups[_lineGroups.Count - 1];
-                currentMask.padding = new Vector4(currentMask.padding.x, currentMask.padding.y, 1600, currentMask.padding.w);
+        RectTransform rectTransform = rectMask.GetComponent<RectTransform>();
+        float rectWidth = rectTransform.rect.width;
+
+        if (xOffset + rectWidth > maxWidth)
+        {
+            xOffset = 0f;
+            yOffset -= 80f;
+        }
+
+        rectMask.SetPosition(xOffset, yOffset);
+        xOffset += rectWidth;
+
+        _createdRectMasks.Add(rectMask);
+
+        return rectMask;
+    }
+
+    private int FindSplitIndex(string text, float availableWidth)
+    {
+        int splitIndex = 0;
+        float width = 0f;
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            width = GetCharacterWidth(text.Substring(0, i + 1));
+            if (width > availableWidth)
+            {
+                break;
+            }
+            splitIndex = i + 1;
+        }
+
+        return splitIndex;
+    }
+
+    private float GetCharacterWidth(string text)
+    {
+        SentenceRectMask tempRectMask = Instantiate(_sentenceRectMaskPrefab, _rectMaskParent);
+        tempRectMask.Init(text);
+
+        RectTransform rectTransform = tempRectMask.GetComponent<RectTransform>();
+        float width = rectTransform.rect.width;
+
+        Destroy(tempRectMask.gameObject);
+
+        return width;
+    }
+
+    private IEnumerator RevealRectMasks()
+    {
+        while (_currentMaskIndex < _createdRectMasks.Count)
+        {
+            var rectMask = _createdRectMasks[_currentMaskIndex];
+            yield return StartCoroutine(rectMask.RevealMask(0.05f)); // 예시로 0.05초의 딜레이를 줌
+
+            // 만약 현재 RectMask의 FragmentReason이 Regex라면 ShowNext를 다시 호출할 때까지 대기
+            if (rectMask.FragmentReason == SentenceRectMask.EFragmentReason.Regex)
+            {
+                _currentMaskIndex++; // 인덱스 업데이트
+                yield break; // 코루틴 종료, ShowNext를 다시 호출하면 이어서 진행
             }
 
-            currentCharIndex++;
+            _currentMaskIndex++; // 다음 Mask로 이동
         }
-
-        for (int i = 0; i < _lineGroups.Count; i++)
-        {
-            RectMask2D lineGroup = _lineGroups[i];
-            yield return StartCoroutine(RevealLine(lineGroup));
-        }
-
-        _typingCoroutine = null;
-        _isTyping = false;
-        ShowWaitingMark(true);
-        _state = DialogueState.Waiting;
     }
 
-
-    private IEnumerator RevealLine(RectMask2D lineGroup)
-    {
-        float startRight = lineGroup.padding.z; // 현재 설정된 right padding 값을 시작 값으로 사용
-        float elapsedTime = 0f;
-        float revealDuration = _typingSpeed * 30; // 드러나는 속도를 더 느리게 설정
-
-        while (elapsedTime < revealDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsedTime / revealDuration);
-
-            float currentRight = Mathf.Lerp(startRight, 0, progress);
-            lineGroup.padding = new Vector4(lineGroup.padding.x, lineGroup.padding.y, currentRight, lineGroup.padding.w);
-
-            yield return null;
+    private void Update(){
+        if(Input.GetKeyDown(KeyCode.Space)){
+            ShowNext();
         }
-
-        // 마스킹을 완전히 제거
-        lineGroup.padding = new Vector4(lineGroup.padding.x, lineGroup.padding.y, 0, lineGroup.padding.w);
     }
 }

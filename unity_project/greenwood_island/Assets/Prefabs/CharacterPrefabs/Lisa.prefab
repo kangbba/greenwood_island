@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1093593374676556963}
   - component: {fileID: 4679146932676477584}
   - component: {fileID: 8109460112451840439}
-  - component: {fileID: 5043553933719852903}
   - component: {fileID: 8584031999050825053}
+  - component: {fileID: 6495543036880168818}
   m_Layer: 5
   m_Name: Lisa
   m_TagString: Untagged
@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -23, y: 0}
+  m_AnchoredPosition: {x: -23, y: -355}
   m_SizeDelta: {x: 762, y: 3018.5222}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4679146932676477584
@@ -77,7 +77,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5043553933719852903
+--- !u!225 &8584031999050825053
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882805499953900167}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &6495543036880168818
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1882805499953900167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adfafcac364bf4cdf9c67d37eb36df9b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c0ab14edd3a7457da5ca5d1a9798abc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _graphic: {fileID: 8584031999050825053}
@@ -111,15 +123,3 @@ MonoBehaviour:
     _emotionSprites:
     - {fileID: 21300000, guid: e5c66e2207c92403aa93d8f2a9964abf, type: 3}
   _img: {fileID: 8109460112451840439}
---- !u!225 &8584031999050825053
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882805499953900167}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0

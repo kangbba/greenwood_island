@@ -8,9 +8,11 @@ public class SentenceRectMaskBuilder
     private Transform _rectMaskParent;
     private SentenceRectMask _sentenceRectMaskPrefab;
 
-    List<SentenceRectMask> _createdRectMasks = new List<SentenceRectMask>();
+    private List<SentenceRectMask> _createdRectMasks = new List<SentenceRectMask>();
 
     public List<SentenceRectMask> CreatedRectMasks { get => _createdRectMasks; }
+
+    private static readonly Regex _regexPattern = new Regex(@"\.{2,}|\.");
 
     public SentenceRectMaskBuilder(Transform rectMaskParent, SentenceRectMask sentenceRectMaskPrefab)
     {
@@ -92,32 +94,46 @@ public class SentenceRectMaskBuilder
         float maxWidth = 1600f;
 
         string currentPart = "";
-        foreach (char letter in sentence)
+
+        foreach (Match match in Regex.Matches(sentence, @"(\.{2,}|\.)|[^.]+"))
         {
-            currentPart += letter;
-            float currentWidth = GetCharacterWidth(currentPart);
+            string chunk = match.Value;
 
-            if (xOffset + currentWidth > maxWidth)
+            // If chunk is a regex pattern (., .., ...), add it as a single rect mask
+            if (_regexPattern.IsMatch(chunk))
             {
-                float availableWidth = maxWidth - xOffset;
-                int splitIndex = FindSplitIndex(currentPart, availableWidth);
-                
-                string part1 = currentPart.Substring(0, splitIndex);
-                SentenceRectMask rectMask1 = AddRectMask(part1, ref xOffset, ref yOffset, maxWidth);
-                rectMask1.FragmentReason = SentenceRectMask.EFragmentReason.Overflow;
-                _createdRectMasks.Add(rectMask1);
+                if (!string.IsNullOrEmpty(currentPart))
+                {
+                    SentenceRectMask rectMask = AddRectMask(currentPart, ref xOffset, ref yOffset, maxWidth);
+                    rectMask.FragmentReason = SentenceRectMask.EFragmentReason.Overflow;
+                    _createdRectMasks.Add(rectMask);
+                    currentPart = "";
+                }
 
-                string part2 = currentPart.Substring(splitIndex);
-                xOffset = 0f;
-                yOffset -= 80f;
-                currentPart = part2;
+                SentenceRectMask regexRectMask = AddRectMask(chunk, ref xOffset, ref yOffset, maxWidth);
+                regexRectMask.FragmentReason = SentenceRectMask.EFragmentReason.Regex;
+                _createdRectMasks.Add(regexRectMask);
             }
-            else if (new Regex(@"\.").IsMatch(letter.ToString()))
+            else
             {
-                SentenceRectMask rectMask = AddRectMask(currentPart, ref xOffset, ref yOffset, maxWidth);
-                rectMask.FragmentReason = SentenceRectMask.EFragmentReason.Regex;
-                _createdRectMasks.Add(rectMask);
-                currentPart = "";
+                currentPart += chunk;
+                float currentWidth = GetCharacterWidth(currentPart);
+
+                if (xOffset + currentWidth > maxWidth)
+                {
+                    float availableWidth = maxWidth - xOffset;
+                    int splitIndex = FindSplitIndex(currentPart, availableWidth);
+                
+                    string part1 = currentPart.Substring(0, splitIndex);
+                    SentenceRectMask rectMask1 = AddRectMask(part1, ref xOffset, ref yOffset, maxWidth);
+                    rectMask1.FragmentReason = SentenceRectMask.EFragmentReason.Overflow;
+                    _createdRectMasks.Add(rectMask1);
+
+                    string part2 = currentPart.Substring(splitIndex);
+                    xOffset = 0f;
+                    yOffset -= 80f;
+                    currentPart = part2;
+                }
             }
         }
 

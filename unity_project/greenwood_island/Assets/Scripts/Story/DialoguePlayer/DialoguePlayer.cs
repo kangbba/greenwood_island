@@ -24,7 +24,10 @@ public class DialoguePlayer : MonoBehaviour
         Finished       // 모든 대화가 끝난 상태
     }
 
+    public bool CanCompleteInstantly { get; set; } = true; // 즉시 완료 가능 여부를 설정하는 옵션
+
     private EDialogueState _dialogueState = EDialogueState.NotStarted;
+    private Coroutine _currentRevealCoroutine; // 현재 실행 중인 RevealRectMasks 코루틴
 
     private void Start()
     {
@@ -53,15 +56,15 @@ public class DialoguePlayer : MonoBehaviour
         int startIndex = _currentMaskIndex;
         int endIndex = _rectMaskBuilder.CalculateEndIndex(_createdRectMasks, startIndex);
 
-        StartCoroutine(RevealRectMasks(startIndex, endIndex));
+        _currentRevealCoroutine = StartCoroutine(RevealRectMasks(startIndex, endIndex, 0.05f));
     }
 
-    private IEnumerator RevealRectMasks(int startIndex, int endIndex)
+    private IEnumerator RevealRectMasks(int startIndex, int endIndex, float delay)
     {
         for (int i = startIndex; i <= endIndex && i < _createdRectMasks.Count; i++)
         {
             var rectMask = _createdRectMasks[i];
-            yield return StartCoroutine(rectMask.RevealMask(0.05f)); // 예시로 0.05초의 딜레이를 줌
+            yield return StartCoroutine(rectMask.RevealMask(delay)); // 예시로 0.05초의 딜레이를 줌
         }
         
         _currentMaskIndex = endIndex + 1; // 다음 인덱스 업데이트
@@ -80,6 +83,42 @@ public class DialoguePlayer : MonoBehaviour
         }
     }
 
+    public void CompleteCurSentence()
+    {
+        if (_dialogueState != EDialogueState.Typing || _currentRevealCoroutine == null || !CanCompleteInstantly)
+        {
+            return; // Typing 상태가 아니거나 코루틴이 실행 중이 아니거나, 즉시 완료가 불가능한 상태라면 리턴
+        }
+
+        StopCoroutine(_currentRevealCoroutine); // 현재 실행 중인 RevealRectMasks 코루틴 중지
+
+        int startIndex = _currentMaskIndex;
+        int endIndex = _rectMaskBuilder.CalculateEndIndex(_createdRectMasks, startIndex);
+
+        // 해당 범위의 모든 SentenceRectMask에 대해 RevealInstantly 호출
+        for (int i = startIndex; i <= endIndex && i < _createdRectMasks.Count; i++)
+        {
+            var rectMask = _createdRectMasks[i];
+            rectMask.RevealInstantly(); // 즉시 텍스트를 완성
+        }
+
+        // 상태를 업데이트
+        _currentMaskIndex = endIndex + 1;
+
+        if (_currentMaskIndex >= _createdRectMasks.Count)
+        {
+            _dialogueState = EDialogueState.Finished;
+        }
+        else if (_createdRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
+        {
+            _dialogueState = EDialogueState.Waiting;
+        }
+        else
+        {
+            _dialogueState = EDialogueState.Typing;
+        }
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -88,7 +127,9 @@ public class DialoguePlayer : MonoBehaviour
             {
                 ShowNext();
             }
-            else if(_dialogueState == EDialogueState.Typing){
+            else if (_dialogueState == EDialogueState.Typing)
+            {
+                CompleteCurSentence();
             }
         }
     }

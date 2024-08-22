@@ -33,17 +33,19 @@ public class Dialogue : Element
         // 첫 문장 감정 상태 설정
         var firstLine = _lines[0];
         CharacterManager.Instance.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex);
-
+        CharacterData characterData =  CharacterManager.Instance.GetCharacterData(_characterID);
+        DialoguePlayer.Clear();
+        DialoguePlayer.SetCharacterText(characterData.characterName_ko, characterData.mainColor);
         // 대화 시작
-        DialogueManager.Instance.StartDialogue(this);
-
+        DialoguePlayer.ShowPanel(true, 0.4f);
+        yield return new WaitForSeconds(.4f);
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
         {
             Debug.Log($"{i}번째 대사 시작");
             Line line = _lines[i];
-            DialogueManager.Instance.InitLine(line);
-            DialogueManager.Instance.ShowNextSentence();
+            DialoguePlayer.InitLine(line);
+            DialoguePlayer.ShowNextSentence();
             //연속 마우스 호출을 막기위한 한프레임 대기
             yield return null;
             CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex);
@@ -52,17 +54,16 @@ public class Dialogue : Element
                 if(Input.GetMouseButtonDown(0)){
                     EDialogueState dialogueState = DialoguePlayer.DialogueState;
                     if(dialogueState == EDialogueState.Typing){
-                        DialogueManager.Instance.CompleteCurSentence();
+                        DialoguePlayer.CompleteCurSentence();
                     }
                     if(dialogueState == EDialogueState.Waiting){
-                        DialogueManager.Instance.ShowNextSentence();
+                        DialoguePlayer.ShowNextSentence();
                     }
                 }
                 yield return null;
             }
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
         }
-        DialogueManager.Instance.EndDialogue();
     }
 
 }

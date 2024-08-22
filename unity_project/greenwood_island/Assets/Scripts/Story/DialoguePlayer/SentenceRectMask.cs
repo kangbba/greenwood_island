@@ -11,6 +11,9 @@ public class SentenceRectMask : MonoBehaviour
     private bool _isRevealingInstantly = false;
     private Coroutine _revealCoroutine;
 
+    private float _preferredWidth;
+    
+
     public enum EFragmentReason
     {
         Regex,
@@ -20,6 +23,7 @@ public class SentenceRectMask : MonoBehaviour
 
     public EFragmentReason FragmentReason { get; set; }
     public string Sentence { get => _sentence; }
+    public float PreferredWidth { get => _preferredWidth; }
 
     public void Init(string s)
     {
@@ -27,15 +31,14 @@ public class SentenceRectMask : MonoBehaviour
         _sentenceText.SetText(_sentence);
         _sentenceText.ForceMeshUpdate();
 
-        float preferredWidth = _sentenceText.preferredWidth;
+        _preferredWidth = _sentenceText.preferredWidth;
 
-        _sentenceText.rectTransform.sizeDelta = new Vector2(preferredWidth, 80f);
+        _sentenceText.rectTransform.sizeDelta = new Vector2(_preferredWidth, 80f);
 
-        _rectMask.rectTransform.sizeDelta = new Vector2(preferredWidth, 80f);
+        _rectMask.rectTransform.sizeDelta = new Vector2(_preferredWidth, 80f);
 
-        _rectMask.padding = new Vector4(0, 0, preferredWidth, 0);
+        _rectMask.padding = new Vector4(0, 0, _preferredWidth, 0);
     }
-
     public IEnumerator RevealMask(float letterDelay)
     {
         _isRevealingInstantly = false;

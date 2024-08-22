@@ -14,6 +14,7 @@ public enum GuideState
 public class DialogueGuide : MonoBehaviour
 {
     [SerializeField] private Image _guideImage;  // Guide 이미지
+    [SerializeField] private Transform _graphic; // 그래픽 오브젝트 (예: 아이콘, 캐릭터 등)
 
     private GuideState _state = GuideState.Hidden;
     private RectTransform _guideRectTransform;
@@ -24,11 +25,6 @@ public class DialogueGuide : MonoBehaviour
         SetState(GuideState.Hidden); // 시작 시에는 가이드가 숨겨진 상태
     }
 
-    void Update()
-    {
-        // Update에서 애니메이션을 처리하는 대신, SetState에서만 애니메이션 처리
-    }
-
     public void SetState(GuideState state)
     {
         _state = state;
@@ -37,27 +33,40 @@ public class DialogueGuide : MonoBehaviour
         {
             case GuideState.Hidden:
                 _guideImage.gameObject.SetActive(false);
-                _guideRectTransform.DOKill();  // 모든 애니메이션 중지
+                _graphic.DOKill(); // _graphic 애니메이션 중지
+                _graphic.localRotation = Quaternion.identity; // 회전을 초기화 (0도)
                 break;
 
             case GuideState.Ongoing:
                 _guideImage.gameObject.SetActive(true);
-                _guideRectTransform.DOKill();  // 모든 애니메이션 중지 후 새로운 애니메이션 시작
-                _guideRectTransform.DOAnchorPosX(_guideRectTransform.anchoredPosition.x + 10f, 0.3f)
-                                   .SetLoops(-1, LoopType.Yoyo); // 좌우로 흔들림
+                _graphic.DOKill(); // 모든 애니메이션 중지 후 새로운 애니메이션 시작
+
+                // _graphic을 좌우로 작은 범위로 흔들림
+                _graphic.DOLocalMoveX(5f, 0.3f) // 흔들림 범위를 10에서 5로 줄임
+                        .SetRelative()
+                        .SetLoops(-1, LoopType.Yoyo);
+
+                // 왼쪽으로 90도 회전
+                _graphic.localRotation = Quaternion.Euler(0f, 0f, 270f);
                 break;
 
             case GuideState.Ended:
                 _guideImage.gameObject.SetActive(true);
-                _guideRectTransform.DOKill();  // 모든 애니메이션 중지 후 새로운 애니메이션 시작
-                _guideRectTransform.DOAnchorPosY(_guideRectTransform.anchoredPosition.y + 10f, 0.3f)
-                                   .SetLoops(-1, LoopType.Yoyo); // 위아래로 흔들림
+                _graphic.DOKill(); // 모든 애니메이션 중지 후 새로운 애니메이션 시작
+
+                // _graphic을 위아래로 작은 범위로 흔들림
+                _graphic.DOLocalMoveY(5f, 0.3f) // 흔들림 범위를 10에서 5로 줄임
+                        .SetRelative()
+                        .SetLoops(-1, LoopType.Yoyo);
+
+                // 회전을 0도로 설정
+                _graphic.localRotation = Quaternion.Euler(0f, 0f, 180f);
                 break;
         }
     }
 
-    public void MoveToPosition(Vector2 position)
+    public void SetGraphicRotation(float angle)
     {
-        _guideRectTransform.anchoredPosition = position;
+        _graphic.localRotation = Quaternion.Euler(0f, 0f, angle);
     }
 }

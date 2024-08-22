@@ -19,6 +19,7 @@ public class CharacterData
     public ECharacterID characterID;
     public Character characterPrefab;
     public string characterName_ko;
+    public Color mainColor;
 }
 
 public class CharacterManager : MonoBehaviour

@@ -57,6 +57,21 @@ public class SentenceRectMaskBuilder
 
         return splitIndex;
     }
+    public void Clear(){
+        // 기존에 생성된 마스크가 있다면 파괴
+        if (_createdRectMasks != null)
+        {
+            foreach (var mask in _createdRectMasks)
+            {
+                if (mask != null)
+                {
+                    GameObject.Destroy(mask.gameObject); // 각 마스크의 게임 오브젝트를 파괴
+                }
+            }
+            _createdRectMasks.Clear(); // 리스트 초기화
+        }
+
+    }
 
     public float GetCharacterWidth(string text)
     {
@@ -73,19 +88,7 @@ public class SentenceRectMaskBuilder
 
     public List<SentenceRectMask> CreateRectMask(Line line, ref int currentMaskIndex)
     {
-        // 기존에 생성된 마스크가 있다면 파괴
-        if (_createdRectMasks != null)
-        {
-            foreach (var mask in _createdRectMasks)
-            {
-                if (mask != null)
-                {
-                    GameObject.Destroy(mask.gameObject); // 각 마스크의 게임 오브젝트를 파괴
-                }
-            }
-            _createdRectMasks.Clear(); // 리스트 초기화
-        }
-
+        Clear();
         currentMaskIndex = 0;
 
         string sentence = line.Sentence;

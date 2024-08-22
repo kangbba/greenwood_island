@@ -17,6 +17,8 @@ public class DialoguePlayer : MonoBehaviour
     [SerializeField] private RectTransform _panelRectTransform;
     [SerializeField] private SentenceRectMask _sentenceRectMaskPrefab;
     [SerializeField] private Transform _rectMaskParent;
+    [SerializeField] private TextMeshProUGUI _characterText;
+    [SerializeField] private DialogueGuide _dialogueGuide;  // DialogueGuide 참조
 
     private List<SentenceRectMask> CreatedRectMasks => _rectMaskBuilder.CreatedRectMasks;
     private int _currentMaskIndex = 0; // 현재 재생 중인 RectMask의 인덱스
@@ -29,13 +31,32 @@ public class DialoguePlayer : MonoBehaviour
 
     private void Start()
     {
+        ShowPanel(false, 0f);
+        SetCharacterText("", Color.clear);
         _rectMaskBuilder = new SentenceRectMaskBuilder(_rectMaskParent, _sentenceRectMaskPrefab);
+    }
+
+    public void Clear()
+    {
+        SetCharacterText("", Color.clear);
+        _rectMaskBuilder.Clear();
+    }
+
+    public void SetCharacterText(string s, Color targetColor)
+    {
+        _characterText.SetText(s);
+
+        // 기존에 실행 중이던 색상 변환이 있다면 중지
+        _characterText.DOKill(); 
+
+        // 현재 색상에서 targetColor로 색상 변경 애니메이션
+        _characterText.DOColor(targetColor, 0.5f); // 0.5초 동안 색상이 바뀌도록 설정
     }
 
     public void InitLine(Line line)
     {
         // 대화 상태 및 관련 변수 초기화
-        _dialogueState = EDialogueState.NotStarted;
+        SetState(EDialogueState.NotStarted);
         _currentMaskIndex = 0; // 현재 재생 중인 RectMask의 인덱스를 초기화
         if (_currentRevealCoroutine != null)
         {
@@ -52,11 +73,6 @@ public class DialoguePlayer : MonoBehaviour
 
     public void ShowNextSentence()
     {
-        if (_dialogueState == EDialogueState.Typing || _dialogueState == EDialogueState.Finished)
-        {
-            return; // 이미 타이핑 중이거나 모든 대화가 끝난 상태에서는 새로운 ShowNext를 시작하지 않음
-        }
-
         if (CreatedRectMasks == null || CreatedRectMasks.Count == 0)
         {
             Debug.LogWarning("No masks available to show.");
@@ -65,7 +81,7 @@ public class DialoguePlayer : MonoBehaviour
 
         Debug.Log("ShowNext");
 
-        _dialogueState = EDialogueState.Typing;
+        SetState(EDialogueState.Typing);
 
         int startIndex = _currentMaskIndex;
         int endIndex = _rectMaskBuilder.CalculateEndIndex(CreatedRectMasks, startIndex);
@@ -101,15 +117,15 @@ public class DialoguePlayer : MonoBehaviour
 
         if (_currentMaskIndex >= CreatedRectMasks.Count)
         {
-            _dialogueState = EDialogueState.Finished; // 모든 RectMask 재생 완료
+            SetState(EDialogueState.Finished); // 모든 RectMask 재생 완료
         }
         else if (CreatedRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
         {
-            _dialogueState = EDialogueState.Waiting; // Regex로 인한 대기 상태로 전환
+            SetState(EDialogueState.Waiting); // Regex로 인한 대기 상태로 전환
         }
         else
         {
-            _dialogueState = EDialogueState.Typing; // 여전히 타이핑 중인 상태로 유지
+            SetState(EDialogueState.Typing); // 여전히 타이핑 중인 상태로 유지
         }
     }
 
@@ -140,15 +156,58 @@ public class DialoguePlayer : MonoBehaviour
 
         if (_currentMaskIndex >= CreatedRectMasks.Count)
         {
-            _dialogueState = EDialogueState.Finished;
+            SetState(EDialogueState.Finished);
         }
         else if (CreatedRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
         {
-            _dialogueState = EDialogueState.Waiting;
+            SetState(EDialogueState.Waiting);
         }
         else
         {
-            _dialogueState = EDialogueState.Typing;
+            SetState(EDialogueState.Typing);
+        }
+    }
+
+    public void SetState(EDialogueState newState)
+    {
+        if (_dialogueState == newState)
+        {
+            return; // 중복된 상태로 전환하지 않음
+        }
+
+        _dialogueState = newState;
+
+        // 상태 전환에 따른 작업 수행
+        switch (newState)
+        {
+            case EDialogueState.Typing:
+                // Typing 상태로 전환될 때 _dialogueGuide를 숨김
+                _dialogueGuide.SetState(GuideState.Hidden);
+                break;
+            case EDialogueState.Waiting:
+                // Waiting 상태로 전환될 때 _dialogueGuide를 마지막 텍스트 위치로 이동 및 Ongoing 상태로 전환
+                MoveGuideToLastCharacter();
+                _dialogueGuide.SetState(GuideState.Ongoing);
+                break;
+            case EDialogueState.Finished:
+                // Finished 상태로 전환될 때 _dialogueGuide를 마지막 텍스트 위치로 이동 및 Ended 상태로 전환
+                MoveGuideToLastCharacter();
+                _dialogueGuide.SetState(GuideState.Ended);
+                break;
+            case EDialogueState.NotStarted:
+                // NotStarted 상태에서는 _dialogueGuide를 숨김
+                _dialogueGuide.SetState(GuideState.Hidden);
+                break;
+        }
+    }
+
+    private void MoveGuideToLastCharacter()
+    {
+        if (_currentMaskIndex > 0 && _currentMaskIndex <= CreatedRectMasks.Count)
+        {
+            var lastMask = CreatedRectMasks[_currentMaskIndex - 1];;
+            Vector3 offset =  Vector3.right * (lastMask.PreferredWidth + 0) + Vector3.down * 50f;
+            _dialogueGuide.transform.position = lastMask.transform.position + offset;
         }
     }
 

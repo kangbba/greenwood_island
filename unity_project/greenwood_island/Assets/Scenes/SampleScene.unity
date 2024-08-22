@@ -1289,9 +1289,11 @@ MonoBehaviour:
   - characterID: 1
     characterPrefab: {fileID: 5043553933719852903, guid: dc526af8978bd4bb8be6a31384e1aa9d, type: 3}
     characterName_ko: "\uCF00\uC774\uD2B8"
+    mainColor: {r: 0.8039216, g: 0.74385625, b: 0.2235294, a: 1}
   - characterID: 2
     characterPrefab: {fileID: 6495543036880168818, guid: 9a6fb32610f1e4eedabb424f9fda98fa, type: 3}
     characterName_ko: "\uB9AC\uC0AC"
+    mainColor: {r: 0.8490566, g: 0.34129232, b: 0.15619439, a: 1}
 --- !u!1 &1607851815
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1682,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2088360323}
     m_Modifications:
+    - target: {fileID: 2506705712651395604, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2506705712651395604, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2506705712651395604, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3722084975736058391, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: m_Name
       value: DialoguePlayer
@@ -1763,10 +1777,6 @@ PrefabInstance:
     - target: {fileID: 8219515785612320796, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8410435596152251663, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -683
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

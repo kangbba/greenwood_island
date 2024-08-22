@@ -11,6 +11,7 @@ public class SentenceRectMask : MonoBehaviour
     // TextMeshProUGUI 컴포넌트를 위한 SerializeField
     [SerializeField] private TextMeshProUGUI _sentenceText;
     private string _sentence; // Init에서 전달된 텍스트를 저장하는 변수
+    private bool _isRevealingInstantly = false; // 즉시 완료 플래그
 
     // 조각난 이유를 설명하는 Enum
     public enum EFragmentReason
@@ -20,7 +21,8 @@ public class SentenceRectMask : MonoBehaviour
         LastFragment // 마지막 조각
     }
 
-    public EFragmentReason FragmentReason {get; set;}
+    public EFragmentReason FragmentReason { get; set; }
+
     // 초기화 메서드
     public void Init(string s)
     {
@@ -41,24 +43,39 @@ public class SentenceRectMask : MonoBehaviour
         // RectTransform의 패딩 설정
         _rectMask.padding = new Vector4(0, 0, preferredWidth, 0); // 오른쪽 패딩을 preferredWidth로 설정
     }
-    
+
     // RevealMask 코루틴
     public IEnumerator RevealMask(float letterDelay)
     {
+        _isRevealingInstantly = false; // 즉시 완료 플래그 초기화
+
         float startPaddingRight = _rectMask.padding.z;
         float targetPaddingRight = 0f;
 
         float revealDuration = _sentence.Length * letterDelay;
         float elapsedTime = 0f;
-       
+
         while (elapsedTime < revealDuration)
         {
+            if (_isRevealingInstantly)
+            {
+                break; // 즉시 완료 요청이 들어오면 루프 중단
+            }
+
             elapsedTime += Time.deltaTime;
             float newPaddingRight = Mathf.Lerp(startPaddingRight, targetPaddingRight, elapsedTime / revealDuration);
             _rectMask.padding = new Vector4(0, 0, newPaddingRight, 0);
             yield return null;
         }
+
+        // 즉시 완료 요청이 있든 없든 최종적으로 패딩을 0으로 설정하여 모든 텍스트가 보이게 함
         _rectMask.padding = new Vector4(0, 0, targetPaddingRight, 0);
+    }
+
+    // 즉시 완료 메서드
+    public void RevealInstantly()
+    {
+        _isRevealingInstantly = true;
     }
 
     // SetPosition 메서드

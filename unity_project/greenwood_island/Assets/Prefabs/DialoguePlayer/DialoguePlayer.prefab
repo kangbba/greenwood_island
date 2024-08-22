@@ -195,6 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bd4adef9a4f42de85f4c6b6ae0a55e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _panelRectTransform: {fileID: 8219515785612320796}
   _sentenceRectMaskPrefab: {fileID: 1242073392574814838, guid: 5bb2dbc59e5604009b84b139d524e379, type: 3}
   _rectMaskParent: {fileID: 3083349875630625259}
 --- !u!1 &5227870559912104620

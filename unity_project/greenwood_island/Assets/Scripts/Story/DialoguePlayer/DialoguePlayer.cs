@@ -2,78 +2,109 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
+public enum EDialogueState
+{
+    NotStarted,    // 대화가 시작되지 않은 상태
+    Typing,        // 현재 텍스트가 타이핑되고 있는 상태
+    Waiting,       // 타이핑이 끝나고, 대기 중인 상태
+    Finished       // 모든 대화가 끝난 상태
+}
 public class DialoguePlayer : MonoBehaviour
 {
-    private Line testLine = new Line(EEmotionID.Angry, 0, "안녕하세요. 긴 문장 테스트를 해보겠습니다 어떻게 보일지 과연 너무나 신기할것같아요 하하하. 하지만 이건 잘 작동하겠죠. 솔직하게 말하자구요");
-    private List<Line> _lines;
-
+    [SerializeField] private RectTransform _panelRectTransform;
     [SerializeField] private SentenceRectMask _sentenceRectMaskPrefab;
     [SerializeField] private Transform _rectMaskParent;
 
-    private List<SentenceRectMask> _createdRectMasks;
+    private List<SentenceRectMask> CeatedRectMasks => _rectMaskBuilder.CreatedRectMasks;
     private int _currentMaskIndex = 0; // 현재 재생 중인 RectMask의 인덱스
 
     private SentenceRectMaskBuilder _rectMaskBuilder;
 
-    public enum EDialogueState
-    {
-        NotStarted,    // 대화가 시작되지 않은 상태
-        Typing,        // 현재 텍스트가 타이핑되고 있는 상태
-        Waiting,       // 타이핑이 끝나고, 대기 중인 상태
-        Finished       // 모든 대화가 끝난 상태
-    }
-
     public bool CanCompleteInstantly { get; set; } = true; // 즉시 완료 가능 여부를 설정하는 옵션
+    public EDialogueState DialogueState { get => _dialogueState; }
 
     private EDialogueState _dialogueState = EDialogueState.NotStarted;
     private Coroutine _currentRevealCoroutine; // 현재 실행 중인 RevealRectMasks 코루틴
 
-    private void Start()
-    {
+    private void Start(){
         _rectMaskBuilder = new SentenceRectMaskBuilder(_rectMaskParent, _sentenceRectMaskPrefab);
-
-        // 초기화 시 테스트 라인을 설정하고 RectMask 생성 후 ShowNext 호출
-        _createdRectMasks = _rectMaskBuilder.CreateRectMask(testLine, ref _currentMaskIndex);
-        ShowNext();
     }
-
-    public void InitDialogue(Dialogue dialogue)
+    public void InitLine(Line line)
     {
-        _lines = dialogue.Lines;
+        // 대화 상태 및 관련 변수 초기화
         _dialogueState = EDialogueState.NotStarted;
+        _currentMaskIndex = 0; // 현재 재생 중인 RectMask의 인덱스를 초기화
+        if (_currentRevealCoroutine != null)
+        {
+            StopCoroutine(_currentRevealCoroutine); // 현재 실행 중인 코루틴이 있으면 중지
+            _currentRevealCoroutine = null;
+        }
+
+        // RectMaskBuilder 초기화
+        _rectMaskBuilder.CreateRectMask(line, ref _currentMaskIndex); // 새로운 마스크 생성
+
+        // ShowNextSentence를 호출하여 첫 번째 문장을 보여줌
+        ShowNextSentence();
     }
 
-    public void ShowNext()
+
+    public void ShowNextSentence()
     {
         if (_dialogueState == EDialogueState.Typing || _dialogueState == EDialogueState.Finished)
         {
             return; // 이미 타이핑 중이거나 모든 대화가 끝난 상태에서는 새로운 ShowNext를 시작하지 않음
         }
 
+        if (CeatedRectMasks == null || CeatedRectMasks.Count == 0)
+        {
+            Debug.LogWarning("No masks available to show.");
+            return;
+        }
+
+        Debug.Log("ShowNext");
+
         _dialogueState = EDialogueState.Typing;
 
         int startIndex = _currentMaskIndex;
-        int endIndex = _rectMaskBuilder.CalculateEndIndex(_createdRectMasks, startIndex);
+        int endIndex = _rectMaskBuilder.CalculateEndIndex(CeatedRectMasks, startIndex);
+
+        // Start and End Index Debugging
+        Debug.Log($"ShowNext StartIndex: {startIndex}, EndIndex: {endIndex}");
+
+        // Display the content of the current rect masks
+        for (int i = startIndex; i <= endIndex && i < CeatedRectMasks.Count; i++)
+        {
+            Debug.Log($"RectMask {i}: {_rectMaskBuilder.CreatedRectMasks[i].Sentence}");
+        }
 
         _currentRevealCoroutine = StartCoroutine(RevealRectMasks(startIndex, endIndex, 0.05f));
     }
 
+
     private IEnumerator RevealRectMasks(int startIndex, int endIndex, float delay)
     {
-        for (int i = startIndex; i <= endIndex && i < _createdRectMasks.Count; i++)
+        for (int i = startIndex; i <= endIndex && i < CeatedRectMasks.Count; i++)
         {
-            var rectMask = _createdRectMasks[i];
-            yield return StartCoroutine(rectMask.RevealMask(delay)); // 예시로 0.05초의 딜레이를 줌
+            var rectMask = CeatedRectMasks[i];
+            if (rectMask != null)
+            {
+                yield return StartCoroutine(rectMask.RevealMask(delay)); 
+            }
+            else
+            {
+                Debug.LogWarning("RectMask is null, skipping.");
+            }
         }
         
         _currentMaskIndex = endIndex + 1; // 다음 인덱스 업데이트
 
-        if (_currentMaskIndex >= _createdRectMasks.Count)
+        if (_currentMaskIndex >= CeatedRectMasks.Count)
         {
             _dialogueState = EDialogueState.Finished; // 모든 RectMask 재생 완료
         }
-        else if (_createdRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
+        else if (CeatedRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
         {
             _dialogueState = EDialogueState.Waiting; // Regex로 인한 대기 상태로 전환
         }
@@ -93,23 +124,26 @@ public class DialoguePlayer : MonoBehaviour
         StopCoroutine(_currentRevealCoroutine); // 현재 실행 중인 RevealRectMasks 코루틴 중지
 
         int startIndex = _currentMaskIndex;
-        int endIndex = _rectMaskBuilder.CalculateEndIndex(_createdRectMasks, startIndex);
+        int endIndex = _rectMaskBuilder.CalculateEndIndex(CeatedRectMasks, startIndex);
 
         // 해당 범위의 모든 SentenceRectMask에 대해 RevealInstantly 호출
-        for (int i = startIndex; i <= endIndex && i < _createdRectMasks.Count; i++)
+        for (int i = startIndex; i <= endIndex && i < CeatedRectMasks.Count; i++)
         {
-            var rectMask = _createdRectMasks[i];
-            rectMask.RevealInstantly(); // 즉시 텍스트를 완성
+            var rectMask = CeatedRectMasks[i];
+            if (rectMask != null)
+            {
+                rectMask.RevealInstantly(); // 즉시 텍스트를 완성
+            }
         }
 
         // 상태를 업데이트
         _currentMaskIndex = endIndex + 1;
 
-        if (_currentMaskIndex >= _createdRectMasks.Count)
+        if (_currentMaskIndex >= CeatedRectMasks.Count)
         {
             _dialogueState = EDialogueState.Finished;
         }
-        else if (_createdRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
+        else if (CeatedRectMasks[_currentMaskIndex - 1].FragmentReason == SentenceRectMask.EFragmentReason.Regex)
         {
             _dialogueState = EDialogueState.Waiting;
         }
@@ -119,18 +153,10 @@ public class DialoguePlayer : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void ShowPanel(bool show, float duration)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (_dialogueState == EDialogueState.Waiting)
-            {
-                ShowNext();
-            }
-            else if (_dialogueState == EDialogueState.Typing)
-            {
-                CompleteCurSentence();
-            }
-        }
+        float offScreenY = -_panelRectTransform.rect.height;
+        Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
+        _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutCubic);
     }
 }

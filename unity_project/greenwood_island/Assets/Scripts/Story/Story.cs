@@ -23,7 +23,7 @@ public class Story : MonoBehaviour
             new List<Line>
             {
                 new Line(EEmotionID.Panic, 0, "여기는 어디지? 모두가 사라진 것 같아... 너무 조용해."),
-                new Line(EEmotionID.Stumped, 1, "리사... 네가 여기 있었으면 좋았을 텐데. 이 이상한 기분을 떨칠 수가 없어."),
+                new Line(EEmotionID.Stumped, 1, "리사. 네가 여기 있었으면 좋았을 텐데. 이 이상한 기분을 떨칠 수가 없어."),
                 new Line(EEmotionID.Angry, 2, "이건 단순한 장난이 아니야. 뭔가 잘못됐어. 나는 이곳을 알아야 해!"),
                 new Line(EEmotionID.Angry, 2, "이건 단순한 장난이 아니야. 뭔가 잘못됐어. 나는 이곳을 알아야 해!2나는 이곳을 알아야 해!2나는 이곳을 알아야 해!2나는 이곳을 알아야 해!2")
             }

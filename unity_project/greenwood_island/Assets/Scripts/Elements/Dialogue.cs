@@ -13,6 +13,7 @@ public class Dialogue : Element
         this._characterID = characterID;
         this._lines = lines;
     }
+    public DialoguePlayer DialoguePlayer => DialogueManager.Instance.DialoguePlayer;
 
     public ECharacterID CharacterID { get => _characterID; }
     public List<Line> Lines { get => _lines; }
@@ -33,34 +34,28 @@ public class Dialogue : Element
         var firstLine = _lines[0];
         CharacterManager.Instance.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex);
 
-        // // 대화 시작
-        // DialogueManager.Instance.StartDialogue(this);
+        // 대화 시작
+        DialogueManager.Instance.StartDialogue(this);
 
-        // // 대화 진행
-        // for (int i = 0; i < _lines.Count; i++)
-        // {
-        //     // 현재 상태가 Typing일 때는 대기
-        //     while (DialogueManager.Instance.DialoguePlayer.CurrentDialogueState == DialogueState.Typing)
-        //     {
-        //         yield return null;
-        //     }
+        // 대화 진행
+        for (int i = 0; i < _lines.Count; i++)
+        {
+            Debug.Log($"{i}번째 대사 시작");
+            Line line = _lines[i];
+            DialogueManager.Instance.InitLine(line);
+            DialogueManager.Instance.ShowNextSentence();
+            CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex);
 
-        //     // 사용자의 입력을 기다림
-        //     yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            while(DialoguePlayer.DialogueState != EDialogueState.Finished){
 
-        //     // 상태가 Waiting일 때 문장 완료
-        //     if (DialogueManager.Instance.DialoguePlayer.CurrentDialogueState == DialogueState.WaitingForNextRegex)
-        //     {
-        //         DialogueManager.Instance.DisplayNextColumn();
-        //     }
-        //     // 상태가 Waiting일 때 문장 완료
-        //     if (DialogueManager.Instance.DialoguePlayer.CurrentDialogueState == DialogueState.WaitingForNextLine)
-        //     {
-        //         DialogueManager.Instance.DisplayNextLine();
-        //     }
-        // }
-
-        // // 대화 종료
-        // DialogueManager.Instance.EndDialogue();
+                if(Input.GetMouseButtonDown(0)){
+                    DialogueManager.Instance.ShowNextSentence();
+                }
+                yield return null;
+            }
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+        }
+        DialogueManager.Instance.EndDialogue();
     }
+
 }

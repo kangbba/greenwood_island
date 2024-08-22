@@ -8,6 +8,10 @@ public class SentenceRectMaskBuilder
     private Transform _rectMaskParent;
     private SentenceRectMask _sentenceRectMaskPrefab;
 
+    List<SentenceRectMask> _createdRectMasks = new List<SentenceRectMask>();
+
+    public List<SentenceRectMask> CreatedRectMasks { get => _createdRectMasks; }
+
     public SentenceRectMaskBuilder(Transform rectMaskParent, SentenceRectMask sentenceRectMaskPrefab)
     {
         _rectMaskParent = rectMaskParent;
@@ -67,8 +71,20 @@ public class SentenceRectMaskBuilder
 
     public List<SentenceRectMask> CreateRectMask(Line line, ref int currentMaskIndex)
     {
+        // 기존에 생성된 마스크가 있다면 파괴
+        if (_createdRectMasks != null)
+        {
+            foreach (var mask in _createdRectMasks)
+            {
+                if (mask != null)
+                {
+                    GameObject.Destroy(mask.gameObject); // 각 마스크의 게임 오브젝트를 파괴
+                }
+            }
+            _createdRectMasks.Clear(); // 리스트 초기화
+        }
+
         currentMaskIndex = 0;
-        List<SentenceRectMask> createdRectMasks = new List<SentenceRectMask>();
 
         string sentence = line.Sentence;
         float xOffset = 0f;
@@ -89,7 +105,7 @@ public class SentenceRectMaskBuilder
                 string part1 = currentPart.Substring(0, splitIndex);
                 SentenceRectMask rectMask1 = AddRectMask(part1, ref xOffset, ref yOffset, maxWidth);
                 rectMask1.FragmentReason = SentenceRectMask.EFragmentReason.Overflow;
-                createdRectMasks.Add(rectMask1);
+                _createdRectMasks.Add(rectMask1);
 
                 string part2 = currentPart.Substring(splitIndex);
                 xOffset = 0f;
@@ -100,7 +116,7 @@ public class SentenceRectMaskBuilder
             {
                 SentenceRectMask rectMask = AddRectMask(currentPart, ref xOffset, ref yOffset, maxWidth);
                 rectMask.FragmentReason = SentenceRectMask.EFragmentReason.Regex;
-                createdRectMasks.Add(rectMask);
+                _createdRectMasks.Add(rectMask);
                 currentPart = "";
             }
         }
@@ -109,10 +125,10 @@ public class SentenceRectMaskBuilder
         {
             SentenceRectMask rectMask = AddRectMask(currentPart, ref xOffset, ref yOffset, maxWidth);
             rectMask.FragmentReason = SentenceRectMask.EFragmentReason.LastFragment;
-            createdRectMasks.Add(rectMask);
+            _createdRectMasks.Add(rectMask);
         }
 
-        return createdRectMasks;
+        return _createdRectMasks;
     }
 
     public int CalculateEndIndex(List<SentenceRectMask> createdRectMasks, int startIndex)

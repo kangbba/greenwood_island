@@ -28,7 +28,7 @@ public class StoryB : Story
                     new Line(EEmotionID.Stumped, 1, "그래도... 이번에는 내가 유리해."),
                 }
             ),
-            new StoryTransition("StoryD") // 결과에 따라 StoryD로 전환
+            new StoryTransition(new StoryD()) // 결과에 따라 StoryD로 전환
         };
     }
 }

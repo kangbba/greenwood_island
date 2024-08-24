@@ -77,15 +77,15 @@ public class StoryManager : MonoBehaviour
         return Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == typeName);
     }
 
-    public void StartStory(string storyId)
+    public void StartStory(Story story)
     {
-        if (_stories.TryGetValue(storyId, out var story))
+        if (story != null)
         {
             StartCoroutine(story.Execute());
         }
         else
         {
-            Debug.LogError($"Story with ID {storyId} not found.");
+            Debug.LogError("Story is null and cannot be started.");
         }
     }
 }

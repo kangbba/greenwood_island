@@ -43,7 +43,7 @@ public class StoryA : Story
                                     new Line(EEmotionID.Panic, 0, "머리를 노리면, 끝낼 수 있을 거야!"),
                                 }
                             ),
-                            new StoryTransition("StoryB") // 다음 스토리로 전환
+                            new StoryTransition(new StoryB()) // 다음 스토리로 전환
                         }
                     ),
                     new ChoiceOption(
@@ -57,7 +57,7 @@ public class StoryA : Story
                                     new Line(EEmotionID.Stumped, 0, "몸을 노리면, 확실히 이길 수 있을 거야!"),
                                 }
                             ),
-                            new StoryTransition("StoryC") // 다음 스토리로 전환
+                            new StoryTransition(new StoryC()) // 다음 스토리로 전환
                         }
                     ),
                     new ChoiceOption(
@@ -71,7 +71,7 @@ public class StoryA : Story
                                     new Line(EEmotionID.Smile, 0, "방어를 강화하면, 나를 지킬 수 있을 거야!"),
                                 }
                             ),
-                            new StoryTransition("StoryD") // 다음 스토리로 전환
+                            new StoryTransition(new StoryD()) // 다음 스토리로 전환
                         }
                     )
                 }

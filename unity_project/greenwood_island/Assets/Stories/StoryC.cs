@@ -28,7 +28,7 @@ public class StoryC : Story
                     new Line(EEmotionID.Happy, 1, "이번에는 내가 유리해."),
                 }
             ),
-            new StoryTransition("StoryD") // 결과에 따라 StoryD로 전환
+            new StoryTransition(new StoryD()) // 결과에 따라 StoryD로 전환
         };
     }
 }

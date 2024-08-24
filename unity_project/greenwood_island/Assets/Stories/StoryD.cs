@@ -44,7 +44,7 @@ public class StoryD : Story
                     new Line(EEmotionID.Smile, 0, "그럼 우리 이제 새로운 모험을 시작해볼까?")
                 }
             ),
-            new StoryTransition("StoryE") // 다음 스토리로 전환
+           // new StoryTransition("StoryE") // 다음 스토리로 전환
         };
     }
 }

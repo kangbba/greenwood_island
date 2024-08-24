@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5742921166433713840}
   - component: {fileID: 4377958270772748238}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Choice Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,8 +147,9 @@ GameObject:
   - component: {fileID: 205453044650762797}
   - component: {fileID: 4473286746429140255}
   - component: {fileID: -1634345931583733196}
+  - component: {fileID: 6027139767458097407}
   m_Layer: 5
-  m_Name: ChoicePrefab
+  m_Name: ChoiceButtonPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -268,3 +269,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &6027139767458097407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662680143061741890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b1ea80adf3524cb3927c71ea32ccd8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _choiceText: {fileID: 4377958270772748238}
+  _button: {fileID: 4473286746429140255}
+  _canvasGroup: {fileID: -1634345931583733196}

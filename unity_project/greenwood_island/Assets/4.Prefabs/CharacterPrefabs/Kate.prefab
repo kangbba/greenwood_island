@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -23, y: -308}
+  m_AnchoredPosition: {x: 0, y: -281}
   m_SizeDelta: {x: 1280, y: 3810.2324}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4679146932676477584
@@ -102,19 +102,19 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 5f68cd1b47cff4530855b8d28b164be1, type: 3}
   - _emotionID: 6
     _emotionSprites:
+    - {fileID: 21300000, guid: 262e32e50eeca4103b157e4aaa99bba8, type: 3}
     - {fileID: 21300000, guid: 79c045933010f44ea8e742924a51253b, type: 3}
-    - {fileID: 21300000, guid: 552fbc20c9f194e70ac270cf0daeb48b, type: 3}
   - _emotionID: 5
     _emotionSprites:
-    - {fileID: 21300000, guid: 6f841591bfd0f4f4dabd1d366663bb88, type: 3}
     - {fileID: 21300000, guid: 6e5e27aae1456447ebb8bce2d296f4b9, type: 3}
     - {fileID: 21300000, guid: 9fc6ac674c1874d70a4207d176ec7db0, type: 3}
     - {fileID: 21300000, guid: c438c80e518ef449299fdf3e2a3e0b6e, type: 3}
     - {fileID: 21300000, guid: 6fed5e455ddf3432193f8bdc341babc6, type: 3}
+    - {fileID: 21300000, guid: 6f841591bfd0f4f4dabd1d366663bb88, type: 3}
   - _emotionID: 4
     _emotionSprites:
-    - {fileID: 21300000, guid: 84454c8dc5e7543ff8abb222cd6c0768, type: 3}
     - {fileID: 21300000, guid: d7e624ec11a5d41ae9e0eaf33fa82afd, type: 3}
+    - {fileID: 21300000, guid: 84454c8dc5e7543ff8abb222cd6c0768, type: 3}
   _img: {fileID: 8109460112451840439}
 --- !u!225 &8584031999050825053
 CanvasGroup:

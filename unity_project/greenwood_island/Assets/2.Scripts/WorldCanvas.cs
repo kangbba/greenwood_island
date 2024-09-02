@@ -7,7 +7,8 @@ public class WorldCanvas : MonoBehaviour
 {
     [SerializeField] private Transform _placeLayer;
     [SerializeField] private Transform _characterLayer;
-    [SerializeField] private Transform _screenEffectLayer;
+    [SerializeField] private Transform _fxLayer;
+    [SerializeField] private Transform _sfxLayer;
 
     [SerializeField] private Image _placeOverlayFilm;
     public Image PlaceOverlayFilm { get => _placeOverlayFilm; }
@@ -19,5 +20,6 @@ public class WorldCanvas : MonoBehaviour
 
     public Transform CharacterLayer { get => _characterLayer; }
     public Transform PlaceLayer { get => _placeLayer; }
-    public Transform ScreenEffectLayer { get => _screenEffectLayer; }
+    public Transform FXLayer { get => _fxLayer; }
+    public Transform SFXLayer { get => _sfxLayer; }
 }

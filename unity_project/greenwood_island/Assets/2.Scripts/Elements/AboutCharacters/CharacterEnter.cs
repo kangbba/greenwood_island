@@ -9,11 +9,15 @@ public class CharacterEnter : Element
     private float _screenPeroneX;
     private float _duration;
     private Ease _easeType;
+    private EEmotionID _initialEmotionID; // 초기 이모션 설정
+    private int _emotionIndex;
 
-    public CharacterEnter(ECharacterID characterID, float screenPeroneX, float duration = 1f, Ease easeType = Ease.OutQuad)
+    public CharacterEnter(ECharacterID characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex, float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         this._characterID = characterID;
         this._screenPeroneX = screenPeroneX;
+        this._initialEmotionID = initialEmotionID; // 초기 이모션 설정
+        this._emotionIndex = emotionIndex; 
         this._duration = duration;
         this._easeType = easeType;
     }
@@ -21,7 +25,7 @@ public class CharacterEnter : Element
     public override IEnumerator Execute()
     {
         // 캐릭터 생성 및 위치 설정
-        Character character = CharacterManager.Instance.InstantiateCharacter(_characterID, _screenPeroneX);
+        Character character = CharacterManager.Instance.InstantiateCharacter(_characterID, _screenPeroneX, _initialEmotionID, _emotionIndex);
 
         if (character == null)
         {

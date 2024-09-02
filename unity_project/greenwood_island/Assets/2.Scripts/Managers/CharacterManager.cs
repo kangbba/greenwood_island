@@ -66,8 +66,8 @@ public class CharacterManager : MonoBehaviour
     {
         return _instantiatedCharacters.Values.ToList();
     }
-
-    public Character InstantiateCharacter(ECharacterID characterID, float screenPeroneX)
+    
+    public Character InstantiateCharacter(ECharacterID characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex)
     {
         CharacterData data = GetCharacterData(characterID);
 
@@ -84,8 +84,10 @@ public class CharacterManager : MonoBehaviour
         }
 
         Character character = Instantiate(data.characterPrefab, UIManager.Instance.WorldCanvas.CharacterLayer.transform);
-        // 캐릭터를 딕셔너리에 등록
         _instantiatedCharacters.Add(characterID, character);
+
+        // 초기 이모션 설정
+        character.ChangeEmotion(initialEmotionID, emotionIndex, 0f);
 
         // 캐릭터를 생성한 후, 즉시 이동(애니메이션 없이) 시키기 위해 CharacterMove 사용
         CharacterMove move = new CharacterMove(characterID, screenPeroneX, 0f, Ease.Linear);
@@ -93,6 +95,7 @@ public class CharacterManager : MonoBehaviour
 
         return character;
     }
+
 
     public void DestroyCharacter(ECharacterID characterID)
     {
@@ -131,7 +134,7 @@ public class CharacterManager : MonoBehaviour
     }
 
     // Utility method to reset all characters
-    public void ResetAllCharacters()
+    public void DestroyAllCharacters()
     {
         foreach (var character in _instantiatedCharacters.Values)
         {

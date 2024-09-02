@@ -31,8 +31,8 @@ public class ChoiceUI : MonoBehaviour
         }
 
         // 선택지 생성 및 순차적 배치
-        float startY = 200f;
-        float yOffset = -200f;
+        float startY = 360f;
+        float yOffset = -360f;
 
         for (int i = 0; i < choices.Count; i++)
         {

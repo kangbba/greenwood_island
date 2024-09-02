@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class StoryManager : MonoBehaviour
@@ -65,7 +66,7 @@ public class StoryManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"Story {storyInstance.StoryId} is already registered.");
+                    Debug.LogWarning($"Story {storyInstance.StoryId} is already registered."); 
                 }
             }
         }

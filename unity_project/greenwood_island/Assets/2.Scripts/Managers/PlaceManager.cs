@@ -136,7 +136,7 @@ public class PlaceManager : MonoBehaviour
         return place;
     }
 
-    public void DestroyAllPlaces()
+    private void DestroyAllPlaces()
     {
         foreach (var place in _activePlaces.Values)
         {

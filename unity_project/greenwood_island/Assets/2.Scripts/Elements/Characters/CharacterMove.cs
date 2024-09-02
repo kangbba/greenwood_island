@@ -10,6 +10,7 @@ public class CharacterMove : Element
     private float _duration;
     private Ease _easeType;
 
+
     public CharacterMove(ECharacterID characterID, float targetScreenPeroneX, float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         this._characterID = characterID;

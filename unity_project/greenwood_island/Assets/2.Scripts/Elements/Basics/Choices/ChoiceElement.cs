@@ -14,6 +14,7 @@ public class ChoiceElement : Element
         _choices = choices ?? new List<ChoiceOption>(); // null 방지를 위해 리스트 초기화
     }
 
+
     public override IEnumerator Execute()
     {
         int chosenIndex = -1;

@@ -14,6 +14,7 @@ public class PlaceEffect : Element
     private Color _effectColor;
     private float _duration;
     private Ease _easeType;
+    
 
     public PlaceEffect(Color effectColor, float duration = 1f, Ease easeType = Ease.Linear)
     {

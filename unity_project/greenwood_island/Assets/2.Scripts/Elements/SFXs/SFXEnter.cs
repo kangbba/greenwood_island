@@ -17,6 +17,7 @@ public class SFXEnter : Element
         _loopTerm = loopTerm;
     }
 
+
     public override IEnumerator Execute()
     {
         // SFX 생성 시 SFXManager를 통해 재생

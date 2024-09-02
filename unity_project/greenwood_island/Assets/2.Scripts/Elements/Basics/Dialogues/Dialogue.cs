@@ -18,6 +18,7 @@ public class Dialogue : Element
     public ECharacterID CharacterID { get => _characterID; }
     public List<Line> Lines { get => _lines; }
 
+
     public override IEnumerator Execute()
     {
         // 이미 생성된 캐릭터를 불러옴

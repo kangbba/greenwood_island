@@ -11,6 +11,7 @@ public class CharacterEnter : Element
     private Ease _easeType;
     private EEmotionID _initialEmotionID; // 초기 이모션 설정
     private int _emotionIndex;
+    
 
     public CharacterEnter(ECharacterID characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex, float duration = 1f, Ease easeType = Ease.OutQuad)
     {
@@ -21,6 +22,7 @@ public class CharacterEnter : Element
         this._duration = duration;
         this._easeType = easeType;
     }
+
 
     public override IEnumerator Execute()
     {

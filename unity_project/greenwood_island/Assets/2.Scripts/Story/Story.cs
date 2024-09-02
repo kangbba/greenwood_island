@@ -5,6 +5,11 @@ using UnityEngine;
 
 public abstract class Story
 {
+    /// <summary>
+    /// Elements에 할당 해두면,
+    /// StoryManager가 자동으로 이 엘리먼츠들을 순서대로 호출할것입니다.
+    /// </summary>
+
     protected List<Element> _elements = new List<Element>();
     protected List<ECharacterID> _activeCharacters = new List<ECharacterID>(); // 현재 스토리에 등장한 캐릭터 목록
 
@@ -52,9 +57,9 @@ public abstract class Story
     /// 스토리의 종료 작업을 담당하는 가상 코루틴 메서드.
     /// 상속받은 클래스에서 구체적으로 구현해야 합니다.
     /// </summary>
-    protected virtual IEnumerator OnExitStory()
+    protected virtual IEnumerator OnExitPlace()
     {
-        // 스토리 종료는 상속받은 클래스에서 구현
+        // 장소 초기화는 상속받은 클래스에서 구현
         yield break;
     }
 
@@ -66,7 +71,7 @@ public abstract class Story
         yield return OnEnterPlace();        // 장소 초기화
         yield return OnStory();             // 스토리 진행
         yield return ExitCharacters();      // 캐릭터 퇴장
-        yield return OnExitStory();         // 스토리 종료
+        yield return OnExitPlace();         // 스토리 종료
         Debug.Log($"Story {StoryId} completed.");
     }
 }

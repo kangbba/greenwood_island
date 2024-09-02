@@ -36,7 +36,7 @@ public class StoryD : Story
                     new Line(EEmotionID.Happy, 0, "그래, 이제부터 함께하자."),
                 }
             ),
-            new PlaceMove(EPlaceID.Town2, 2f, Ease.InOutQuad, true, Color.white),
+            new PlaceMove(EPlaceID.Town2, 2f, Ease.InOutQuad),
             new Dialogue(
                 ECharacterID.Lisa,
                 new List<Line>

@@ -10,6 +10,7 @@ public class CharactersExit : Element
     private float _duration;
     private Ease _easeType;
 
+
     public CharactersExit(List<ECharacterID> characterIDs, float duration = 1f, Ease easeType = Ease.InQuad)
     {
         this._characterIDs = characterIDs;

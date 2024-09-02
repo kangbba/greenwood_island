@@ -102,7 +102,7 @@ public class StoryB : Story
         Debug.Log($"Story {StoryId} OnStory completed.");
     }
 
-    protected override IEnumerator OnExitStory()
+    protected override IEnumerator OnExitPlace()
     {
         // 스토리 종료 작업
         Debug.Log($"Story {StoryId} finished.");

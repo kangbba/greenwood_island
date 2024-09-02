@@ -20,8 +20,10 @@ public class SFXExit : Element
         // 활성화된 SFX 오디오 소스를 가져옴
         List<AudioSource> activeSFXs = SFXManager.Instance.GetActiveSFXs(_sfxType);
 
-        foreach (var audioSource in activeSFXs)
+        // 리스트를 역순으로 순회하며 안전하게 제거
+        for (int i = activeSFXs.Count - 1; i >= 0; i--)
         {
+            AudioSource audioSource = activeSFXs[i];
             if (audioSource != null)
             {
                 // 볼륨을 페이드 아웃 시키고 완료될 때까지 대기

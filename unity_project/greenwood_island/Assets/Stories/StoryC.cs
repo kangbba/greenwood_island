@@ -20,7 +20,7 @@ public class StoryC : Story
                     new Line(EEmotionID.Panic, 0, "너의 움직임이 더 빨라졌군... 하지만 이길 수 없어!"),
                 }
             ),
-            new PlaceMove(EPlaceID.Mountain, 1.5f, Ease.InOutQuad, true, Color.gray),
+            new PlaceMove(EPlaceID.Mountain, 1.5f, Ease.InOutQuad),
             new Dialogue(
                 ECharacterID.Kate,
                 new List<Line>

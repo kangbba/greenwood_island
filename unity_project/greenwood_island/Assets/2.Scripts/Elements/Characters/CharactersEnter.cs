@@ -13,6 +13,7 @@ public class CharactersEnter : Element
     private float _duration;
     private Ease _easeType;
 
+
     public CharactersEnter(List<ECharacterID> characterIDs, List<float> screenPeroneXs, List<EEmotionID> emotionIDs, List<int> emotionIndexes, float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         // 각 리스트가 동일한 길이인지 확인

@@ -15,7 +15,7 @@ public class FXExit : Element
         _duration = duration;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         List<GameObject> activeFXs = FXManager.Instance.GetActiveFXs(_fxType);
 

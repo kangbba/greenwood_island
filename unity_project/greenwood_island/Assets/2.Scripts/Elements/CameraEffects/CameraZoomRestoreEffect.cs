@@ -14,7 +14,7 @@ public class CameraZoomRestoreEffect : Element
         _easeType = easeType;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         if (CameraController.Instance == null)
         {

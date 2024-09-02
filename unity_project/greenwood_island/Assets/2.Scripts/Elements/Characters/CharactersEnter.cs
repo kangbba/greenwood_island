@@ -31,7 +31,7 @@ public class CharactersEnter : Element
         this._easeType = easeType;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         List<Coroutine> enterCoroutines = new List<Coroutine>();
 
@@ -39,7 +39,7 @@ public class CharactersEnter : Element
         for (int i = 0; i < _characterIDs.Count; i++)
         {
             CharacterEnter characterEnter = new CharacterEnter(_characterIDs[i], _screenPeroneXs[i], _emotionIDs[i], _emotionIndexes[i], _duration, _easeType);
-            Coroutine enterCoroutine = CoroutineRunner.Instance.StartCoroutine(characterEnter.Execute());
+            Coroutine enterCoroutine = CoroutineRunner.Instance.StartCoroutine(characterEnter.ExecuteRoutine());
             enterCoroutines.Add(enterCoroutine);
         }
 

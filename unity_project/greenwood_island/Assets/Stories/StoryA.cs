@@ -5,23 +5,17 @@ using DG.Tweening;
 
 public class StoryA : Story
 {
-    public override string StoryId => "StoryA";
-
-    protected override IEnumerator OnEnterPlace()
-    {
-        // 스토리 시작 시 장소 초기화
-        PlaceManager.Instance.InstantiatePlace(EPlaceID.Forest);
-        PlaceManager.Instance.ShowPlace(EPlaceID.Forest, 1.0f, Ease.InOutQuad);
-        Debug.Log($"Story {StoryId} OnEnterPlace: Place Town1 initialized.");
-        yield return null;
-    }
-
+    public override EStoryID StoryId => EStoryID.StoryA;
     public StoryA()
     {
         _elements = new List<Element>
         {
-            new SFXEnter(SFXType.CreepyWhisper, true, 0.5f),
-            new CameraMoveEffect(new Vector3(7, 0, 10), 0f, Ease.InOutQuad), // 초기 카메라 이동 효과
+
+            new SFXEnter(SFXType.CreepyWhisper),
+            new ParallelElement(
+                new PlaceMove(EPlaceID.Mountain),
+                new CameraMoveEffect(new Vector3(7, 0, 10), 0f, Ease.InOutQuad)// 초기 카메라 이동 효과
+            ),
             new CameraMoveEffect(new Vector3(0, 0, -10), 5f, Ease.InOutQuad), // 초기 카메라 이동 효과
             new CharactersEnter(new List<ECharacterID> { ECharacterID.Kate, ECharacterID.Lisa }, new List<float> { 0.33f, 0.66f }, new List<EEmotionID> { EEmotionID.Angry, EEmotionID.Stumped },
             new List<int> { 0, 0 }, 2f, Ease.OutQuad),
@@ -119,25 +113,17 @@ public class StoryA : Story
                     )
                 }
             ),
-            new SFXExit(SFXType.CreepyWhisper)
+            new SFXExit(SFXType.CreepyWhisper),
         };
     }
 
 
     protected override IEnumerator OnStory()
     {
-        // 스토리 진행 단계
         foreach (var element in _elements)
         {
-            yield return element.Execute();
+            yield return element.ExecuteRoutine();
         }
-        Debug.Log($"Story {StoryId} OnStory completed.");
     }
 
-    protected override IEnumerator OnExitPlace()
-    {
-        // 스토리 종료 작업
-        Debug.Log($"Story {StoryId} finished.");
-        yield return null;
-    }
 }

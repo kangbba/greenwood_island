@@ -9,6 +9,8 @@ public class Place : MonoBehaviour
     public EPlaceID PlaceID;  // 장소의 ID를 할당할 필드
     private Image _image;  // UI 이미지 컴포넌트
 
+    public Image Image { get => _image; }
+
     private void Awake()
     {
         _image = GetComponent<Image>();
@@ -19,7 +21,7 @@ public class Place : MonoBehaviour
         }
 
         // 초기화 시 투명하게 설정
-        SetColor(new Color(0, 0, 0, 0), 0f);
+        SetVisibility(true, 1f);
     }
 
     // 가시성을 설정하는 메서드 (페이드 인/아웃)

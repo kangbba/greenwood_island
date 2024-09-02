@@ -16,7 +16,7 @@ public class CharacterExit : Element
         this._easeType = easeType;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 가져오기
         Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);

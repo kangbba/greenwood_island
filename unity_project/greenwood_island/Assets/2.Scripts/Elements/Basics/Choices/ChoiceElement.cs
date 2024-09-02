@@ -15,7 +15,7 @@ public class ChoiceElement : Element
     }
 
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         int chosenIndex = -1;
 
@@ -29,7 +29,7 @@ public class ChoiceElement : Element
         // 선택한 결과에 따른 Elements 실행
         if (chosenIndex >= 0 && chosenIndex < _choices.Count)
         {
-            yield return CoroutineRunner.Instance.StartCoroutine(_choices[chosenIndex].Execute());
+            yield return CoroutineRunner.Instance.StartCoroutine(_choices[chosenIndex].ExecuteRoutine());
         }
         else
         {

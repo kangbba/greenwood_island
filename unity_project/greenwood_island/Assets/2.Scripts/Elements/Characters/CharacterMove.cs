@@ -19,7 +19,7 @@ public class CharacterMove : Element
         this._easeType = easeType;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 기존 캐릭터 가져오기
         Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);

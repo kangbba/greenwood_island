@@ -5,22 +5,15 @@ using DG.Tweening;
 
 public class StoryB : Story
 {
-    public override string StoryId => "StoryB";
-
-    protected override IEnumerator OnEnterPlace()
-    {
-        // 스토리 시작 시 장소 초기화
-        PlaceManager.Instance.InstantiatePlace(EPlaceID.Town2);
-        PlaceManager.Instance.ShowPlace(EPlaceID.Town2, 1.0f, Ease.InOutQuad);
-        Debug.Log($"Story {StoryId} OnEnterPlace: Place Town2 initialized.");
-        yield return null;
-    }
+    public override EStoryID StoryId => EStoryID.StoryB;
 
 
     public StoryB()
     {
         _elements = new List<Element>
         {
+            new PlaceMove(EPlaceID.Mountain),
+            new SFXEnter(SFXType.CreepyWhisper),
             new CameraMoveEffect(new Vector3(0, 0, -10), 1.0f, Ease.InOutQuad), // 초기 카메라 이동 효과
             new Dialogue(
                 ECharacterID.Kate,
@@ -88,24 +81,22 @@ public class StoryB : Story
                         }
                     )
                 }
-            )
+            ),
+            new SFXExit(SFXType.CreepyWhisper),
         };
     }
 
     protected override IEnumerator OnStory()
     {
+        PlaceManager.Instance.InstantiatePlace(EPlaceID.Town2);
+        PlaceManager.Instance.ShowPlace(EPlaceID.Town2, 1.0f, Ease.InOutQuad);
+        new PlaceMove(EPlaceID.Forest).Execute();
         // 스토리 진행 단계
         foreach (var element in _elements)
         {
-            yield return element.Execute();
+            yield return element.ExecuteRoutine();
         }
         Debug.Log($"Story {StoryId} OnStory completed.");
     }
 
-    protected override IEnumerator OnExitPlace()
-    {
-        // 스토리 종료 작업
-        Debug.Log($"Story {StoryId} finished.");
-        yield return null;
-    }
 }

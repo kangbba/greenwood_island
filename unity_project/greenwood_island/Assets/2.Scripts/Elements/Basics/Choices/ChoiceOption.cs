@@ -12,11 +12,11 @@ public class ChoiceOption
         Elements = elements ?? new List<Element>();
     }
 
-    public IEnumerator Execute()
+    public IEnumerator ExecuteRoutine()
     {
         foreach (var element in Elements)
         {
-            yield return CoroutineRunner.Instance.StartCoroutine(element.Execute());
+            yield return CoroutineRunner.Instance.StartCoroutine(element.ExecuteRoutine());
         }
     }
 }

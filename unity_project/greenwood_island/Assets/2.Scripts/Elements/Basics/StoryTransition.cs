@@ -3,24 +3,19 @@ using UnityEngine;
 
 public class StoryTransition : Element
 {
-    private Story _nextStory;
+    private EStoryID _storyID;
 
-    public StoryTransition(Story nextStory)
+    // 생성자를 통해 EStoryID만 받도록 설정
+    public StoryTransition(EStoryID storyID)
     {
-        _nextStory = nextStory;
+        _storyID = storyID;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
-        if (_nextStory != null)
-        {
-            // StoryManager를 통해 다음 스토리 시작
-            StoryManager.Instance.StartStory(_nextStory);
-        }
-        else
-        {
-            Debug.LogWarning("Next story is null in StoryTransition.");
-        }
+        // StoryManager를 통해 스토리 실행
+        StoryManager.Instance.StartStory(_storyID);
+
         yield return null;
     }
 }

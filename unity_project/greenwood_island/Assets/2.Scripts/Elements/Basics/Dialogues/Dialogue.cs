@@ -19,7 +19,7 @@ public class Dialogue : Element
     public List<Line> Lines { get => _lines; }
 
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 이미 생성된 캐릭터를 불러옴
         Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);

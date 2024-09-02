@@ -15,7 +15,7 @@ public class SFXExit : Element
         _fadeDuration = fadeDuration;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 활성화된 SFX 오디오 소스를 가져옴
         List<AudioSource> activeSFXs = SFXManager.Instance.GetActiveSFXs(_sfxType);

@@ -24,7 +24,7 @@ public class ScreenOverlayFilmEffect : Element
         _easeType = easeType;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // ScreenOverlayFilm이 null인 경우 예외 처리 및 얼리 리턴
         if (ScreenOverlayFilm == null)

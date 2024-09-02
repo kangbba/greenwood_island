@@ -13,18 +13,14 @@ using UnityEngine.UI;
 public class PlaceMove : Element
 {
     private EPlaceID _newPlaceID; // 이동할 새로운 장소의 ID
-    private float _duration = 1.0f; // 전환에 걸리는 시간
-    private Ease _transitionEase = Ease.InOutQuad; // 전환 애니메이션의 Ease 타입
 
     // 생성자 추가
-    public PlaceMove(EPlaceID newPlaceID, float duration, Ease transitionEase)
+    public PlaceMove(EPlaceID newPlaceID)
     {
         _newPlaceID = newPlaceID;
-        _duration = duration;
-        _transitionEase = transitionEase;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 현재 활성화된 장소 가져오기
         Place currentPlace = PlaceManager.Instance.CurrentPlace;
@@ -33,16 +29,6 @@ public class PlaceMove : Element
         Place newPlace = PlaceManager.Instance.InstantiatePlace(_newPlaceID);
         if (newPlace != null)
         {
-            // 새로운 장소가 점진적으로 나타나는 연출 (투명도 0 -> 1)
-            CanvasGroup newPlaceCanvasGroup = newPlace.GetComponent<CanvasGroup>();
-            if (newPlaceCanvasGroup != null)
-            {
-                newPlaceCanvasGroup.alpha = 0;
-                newPlaceCanvasGroup.DOFade(1, _duration).SetEase(_transitionEase);
-            }
-
-            yield return new WaitForSeconds(_duration);
-
             // 기존 장소 파괴
             if (currentPlace != null)
             {

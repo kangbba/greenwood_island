@@ -24,7 +24,7 @@ public class CharacterEnter : Element
     }
 
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 생성 및 위치 설정
         Character character = CharacterManager.Instance.InstantiateCharacter(_characterID, _screenPeroneX, _initialEmotionID, _emotionIndex);

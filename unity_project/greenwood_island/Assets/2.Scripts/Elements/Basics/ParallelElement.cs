@@ -13,7 +13,7 @@ public class ParallelElement : Element
         _elements = new List<Element>(elements);
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 각 요소의 완료 여부를 추적할 리스트
         List<bool> isCompleted = new List<bool>(_elements.Count);
@@ -24,11 +24,11 @@ public class ParallelElement : Element
             isCompleted.Add(false);
         }
 
-        // 각 Element의 Execute 코루틴을 동시에 실행
+        // 각 Element의 ExecuteRoutine 코루틴을 동시에 실행
         for (int i = 0; i < _elements.Count; i++)
         {
             int index = i; // 클로저 문제를 피하기 위해 별도의 변수 사용
-            CoroutineRunner.Instance.StartCoroutine(ExecuteElement(_elements[index], index, isCompleted));
+            CoroutineRunner.Instance.StartCoroutine(ExecuteRoutineElement(_elements[index], index, isCompleted));
         }
 
         // 모든 실행된 코루틴이 완료될 때까지 대기
@@ -38,10 +38,10 @@ public class ParallelElement : Element
         }
     }
 
-    // 개별 Element의 Execute를 수행하고 완료 여부를 추적하는 코루틴
-    private IEnumerator ExecuteElement(Element element, int index, List<bool> isCompleted)
+    // 개별 Element의 ExecuteRoutine를 수행하고 완료 여부를 추적하는 코루틴
+    private IEnumerator ExecuteRoutineElement(Element element, int index, List<bool> isCompleted)
     {
-        yield return element.Execute();
+        yield return element.ExecuteRoutine();
         isCompleted[index] = true; // 해당 인덱스의 완료 여부를 true로 설정
     }
 }

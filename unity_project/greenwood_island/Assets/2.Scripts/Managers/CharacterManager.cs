@@ -38,6 +38,8 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
+    public Dictionary<ECharacterID, Character> InstantiatedCharacters { get => _instantiatedCharacters; }
+
     [SerializeField]
     private List<CharacterData> _characterDatas;
 
@@ -62,10 +64,13 @@ public class CharacterManager : MonoBehaviour
     }
 
     // Utility method to get all active characters
-    public List<Character> GetAllActiveCharacters()
+    // Utility method to get all active characters as ECharacterID list
+    public List<ECharacterID> GetAllActiveCharacterIDs()
     {
-        return _instantiatedCharacters.Values.ToList();
+        // _instantiatedCharacters의 Key 값들(ECharacterID)을 리스트로 변환하여 반환
+        return _instantiatedCharacters.Keys.ToList();
     }
+
     
     public Character InstantiateCharacter(ECharacterID characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex)
     {
@@ -91,7 +96,7 @@ public class CharacterManager : MonoBehaviour
 
         // 캐릭터를 생성한 후, 즉시 이동(애니메이션 없이) 시키기 위해 CharacterMove 사용
         CharacterMove move = new CharacterMove(characterID, screenPeroneX, 0f, Ease.Linear);
-        StartCoroutine(move.Execute());
+        StartCoroutine(move.ExecuteRoutine());
 
         return character;
     }

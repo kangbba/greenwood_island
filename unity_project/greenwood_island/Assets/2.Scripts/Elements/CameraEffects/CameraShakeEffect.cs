@@ -17,7 +17,7 @@ public class CameraShakeEffect : Element
         _randomness = randomness;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         if (CameraController.Instance == null)
         {

@@ -23,7 +23,7 @@ public class PlaceEffect : Element
         _easeType = easeType;
     }
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // 현재 활성화된 장소 가져오기
         Place currentPlace = PlaceManager.Instance.CurrentPlace;
@@ -34,11 +34,9 @@ public class PlaceEffect : Element
             yield break;
         }
 
-        // 장소의 색상 변경
-        SpriteRenderer renderer = currentPlace.GetComponent<SpriteRenderer>();
-        if (renderer != null)
+        if (currentPlace.Image != null)
         {
-            renderer.DOColor(_effectColor, _duration).SetEase(_easeType);
+            currentPlace.Image.DOColor(_effectColor, _duration).SetEase(_easeType);
         }
         else
         {

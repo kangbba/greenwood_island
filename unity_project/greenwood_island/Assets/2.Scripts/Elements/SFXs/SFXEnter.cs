@@ -18,7 +18,7 @@ public class SFXEnter : Element
     }
 
 
-    public override IEnumerator Execute()
+    public override IEnumerator ExecuteRoutine()
     {
         // SFX 생성 시 SFXManager를 통해 재생
         AudioSource sfxSource;

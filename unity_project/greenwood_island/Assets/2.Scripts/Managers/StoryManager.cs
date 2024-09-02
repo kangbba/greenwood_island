@@ -6,13 +6,20 @@ using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using UnityEngine;
-
+public enum EStoryID
+{
+    StoryA,
+    StoryB,
+    StoryC,
+    StoryD,
+    // 다른 스토리 ID를 여기에 추가
+}
 public class StoryManager : MonoBehaviour
 {
     public static StoryManager Instance { get; private set; }
 
     [SerializeField] private string storyFolderPath = "Stories"; // "Stories" 폴더 경로 설정
-    private Dictionary<string, Story> _stories;
+    private Dictionary<EStoryID, Story> _stories;
 
     private void Awake()
     {
@@ -35,7 +42,7 @@ public class StoryManager : MonoBehaviour
         if (_stories != null && _stories.Count > 0)
         {
             var firstStory = _stories.Values.First();
-            StartCoroutine(firstStory.Execute());
+            StartCoroutine(firstStory.ExecuteRoutine());
         }
         else
         {
@@ -45,7 +52,7 @@ public class StoryManager : MonoBehaviour
 
     private void LoadStories()
     {
-        _stories = new Dictionary<string, Story>();
+        _stories = new Dictionary<EStoryID, Story>();
 
         // "storyFolderPath" 폴더 내의 모든 .cs 파일을 가져옴
         string[] files = Directory.GetFiles(Application.dataPath + "/" + storyFolderPath, "*.cs", SearchOption.AllDirectories);
@@ -66,7 +73,7 @@ public class StoryManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"Story {storyInstance.StoryId} is already registered."); 
+                    Debug.LogWarning($"Story {storyInstance.StoryId} is already registered.");
                 }
             }
         }
@@ -78,15 +85,15 @@ public class StoryManager : MonoBehaviour
         return Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == typeName);
     }
 
-    public void StartStory(Story story)
+    public void StartStory(EStoryID storyId)
     {
-        if (story != null)
+        if (_stories.TryGetValue(storyId, out Story story))
         {
-            StartCoroutine(story.Execute());
+            StartCoroutine(story.ExecuteRoutine());
         }
         else
         {
-            Debug.LogError("Story is null and cannot be started.");
+            Debug.LogError($"Story with ID {storyId} not found.");
         }
     }
 }

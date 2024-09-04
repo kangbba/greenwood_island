@@ -657,6 +657,7 @@ MonoBehaviour:
   - {fileID: 1053420155645376636, guid: 2a20a7dc6c393407c8aace961e9eb047, type: 3}
   - {fileID: 1053420155645376636, guid: fa8cd937dad20494fab72e38b1ffdfca, type: 3}
   - {fileID: 1053420155645376636, guid: fead8e47ab6094e948cc544bc804f4cf, type: 3}
+  - {fileID: 1053420155645376636, guid: bf59d049d28fb4b778da7a4f0df526da, type: 3}
 --- !u!224 &691674547 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8219515785612320796, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}

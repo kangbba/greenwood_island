@@ -9,7 +9,8 @@ public enum EPlaceID
     Town2,
     Town3,
     Mountain,
-    GreenwoodIsland
+    GreenwoodIsland,
+    RyanRoom
     // 다른 장소를 여기에 추가
 }
 
@@ -53,6 +54,13 @@ public class PlaceManager : MonoBehaviour
             return null;
         }
 
+        // 현재 장소가 존재하면 파괴 후 새로운 장소로 설정
+        if (_currentPlace != null)
+        {
+            DestroyPlace(_currentPlace.PlaceID);
+        }
+
+        // 이미 활성화된 장소가 있는 경우 해당 장소 반환
         if (_activePlaces.ContainsKey(placeID))
         {
             Debug.LogWarning($"Place with ID {placeID} is already instantiated.");
@@ -66,53 +74,14 @@ public class PlaceManager : MonoBehaviour
         _activePlaces.Add(placeID, place);
         _currentPlace = place; // 생성된 장소를 현재 장소로 설정
 
+        // 디버깅 로그 추가
+        Debug.Log($"Current place set to {_currentPlace.PlaceID}");
+
         return place;
     }
 
-    public void ShowPlace(EPlaceID placeID, float duration, Ease easeType)
-    {
-        Place place = GetActivePlace(placeID);
-
-        if (place == null)
-        {
-            Debug.LogWarning($"Place with ID {placeID} is not active and cannot be shown.");
-            return;
-        }
-
-        place.SetVisibility(true, duration);
-        CanvasGroup canvasGroup = place.GetComponent<CanvasGroup>();
-        if (canvasGroup != null)
-        {
-            canvasGroup.DOFade(1, duration).SetEase(easeType);
-        }
-        _currentPlace = place; // 표시된 장소를 현재 장소로 설정
-    }
-
-    public void HidePlace(EPlaceID placeID, float duration, Ease easeType)
-    {
-        Place place = GetActivePlace(placeID);
-
-        if (place == null)
-        {
-            Debug.LogWarning($"Place with ID {placeID} is not active and cannot be hidden.");
-            return;
-        }
-
-        place.SetVisibility(false, duration);
-        CanvasGroup canvasGroup = place.GetComponent<CanvasGroup>();
-        if (canvasGroup != null)
-        {
-            canvasGroup.DOFade(0, duration).SetEase(easeType);
-        }
-
-        // 현재 장소가 숨겨질 경우 _currentPlace를 null로 설정할 수 있음
-        if (_currentPlace == place)
-        {
-            _currentPlace = null;
-        }
-    }
-
-    public void DestroyPlace(EPlaceID placeID)
+    // 기존의 DestroyPlace 메서드를 private으로 변경하여 외부에서 직접 호출되지 않도록 설정
+    private void DestroyPlace(EPlaceID placeID)
     {
         if (_activePlaces.TryGetValue(placeID, out Place place))
         {
@@ -123,6 +92,7 @@ public class PlaceManager : MonoBehaviour
             if (_currentPlace == place)
             {
                 _currentPlace = null;
+                Debug.Log("Current place destroyed, set to null.");
             }
         }
         else
@@ -135,15 +105,5 @@ public class PlaceManager : MonoBehaviour
     {
         _activePlaces.TryGetValue(placeID, out Place place);
         return place;
-    }
-
-    private void DestroyAllPlaces()
-    {
-        foreach (var place in _activePlaces.Values)
-        {
-            Destroy(place.gameObject);
-        }
-        _activePlaces.Clear();
-        _currentPlace = null; // 모든 장소가 파괴되면 _currentPlace도 초기화
     }
 }

@@ -12,7 +12,7 @@ public class SentenceRectMaskBuilder
 
     public List<SentenceRectMask> CreatedRectMasks { get => _createdRectMasks; }
 
-    private static readonly Regex _regexPattern = new Regex(@"\.{2,}|\.");
+    private static readonly Regex _regexPattern = new Regex(@"\.{2,}|\?|\.");
 
     public SentenceRectMaskBuilder(Transform rectMaskParent, SentenceRectMask sentenceRectMaskPrefab)
     {

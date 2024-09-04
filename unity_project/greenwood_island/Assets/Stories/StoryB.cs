@@ -52,8 +52,8 @@ public class StoryB : Story
             {
                 new ChoiceOption(
                     "리사에게 과거의 사건을 들먹인다.",
-                    new List<Element>
-                    {
+                    new SequentialElement
+                    (
                         new Dialogue(
                             ECharacterID.Kate,
                             new List<Line>
@@ -73,12 +73,12 @@ public class StoryB : Story
                             }
                         ),
                         new FXExit(FXType.BloodDrip)
-                    }
+                    )
                 ),
                 new ChoiceOption(
                     "리사의 몸을 노린다.",
-                    new List<Element>
-                    {
+                    new SequentialElement
+                    (
                         new CharacterMove(ECharacterID.Kate, 0.3f, 0.5f, Ease.InOutSine), // 케이트가 약간 오른쪽으로 이동
                         new Dialogue(
                             ECharacterID.Kate,
@@ -103,12 +103,12 @@ public class StoryB : Story
                         ),
                         new PlaceOverlayFilm(Color.black.ModifiedAlpha(.9f), .5f),
                         new ScreenOverlayFilm(Color.black, 3f)
-                    }
+                    )
                 ),
                 new ChoiceOption(
                     "라이언을 부른다.",
-                    new List<Element>
-                    {
+                    new SequentialElement
+                    (
                         new CharacterMove(ECharacterID.Kate, 0.33f, 0.5f, Ease.OutBack), // 케이트가 원래 위치로 복귀
                         new Dialogue(
                             ECharacterID.Kate,
@@ -118,7 +118,7 @@ public class StoryB : Story
                                 new Line(EEmotionID.Smile, 1, "진짜 네가 원하는 거야, 리사?"),
                             }
                         )
-                    }
+                   )
                 )
             }
         )

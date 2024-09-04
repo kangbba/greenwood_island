@@ -25,9 +25,9 @@ public class PlaceFilm : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        // 현재 활성화된 장소 가져오기
-        Place currentPlace = PlaceManager.Instance.CurrentPlace;
+        Debug.Log($"PlaceFilm {_effectColor}");
 
+        Place currentPlace = PlaceManager.Instance.CurrentPlace;
         if (currentPlace == null)
         {
             Debug.LogWarning("No active place to apply the effect.");
@@ -36,7 +36,8 @@ public class PlaceFilm : Element
 
         if (currentPlace.Image != null)
         {
-            currentPlace.SetColor(_effectColor, _duration);
+            Debug.Log($"currentPlace : {currentPlace.PlaceID}");
+            currentPlace.SetColor(_effectColor, _duration, _easeType);
         }
         else
         {

@@ -24,14 +24,10 @@ public class PlaceEnter : Element
         // 장소 전환 전 효과 실행
         yield return _enterEffect.ExecuteRoutine();
 
-        // 장소 전환 실행
-        Place currentPlace = PlaceManager.Instance.CurrentPlace;
+        Debug.Log("PlaceEnter :: 새로운 장소 인스턴스화 시도 했음");
         Place newPlace = PlaceManager.Instance.InstantiatePlace(_newPlaceID);
 
-        if (newPlace != null && currentPlace != null)
-        {
-            PlaceManager.Instance.DestroyPlace(currentPlace.PlaceID);
-        }
+        // yield return new WaitUntil( ()=> PlaceManager.Instance.CurrentPlace != null );
 
         // 장소 전환 후 효과 실행
         yield return _exitEffect.ExecuteRoutine();

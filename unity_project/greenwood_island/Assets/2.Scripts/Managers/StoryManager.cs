@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 public enum EStoryID
@@ -14,6 +12,7 @@ public enum EStoryID
     StoryD,
     // 다른 스토리 ID를 여기에 추가
 }
+
 public class StoryManager : MonoBehaviour
 {
     public static StoryManager Instance { get; private set; }
@@ -43,11 +42,20 @@ public class StoryManager : MonoBehaviour
 
     private void Start()
     {
+        // Start에서 지연된 스토리 시작 호출
+        StartCoroutine(StartStoryAfterDelay());
+    }
+
+    private IEnumerator StartStoryAfterDelay()
+    {
+        // 딜레이를 줄 수 있도록 필요한 시간만큼 대기 (필요에 따라 조정 가능)
+        yield return new WaitForSeconds(1f); 
+
         // 첫 번째 스토리를 자동으로 시작
         if (_stories != null && _stories.Count > 0)
         {
             var firstStory = _stories.Values.First();
-            PlayStory(firstStory.StoryId);
+            PlayStory(EStoryID.StoryD);
         }
         else
         {
@@ -63,7 +71,7 @@ public class StoryManager : MonoBehaviour
         // 새로운 스토리를 찾고 실행
         if (_stories.TryGetValue(storyID, out _currentStory))
         {
-            StartCoroutine(PlayStoryRoutine());
+            StartCoroutine(StoryStartRoutine());
         }
         else
         {
@@ -71,11 +79,11 @@ public class StoryManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayStoryRoutine()
+    private IEnumerator StoryStartRoutine()
     {
         // 모든 클리어 작업 수행
         float clearDuration = 1f;
-        RestoreAll(1f);
+        RestoreAll(clearDuration);
         yield return new WaitForSeconds(clearDuration);
 
         // 현재 스토리의 StartRoutine과 UpdateRoutine을 실행
@@ -88,6 +96,7 @@ public class StoryManager : MonoBehaviour
 
     private void RestoreAll(float duration)
     {
+        Debug.Log("StoryManager :: RestoreAll Started");
         new FXsClear(duration).Execute();
         new SFXsClear(duration).Execute();
         new PlaceFilmClear(duration).Execute();
@@ -96,7 +105,6 @@ public class StoryManager : MonoBehaviour
         new CharactersClear(duration).Execute();
         new PlaceOverlayFilmClear(duration).Execute();
         new ScreenOverlayFilmClear(duration).Execute();
+        Debug.Log("StoryManager :: RestoreAll Completed");
     }
-
 }
-

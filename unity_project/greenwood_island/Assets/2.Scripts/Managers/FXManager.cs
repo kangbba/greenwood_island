@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public enum FXType
@@ -16,6 +17,7 @@ public class FXPrefabEntry
     public FXType fxType;          // FX의 타입 (enum 기반)
     public GameObject fxPrefab;    // FX에 사용할 프리팹
 }
+
 public class FXManager : MonoBehaviour
 {
     public static FXManager Instance { get; private set; }
@@ -40,21 +42,18 @@ public class FXManager : MonoBehaviour
         }
     }
 
-    // 프리팹 초기화 및 Animator 검증
     private void InitializeFXPrefabs()
     {
         foreach (var entry in fxPrefabEntries)
         {
             if (entry.fxPrefab != null)
             {
-                // Animator가 포함되어 있는지 검사
                 if (entry.fxPrefab.GetComponent<Animator>() == null)
                 {
                     Debug.LogWarning($"FX Prefab '{entry.fxType}' does not contain an Animator component and will not be registered.");
-                    continue; // Animator가 없으면 등록하지 않음
+                    continue;
                 }
 
-                // 중복 등록 방지
                 if (!_fxPrefabs.ContainsKey(entry.fxType))
                 {
                     _fxPrefabs.Add(entry.fxType, entry.fxPrefab);
@@ -70,15 +69,14 @@ public class FXManager : MonoBehaviour
             }
         }
     }
-    // 특정 FX 프리팹 생성 메서드 (localPosition으로 생성하도록 설정)
+
     public GameObject SpawnFX(FXType fxType, Vector3 localPos)
     {
         if (_fxPrefabs.TryGetValue(fxType, out GameObject fxPrefab))
         {
             GameObject fxInstance = Instantiate(fxPrefab, UIManager.Instance.WorldCanvas.FXLayer);
-            fxInstance.transform.localPosition = localPos; // localPosition으로 설정
+            fxInstance.transform.localPosition = localPos;
 
-            // 생성된 FX를 _activeFXs에 추가
             if (!_activeFXs.ContainsKey(fxType))
             {
                 _activeFXs[fxType] = new List<GameObject>();
@@ -94,7 +92,6 @@ public class FXManager : MonoBehaviour
         }
     }
 
-    // 특정 FXType에 대한 활성화된 FX 리스트 반환
     public List<GameObject> GetActiveFXs(FXType fxType)
     {
         if (_activeFXs.TryGetValue(fxType, out List<GameObject> activeFXList))
@@ -104,8 +101,7 @@ public class FXManager : MonoBehaviour
         return new List<GameObject>();
     }
 
-    // 특정 FXType에 대한 FX 제거
-    public void RemoveFX(GameObject fxInstance)
+    public void DestroyFX(GameObject fxInstance)
     {
         foreach (var fxList in _activeFXs.Values)
         {
@@ -118,16 +114,34 @@ public class FXManager : MonoBehaviour
         }
     }
 
-    // 모든 FX 제거 (선택적)
-    public void RemoveAllFX(FXType fxType)
+    // CanvasGroup이 없으면 추가한 후 페이드 아웃 적용 및 FX 제거
+    public void FadeAndDestroyFX(GameObject fxInstance, float duration)
     {
-        if (_activeFXs.TryGetValue(fxType, out List<GameObject> activeFXList))
+        if (fxInstance == null) return;
+
+        CanvasGroup canvasGroup = fxInstance.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
         {
-            foreach (var fxInstance in activeFXList)
-            {
-                Destroy(fxInstance);
-            }
-            activeFXList.Clear();
+            canvasGroup = fxInstance.AddComponent<CanvasGroup>();
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
         }
+
+        canvasGroup.DOFade(0, duration).OnComplete(() => DestroyFX(fxInstance));
+    }
+
+    // 모든 FX를 페이드 아웃하고 제거하는 메서드
+    public void FadeOutAndDestroyAllFX(float duration)
+    {
+        foreach (var fxList in _activeFXs.Values)
+        {
+            foreach (var fxInstance in fxList)
+            {
+                FadeAndDestroyFX(fxInstance, duration); // 개별 FX를 페이드 아웃 후 제거
+            }
+        }
+
+        // 모든 FX 리스트를 클리어하여 딕셔너리를 초기화
+        _activeFXs.Clear();
     }
 }

@@ -7,8 +7,9 @@ public enum EPlaceID
 {
     Town1,
     Town2,
+    Town3,
     Mountain,
-    Forest,
+    GreenwoodIsland
     // 다른 장소를 여기에 추가
 }
 

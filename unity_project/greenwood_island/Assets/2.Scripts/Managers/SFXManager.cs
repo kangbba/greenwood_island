@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public enum SFXType
 {
     CreepyWhisper,
-    Footsteps,
-    DoorCreak,
-    HeavyBreathing,
+    BirdsChirping,
+    Waves,
     // 필요한 SFX 타입들을 추가
 }
 
@@ -140,6 +140,37 @@ public class SFXManager : MonoBehaviour
         return new List<AudioSource>();
     }
 
+    // 특정 AudioSource를 페이드 아웃하고 제거하는 메서드
+    public void FadeOutAndDestroy(AudioSource audioSource, float fadeDuration)
+    {
+        if (audioSource == null) return;
+
+        // 페이드 아웃과 제거를 DOTween으로 수행
+        audioSource.DOFade(0f, fadeDuration).OnComplete(() =>
+        {
+            RemoveSFX(audioSource);
+        });
+    }
+    // 모든 SFX 제거// 모든 SFX를 페이드 아웃하고 제거하는 메서드
+    public void FadeOutAndDestroyAllSFX(float duration)
+    {
+        // _activeSFXs 딕셔너리의 모든 리스트를 순회
+        foreach (var sfxList in _activeSFXs.Values)
+        {
+            foreach (var audioSource in sfxList)
+            {
+                if (audioSource != null)
+                {
+                    FadeOutAndDestroy(audioSource, duration); // 개별 오디오 소스를 페이드 아웃 후 제거
+                }
+            }
+        }
+
+        // 모든 SFX 리스트를 클리어하여 딕셔너리를 초기화
+        _activeSFXs.Clear();
+    }
+
+
     // 특정 SFXType에 대한 SFX 제거
     public void RemoveSFX(AudioSource audioSource)
     {
@@ -160,22 +191,4 @@ public class SFXManager : MonoBehaviour
         }
     }
 
-    // 모든 SFX 제거
-    public void RemoveAllSFX(SFXType sfxType)
-    {
-        if (_activeSFXs.TryGetValue(sfxType, out List<AudioSource> activeSFXList))
-        {
-            foreach (var audioSource in activeSFXList)
-            {
-                if (_activeLoops.ContainsKey(audioSource) && _activeLoops[audioSource] != null)
-                {
-                    StopCoroutine(_activeLoops[audioSource]); // 코루틴 중지
-                    _activeLoops.Remove(audioSource);
-                }
-
-                Destroy(audioSource.gameObject); // AudioSource를 가진 GameObject 파괴
-            }
-            activeSFXList.Clear();
-        }
-    }
 }

@@ -14,6 +14,7 @@ public enum EDialogueState
 
 public class DialoguePlayer : MonoBehaviour
 {
+    [SerializeField] private bool _showDebug;
     [SerializeField] private RectTransform _panelRectTransform;
     [SerializeField] private SentenceRectMask _sentenceRectMaskPrefab;
     [SerializeField] private Transform _rectMaskParent;
@@ -80,7 +81,9 @@ public class DialoguePlayer : MonoBehaviour
             return;
         }
 
-        Debug.Log("ShowNext");
+        if(_showDebug){
+            Debug.Log("ShowNext");
+        }
 
         SetState(EDialogueState.Typing);
 
@@ -88,12 +91,17 @@ public class DialoguePlayer : MonoBehaviour
         int endIndex = _rectMaskBuilder.CalculateEndIndex(CreatedRectMasks, startIndex);
 
         // Start and End Index Debugging
-        Debug.Log($"ShowNext StartIndex: {startIndex}, EndIndex: {endIndex}");
+
+        if(_showDebug){
+            Debug.Log($"ShowNext StartIndex: {startIndex}, EndIndex: {endIndex}");
+        }
 
         // Display the content of the current rect masks
         for (int i = startIndex; i <= endIndex && i < CreatedRectMasks.Count; i++)
         {
-            Debug.Log($"RectMask {i}: {CreatedRectMasks[i].Sentence}");
+            if(_showDebug){
+                Debug.Log($"RectMask {i}: {CreatedRectMasks[i].Sentence}");
+            }
         }
 
         _currentRevealCoroutine = StartCoroutine(RevealRectMasks(startIndex, endIndex, 0.05f));

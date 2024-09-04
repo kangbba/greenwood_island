@@ -6,124 +6,84 @@ using DG.Tweening;
 public class StoryA : Story
 {
     public override EStoryID StoryId => EStoryID.StoryA;
-    public StoryA()
+
+    // 각 단계의 Elements를 상속받은 클래스에서 정의
+    protected override List<Element> StartElements => new List<Element>
     {
-        _elements = new List<Element>
-        {
+        new SFXEnter(SFXType.BirdsChirping, true, 0f), // 새소리로 평화로운 분위기 연출
+        new PEWithOverlayColor(EPlaceID.GreenwoodIsland, Color.white), // 그린우드 섬으로 장소 전환
+    };
 
-            new SFXEnter(SFXType.CreepyWhisper),
-            new ParallelElement(
-                new PlaceMove(EPlaceID.Mountain),
-                new CameraMoveEffect(new Vector3(7, 0, 10), 0f, Ease.InOutQuad)// 초기 카메라 이동 효과
-            ),
-            new CameraMoveEffect(new Vector3(0, 0, -10), 5f, Ease.InOutQuad), // 초기 카메라 이동 효과
-            new CharactersEnter(new List<ECharacterID> { ECharacterID.Kate, ECharacterID.Lisa }, new List<float> { 0.33f, 0.66f }, new List<EEmotionID> { EEmotionID.Angry, EEmotionID.Stumped },
-            new List<int> { 0, 0 }, 2f, Ease.OutQuad),
-            new Dialogue(
-                ECharacterID.Kate,
-                new List<Line>
-                {
-                    new Line(EEmotionID.Angry, 0, "리사, 모든 걸 뺏어간 네가... 널 이대로 두고 볼 순 없어."),
-                    new Line(EEmotionID.Angry, 1, "너의 잘난 척, 네가 나보다 더 나은 삶을 산다는 게... 용납할 수 없어."),
-                }
-            ),
-            new Dialogue(
-                ECharacterID.Lisa,
-                new List<Line>
-                {
-                    new Line(EEmotionID.Smile, 0, "또 그 얘기야? 케이트, 나한테 화내봤자 달라질 건 없어."),
-                    new Line(EEmotionID.Panic, 1, "넌 늘 내 그림자였어. 그걸 인정하는 게 왜 그렇게 힘들어?"),
-                }
-            ),
-            new ChoiceElement(
-                "케이트의 다음 행동은?",
-                new List<ChoiceOption>
-                {
-                    new ChoiceOption(
-                        "리사에게 과거의 사건을 들먹인다.",
-                        new List<Element>
-                        {
-                            new Dialogue(
-                                ECharacterID.Kate,
-                                new List<Line>
-                                {
-                                    new Line(EEmotionID.Angry, 2, "머리를 노리면, 네 잘난 척하는 얼굴... 더는 볼 필요 없을 거야."),
-                                }
-                            ),
-                            new CharacterMove(ECharacterID.Kate, 0.38f, 0.5f, Ease.OutQuad), // 케이트가 왼쪽으로 이동
-                            new CameraShakeEffect(),
-                            new PlaceOverlayFilmEffect(Color.black.ModifiedAlpha(.5f), 1f),
-                            new FXEnter(FXType.BloodDrip, 3f),
-                            new Dialogue(
-                                ECharacterID.Lisa,
-                                new List<Line>
-                                {
-                                    new Line(EEmotionID.Sad, 0, "너... 정말 나를 이렇게까지 증오하는 거야?"),
-                                }
-                            ),
-                            new FXExit(FXType.BloodDrip)
-                        }
-                    ),
-                    new ChoiceOption(
-                        "리사의 몸을 노린다.",
-                        new List<Element>
-                        {
-                            new CameraZoomEffect(50f, 0.5f, Ease.OutBounce), // 몸을 노리는 선택 시 카메라 줌 효과
-                            new CharacterMove(ECharacterID.Kate, 0.3f, 0.5f, Ease.InOutSine), // 케이트가 약간 오른쪽으로 이동
-                            new Dialogue(
-                                ECharacterID.Kate,
-                                new List<Line>
-                                {
-                                    new Line(EEmotionID.Angry, 1, "너를 다치게 하면... 아마 내가 좀 더 나아질지도 몰라."),
-                                    new Line(EEmotionID.Angry, 1, "네 잘난 척하는 얼굴... 더는 볼 필요 없을 거야."),
-                                }
-                            ),
-                            new PlaceOverlayFilmEffect(Color.black.ModifiedAlpha(.5f), .5f),
-                            new CharacterMove(ECharacterID.Kate, 0.38f, 0.5f, Ease.OutQuad), // 케이트가 왼쪽으로 이동
-                            new CameraShakeEffect(),
-                            new PlaceEffect(Color.red.ModifiedAlpha(.5f), .25f),
-                            new PlaceOverlayFilmEffect(Color.black.ModifiedAlpha(.7f), .25f),
-                            new FXEnter(FXType.BloodDrip, 3f),
-                            new Dialogue(
-                                ECharacterID.Lisa,
-                                new List<Line>
-                                {
-                                    new Line(EEmotionID.Sad, 0, "너... 정말... 나를 이렇게까지..."),
-                                }
-                            ),
-                            new PlaceOverlayFilmEffect(Color.black.ModifiedAlpha(.9f), .5f),
-                            new ScreenOverlayFilmEffect(Color.black, 3f)
-                        }
-                    ),
-                    new ChoiceOption(
-                        "라이언을 부른다.",
-                        new List<Element>
-                        {
-                            new CameraZoomRestoreEffect(0.5f, Ease.InOutSine), // 방어 선택 시 카메라 줌 복원 효과
-                            new CharacterMove(ECharacterID.Kate, 0.33f, 0.5f, Ease.OutBack), // 케이트가 원래 위치로 복귀
-                            new Dialogue(
-                                ECharacterID.Kate,
-                                new List<Line>
-                                {
-                                    new Line(EEmotionID.Smile, 0, "이러다 정말 끝날지도 모르겠네... 그런데 이게..."),
-                                    new Line(EEmotionID.Smile, 1, "진짜 네가 원하는 거야, 리사?"),
-                                }
-                            )
-                        }
-                    )
-                }
-            ),
-            new SFXExit(SFXType.CreepyWhisper),
-        };
-    }
-
-
-    protected override IEnumerator OnStory()
+    protected override List<Element> UpdateElements => new List<Element>
     {
-        foreach (var element in _elements)
-        {
-            yield return element.ExecuteRoutine();
-        }
-    }
+        new Dialogue(
+            ECharacterID.Mono,
+            new List<Line>
+            {
+                new Line(EEmotionID.Normal, 0, "그린우드 섬... 조용하고, 평화로운 분위기가 가득하네."),
+                new Line(EEmotionID.Happy, 1, "바람도 살랑거리고, 햇살도 따뜻하고... 이런 곳이 있었던 건가."),
+                new Line(EEmotionID.Happy, 2, "잠시 모든 걸 잊고 이곳을 느껴봐야겠다.")
+            }
+        ),
+        // 마을 1 탐험 연출
+        new PEWithOverlayColor(EPlaceID.Town1, Color.grey), // 그린우드 섬으로 장소 전환
+        new Dialogue(
+            ECharacterID.Mono,
+            new List<Line>
+            {
+                new Line(EEmotionID.Normal, 0, "하늘이 정말 맑고 예쁘다. 마을도 참 아기자기하네."),
+                new Line(EEmotionID.Smile, 1, "여긴 다들 여유로운 표정이야. 다음엔 저 가게도 한번 들어가 봐야지."),
+            }
+        ),
+        // 마을 2 탐험 연출
+        new PEWithOverlayColor(EPlaceID.Town2, Color.black), // 그린우드 섬으로 장소 전환
+        new PlaceFilm(Color.blue.ModifiedAlpha(.5f), .5f), // 마을의 차분한 색감 강조
+        new CameraMove2D(new Vector2(0, 1), 2f, Ease.InOutQuad), // 카메라가 마을 2를 가로지르며 이동
+        new Dialogue(
+            ECharacterID.Mono,
+            new List<Line>
+            {
+                new Line(EEmotionID.Normal, 0, "밤이된것같아. 이쪽은 조금 더 고요하네. 어딘가 신비로운 느낌이야."),
+                new Line(EEmotionID.Normal, 1, "여기도 구경해봐야겠어. 뭐가 있을지 궁금하군."),
+            }
+        ),
+        // 마을 3 탐험 후 케이트와의 조우 연출
+        new PEWithOverlayColor(EPlaceID.Town3, Color.white), // 그린우드 섬으로 장소 전환
+        new CameraMove2D(new Vector2(1, 0), 2f, Ease.OutQuad), // 카메라가 마을 3을 감싸듯 이동
+        new Dialogue(
+            ECharacterID.Mono,
+            new List<Line>
+            {
+                new Line(EEmotionID.Normal, 0, "여긴 또 다른 매력이 있네. 어딜 둘러봐도 신기한 것들로 가득해."),
+                new Line(EEmotionID.Normal, 1, "누가 살고 있을까? 사람들 표정도 궁금해진다."),
+            }
+        ),
+        // 케이트와의 만남
+        new CharactersEnter(
+            new List<ECharacterID> { ECharacterID.Kate },
+            new List<float> { 0.5f }, // 화면 중앙에 위치
+            new List<EEmotionID> { EEmotionID.Smile },
+            new List<int> { 0 },
+            1.5f,
+            Ease.OutQuad
+        ),
+        new Dialogue(
+            ECharacterID.Kate,
+            new List<Line>
+            {
+                new Line(EEmotionID.Smile, 0, "안녕하세요. 새로운 얼굴이네요. 여기서 뭘 찾고 계신가요?"),
+                new Line(EEmotionID.Normal, 1, "이곳은 조용한 동네예요. 천천히 둘러보세요."),
+            }
+        ),
+        new Dialogue(
+            ECharacterID.Ryan,
+            new List<Line>
+            {
+                new Line(EEmotionID.Smile, 0, "안녕하세요. 이곳이 정말 예쁘네요."),
+                new Line(EEmotionID.Normal, 1, "이런 곳에서 지내면 마음이 편해질 것 같아요."),
+            }
+        ),
+        new StoryTransition(EStoryID.StoryB)
+    };
 
 }

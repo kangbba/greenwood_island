@@ -9,14 +9,14 @@ using DG.Tweening;
 /// 원래 색상으로 복원하는 기능은 포함되지 않으며, 외부에서 수동으로 처리할 수 있습니다.
 /// </summary>
 [System.Serializable]
-public class PlaceEffect : Element
+public class PlaceFilm : Element
 {
     private Color _effectColor;
     private float _duration;
     private Ease _easeType;
     
 
-    public PlaceEffect(Color effectColor, float duration = 1f, Ease easeType = Ease.Linear)
+    public PlaceFilm(Color effectColor, float duration = 1f, Ease easeType = Ease.Linear)
     {
         _effectColor = effectColor;
         _duration = duration;
@@ -36,11 +36,12 @@ public class PlaceEffect : Element
 
         if (currentPlace.Image != null)
         {
-            currentPlace.Image.DOColor(_effectColor, _duration).SetEase(_easeType);
+            currentPlace.SetColor(_effectColor, _duration);
         }
         else
         {
             Debug.LogWarning("No SpriteRenderer found on the current place.");
         }
+        yield return new WaitForSeconds(_duration);
     }
 }

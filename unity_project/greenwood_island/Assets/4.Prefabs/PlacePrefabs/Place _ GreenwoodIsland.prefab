@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3900591975215019464}
   - component: {fileID: 1053420155645376636}
   m_Layer: 5
-  m_Name: Place _ Town2
+  m_Name: Place _ GreenwoodIsland
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2c67d89a09de94fdeb35aa8f0dd8d4b4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4fdb1f9dbe2af4a68beddf2a0af29058, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -88,4 +88,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aba500eb7abc74c038de84d365c4c6ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlaceID: 1
+  PlaceID: 4

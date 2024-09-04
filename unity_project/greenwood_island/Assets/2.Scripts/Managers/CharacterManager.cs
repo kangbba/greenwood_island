@@ -6,6 +6,7 @@ using DG.Tweening;
 
 public enum ECharacterID
 {
+    Mono,
     Ryan,
     Kate,
     Lisa,
@@ -104,6 +105,9 @@ public class CharacterManager : MonoBehaviour
 
     public void DestroyCharacter(ECharacterID characterID)
     {
+        if(characterID == ECharacterID.Mono || characterID == ECharacterID.Ryan){
+            return;
+        }
         if (_instantiatedCharacters.TryGetValue(characterID, out Character character))
         {
             Destroy(character.gameObject);
@@ -117,6 +121,9 @@ public class CharacterManager : MonoBehaviour
 
     public Character GetActiveCharacter(ECharacterID characterID)
     {
+        if(characterID == ECharacterID.Mono || characterID == ECharacterID.Ryan){
+            return null;
+        }
         if (IsExist(characterID))
         {
             return _instantiatedCharacters[characterID];

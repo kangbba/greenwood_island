@@ -14,17 +14,21 @@ public class ChoiceElement : Element
         _choices = choices ?? new List<ChoiceOption>(); // null 방지를 위해 리스트 초기화
     }
 
-
     public override IEnumerator ExecuteRoutine()
     {
         int chosenIndex = -1;
 
         // 선택지 UI를 표시하고 플레이어의 선택을 기다림
-        yield return CoroutineRunner.Instance.StartCoroutine(UIManager.Instance.SystemCanvas.ChoiceUI.DisplayChoices(
-            _question, 
-            _choices.Select(choice => choice.Title).ToList(), 
-            index => chosenIndex = index // 콜백으로 선택된 인덱스를 설정
-        ));
+        yield return CoroutineRunner.Instance.StartCoroutine(
+            UIManager.Instance.SystemCanvas.ChoiceUI.DisplayChoices(
+                _question,
+                _choices.Select(choice => choice.Title).ToList(),
+                index => chosenIndex = index // 콜백으로 선택된 인덱스를 설정
+            )
+        );
+
+        // 선택된 인덱스를 로그로 출력
+        Debug.Log($"선택된 인덱스: {chosenIndex}");
 
         // 선택한 결과에 따른 Elements 실행
         if (chosenIndex >= 0 && chosenIndex < _choices.Count)

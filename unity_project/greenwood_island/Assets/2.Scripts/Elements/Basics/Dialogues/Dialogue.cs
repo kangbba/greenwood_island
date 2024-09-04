@@ -25,9 +25,9 @@ public class Dialogue : Element
         Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);
 
         // 캐릭터가 없으면 로그 출력 후 종료
-        if (character == null)
+        if (character == null && _characterID != ECharacterID.Ryan && _characterID != ECharacterID.Mono)
         {
-            Debug.LogWarning($"Character with ID: {_characterID} not found.");
+            Debug.LogError($"Character with ID: {_characterID} not found.");
             yield break;
         }
 
@@ -43,7 +43,6 @@ public class Dialogue : Element
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
         {
-            Debug.Log($"{i}번째 대사 시작");
             Line line = _lines[i];
             DialoguePlayer.InitLine(line);
             DialoguePlayer.ShowNextSentence();

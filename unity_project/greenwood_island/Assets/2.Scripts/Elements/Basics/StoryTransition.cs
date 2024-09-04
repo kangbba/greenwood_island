@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StoryTransition : Element
@@ -14,7 +15,7 @@ public class StoryTransition : Element
     public override IEnumerator ExecuteRoutine()
     {
         // StoryManager를 통해 스토리 실행
-        StoryManager.Instance.StartStory(_storyID);
+        StoryManager.Instance.PlayStory(_storyID);
 
         yield return null;
     }

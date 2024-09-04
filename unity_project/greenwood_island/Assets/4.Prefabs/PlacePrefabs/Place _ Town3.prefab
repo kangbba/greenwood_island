@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3900591975215019464}
   - component: {fileID: 1053420155645376636}
   m_Layer: 5
-  m_Name: Place _ Town1 2
+  m_Name: Place _ Town3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 18809dc6f105443ac956cfc34f0fd9d5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ff3cb7bf3bbe4161a8dd6fb1060124d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

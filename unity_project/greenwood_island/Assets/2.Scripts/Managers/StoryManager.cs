@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 using UnityEngine;
+
 public enum EStoryID
 {
     StoryA,
@@ -20,6 +20,10 @@ public class StoryManager : MonoBehaviour
 
     [SerializeField] private string storyFolderPath = "Stories"; // "Stories" 폴더 경로 설정
     private Dictionary<EStoryID, Story> _stories;
+    private StoryLoader _storyLoader; // StoryLoader 인스턴스
+
+    private Story _currentStory; // 현재 실행 중인 스토리
+    private Story _previousStory; // 이전에 실행된 스토리
 
     private void Awake()
     {
@@ -33,7 +37,8 @@ public class StoryManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        LoadStories();
+        _storyLoader = new StoryLoader(storyFolderPath);
+        _stories = _storyLoader.GetLoadedStories();
     }
 
     private void Start()
@@ -42,7 +47,7 @@ public class StoryManager : MonoBehaviour
         if (_stories != null && _stories.Count > 0)
         {
             var firstStory = _stories.Values.First();
-            StartCoroutine(firstStory.ExecuteRoutine());
+            PlayStory(firstStory.StoryId);
         }
         else
         {
@@ -50,50 +55,48 @@ public class StoryManager : MonoBehaviour
         }
     }
 
-    private void LoadStories()
+    public void PlayStory(EStoryID storyID)
     {
-        _stories = new Dictionary<EStoryID, Story>();
+        // 현재 스토리를 이전 스토리로 설정
+        _previousStory = _currentStory;
 
-        // "storyFolderPath" 폴더 내의 모든 .cs 파일을 가져옴
-        string[] files = Directory.GetFiles(Application.dataPath + "/" + storyFolderPath, "*.cs", SearchOption.AllDirectories);
-
-        foreach (string file in files)
+        // 새로운 스토리를 찾고 실행
+        if (_stories.TryGetValue(storyID, out _currentStory))
         {
-            string fileName = Path.GetFileNameWithoutExtension(file);
-            Type storyType = GetTypeFromAssembly(fileName);
-
-            if (storyType != null && storyType.IsSubclassOf(typeof(Story)))
-            {
-                Story storyInstance = (Story)Activator.CreateInstance(storyType);
-
-                if (!_stories.ContainsKey(storyInstance.StoryId))
-                {
-                    _stories.Add(storyInstance.StoryId, storyInstance);
-                    Debug.Log($"Story {storyInstance.StoryId} registered.");
-                }
-                else
-                {
-                    Debug.LogWarning($"Story {storyInstance.StoryId} is already registered.");
-                }
-            }
-        }
-    }
-
-    private Type GetTypeFromAssembly(string typeName)
-    {
-        // 현재 어셈블리에서 typeName과 일치하는 타입을 찾음
-        return Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == typeName);
-    }
-
-    public void StartStory(EStoryID storyId)
-    {
-        if (_stories.TryGetValue(storyId, out Story story))
-        {
-            StartCoroutine(story.ExecuteRoutine());
+            StartCoroutine(PlayStoryRoutine());
         }
         else
         {
-            Debug.LogError($"Story with ID {storyId} not found.");
+            Debug.LogError($"Story with ID {storyID} not found.");
         }
     }
+
+    private IEnumerator PlayStoryRoutine()
+    {
+        // 모든 클리어 작업 수행
+        float clearDuration = 1f;
+        RestoreAll(1f);
+        yield return new WaitForSeconds(clearDuration);
+
+        // 현재 스토리의 StartRoutine과 UpdateRoutine을 실행
+        if (_currentStory != null)
+        {
+            yield return _currentStory.StartRoutine();
+            yield return _currentStory.UpdateRoutine();
+        }
+    }
+
+    private void RestoreAll(float duration)
+    {
+        new FXsClear(duration).Execute();
+        new SFXsClear(duration).Execute();
+        new PlaceFilmClear(duration).Execute();
+        new CameraMove2DClear(duration).Execute();
+        new CameraZoomClear(duration).Execute();
+        new CharactersClear(duration).Execute();
+        new PlaceOverlayFilmClear(duration).Execute();
+        new ScreenOverlayFilmClear(duration).Execute();
+    }
+
 }
+

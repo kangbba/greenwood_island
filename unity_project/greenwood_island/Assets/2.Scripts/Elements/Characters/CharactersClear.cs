@@ -4,13 +4,13 @@ using UnityEngine;
 using DG.Tweening;  // DOTween을 사용하기 위해 추가
 
 [System.Serializable]
-public class AllCharactersExit : Element
+public class CharactersClear : Element
 {
     private float _duration;
     private Ease _easeType;
 
 
-    public AllCharactersExit(float duration = 1f, Ease easeType = Ease.InQuad)
+    public CharactersClear(float duration = 1f, Ease easeType = Ease.InQuad)
     {
         this._duration = duration;
         this._easeType = easeType;

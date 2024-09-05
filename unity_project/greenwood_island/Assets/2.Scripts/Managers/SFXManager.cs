@@ -8,6 +8,7 @@ public enum SFXType
     CreepyWhisper,
     BirdsChirping,
     Waves,
+    CreepyTicking,
     // 필요한 SFX 타입들을 추가
 }
 

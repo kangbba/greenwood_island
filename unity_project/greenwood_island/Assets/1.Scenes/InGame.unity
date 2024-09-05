@@ -169,7 +169,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 570999724}
+  m_Father: {fileID: 2088360323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -257,18 +257,6 @@ PrefabInstance:
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_SizeDelta.y
       value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -580,7 +568,6 @@ RectTransform:
   - {fileID: 1992579753}
   - {fileID: 871915259}
   - {fileID: 1607851816}
-  - {fileID: 117920918}
   - {fileID: 1736861471}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1024,7 +1011,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 538.6
   m_Depth: -1
   m_CullingMask:
@@ -1224,11 +1211,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxClipEntries:
   - sfxType: 0
-    sfxClip: {fileID: 8300000, guid: 05b97387bc59f43419534f7f139c9d75, type: 3}
+    sfxClip: {fileID: 8300000, guid: 8402c7aa3cc454475a4ecac3e8d2282c, type: 3}
   - sfxType: 1
     sfxClip: {fileID: 8300000, guid: 20bb698a7a673465c9bc41997bff9949, type: 3}
   - sfxType: 2
     sfxClip: {fileID: 8300000, guid: cad0e3e20aae04d3293449f579de96e2, type: 3}
+  - sfxType: 3
+    sfxClip: {fileID: 8300000, guid: c11d112a9b83e420b8e70f8409f8b9e1, type: 3}
 --- !u!1 &1182966280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1783,6 +1772,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 117920918}
   - {fileID: 691674547}
   - {fileID: 75537164}
   - {fileID: 2136401969}
@@ -1894,10 +1884,6 @@ PrefabInstance:
     - target: {fileID: 3722084975736058391, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: m_Name
       value: DialoguePlayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 6758782680214195644, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: _showDebug
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8219515785612320796, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: m_Pivot.x

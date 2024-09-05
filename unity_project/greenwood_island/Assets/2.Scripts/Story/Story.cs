@@ -6,29 +6,31 @@ public abstract class Story
 {
     /// <summary>
     /// Start, Update, Exit 단계에서 실행될 Elements를 상속받은 클래스에서 구현하도록 합니다.
+    /// SequentialElement를 사용하여 각 단계의 Elements를 순차적으로 실행합니다.
     /// </summary>
 
-    // 각 단계의 Elements를 상속받은 클래스에서 정의하도록 강제
-    protected abstract List<Element> StartElements { get; }
-    protected abstract List<Element> UpdateElements { get; }
+    // 각 단계의 Elements를 SequentialElement로 정의
+    protected abstract SequentialElement StartElements { get; }
+    protected abstract SequentialElement UpdateElements { get; }
+    protected abstract SequentialElement ExitElements { get; }
 
     public abstract EStoryID StoryId { get; }
 
-    // StartRoutine: Start 단계의 Elements를 순차적으로 실행
-    public virtual IEnumerator StartRoutine()
+    // Start 단계의 Elements를 실행하는 메서드
+    public IEnumerator StartRoutine()
     {
-        foreach (var element in StartElements)
-        {
-            yield return element.ExecuteRoutine();
-        }
+        yield return StartElements.ExecuteRoutine();
     }
 
-    // UpdateRoutine: Update 단계의 Elements를 순차적으로 실행
-    public virtual IEnumerator UpdateRoutine()
+    // Update 단계의 Elements를 실행하는 메서드
+    public IEnumerator UpdateRoutine()
     {
-        foreach (var element in UpdateElements)
-        {
-            yield return element.ExecuteRoutine();
-        }
+        yield return UpdateElements.ExecuteRoutine();
+    }
+
+    // Exit 단계의 Elements를 실행하는 메서드 (필요할 경우)
+    public IEnumerator ExitRoutine()
+    {
+        yield return ExitElements.ExecuteRoutine();
     }
 }

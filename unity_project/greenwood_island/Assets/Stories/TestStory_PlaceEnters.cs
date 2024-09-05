@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class StoryA : Story
+public class TestStory_PlaceEnters : Story
 {
-    public override EStoryID StoryId => EStoryID.StoryA;
+    public override EStoryID StoryId => EStoryID.TestStory_PlaceEnters;
 
     // 각 단계의 Elements를 상속받은 클래스에서 정의
-    protected override List<Element> StartElements => new List<Element>
-    {
+    protected override SequentialElement StartElements => new
+    (
         new SFXEnter(SFXType.BirdsChirping, true, 0f), // 새소리로 평화로운 분위기 연출
-        new PEWithOverlayColor(EPlaceID.GreenwoodIsland, Color.white), // 그린우드 섬으로 장소 전환
-    };
+        new PEWithOverlayColor(EPlaceID.GreenwoodIsland, Color.white) // 그린우드 섬으로 장소 전환
+    );
 
-    protected override List<Element> UpdateElements => new List<Element>
-    {
+    protected override SequentialElement UpdateElements => new
+    (
         new Dialogue(
             ECharacterID.Mono,
             new List<Line>
@@ -82,8 +82,11 @@ public class StoryA : Story
                 new Line(EEmotionID.Smile, 0, "안녕하세요. 이곳이 정말 예쁘네요."),
                 new Line(EEmotionID.Normal, 1, "이런 곳에서 지내면 마음이 편해질 것 같아요."),
             }
-        ),
-        new StoryTransition(EStoryID.StoryB)
-    };
+        )
+    );
 
+
+    protected override SequentialElement ExitElements => new (
+
+    );
 }

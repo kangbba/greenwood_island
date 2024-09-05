@@ -39,14 +39,14 @@ public class SentenceRectMask : MonoBehaviour
 
         _rectMask.padding = new Vector4(0, 0, _preferredWidth, 0);
     }
-    public IEnumerator RevealMask(float letterDelay)
+    public IEnumerator RevealMask(float speed)
     {
         _isRevealingInstantly = false;
 
         float startPaddingRight = _rectMask.padding.z;
         float targetPaddingRight = 0f;
 
-        float revealDuration = _sentence.Length * letterDelay;
+        float revealDuration = _sentence.Length / speed;
         float elapsedTime = 0f;
 
         while (elapsedTime < revealDuration)

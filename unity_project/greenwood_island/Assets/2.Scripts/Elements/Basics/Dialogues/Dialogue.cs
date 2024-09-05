@@ -45,7 +45,7 @@ public class Dialogue : Element
         {
             Line line = _lines[i];
             DialoguePlayer.InitLine(line);
-            DialoguePlayer.ShowNextSentence();
+            DialoguePlayer.ShowNextSentence(line.PlaySpeed);
             //연속 마우스 호출을 막기위한 한프레임 대기
             yield return null;
             CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex);
@@ -57,7 +57,7 @@ public class Dialogue : Element
                         DialoguePlayer.CompleteCurSentence();
                     }
                     else if(dialogueState == EDialogueState.Waiting){
-                        DialoguePlayer.ShowNextSentence();
+                        DialoguePlayer.ShowNextSentence(line.PlaySpeed);
                     }
                     else if(dialogueState == EDialogueState.Finished){
 

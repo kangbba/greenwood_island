@@ -16,9 +16,11 @@ public class CameraController : MonoBehaviour
     public Transform ShakeLayer { get; private set; } // 카메라의 흔들림 효과를 담당하는 레이어
 
     // 줌 비율 0 ~ 1에 매핑되는 Z 축 범위 설정 (예: 0은 Z = 10, 1은 Z = 5)
-    private Vector2 _zoomRange = new Vector2(-100f, 0f); // 0은 최대 줌(멀리), 1은 최소 줌(가까이)
+    private Vector2 _zoomRange = new Vector2(-823f, -30f); // 0은 최대 줌(멀리), 1은 최소 줌(가까이)
 
-    private Tween _currentTween; // 현재 실행 중인 트윈을 추적
+    private Tween _planeTween; // PlaneLayer의 현재 실행 중인 트윈
+    private Tween _depthTween; // DepthLayer의 현재 실행 중인 트윈
+    private Tween _shakeTween; // ShakeLayer의 현재 실행 중인 트윈
 
     private void Awake()
     {
@@ -60,8 +62,8 @@ public class CameraController : MonoBehaviour
     /// <param name="easeType">Ease 타입</param>
     public void MovePlane(Vector2 targetLocalPos, float duration, Ease easeType = Ease.OutQuad)
     {
-        _currentTween?.Kill();
-        _currentTween = PlaneLayer.DOLocalMove(new Vector3(targetLocalPos.x, targetLocalPos.y, PlaneLayer.localPosition.z), duration).SetEase(easeType);
+        _planeTween?.Kill();
+        _planeTween = PlaneLayer.DOLocalMove(new Vector3(targetLocalPos.x, targetLocalPos.y, PlaneLayer.localPosition.z), duration).SetEase(easeType);
     }
 
     /// <summary>
@@ -73,8 +75,8 @@ public class CameraController : MonoBehaviour
     public void Zoom(float zoomFactor, float duration, Ease easeType = Ease.OutQuad)
     {
         float targetZ = Mathf.Lerp(_zoomRange.x, _zoomRange.y, Mathf.Clamp01(zoomFactor));
-        _currentTween?.Kill();
-        _currentTween = DepthLayer.DOLocalMoveZ(targetZ, duration).SetEase(easeType);
+        _depthTween?.Kill();
+        _depthTween = DepthLayer.DOLocalMoveZ(targetZ, duration).SetEase(easeType);
     }
 
     /// <summary>
@@ -86,8 +88,8 @@ public class CameraController : MonoBehaviour
     /// <param name="randomness">흔들림의 무작위성</param>
     public void Shake(float duration, float strength = 3f, int vibrato = 10, float randomness = 90f)
     {
-        _currentTween?.Kill();
-        _currentTween = ShakeLayer.DOShakePosition(duration, strength, vibrato, randomness);
+        _shakeTween?.Kill();
+        _shakeTween = ShakeLayer.DOShakePosition(duration, strength, vibrato, randomness);
     }
 
     /// <summary>
@@ -95,7 +97,10 @@ public class CameraController : MonoBehaviour
     /// </summary>
     public void Restore(float duration, Ease easeType = Ease.OutQuad)
     {
-        _currentTween?.Kill();
+        _planeTween?.Kill();
+        _depthTween?.Kill();
+        _shakeTween?.Kill();
+
         PlaneLayer.DOLocalMove(Vector3.zero, duration).SetEase(easeType);
         DepthLayer.DOLocalMoveZ(_zoomRange.x, duration).SetEase(easeType); // 기본값으로 복원 (줌 비율 0)
         ShakeLayer.DOLocalMove(Vector3.zero, duration).SetEase(easeType); // 흔들림 복원

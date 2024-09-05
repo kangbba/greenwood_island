@@ -6,10 +6,9 @@ using UnityEngine;
 
 public enum EStoryID
 {
-    StoryA,
-    StoryB,
-    StoryC,
-    StoryD,
+    TestStory_KateKillLisa,
+    TestStory_PlaceEnters,
+    TestStoryTime,
     // 다른 스토리 ID를 여기에 추가
 }
 
@@ -55,7 +54,7 @@ public class StoryManager : MonoBehaviour
         if (_stories != null && _stories.Count > 0)
         {
             var firstStory = _stories.Values.First();
-            PlayStory(EStoryID.StoryD);
+            PlayStory(EStoryID.TestStoryTime);
         }
         else
         {
@@ -83,7 +82,6 @@ public class StoryManager : MonoBehaviour
     {
         // 모든 클리어 작업 수행
         float clearDuration = 1f;
-        RestoreAll(clearDuration);
         yield return new WaitForSeconds(clearDuration);
 
         // 현재 스토리의 StartRoutine과 UpdateRoutine을 실행
@@ -91,6 +89,8 @@ public class StoryManager : MonoBehaviour
         {
             yield return _currentStory.StartRoutine();
             yield return _currentStory.UpdateRoutine();
+            yield return _currentStory.ExitRoutine();
+            RestoreAll(clearDuration);
         }
     }
 

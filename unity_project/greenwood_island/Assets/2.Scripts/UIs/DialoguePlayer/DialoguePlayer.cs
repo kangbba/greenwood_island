@@ -70,10 +70,10 @@ public class DialoguePlayer : MonoBehaviour
         _rectMaskBuilder.CreateRectMask(line, ref _currentMaskIndex);
 
         // 첫 번째 문장을 보여줌
-        ShowNextSentence();
+        ShowNextSentence(line.PlaySpeed);
     }
 
-    public void ShowNextSentence()
+    public void ShowNextSentence(float speed)
     {
         if (CreatedRectMasks == null || CreatedRectMasks.Count == 0)
         {
@@ -104,16 +104,16 @@ public class DialoguePlayer : MonoBehaviour
             }
         }
 
-        _currentRevealCoroutine = StartCoroutine(RevealRectMasks(startIndex, endIndex, 0.05f));
+        _currentRevealCoroutine = StartCoroutine(RevealRectMasks(startIndex, endIndex, speed));
     }
-    private IEnumerator RevealRectMasks(int startIndex, int endIndex, float delay)
+    private IEnumerator RevealRectMasks(int startIndex, int endIndex, float speed)
     {
         for (int i = startIndex; i <= endIndex && i < CreatedRectMasks.Count; i++)
         {
             var rectMask = CreatedRectMasks[i];
             if (rectMask != null)
             {
-                yield return StartCoroutine(rectMask.RevealMask(delay));
+                yield return StartCoroutine(rectMask.RevealMask(speed));
             }
             else
             {

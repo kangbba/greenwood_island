@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class StoryB : Story
+public class TestStory_KateKillLisa : Story
 {
-    public override EStoryID StoryId => EStoryID.StoryB;
+    public override EStoryID StoryId => EStoryID.TestStory_KateKillLisa;
 
     // 각 단계의 Elements를 상속받은 클래스에서 정의
-    protected override List<Element> StartElements => new List<Element>
-    {
+    protected override SequentialElement StartElements => new
+    (
         new ScreenOverlayFilm(Color.black, 0f),
         new SFXEnter(SFXType.CreepyWhisper, true, 1f),
         new PEWithOverlayColor(EPlaceID.Mountain, Color.white),
@@ -18,10 +18,10 @@ public class StoryB : Story
             new ScreenOverlayFilm(Color.clear, 1f),
             new CameraMove2DClear() // 초기 카메라 이동 효과
         )
-    };
+    );
 
-    protected override List<Element> UpdateElements => new List<Element>
-    {
+    protected override SequentialElement UpdateElements => new
+    (
         new CharactersEnter(
             new List<ECharacterID> { ECharacterID.Kate, ECharacterID.Lisa },
             new List<float> { 0.33f, 0.66f },
@@ -122,6 +122,9 @@ public class StoryB : Story
                 )
             }
         )
-    };
+    );
 
+    protected override SequentialElement ExitElements => new(
+
+    );
 }

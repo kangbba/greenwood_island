@@ -56,10 +56,7 @@ public class TestStory_KateKillLisa : Story
                     (
                         new Dialogue(
                             ECharacterID.Kate,
-                            new List<Line>
-                            {
-                                new Line(EEmotionID.Angry, 2, "머리를 노리면, 네 잘난 척하는 얼굴... 더는 볼 필요 없을 거야."),
-                            }
+                            new Line(EEmotionID.Angry, 2, "머리를 노리면, 네 잘난 척하는 얼굴... 더는 볼 필요 없을 거야.")
                         ),
                         new CharacterMove(ECharacterID.Kate, 0.38f, 0.5f, Ease.OutQuad), // 케이트가 왼쪽으로 이동
                         new CameraShake(),
@@ -67,10 +64,7 @@ public class TestStory_KateKillLisa : Story
                         new FXEnter(FXType.BloodDrip, 3f),
                         new Dialogue(
                             ECharacterID.Lisa,
-                            new List<Line>
-                            {
-                                new Line(EEmotionID.Sad, 0, "너... 정말 나를 이렇게까지 증오하는 거야?"),
-                            }
+                            new Line(EEmotionID.Sad, 0, "너... 정말 나를 이렇게까지 증오하는 거야?")
                         ),
                         new FXExit(FXType.BloodDrip)
                     )
@@ -96,10 +90,7 @@ public class TestStory_KateKillLisa : Story
                         new FXEnter(FXType.BloodDrip, 3f),
                         new Dialogue(
                             ECharacterID.Lisa,
-                            new List<Line>
-                            {
-                                new Line(EEmotionID.Sad, 0, "너... 정말... 나를 이렇게까지..."),
-                            }
+                            new Line(EEmotionID.Sad, 0, "너... 정말... 나를 이렇게까지...")
                         ),
                         new PlaceOverlayFilm(Color.black.ModifiedAlpha(.9f), .5f),
                         new ScreenOverlayFilm(Color.black, 3f)

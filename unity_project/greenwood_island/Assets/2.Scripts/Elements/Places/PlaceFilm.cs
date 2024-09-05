@@ -27,22 +27,7 @@ public class PlaceFilm : Element
     {
         Debug.Log($"PlaceFilm {_effectColor}");
 
-        Place currentPlace = PlaceManager.Instance.CurrentPlace;
-        if (currentPlace == null)
-        {
-            Debug.LogWarning("No active place to apply the effect.");
-            yield break;
-        }
-
-        if (currentPlace.Image != null)
-        {
-            Debug.Log($"currentPlace : {currentPlace.PlaceID}");
-            currentPlace.SetColor(_effectColor, _duration, _easeType);
-        }
-        else
-        {
-            Debug.LogWarning("No SpriteRenderer found on the current place.");
-        }
+        PlaceManager.Instance.ChangeCurrentPlaceColor(_effectColor, _duration, _easeType);
         yield return new WaitForSeconds(_duration);
     }
 }

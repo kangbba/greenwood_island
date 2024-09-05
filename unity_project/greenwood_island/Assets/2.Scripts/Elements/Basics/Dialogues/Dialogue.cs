@@ -8,6 +8,11 @@ public class Dialogue : Element
     private ECharacterID _characterID;
     private List<Line> _lines;
 
+    public Dialogue(ECharacterID characterID, Line line)
+    {
+        this._characterID = characterID;
+        this._lines = new List<Line> {line};
+    }
     public Dialogue(ECharacterID characterID, List<Line> lines)
     {
         this._characterID = characterID;

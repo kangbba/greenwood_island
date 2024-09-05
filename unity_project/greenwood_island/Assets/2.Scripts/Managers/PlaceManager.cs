@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using System;
 
 public enum EPlaceID
 {
@@ -35,14 +36,13 @@ public class PlaceManager : MonoBehaviour
         }
     }
 
+
     [SerializeField]
     private List<Place> _placePrefabs; // 미리 정의된 장소 프리팹 리스트
 
-    private Dictionary<EPlaceID, Place> _activePlaces = new Dictionary<EPlaceID, Place>(); // 활성화된 장소를 관리할 딕셔너리
-
     private Place _currentPlace; // 현재 활성화된 장소를 나타내는 필드
+    private Place _previousPlace; // 현재 활성화된 장소를 나타내는 필드
 
-    public Place CurrentPlace => _currentPlace; // 현재 장소를 반환하는 게터
 
     public Place InstantiatePlace(EPlaceID placeID)
     {
@@ -54,56 +54,36 @@ public class PlaceManager : MonoBehaviour
             return null;
         }
 
-        // 현재 장소가 존재하면 파괴 후 새로운 장소로 설정
-        if (_currentPlace != null)
-        {
-            DestroyPlace(_currentPlace.PlaceID);
-        }
-
-        // 이미 활성화된 장소가 있는 경우 해당 장소 반환
-        if (_activePlaces.ContainsKey(placeID))
-        {
-            Debug.LogWarning($"Place with ID {placeID} is already instantiated.");
-            return _activePlaces[placeID];
-        }
+        _previousPlace = _currentPlace;
 
         // 장소를 생성하여 PlaceLayer에 추가
+
         Transform placeLayer = UIManager.Instance.WorldCanvas.PlaceLayer;
-        Place place = Instantiate(placePrefab, placeLayer);
-
-        _activePlaces.Add(placeID, place);
-        _currentPlace = place; // 생성된 장소를 현재 장소로 설정
-
-        // 디버깅 로그 추가
+        _currentPlace = Instantiate(placePrefab, placeLayer);
         Debug.Log($"Current place set to {_currentPlace.PlaceID}");
 
-        return place;
+
+        return _currentPlace;
     }
-
-    // 기존의 DestroyPlace 메서드를 private으로 변경하여 외부에서 직접 호출되지 않도록 설정
-    private void DestroyPlace(EPlaceID placeID)
+    public void ChangeCurrentPlaceColor(Color color, float duration, Ease easeType)
     {
-        if (_activePlaces.TryGetValue(placeID, out Place place))
+        if (_currentPlace != null && _currentPlace.Image != null)
         {
-            Destroy(place.gameObject);
-            _activePlaces.Remove(placeID);
-
-            // 파괴된 장소가 현재 장소와 같다면 _currentPlace를 null로 설정
-            if (_currentPlace == place)
-            {
-                _currentPlace = null;
-                Debug.Log("Current place destroyed, set to null.");
-            }
+            _currentPlace.SetColor(color, duration, easeType);
         }
         else
         {
-            Debug.LogWarning($"No active place found with ID: {placeID} to destroy.");
+            Debug.LogWarning("PlaceManager :: Current Place is null or has no Image component.");
         }
     }
-
-    public Place GetActivePlace(EPlaceID placeID)
+    // 기존의 DestroyPlace 메서드를 private으로 변경하여 외부에서 직접 호출되지 않도록 설정
+    private void DestroyPreviousPlace()
     {
-        _activePlaces.TryGetValue(placeID, out Place place);
-        return place;
+        if(_previousPlace == null){
+            Debug.LogWarning("PlaceManager :: Previous Place is null");
+            return;
+        }
+        Destroy(_previousPlace.gameObject);
     }
+
 }

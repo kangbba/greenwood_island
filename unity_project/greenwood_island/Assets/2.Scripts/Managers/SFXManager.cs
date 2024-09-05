@@ -76,7 +76,7 @@ public class SFXManager : MonoBehaviour
             // 새로운 GameObject를 생성하여 AudioSource 추가
             GameObject audioObject = new GameObject($"SFX_{sfxType}");
             audioObject.transform.position = position;
-            audioObject.transform.parent = UIManager.Instance.WorldCanvas.SFXLayer;
+            audioObject.transform.parent = UIManager.Instance.SystemCanvas.SFXLayer;
 
             // AudioSource 컴포넌트를 추가하고 설정
             AudioSource audioSource = audioObject.AddComponent<AudioSource>();

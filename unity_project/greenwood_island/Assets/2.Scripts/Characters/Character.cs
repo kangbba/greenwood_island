@@ -15,99 +15,63 @@ public enum EEmotionID
     Panic,
     Stumped,
 }
+
 public class Character : MonoBehaviour
 {
-    [System.Serializable]
-    public class EmotionPlan
-    {
-        public EEmotionID _emotionID; // Emotion ID (e.g., "Happy", "Sad")
-        public Sprite[] _emotionSprites; // Array of sprites corresponding to the emotion
-    }
-
     [SerializeField] private CanvasGroup _graphic;
     [SerializeField] private RectTransform _rectTransform;
-    [SerializeField] private List<EmotionPlan> _emotionPlans; // List of emotion plans
     [SerializeField] private Image _img; // Image component for the character sprite
+    [SerializeField] private EmotionPlansData _emotionPlansData; // ScriptableObject to manage emotion plans
 
-    private Vector3 _originalPos = Vector3.zero; // Define the original position as (0, 0, 0)
 
-    protected List<EmotionPlan> EmotionPlans { get => _emotionPlans; }
+    private List<EmotionPlan> EmotionPlans => _emotionPlansData != null ? _emotionPlansData.EmotionPlans : new List<EmotionPlan>();
 
-    private void Start()
-    {
-        SetVisibility(false, 0f);
-    }
-    public void SetVisibility(bool visible, float duration)
+    public void SetVisibility(bool visible, float duration, Ease easeType = Ease.OutQuad)
     {
         float targetAlpha = visible ? 1f : 0f;
 
-        // Animate the alpha value
-        _graphic.DOFade(targetAlpha, duration).SetEase(Ease.OutQuad);
+        _graphic.DOFade(targetAlpha, duration).SetEase(easeType);
     }
 
-    public void ChangeEmotion(EEmotionID emotionID, int index, float duration)
+    public void ChangeEmotion(EEmotionID emotionID, int index, float duration = 1f)
     {
-        EmotionPlan selectedPlan = EmotionPlans.Find(plan => plan._emotionID == emotionID);
+        // 해당 감정을 EmotionPlans에서 찾음
+        EmotionPlan selectedPlan = EmotionPlans.Find(plan => plan.EmotionID == emotionID);
 
         if (selectedPlan == null)
         {
-            Debug.LogWarning($"Emotion '{emotionID}' not found in the emotion plans.");
+            Debug.LogWarning($"{nameof(Character)} :: 이모션 '{emotionID}' 을 플랜에서 찾을 수 없음");
             return;
         }
 
-        if (index < 0 || index >= selectedPlan._emotionSprites.Length)
+        if (index < 0 || index >= selectedPlan.EmotionSprites.Length)
         {
-            Debug.LogWarning($"Invalid sprite index '{index}' for emotion '{emotionID}'.");
+            Debug.LogWarning($"{nameof(Character)} :: 유효하지 않은 인덱스 '{emotionID}' '{index}' 을 할당하려는 시도.");
             return;
         }
 
-        if (duration <= 0f)
-        {
-            // Change the sprite immediately
-            _img.sprite = selectedPlan._emotionSprites[index];
-            _graphic.alpha = 1f;
-        }
-        else
-        {
-            // Fade to 0.3, then change sprite, and fade back to 1
-            Sequence transitionSequence = DOTween.Sequence();
+        // 현재 이미지의 투명도 조정 및 새로운 스프라이트 설정 후 등장
+        Sprite newSprite = selectedPlan.EmotionSprites[index];
+        Image tempImage = Instantiate(_img, _img.transform.parent); // 현재 이미지의 복제본을 만듦
+        tempImage.sprite = _img.sprite; // 이전 스프라이트를 할당
 
-            transitionSequence.Append(_graphic.DOFade(0.3f, duration * 0.4f).SetEase(Ease.InQuad)) // Fade from 1 -> 0.3
-                              .AppendInterval(0.1f) // Wait for 0.1 seconds for a smooth transition
-                              .AppendCallback(() =>
-                              {
-                                  _img.sprite = selectedPlan._emotionSprites[index]; // Change the sprite
-                              })
-                              .Append(_graphic.DOFade(1f, duration * 0.6f).SetEase(Ease.OutQuad)); // Fade from 0.3 -> 1
+        // 새로운 스프라이트를 투명하게 설정
+        _img.sprite = newSprite;
+        _img.color = new Color(_img.color.r, _img.color.g, _img.color.b, 0);
 
-            transitionSequence.Play();
-        }
+        // 시퀀스로 애니메이션 처리: 이전 스프라이트는 사라지고, 새로운 스프라이트는 나타남
+        Sequence transitionSequence = DOTween.Sequence();
 
-        Debug.Log($"Emotion changed to '{emotionID}' with sprite index {index}, duration: {duration}s.");
-    }
+        transitionSequence.Append(tempImage.DOFade(0f, duration * 0.5f)) // 이전 스프라이트 사라짐
+                        .Join(_img.DOFade(1f, duration * 0.5f)) // 새로운 스프라이트 등장
+                        .OnComplete(() =>
+                        {
+                            Destroy(tempImage.gameObject); // 이전 스프라이트 제거
+                        });
 
-    public void ApplyJumpEffect()
-    {
-        float jumpHeight = 30f;
+        transitionSequence.Play();
 
-        _rectTransform.DOAnchorPosY(_originalPos.y + jumpHeight, 0.2f).SetEase(Ease.OutQuad)
-            .OnComplete(() => _rectTransform.DOAnchorPosY(_originalPos.y, 0.2f).SetEase(Ease.InQuad));
-    }
-
-    public void ApplyShakeEffect(float duration, float strength)
-    {
-        _rectTransform.DOShakePosition(duration, strength, 10, 90, false, true);
-    }
-
-    public void Highlight(float duration = 0.5f)
-    {
-        Sequence highlightSequence = DOTween.Sequence();
-
-        highlightSequence.Append(_graphic.DOFade(1.2f, duration / 2).SetEase(Ease.OutQuad)) 
-                         .Join(_rectTransform.DOScale(1.1f, duration / 2).SetEase(Ease.OutQuad))
-                         .Append(_graphic.DOFade(1f, duration / 2).SetEase(Ease.InQuad))
-                         .Join(_rectTransform.DOScale(1f, duration / 2).SetEase(Ease.InQuad));
-
-        highlightSequence.Play();
+        // 로그 메시지 간소화 및 스크립트 이름 추가
+        Debug.Log($"Emotion changed to '{emotionID} {index}' (duration: {duration}s).");
     }
 }

@@ -34,15 +34,7 @@ public class CharacterEnter : Element
             Debug.LogWarning($"Failed to instantiate character with ID: {_characterID}");
             yield break;
         }
-
-        // 등장 애니메이션 (예: 투명도 0 -> 1)
-        CanvasGroup canvasGroup = character.GetComponent<CanvasGroup>();
-        if (canvasGroup != null)
-        {
-            canvasGroup.alpha = 0;
-            canvasGroup.DOFade(1, _duration).SetEase(_easeType);
-        }
-
+        character.SetVisibility(true, _duration, _easeType);
         // 애니메이션 완료까지 대기
         yield return new WaitForSeconds(_duration);
     }

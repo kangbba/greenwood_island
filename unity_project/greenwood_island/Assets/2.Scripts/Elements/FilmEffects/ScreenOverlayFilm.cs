@@ -15,7 +15,7 @@ public class ScreenOverlayFilm : Element
     private Ease _easeType;
 
     // ScreenOverlayFilm을 참조
-    private Image ScreenOverlayFilmImg => UIManager.Instance.WorldCanvas.ScreenOverlayFilm;
+    private Image ScreenOverlayFilmImg => UIManager.Instance.SystemCanvas.ScreenOverlayFilm;
 
     public ScreenOverlayFilm(Color overlayColor, float duration = 1f, Ease easeType = Ease.Linear)
     {

@@ -74,7 +74,7 @@ public class FXManager : MonoBehaviour
     {
         if (_fxPrefabs.TryGetValue(fxType, out GameObject fxPrefab))
         {
-            GameObject fxInstance = Instantiate(fxPrefab, UIManager.Instance.WorldCanvas.FXLayer);
+            GameObject fxInstance = Instantiate(fxPrefab, UIManager.Instance.SystemCanvas.FXLayer);
             fxInstance.transform.localPosition = localPos;
 
             if (!_activeFXs.ContainsKey(fxType))

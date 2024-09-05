@@ -94,13 +94,38 @@ public class CharacterManager : MonoBehaviour
 
         // 초기 이모션 설정
         character.ChangeEmotion(initialEmotionID, emotionIndex, 0f);
-
-        // 캐릭터를 생성한 후, 즉시 이동(애니메이션 없이) 시키기 위해 CharacterMove 사용
-        CharacterMove move = new CharacterMove(characterID, screenPeroneX, 0f, Ease.Linear);
-        StartCoroutine(move.ExecuteRoutine());
+        character.SetVisibility(false, 0f);
+        MoveCharacter(characterID, screenPeroneX, 0f, Ease.Linear);
 
         return character;
     }
+    public void MoveCharacter(ECharacterID characterID, float targetScreenPercentageX, float _duration, Ease _easeType)
+    {
+        // 활성화된 캐릭터를 가져옴
+        Character character = GetActiveCharacter(characterID);
+        if (character == null)
+        {
+            Debug.LogError("Character not found.");
+            return;
+        }
+
+        // UI Canvas에 속한 RectTransform 기준으로 이동할 목표 위치 계산
+        RectTransform rectTransform = character.GetComponent<RectTransform>();
+        if (rectTransform == null)
+        {
+            Debug.LogError("Character does not have a RectTransform.");
+            return;
+        }
+
+        // 목표 위치 계산 (화면 너비 기준)
+        float targetX = Screen.width * targetScreenPercentageX; // 화면 너비에 비례하여 목표 X 위치 계산
+        Vector3 targetPosition = rectTransform.anchoredPosition;
+        targetPosition.x = targetX - (Screen.width / 2); // 화면 중앙을 기준으로 위치 조정
+
+        // 캐릭터 이동 애니메이션
+        rectTransform.DOAnchorPos(new Vector2(targetPosition.x, rectTransform.anchoredPosition.y), _duration).SetEase(_easeType);
+    }
+
 
 
     public void DestroyCharacter(ECharacterID characterID)
@@ -136,12 +161,12 @@ public class CharacterManager : MonoBehaviour
     }
 
     // 캐릭터의 감정 상태를 설정하는 메서드
-    public void SetCharacterEmotion(ECharacterID characterID, EEmotionID emotionID, int emotionIndex)
+    public void SetCharacterEmotion(ECharacterID characterID, EEmotionID emotionID, int emotionIndex, float duration)
     {
         Character character = GetActiveCharacter(characterID);
         if (character != null)
         {
-            character.ChangeEmotion(emotionID, emotionIndex, 0f);
+            character.ChangeEmotion(emotionID, emotionIndex, duration);
         }
     }
 
@@ -154,4 +179,5 @@ public class CharacterManager : MonoBehaviour
         }
         _instantiatedCharacters.Clear();
     }
+
 }

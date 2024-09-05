@@ -236,19 +236,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_SizeDelta.x
@@ -256,7 +256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1309624673805078309, guid: 6a7f8848dec994db18fc93bee4401de9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -566,7 +566,6 @@ RectTransform:
   - {fileID: 2055063874}
   - {fileID: 1007522597}
   - {fileID: 1992579753}
-  - {fileID: 871915259}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -588,10 +587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _placeLayer: {fileID: 2055063874}
   _characterLayer: {fileID: 1992579753}
-  _fxLayer: {fileID: 117920918}
-  _sfxLayer: {fileID: 1736861471}
   _placeOverlayFilm: {fileID: 1007522598}
-  _screenOverlayFilm: {fileID: 1607851818}
 --- !u!1 &660162082
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +639,7 @@ MonoBehaviour:
   - {fileID: 1053420155645376636, guid: fa8cd937dad20494fab72e38b1ffdfca, type: 3}
   - {fileID: 1053420155645376636, guid: fead8e47ab6094e948cc544bc804f4cf, type: 3}
   - {fileID: 1053420155645376636, guid: bf59d049d28fb4b778da7a4f0df526da, type: 3}
+  - {fileID: 1053420155645376636, guid: a64d36944c795489c8d969c2b56c07c4, type: 3}
 --- !u!224 &691674547 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8219515785612320796, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
@@ -904,11 +901,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 570999724}
+  m_Father: {fileID: 2088360323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -960, y: -540}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &871915260
@@ -1209,7 +1206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxClipEntries:
   - sfxType: 0
-    sfxClip: {fileID: 8300000, guid: 8402c7aa3cc454475a4ecac3e8d2282c, type: 3}
+    sfxClip: {fileID: 8300000, guid: 05b97387bc59f43419534f7f139c9d75, type: 3}
   - sfxType: 1
     sfxClip: {fileID: 8300000, guid: 20bb698a7a673465c9bc41997bff9949, type: 3}
   - sfxType: 2
@@ -1314,7 +1311,7 @@ MonoBehaviour:
     characterName_ko: "\uB77C\uC774\uC5B8"
     mainColor: {r: 0.80740476, g: 0.8476896, b: 0.9056604, a: 1}
   - characterID: 2
-    characterPrefab: {fileID: 5043553933719852903, guid: dc526af8978bd4bb8be6a31384e1aa9d, type: 3}
+    characterPrefab: {fileID: 7119238039721096477, guid: dc526af8978bd4bb8be6a31384e1aa9d, type: 3}
     characterName_ko: "\uCF00\uC774\uD2B8"
     mainColor: {r: 1, g: 0.83867025, b: 0.514151, a: 1}
   - characterID: 3
@@ -1473,8 +1470,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -960, y: -540}
-  m_SizeDelta: {x: 0.00012207031, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1736861472
 CanvasRenderer:
@@ -1770,6 +1767,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 871915259}
   - {fileID: 1607851816}
   - {fileID: 117920918}
   - {fileID: 1736861471}

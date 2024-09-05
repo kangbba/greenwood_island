@@ -9,6 +9,7 @@ public enum SFXType
     BirdsChirping,
     Waves,
     CreepyTicking,
+    CelebrationMusic
     // 필요한 SFX 타입들을 추가
 }
 

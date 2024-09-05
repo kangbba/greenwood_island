@@ -46,11 +46,12 @@ public class TestStory_KateKillLisa : Story
                 new Line(EEmotionID.Panic, 1, "넌 늘 내 그림자였어. 그걸 인정하는 게 왜 그렇게 힘들어?"),
             }
         ),
-        new ChoiceElement(
+
+        new ChoiceSet(
             "케이트의 다음 행동은?",
-            new List<ChoiceOption>
+            new List<ChoiceContent>
             {
-                new ChoiceOption(
+                new ChoiceContent(
                     "리사에게 과거의 사건을 들먹인다.",
                     new SequentialElement
                     (
@@ -69,7 +70,7 @@ public class TestStory_KateKillLisa : Story
                         new FXExit(FXType.BloodDrip)
                     )
                 ),
-                new ChoiceOption(
+                new ChoiceContent(
                     "리사의 몸을 노린다.",
                     new SequentialElement
                     (
@@ -96,7 +97,7 @@ public class TestStory_KateKillLisa : Story
                         new ScreenOverlayFilm(Color.black, 3f)
                     )
                 ),
-                new ChoiceOption(
+                new ChoiceContent(
                     "라이언을 부른다.",
                     new SequentialElement
                     (

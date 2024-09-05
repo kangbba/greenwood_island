@@ -29,26 +29,7 @@ public class CharacterMove : Element
             Debug.LogWarning($"No active character found with ID: {_characterID} to move.");
             yield break;
         }
-
-        // 목표 위치 계산
-        Camera mainCamera = Camera.main;
-        if (mainCamera == null)
-        {
-            Debug.LogError("Main Camera not found.");
-            yield break;
-        }
-
-        // ViewportToWorldPoint를 사용해 목표 위치 계산 (0.0~1.0 사이의 X 값을 월드 좌표로 변환)
-        Vector3 targetWorldPosition = mainCamera.ViewportToWorldPoint(new Vector3(_targetScreenPeroneX, 0.5f, character.transform.position.z - mainCamera.transform.position.z));
-
-        // Y와 Z는 기존 값을 유지
-        targetWorldPosition.y = character.transform.position.y;
-        targetWorldPosition.z = character.transform.position.z;
-
-        // 캐릭터 이동 애니메이션
-        character.transform.DOMove(targetWorldPosition, _duration).SetEase(_easeType);
-
-        // 애니메이션 완료까지 대기
+        CharacterManager.Instance.MoveCharacter(_characterID, _targetScreenPeroneX, _duration, _easeType);
         yield return new WaitForSeconds(_duration);
     }
 }

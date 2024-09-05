@@ -6,22 +6,20 @@ using TMPro;
 
 public class ChoiceUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _questionText;
-    [SerializeField] private Transform _choicesContainer;
-    [SerializeField] private ChoiceButton _choicePrefab;  // ChoiceButton 스크립트가 할당된 프리팹
+    [SerializeField] private Transform _choicesContainer; // 선택지 컨테이너
+    [SerializeField] private ChoiceButton _choicePrefab; // 선택지 버튼 프리팹
+    private float ButtonHeight => _choicePrefab.GetComponent<RectTransform>().rect.height; // 각 버튼의 높이
 
     private int _selectedChoice = -1;
     private System.Action<int> _onChoiceSelectedCallback;
 
     private void Start()
     {
-        _questionText.alpha = 0f; // 시작 시 질문 텍스트를 안 보이게 설정
+        // 초기화 또는 필요시 다른 설정
     }
 
     public IEnumerator DisplayChoices(string question, List<string> choices, System.Action<int> onChoiceSelected)
     {
-        _questionText.text = question;
-        _questionText.DOFade(1f, 0.5f); // 질문 텍스트 페이드 인
         _onChoiceSelectedCallback = onChoiceSelected;
 
         // 기존 선택지 UI 제거
@@ -30,21 +28,21 @@ public class ChoiceUI : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        // 선택지 생성 및 순차적 배치
-        float startY = 360f;
-        float yOffset = -360f;
+        // 컨테이너 높이 조정
+        AdjustContainerHeight(choices.Count);
 
+        // 선택지 생성 및 배치
         for (int i = 0; i < choices.Count; i++)
         {
             var choiceButton = Instantiate(_choicePrefab, _choicesContainer);
             choiceButton.SetText(choices[i]);
-
-            // 세로축 localPosition을 순차적으로 설정
-            float yPosition = startY + (i * yOffset);
-            choiceButton.GetComponent<RectTransform>().localPosition = new Vector3(0, yPosition, 0);
-
-            // 생성 시 페이드 인 애니메이션
             choiceButton.FadeIn(0.5f);
+
+            // 균등하게 배치하기 위해 위치 설정
+            float yPosition = Mathf.Lerp(_choicesContainer.GetComponent<RectTransform>().rect.height / 2 - ButtonHeight / 2,
+                                         -_choicesContainer.GetComponent<RectTransform>().rect.height / 2 + ButtonHeight / 2,
+                                         (float)i / (choices.Count - 1));
+            choiceButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, yPosition);
 
             int index = i;
             choiceButton.SetOnClickListener(() => OnChoiceSelected(index, choiceButton.gameObject));
@@ -55,10 +53,16 @@ public class ChoiceUI : MonoBehaviour
         // 플레이어가 선택할 때까지 대기
         yield return new WaitUntil(() => _selectedChoice != -1);
 
-        _questionText.DOFade(0f, 0.5f); // 질문 텍스트 페이드 아웃
-
         // 선택 후 애니메이션 완료까지 대기
         yield return new WaitForSeconds(1.5f);
+    }
+
+    private void AdjustContainerHeight(int choiceCount)
+    {
+        // 컨테이너의 높이를 선택지 개수에 맞게 조정
+        RectTransform rectTransform = _choicesContainer.GetComponent<RectTransform>();
+        float totalHeight = choiceCount * 150;
+        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, totalHeight);
     }
 
     private void OnChoiceSelected(int choiceIndex, GameObject selectedChoice)

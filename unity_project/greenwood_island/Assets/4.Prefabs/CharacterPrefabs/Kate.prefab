@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1093593374676556963}
   - component: {fileID: 4679146932676477584}
   - component: {fileID: 8109460112451840439}
-  - component: {fileID: 5043553933719852903}
   - component: {fileID: 8584031999050825053}
+  - component: {fileID: 7119238039721096477}
   m_Layer: 5
   m_Name: Kate
   m_TagString: Untagged
@@ -77,45 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5043553933719852903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882805499953900167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adfafcac364bf4cdf9c67d37eb36df9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _graphic: {fileID: 8584031999050825053}
-  _rectTransform: {fileID: 1093593374676556963}
-  _emotionPlans:
-  - _emotionID: 0
-    _emotionSprites:
-    - {fileID: 21300000, guid: b3065939a3b4d46779d21d11a1a09cbe, type: 3}
-    - {fileID: 21300000, guid: 0cd793af3ea6448ad81d2b4853bacd15, type: 3}
-    - {fileID: 21300000, guid: 2140e59f3577c4f349620d45239d2b16, type: 3}
-    - {fileID: 21300000, guid: 9d53a47939aa44d38b23a628c15ede19, type: 3}
-    - {fileID: 21300000, guid: f8d12d2548cb04a4293ed9f4dffb546c, type: 3}
-    - {fileID: 21300000, guid: 5f68cd1b47cff4530855b8d28b164be1, type: 3}
-  - _emotionID: 6
-    _emotionSprites:
-    - {fileID: 21300000, guid: 262e32e50eeca4103b157e4aaa99bba8, type: 3}
-    - {fileID: 21300000, guid: 79c045933010f44ea8e742924a51253b, type: 3}
-  - _emotionID: 5
-    _emotionSprites:
-    - {fileID: 21300000, guid: 6e5e27aae1456447ebb8bce2d296f4b9, type: 3}
-    - {fileID: 21300000, guid: 9fc6ac674c1874d70a4207d176ec7db0, type: 3}
-    - {fileID: 21300000, guid: c438c80e518ef449299fdf3e2a3e0b6e, type: 3}
-    - {fileID: 21300000, guid: 6fed5e455ddf3432193f8bdc341babc6, type: 3}
-    - {fileID: 21300000, guid: 6f841591bfd0f4f4dabd1d366663bb88, type: 3}
-  - _emotionID: 4
-    _emotionSprites:
-    - {fileID: 21300000, guid: d7e624ec11a5d41ae9e0eaf33fa82afd, type: 3}
-    - {fileID: 21300000, guid: 84454c8dc5e7543ff8abb222cd6c0768, type: 3}
-  _img: {fileID: 8109460112451840439}
 --- !u!225 &8584031999050825053
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -128,3 +89,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &7119238039721096477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882805499953900167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c0ab14edd3a7457da5ca5d1a9798abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _graphic: {fileID: 8584031999050825053}
+  _rectTransform: {fileID: 1093593374676556963}
+  _img: {fileID: 8109460112451840439}
+  _emotionPlansData: {fileID: 11400000, guid: 6a7c58ecf03a24efca730808001880f1, type: 2}

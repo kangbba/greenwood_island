@@ -10,6 +10,7 @@ public enum EStoryID
     TestStory_PlaceEnters,
     TestStoryTime,
     // 다른 스토리 ID를 여기에 추가
+    TestStory_BirthdayParty
 }
 
 public class StoryManager : MonoBehaviour
@@ -41,20 +42,11 @@ public class StoryManager : MonoBehaviour
 
     private void Start()
     {
-        // Start에서 지연된 스토리 시작 호출
-        StartCoroutine(StartStoryAfterDelay());
-    }
-
-    private IEnumerator StartStoryAfterDelay()
-    {
-        // 딜레이를 줄 수 있도록 필요한 시간만큼 대기 (필요에 따라 조정 가능)
-        yield return new WaitForSeconds(1f); 
-
         // 첫 번째 스토리를 자동으로 시작
         if (_stories != null && _stories.Count > 0)
         {
             var firstStory = _stories.Values.First();
-            PlayStory(EStoryID.TestStoryTime);
+            PlayStory(EStoryID.TestStory_BirthdayParty);
         }
         else
         {
@@ -68,8 +60,9 @@ public class StoryManager : MonoBehaviour
         _previousStory = _currentStory;
 
         // 새로운 스토리를 찾고 실행
-        if (_stories.TryGetValue(storyID, out _currentStory))
+        if (_stories.TryGetValue(storyID, out Story story))
         {
+            _currentStory = story;
             StartCoroutine(StoryStartRoutine());
         }
         else

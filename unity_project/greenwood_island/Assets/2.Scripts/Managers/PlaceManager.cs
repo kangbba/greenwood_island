@@ -11,7 +11,8 @@ public enum EPlaceID
     Town3,
     Mountain,
     GreenwoodIsland,
-    RyanRoom
+    RyanRoom,
+    Lobby
     // 다른 장소를 여기에 추가
 }
 

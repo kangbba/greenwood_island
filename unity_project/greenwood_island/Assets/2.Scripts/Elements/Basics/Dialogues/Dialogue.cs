@@ -26,34 +26,38 @@ public class Dialogue : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        // 이미 생성된 캐릭터를 불러옴
-        Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);
-
-        // 캐릭터가 없으면 로그 출력 후 종료
-        if (character == null && _characterID != ECharacterID.Ryan && _characterID != ECharacterID.Mono)
-        {
-            Debug.LogError($"Character with ID: {_characterID} not found.");
-            yield break;
-        }
-
         // 첫 문장 감정 상태 설정
+        bool isRyanOrMono = _characterID == ECharacterID.Ryan || _characterID == ECharacterID.Mono;
         var firstLine = _lines[0];
-        CharacterManager.Instance.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex);
         CharacterData characterData =  CharacterManager.Instance.GetCharacterData(_characterID);
         DialoguePlayer.Clear();
         DialoguePlayer.SetCharacterText(characterData.characterName_ko, characterData.mainColor);
-        // 대화 시작
         DialoguePlayer.ShowPanel(true, 0.2f);
         yield return new WaitForSeconds(.4f);
+
+        EEmotionID recentEmotionID = firstLine.EmotionID;
+        int recentEmotionIndex = firstLine.EmotionIndex;
+
+        CharacterManager.Instance.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex, 1f);
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
         {
             Line line = _lines[i];
             DialoguePlayer.InitLine(line);
+
+            EEmotionID emotionID = line.EmotionID;
+            int emotionIndex = line.EmotionIndex;
+            
+            bool isIdenticalEmotionSprite = (emotionID == recentEmotionID) && (emotionIndex == recentEmotionIndex);
+            if(!isIdenticalEmotionSprite && !isRyanOrMono){
+                Debug.Log($"{_characterID} 감정의 변화 {recentEmotionID}{recentEmotionIndex} -> {emotionID}{emotionIndex}");
+                float transitionDuration = 2f;
+                CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex, transitionDuration);
+            }
+            recentEmotionID = line.EmotionID;
+            recentEmotionIndex = line.EmotionIndex;
             DialoguePlayer.ShowNextSentence(line.PlaySpeed);
-            //연속 마우스 호출을 막기위한 한프레임 대기
             yield return null;
-            CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex);
 
             while(DialoguePlayer.DialogueState != EDialogueState.Finished){
                 if(Input.GetMouseButtonDown(0)){

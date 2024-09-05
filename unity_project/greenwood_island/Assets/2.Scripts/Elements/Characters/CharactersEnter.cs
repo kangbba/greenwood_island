@@ -33,20 +33,11 @@ public class CharactersEnter : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        List<Coroutine> enterCoroutines = new List<Coroutine>();
-
         // 각 캐릭터에 대해 CharacterEnter을 생성하여 실행
         for (int i = 0; i < _characterIDs.Count; i++)
         {
-            CharacterEnter characterEnter = new CharacterEnter(_characterIDs[i], _screenPeroneXs[i], _emotionIDs[i], _emotionIndexes[i], _duration, _easeType);
-            Coroutine enterCoroutine = CoroutineRunner.Instance.StartCoroutine(characterEnter.ExecuteRoutine());
-            enterCoroutines.Add(enterCoroutine);
+            new CharacterEnter(_characterIDs[i], _screenPeroneXs[i], _emotionIDs[i], _emotionIndexes[i], _duration, _easeType).Execute();
         }
-
-        // 모든 캐릭터의 등장 코루틴이 완료될 때까지 대기
-        foreach (var coroutine in enterCoroutines)
-        {
-            yield return coroutine;
-        }
+        yield return new WaitForSeconds(_duration);
     }
 }

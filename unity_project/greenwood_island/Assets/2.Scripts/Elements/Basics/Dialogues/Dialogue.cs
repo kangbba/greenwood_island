@@ -51,7 +51,7 @@ public class Dialogue : Element
             bool isIdenticalEmotionSprite = (emotionID == recentEmotionID) && (emotionIndex == recentEmotionIndex);
             if(!isIdenticalEmotionSprite && !isRyanOrMono){
                 Debug.Log($"{_characterID} 감정의 변화 {recentEmotionID}{recentEmotionIndex} -> {emotionID}{emotionIndex}");
-                float transitionDuration = 2f;
+                float transitionDuration = .5f;
                 CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex, transitionDuration);
             }
             recentEmotionID = line.EmotionID;

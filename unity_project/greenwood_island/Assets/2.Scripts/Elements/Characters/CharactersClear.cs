@@ -18,21 +18,13 @@ public class CharactersClear : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        List<Coroutine> exitCoroutines = new List<Coroutine>();
-
         // 각 캐릭터에 대해 CharacterExit을 생성하여 실행
         var activeCharacterIDs = CharacterManager.Instance.GetAllActiveCharacterIDs();
         foreach (var characterID in activeCharacterIDs)
         {
-            CharacterExit characterExit = new CharacterExit(characterID, _duration, _easeType);
-            Coroutine exitCoroutine = CoroutineRunner.Instance.StartCoroutine(characterExit.ExecuteRoutine());
-            exitCoroutines.Add(exitCoroutine);
+            new CharacterExit(characterID, _duration, _easeType).Execute();
         }
+        yield return new WaitForSeconds(_duration);
 
-        // 모든 퇴장 코루틴이 완료될 때까지 대기
-        foreach (var coroutine in exitCoroutines)
-        {
-            yield return coroutine;
-        }
     }
 }

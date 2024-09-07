@@ -16,6 +16,7 @@ public class DialoguePlayer : MonoBehaviour
 {
     [SerializeField] private bool _showDebug;
     [SerializeField] private RectTransform _panelRectTransform;
+    [SerializeField] private CanvasGroup _cavasGroup;
     [SerializeField] private SentenceRectMask _sentenceRectMaskPrefab;
     [SerializeField] private Transform _rectMaskParent;
     [SerializeField] private TextMeshProUGUI _characterText;
@@ -32,7 +33,8 @@ public class DialoguePlayer : MonoBehaviour
 
     private void Start()
     {
-        ShowPanel(false, 0f);
+        ShowUp(false, 0f);
+        FadeIn(false, 0f);
         SetCharacterText("", Color.clear);
         _rectMaskBuilder = new SentenceRectMaskBuilder(_rectMaskParent, _sentenceRectMaskPrefab);
     }
@@ -222,10 +224,14 @@ public class DialoguePlayer : MonoBehaviour
     }
 
 
-    public void ShowPanel(bool show, float duration)
+    public void ShowUp(bool show, float duration)
     {
         float offScreenY = -_panelRectTransform.rect.height;
         Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
         _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutCubic);
+    }
+    public void FadeIn(bool show, float duration)
+    {
+        _cavasGroup.DOFade(show ? 1f : 0f, duration).SetEase(Ease.OutCubic);
     }
 }

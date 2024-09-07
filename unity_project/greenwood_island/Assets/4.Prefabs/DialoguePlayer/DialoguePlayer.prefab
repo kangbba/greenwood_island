@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 7786688469499811892}
   - component: {fileID: 4032365409791275931}
   - component: {fileID: 6758782680214195644}
+  - component: {fileID: 6506748226271867384}
   m_Layer: 5
   m_Name: DialoguePlayer
   m_TagString: Untagged
@@ -259,10 +260,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _showDebug: 0
   _panelRectTransform: {fileID: 8219515785612320796}
+  _cavasGroup: {fileID: 6506748226271867384}
   _sentenceRectMaskPrefab: {fileID: 1242073392574814838, guid: 5bb2dbc59e5604009b84b139d524e379, type: 3}
   _rectMaskParent: {fileID: 3083349875630625259}
   _characterText: {fileID: 768922501430428279}
   _dialogueGuide: {fileID: 7917896055654264134}
+--- !u!225 &6506748226271867384
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3722084975736058391}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5227870559912104620
 GameObject:
   m_ObjectHideFlags: 0

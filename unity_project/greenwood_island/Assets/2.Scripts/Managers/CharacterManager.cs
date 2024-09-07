@@ -90,11 +90,12 @@ public class CharacterManager : MonoBehaviour
         }
 
         Character character = Instantiate(data.characterPrefab, UIManager.Instance.WorldCanvas.CharacterLayer.transform);
+        character.SetVisibility(false, 0f);
+        
         _instantiatedCharacters.Add(characterID, character);
 
         // 초기 이모션 설정
         character.ChangeEmotion(initialEmotionID, emotionIndex, 0f);
-        character.SetVisibility(false, 0f);
         MoveCharacter(characterID, screenPeroneX, 0f, Ease.Linear);
 
         return character;

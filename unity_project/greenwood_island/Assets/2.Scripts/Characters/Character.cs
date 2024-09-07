@@ -14,6 +14,8 @@ public enum EEmotionID
     Angry,
     Panic,
     Stumped,
+    CryingHappy,
+
 }
 
 public class Character : MonoBehaviour
@@ -26,10 +28,16 @@ public class Character : MonoBehaviour
 
     private List<EmotionPlan> EmotionPlans => _emotionPlansData != null ? _emotionPlansData.EmotionPlans : new List<EmotionPlan>();
 
+    public EmotionPlansData EmotionPlansData { get => _emotionPlansData; }
+
     public void SetVisibility(bool visible, float duration, Ease easeType = Ease.OutQuad)
     {
         float targetAlpha = visible ? 1f : 0f;
 
+        _graphic.DOFade(targetAlpha, duration).SetEase(easeType);
+    }
+    public void SetVisibility(float targetAlpha, float duration, Ease easeType = Ease.OutQuad)
+    {
         _graphic.DOFade(targetAlpha, duration).SetEase(easeType);
     }
 
@@ -50,8 +58,19 @@ public class Character : MonoBehaviour
             return;
         }
 
-        // 현재 이미지의 투명도 조정 및 새로운 스프라이트 설정 후 등장
+        // 새로운 스프라이트 설정
         Sprite newSprite = selectedPlan.EmotionSprites[index];
+
+        // duration이 0일 때: 즉시 이미지 변경
+        if (duration <= 0f)
+        {
+            _img.sprite = newSprite;
+            _img.color = new Color(_img.color.r, _img.color.g, _img.color.b, 1f); // 알파 값을 1로 설정
+            Debug.Log($"Emotion changed to '{emotionID} {index}' instantly.");
+            return;
+        }
+
+        // 현재 이미지의 투명도 조정 및 새로운 스프라이트 설정 후 등장
         Image tempImage = Instantiate(_img, _img.transform.parent); // 현재 이미지의 복제본을 만듦
         tempImage.sprite = _img.sprite; // 이전 스프라이트를 할당
 
@@ -74,4 +93,5 @@ public class Character : MonoBehaviour
         // 로그 메시지 간소화 및 스크립트 이름 추가
         Debug.Log($"Emotion changed to '{emotionID} {index}' (duration: {duration}s).");
     }
+
 }

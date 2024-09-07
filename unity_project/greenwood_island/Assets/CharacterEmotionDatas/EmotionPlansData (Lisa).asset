@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b638356e747407b8cbef6213098cdb, type: 3}
+  m_Name: EmotionPlansData (Lisa)
+  m_EditorClassIdentifier: 
+  _emotionPlans:
+  - _emotionID: 0
+    _emotionSprites:
+    - {fileID: 21300000, guid: b3065939a3b4d46779d21d11a1a09cbe, type: 3}
+    - {fileID: 21300000, guid: 0cd793af3ea6448ad81d2b4853bacd15, type: 3}
+    - {fileID: 21300000, guid: 2140e59f3577c4f349620d45239d2b16, type: 3}
+    - {fileID: 21300000, guid: 9d53a47939aa44d38b23a628c15ede19, type: 3}
+  - _emotionID: 1
+    _emotionSprites:
+    - {fileID: 21300000, guid: f8d12d2548cb04a4293ed9f4dffb546c, type: 3}
+    - {fileID: 21300000, guid: 5f68cd1b47cff4530855b8d28b164be1, type: 3}
+    - {fileID: 21300000, guid: 5eedc65e6192f4892be9f27b2d6917c0, type: 3}
+  - _emotionID: 2
+    _emotionSprites:
+    - {fileID: 21300000, guid: f8d12d2548cb04a4293ed9f4dffb546c, type: 3}
+  - _emotionID: 3
+    _emotionSprites:
+    - {fileID: 21300000, guid: 262e32e50eeca4103b157e4aaa99bba8, type: 3}
+  - _emotionID: 4
+    _emotionSprites:
+    - {fileID: 21300000, guid: 84454c8dc5e7543ff8abb222cd6c0768, type: 3}
+  - _emotionID: 5
+    _emotionSprites:
+    - {fileID: 21300000, guid: 9fc6ac674c1874d70a4207d176ec7db0, type: 3}
+    - {fileID: 21300000, guid: c438c80e518ef449299fdf3e2a3e0b6e, type: 3}
+  - _emotionID: 6
+    _emotionSprites:
+    - {fileID: 21300000, guid: 79c045933010f44ea8e742924a51253b, type: 3}
+  - _emotionID: 7
+    _emotionSprites:
+    - {fileID: 21300000, guid: 3dc5a25b7d667469ea55dc2c319fd912, type: 3}
+  - _emotionID: 8
+    _emotionSprites:
+    - {fileID: 21300000, guid: ad8b655ca3ce04398bf42652f691a36d, type: 3}

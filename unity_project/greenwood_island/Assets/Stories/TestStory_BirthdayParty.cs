@@ -6,7 +6,12 @@ using DG.Tweening;
 public class TestStory_BirthdayParty : Story
 {
     public override EStoryID StoryId => EStoryID.TestStory_BirthdayParty;
-
+    
+    public Sprite Kate_CryingHappy {
+        get{
+             return CharacterManager.Instance.GetCharacterData(ECharacterID.Kate).characterPrefab.EmotionPlansData.EmotionPlans.Find(plan => plan.EmotionID == EEmotionID.CryingHappy).EmotionSprites[0];
+        }
+    }
     // 시작 부분의 요소들
     protected override SequentialElement StartElements => new
     (
@@ -60,7 +65,7 @@ public class TestStory_BirthdayParty : Story
                     (
                         new Dialogue(
                             ECharacterID.Kate,
-                            new Line(EEmotionID.Normal, 2, "음... 꽃도 좋지만, 오늘은 좀 더 특별한 게 있었으면 좋겠어.")
+                            new Line(EEmotionID.Stumped, 0, "음... 꽃도 좋지만, 오늘은 좀 더 특별한 게 있었으면 좋겠어.")
                         ),
                         new Dialogue(
                             ECharacterID.Lisa,
@@ -76,9 +81,27 @@ public class TestStory_BirthdayParty : Story
                     "어릴 적부터 원했던 그림책.",
                     new SequentialElement
                     (
+                        new ParallelElement(
+                            new AllCharactersVisibility(.5f),
+                            new Dialogue(
+                                ECharacterID.Kate,
+                                new Line(EEmotionID.CryingHappy, 0, "이.. 이것은..!")
+                            ),
+                            new CutInEnter(
+                                Kate_CryingHappy,
+                                .3f,
+                                1.4f,
+                                Vector2.up * -1959
+                            ),
+                            new CameraShake(.5f)
+                        ),
+                        new ParallelElement(
+                            new AllCharactersVisibility(1f),
+                            new CutInClear(.3f)
+                        ),
                         new Dialogue(
                             ECharacterID.Kate,
-                            new Line(EEmotionID.Happy, 1, "이게 정말 그 그림책이야? 정말 감동이야, 고마워!")
+                            new Line(EEmotionID.CryingHappy, 0, "내가 이 그림책을 얼마나 찾았는지 알아? 정말 감동이야, 고마워!")
                         ),
                         new Dialogue(
                             ECharacterID.Ryan,
@@ -96,7 +119,7 @@ public class TestStory_BirthdayParty : Story
                     (
                         new Dialogue(
                             ECharacterID.Kate,
-                            new Line(EEmotionID.Sad, 0, "음... 이 초콜릿도 맛있어 보이지만, 오늘은 좀 더 특별한 게 필요해.")
+                            new Line(EEmotionID.Stumped, 0, "음... 이 초콜릿도 맛있어 보이지만, 오늘은 좀 더 특별한 게 필요해.")
                         ),
                         new Dialogue(
                             ECharacterID.Lisa,
@@ -109,19 +132,19 @@ public class TestStory_BirthdayParty : Story
                     )
                 )
             }
-        )
-    );
-
-    // 종료 부분의 요소들
-    protected override SequentialElement ExitElements => new
-    (
+        ),
         new Dialogue(
             ECharacterID.Kate,
             new List<Line>
             {
                 new Line(EEmotionID.Happy, 0, "오늘 정말 즐거웠어. 모두 고마워!"),
             }
-        ),
+        )
+    );
+
+    // 종료 부분의 요소들
+    protected override SequentialElement ExitElements => new
+    (
         new CharactersExit(
             new List<ECharacterID> { ECharacterID.Kate, ECharacterID.Lisa, ECharacterID.Ryan },
             1f,

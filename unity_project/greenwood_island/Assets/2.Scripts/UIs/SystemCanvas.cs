@@ -10,6 +10,7 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private Transform _sfxLayer;
     [SerializeField] private DialoguePlayer _dialoguePlayer;
     [SerializeField] private ChoiceUI _choiceUI;
+    [SerializeField] private CutInUI _cutInUI;
 
 
     public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
@@ -17,4 +18,7 @@ public class SystemCanvas : MonoBehaviour
     public Transform SFXLayer { get => _sfxLayer; }
     public DialoguePlayer DialoguePlayer { get => _dialoguePlayer; }
     public ChoiceUI ChoiceUI { get => _choiceUI;  }
+    public CutInUI CutInUI { get => _cutInUI; }
+
+    
 }

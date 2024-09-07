@@ -95,7 +95,8 @@ public class StoryManager : MonoBehaviour
         new PlaceFilmClear(duration).Execute();
         new CameraMove2DClear(duration).Execute();
         new CameraZoomClear(duration).Execute();
-        new CharactersClear(duration).Execute();
+        new AllCharactersClear(duration).Execute();
+        new CutInClear(duration).Execute();
         new PlaceOverlayFilmClear(duration).Execute();
         new ScreenOverlayFilmClear(duration).Execute();
         Debug.Log("StoryManager :: RestoreAll Completed");

@@ -15,6 +15,7 @@ public abstract class Story
     protected abstract SequentialElement ExitElements { get; }
 
     public abstract EStoryID StoryId { get; }
+    protected abstract string StoryDesc { get; }
 
     // Start 단계의 Elements를 실행하는 메서드
     public IEnumerator StartRoutine()

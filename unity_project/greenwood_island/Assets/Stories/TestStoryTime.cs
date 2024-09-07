@@ -6,6 +6,7 @@ using UnityEngine;
 public class TestStoryTime : Story
 {
     public override EStoryID StoryId => EStoryID.TestStoryTime;
+    protected override string StoryDesc => "";
 
     // Start 단계의 Elements를 정의
     protected override SequentialElement StartElements => new

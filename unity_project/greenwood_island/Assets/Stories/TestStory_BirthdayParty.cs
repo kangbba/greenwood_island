@@ -6,6 +6,7 @@ using DG.Tweening;
 public class TestStory_BirthdayParty : Story
 {
     public override EStoryID StoryId => EStoryID.TestStory_BirthdayParty;
+    protected override string StoryDesc => "";
     
     public Sprite Kate_CryingHappy {
         get{

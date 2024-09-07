@@ -6,6 +6,7 @@ using DG.Tweening;
 public class TestStory_PlaceEnters : Story
 {
     public override EStoryID StoryId => EStoryID.TestStory_PlaceEnters;
+    protected override string StoryDesc => "";
 
     // 각 단계의 Elements를 상속받은 클래스에서 정의
     protected override SequentialElement StartElements => new

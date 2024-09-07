@@ -6,6 +6,8 @@ using UnityEngine;
 
 public enum EStoryID
 {
+    Story1 = 1,
+    
     TestStory_KateKillLisa,
     TestStory_PlaceEnters,
     TestStoryTime,

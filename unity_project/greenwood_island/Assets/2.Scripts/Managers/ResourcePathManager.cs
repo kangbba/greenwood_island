@@ -14,6 +14,7 @@ public static class ResourcePathManager
     private const string SHARED_RESOURCE_PATH = "SharedResources"; // 공유 자원의 기본 경로
     private const string STORY_RESOURCE_BASE_PATH = "StoryResources"; // 스토리별 자원의 기본 경로
 
+   
     /// <summary>
     /// 리소스 타입과 스토리 이름을 바탕으로 적합한 경로를 반환합니다.
     /// </summary>
@@ -26,44 +27,29 @@ public static class ResourcePathManager
     {
         string resourcePath = string.Empty;
 
-        // 리소스 타입에 따른 폴더 이름 결정
-        string typeFolder = GetTypeFolderName(resourceType);
-
-        if (isShared)
-        {
-            // 공유 자원을 검색할 경우
-            resourcePath = $"{SHARED_RESOURCE_PATH}/{typeFolder}/{resourceID}";
-        }
-        else
-        {
-            // 스토리 자원을 검색할 경우
-            resourcePath = $"{STORY_RESOURCE_BASE_PATH}/{storyName}/{typeFolder}/{resourceID}";
-        }
-
-        return resourcePath;
-    }
-
-    /// <summary>
-    /// 리소스 타입에 따른 폴더 이름을 반환합니다.
-    /// </summary>
-    /// <param name="resourceType">리소스 타입</param>
-    /// <returns>폴더 이름 문자열</returns>
-    private static string GetTypeFolderName(ResourceType resourceType)
-    {
+        string basicFolderPath =  isShared ? SHARED_RESOURCE_PATH : $"{STORY_RESOURCE_BASE_PATH}/{storyName}";
+        // 리소스 타입별로 특정한 폴더 구조를 반영
         switch (resourceType)
         {
             case ResourceType.FX:
-                return "FXs";
+                resourcePath = $"{basicFolderPath}/FXs/{resourceID}/{resourceID}";
+                break;
+
             case ResourceType.SFX:
-                return "SFXs";
+                resourcePath = $"{basicFolderPath}/SFXs/{resourceID}";
+                break;
             case ResourceType.Place:
-                return "Places";
+                resourcePath = $"{basicFolderPath}/Places/{resourceID}";
+                break;
             case ResourceType.Story:
-                return "Scripts"; // Story 타입의 리소스는 Scripts 폴더에 위치
-            // 다른 리소스 타입에 대한 폴더 명을 추가할 수 있음
+                resourcePath = $"{basicFolderPath}/Scripts/{resourceID}";
+                break;
+
             default:
                 Debug.LogWarning($"Unknown resource type: {resourceType}");
-                return string.Empty;
+                break;
         }
+
+        return resourcePath;
     }
 }

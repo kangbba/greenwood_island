@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 2840459977779952861}
   - component: {fileID: 2419850156295561879}
   m_Layer: 5
-  m_Name: Blood
+  m_Name: BloodDrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

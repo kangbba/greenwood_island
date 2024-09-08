@@ -9,7 +9,7 @@ public class FXEnter : Element
     private float _duration;
 
     // _localPosition의 기본값을 Vector3.zero로 설정
-    public FXEnter(string fxID, string storyName, float duration, Vector3 localPosition = default)
+    public FXEnter(string fxID, float duration, Vector3 localPosition = default)
     {
         _fxID = fxID;
         _localPosition = localPosition == default ? Vector3.zero : localPosition; // 기본값을 Vector3.zero로 설정

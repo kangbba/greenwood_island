@@ -85,7 +85,7 @@ public class SFXManager : MonoBehaviour
         while (audioSource != null)
         {
             if (audioSource.clip == null) yield break; // 클립이 없으면 종료
-            Debug.Log($"LoopWithTerm {term}");
+            Debug.Log($"SFXManager :: 음원이 반복 재생중입니다. 의도된 동작인지 확인하세요 term : {term}");
             audioSource.Play(); // 오디오 재생
             yield return new WaitForSeconds(audioSource.clip.length + term); // 클립 재생 시간과 간격만큼 대기
         }

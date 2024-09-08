@@ -5,7 +5,8 @@ public enum ResourceType
     FX,
     SFX,
     Place,
-    Story
+    Story,
+    Character // Character 타입 추가
     // 다른 리소스 타입을 여기에 추가 가능
 }
 
@@ -14,7 +15,6 @@ public static class ResourcePathManager
     private const string SHARED_RESOURCE_PATH = "SharedResources"; // 공유 자원의 기본 경로
     private const string STORY_RESOURCE_BASE_PATH = "StoryResources"; // 스토리별 자원의 기본 경로
 
-   
     /// <summary>
     /// 리소스 타입과 스토리 이름을 바탕으로 적합한 경로를 반환합니다.
     /// </summary>
@@ -27,7 +27,9 @@ public static class ResourcePathManager
     {
         string resourcePath = string.Empty;
 
-        string basicFolderPath =  isShared ? SHARED_RESOURCE_PATH : $"{STORY_RESOURCE_BASE_PATH}/{storyName}";
+        // 기본 폴더 경로 설정
+        string basicFolderPath = isShared ? SHARED_RESOURCE_PATH : $"{STORY_RESOURCE_BASE_PATH}/{storyName}";
+
         // 리소스 타입별로 특정한 폴더 구조를 반영
         switch (resourceType)
         {
@@ -38,11 +40,17 @@ public static class ResourcePathManager
             case ResourceType.SFX:
                 resourcePath = $"{basicFolderPath}/SFXs/{resourceID}";
                 break;
+
             case ResourceType.Place:
                 resourcePath = $"{basicFolderPath}/Places/{resourceID}";
                 break;
+
             case ResourceType.Story:
                 resourcePath = $"{basicFolderPath}/Scripts/{resourceID}";
+                break;
+
+            case ResourceType.Character: // Character 타입 경로 추가
+                resourcePath = $"{basicFolderPath}/Characters/{resourceID}/{resourceID}";
                 break;
 
             default:

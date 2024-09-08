@@ -5,15 +5,14 @@ using DG.Tweening;  // DOTween을 사용하기 위해 추가
 [System.Serializable]
 public class CharacterEnter : Element
 {
-    private ECharacterID _characterID;
+    private string _characterID;
     private float _screenPeroneX;
     private float _duration;
     private Ease _easeType;
     private EEmotionID _initialEmotionID; // 초기 이모션 설정
     private int _emotionIndex;
-    
 
-    public CharacterEnter(ECharacterID characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex, float duration = 1f, Ease easeType = Ease.OutQuad)
+    public CharacterEnter(string characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex, float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         this._characterID = characterID;
         this._screenPeroneX = screenPeroneX;
@@ -22,7 +21,6 @@ public class CharacterEnter : Element
         this._duration = duration;
         this._easeType = easeType;
     }
-
 
     public override IEnumerator ExecuteRoutine()
     {

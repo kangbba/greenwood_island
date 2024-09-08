@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,33 +14,39 @@ public enum EEmotionID
     Panic,
     Stumped,
     CryingHappy,
-
 }
 
-public class Character : MonoBehaviour
+public abstract class Character : MonoBehaviour
 {
+    // 반드시 상속받는 클래스에서 구현해야 하는 추상 속성
+    protected abstract string CharacterName_KO { get; }
+
     [SerializeField] private CanvasGroup _graphic;
     [SerializeField] private RectTransform _rectTransform;
-    [SerializeField] private Image _img; // Image component for the character sprite
-    [SerializeField] private EmotionPlansData _emotionPlansData; // ScriptableObject to manage emotion plans
+    [SerializeField] private Image _img; // 캐릭터 스프라이트용 이미지 컴포넌트
+    [SerializeField] private EmotionPlansData _emotionPlansData; // 감정 계획을 관리하는 ScriptableObject
+    [SerializeField] private Color _mainColor; // 캐릭터의 메인 색상
 
+    protected virtual List<EmotionPlan> EmotionPlans => _emotionPlansData != null ? _emotionPlansData.EmotionPlans : new List<EmotionPlan>();
 
-    private List<EmotionPlan> EmotionPlans => _emotionPlansData != null ? _emotionPlansData.EmotionPlans : new List<EmotionPlan>();
+    public EmotionPlansData EmotionPlansData => _emotionPlansData;
+    public Color MainColor => _mainColor; // 메인 색상에 대한 공개 속성
 
-    public EmotionPlansData EmotionPlansData { get => _emotionPlansData; }
+    // 상속받는 클래스의 이름을 CharacterID로 반환
+    protected virtual string CharacterID => GetType().Name;
 
-    public void SetVisibility(bool visible, float duration, Ease easeType = Ease.OutQuad)
+    public virtual void SetVisibility(bool visible, float duration, Ease easeType = Ease.OutQuad)
     {
         float targetAlpha = visible ? 1f : 0f;
-
         _graphic.DOFade(targetAlpha, duration).SetEase(easeType);
     }
-    public void SetVisibility(float targetAlpha, float duration, Ease easeType = Ease.OutQuad)
+
+    public virtual void SetVisibility(float targetAlpha, float duration, Ease easeType = Ease.OutQuad)
     {
         _graphic.DOFade(targetAlpha, duration).SetEase(easeType);
     }
 
-    public void ChangeEmotion(EEmotionID emotionID, int index, float duration = 1f)
+    public virtual void ChangeEmotion(EEmotionID emotionID, int index, float duration = 1f)
     {
         // 해당 감정을 EmotionPlans에서 찾음
         EmotionPlan selectedPlan = EmotionPlans.Find(plan => plan.EmotionID == emotionID);
@@ -93,5 +98,4 @@ public class Character : MonoBehaviour
         // 로그 메시지 간소화 및 스크립트 이름 추가
         Debug.Log($"Emotion changed to '{emotionID} {index}' (duration: {duration}s).");
     }
-
 }

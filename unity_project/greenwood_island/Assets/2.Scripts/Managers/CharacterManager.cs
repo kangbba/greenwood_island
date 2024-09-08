@@ -12,6 +12,8 @@ public enum ECharacterID
     Lisa,
     Joseph,
     Rachel,
+    Doctor,
+    Nurse,
 }
 
 [System.Serializable]

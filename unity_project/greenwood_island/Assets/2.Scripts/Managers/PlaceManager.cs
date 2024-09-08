@@ -1,20 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using UnityEngine.UI;
-using System;
-
-public enum EPlaceID
-{
-    Town1,
-    Town2,
-    Town3,
-    Mountain,
-    GreenwoodIsland,
-    RyanRoom,
-    Lobby
-    // 다른 장소를 여기에 추가
-}
 
 public class PlaceManager : MonoBehaviour
 {
@@ -37,54 +22,96 @@ public class PlaceManager : MonoBehaviour
         }
     }
 
+    public Place CurrentPlace => _currentPlace;
 
     [SerializeField]
-    private List<Place> _placePrefabs; // 미리 정의된 장소 프리팹 리스트
+    private Place _placePrefab; // 빈 프리팹을 참조할 변수
 
-    private Place _currentPlace; // 현재 활성화된 장소를 나타내는 필드
-    private Place _previousPlace; // 현재 활성화된 장소를 나타내는 필드
+    private Place _currentPlace; // 현재 활성화된 장소
+    private Place _previousPlace; // 이전에 활성화된 장소
+    private List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
 
-
-    public Place InstantiatePlace(EPlaceID placeID)
+    // 이미지 ID와 스토리 이름을 받아 새로운 장소를 생성하는 메서드
+    public Place CreatePlace(string imageID, string storyName)
     {
-        Place placePrefab = _placePrefabs.Find(p => p.PlaceID == placeID);
+        // 이미지 로드 시도
+        Sprite placeImage = LoadPlaceImage(imageID, storyName);
 
-        if (placePrefab == null)
+        if (placeImage == null)
         {
-            Debug.LogError($"Place prefab with ID {placeID} not found.");
+            Debug.LogError($"Failed to load place image with ID '{imageID}' from story '{storyName}' or shared resources.");
             return null;
         }
 
-        _previousPlace = _currentPlace;
+        // 새로운 장소를 인스턴스화
+        _currentPlace = Instantiate(_placePrefab, UIManager.Instance.WorldCanvas.PlaceLayer);
 
-        // 장소를 생성하여 PlaceLayer에 추가
+        if (_currentPlace == null)
+        {
+            Debug.LogError("Failed to create new place.");
+            return null;
+        }
 
-        Transform placeLayer = UIManager.Instance.WorldCanvas.PlaceLayer;
-        _currentPlace = Instantiate(placePrefab, placeLayer);
-        Debug.Log($"Current place set to {_currentPlace.PlaceID}");
+        // 생성된 장소의 이미지 설정
+        _currentPlace.SetImage(placeImage);
 
+        _previousPlace = _currentPlace; // 생성된 장소를 이전 장소로 설정
+        _activePlaces.Add(_currentPlace); // 활성화된 장소 리스트에 추가
 
         return _currentPlace;
     }
-    public void ChangeCurrentPlaceColor(Color color, float duration, Ease easeType)
+
+    // 특정 placeID에 해당하는 활성화된 Place 반환
+    public Place GetActivePlace(string placeID)
     {
-        if (_currentPlace != null && _currentPlace.Image != null)
+        foreach (var place in _activePlaces)
         {
-            _currentPlace.SetColor(color, duration, easeType);
+            if (place != null && place.name == placeID)
+            {
+                return place;
+            }
         }
-        else
-        {
-            Debug.LogWarning("PlaceManager :: Current Place is null or has no Image component.");
-        }
+
+        Debug.LogWarning($"Place with ID '{placeID}' is not currently active.");
+        return null;
     }
-    // 기존의 DestroyPlace 메서드를 private으로 변경하여 외부에서 직접 호출되지 않도록 설정
+
+    // 장소 이미지를 로드하는 메서드 (스토리 자원 우선, 실패 시 공유 자원 로드)
+    private Sprite LoadPlaceImage(string imageID, string storyName)
+    {
+        // 스토리 경로에서 이미지 로드 시도
+        string storyPlacePath = ResourcePathManager.GetResourcePath(imageID, storyName, ResourceType.Place, false);
+        Sprite placeImage = Resources.Load<Sprite>(storyPlacePath);
+
+        // 스토리 경로에서 로드 성공 시 로그 출력
+        if (placeImage != null)
+        {
+            Debug.Log($"Place image '{imageID}' loaded from Story path: '{storyPlacePath}'.");
+            return placeImage;
+        }
+
+        // 스토리 경로에서 로드 실패 시, 공유 경로에서 로드 시도
+        string sharedPlacePath = ResourcePathManager.GetResourcePath(imageID, storyName, ResourceType.Place, true);
+        placeImage = Resources.Load<Sprite>(sharedPlacePath);
+
+        // 공유 경로에서 로드 성공 시 로그 출력
+        if (placeImage != null)
+        {
+            Debug.Log($"Place image '{imageID}' loaded from Shared path: '{sharedPlacePath}'.");
+        }
+
+        return placeImage;
+    }
+
+    // 이전 장소 파괴는 이제 수동으로 처리할 예정이므로 이 메서드는 호출하지 않음
     private void DestroyPreviousPlace()
     {
-        if(_previousPlace == null){
+        if (_previousPlace == null)
+        {
             Debug.LogWarning("PlaceManager :: Previous Place is null");
             return;
         }
+        _activePlaces.Remove(_previousPlace); // 리스트에서 제거
         Destroy(_previousPlace.gameObject);
     }
-
 }

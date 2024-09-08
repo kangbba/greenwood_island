@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Story
+public abstract class Story : ScriptableObject
 {
     /// <summary>
     /// Start, Update, Exit 단계에서 실행될 Elements를 상속받은 클래스에서 구현하도록 합니다.
@@ -14,7 +13,8 @@ public abstract class Story
     protected abstract SequentialElement UpdateElements { get; }
     protected abstract SequentialElement ExitElements { get; }
 
-    public abstract EStoryID StoryId { get; }
+    // 스토리 ID는 자동으로 클래스의 이름을 사용
+    public virtual string StoryId => GetType().Name; // 클래스의 이름을 ID로 사용
     protected abstract string StoryDesc { get; }
 
     // Start 단계의 Elements를 실행하는 메서드

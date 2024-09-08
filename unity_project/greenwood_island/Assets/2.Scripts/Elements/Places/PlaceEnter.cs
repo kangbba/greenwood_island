@@ -7,29 +7,31 @@ using UnityEngine;
 /// </summary>
 public class PlaceEnter : Element
 {
-    private EPlaceID _newPlaceID; // 이동할 새로운 장소의 ID
-    private SequentialElement _enterEffect; // 장소 전환 전 실행될 효과
-    private SequentialElement _exitEffect; // 장소 전환 후 실행될 효과
+    private string _imageID; // 이동할 새로운 장소의 이미지 ID
+    private Story _story; // 현재 스토리 객체
 
-    // 생성자: SequentialElement를 사용하여 전환 전, 후 효과를 순차적으로 실행
-    public PlaceEnter(SequentialElement enterEffect, EPlaceID newPlaceID, SequentialElement exitEffect)
+    // 생성자: 이미지 ID와 현재 스토리 객체를 받아서 초기화
+    public PlaceEnter(string imageID, Story story)
     {
-        _enterEffect = enterEffect ?? new SequentialElement();
-        _newPlaceID = newPlaceID;
-        _exitEffect = exitEffect ?? new SequentialElement();
+        _imageID = imageID;
+        _story = story; // 현재 스토리 설정
     }
 
     public override IEnumerator ExecuteRoutine()
     {
-        // 장소 전환 전 효과 실행
-        yield return _enterEffect.ExecuteRoutine();
-
         Debug.Log("PlaceEnter :: 새로운 장소 인스턴스화 시도 했음");
-        Place newPlace = PlaceManager.Instance.InstantiatePlace(_newPlaceID);
 
-        // yield return new WaitUntil( ()=> PlaceManager.Instance.CurrentPlace != null );
+        // 현재 스토리의 이름을 사용하여 새로운 장소 생성
+        Place newPlace = PlaceManager.Instance.CreatePlace(_imageID, _story.StoryId);
+
+        // 이미지가 정상적으로 로드되었는지 확인
+        if (newPlace == null)
+        {
+            Debug.LogError("PlaceEnter :: 새로운 장소를 생성하지 못했습니다.");
+            yield break;
+        }
 
         // 장소 전환 후 효과 실행
-        yield return _exitEffect.ExecuteRoutine();
+        yield return null;
     }
 }

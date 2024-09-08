@@ -2,31 +2,11 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public enum FXType
-{
-    BloodDrip,
-    SmokePuff,
-    Sparkle,
-    FireExplosion,
-    // 필요한 FX 타입들을 추가
-}
-
-[System.Serializable]
-public class FXPrefabEntry
-{
-    public FXType fxType;          // FX의 타입 (enum 기반)
-    public GameObject fxPrefab;    // FX에 사용할 프리팹
-}
-
 public class FXManager : MonoBehaviour
 {
     public static FXManager Instance { get; private set; }
 
-    [SerializeField]
-    private List<FXPrefabEntry> fxPrefabEntries = new List<FXPrefabEntry>(); // Inspector에서 등록할 프리팹 리스트
-
-    private Dictionary<FXType, GameObject> _fxPrefabs = new Dictionary<FXType, GameObject>();
-    private Dictionary<FXType, List<GameObject>> _activeFXs = new Dictionary<FXType, List<GameObject>>(); // 활성화된 FX들
+    private Dictionary<string, List<GameObject>> _activeFXs = new Dictionary<string, List<GameObject>>(); // 활성화된 FX들
 
     private void Awake()
     {
@@ -34,7 +14,6 @@ public class FXManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeFXPrefabs();
         }
         else
         {
@@ -42,65 +21,43 @@ public class FXManager : MonoBehaviour
         }
     }
 
-    private void InitializeFXPrefabs()
+    // 특정 FX를 스폰하는 메서드
+    public GameObject SpawnFX(string fxID, string storyName, Vector3 localPos)
     {
-        foreach (var entry in fxPrefabEntries)
+        // 스토리 이름과 FX ID를 사용하여 FX 프리팹 로드
+        GameObject fxPrefab = LoadFXPrefab(fxID, storyName);
+
+        if (fxPrefab == null)
         {
-            if (entry.fxPrefab != null)
-            {
-                if (entry.fxPrefab.GetComponent<Animator>() == null)
-                {
-                    Debug.LogWarning($"FX Prefab '{entry.fxType}' does not contain an Animator component and will not be registered.");
-                    continue;
-                }
-
-                if (!_fxPrefabs.ContainsKey(entry.fxType))
-                {
-                    _fxPrefabs.Add(entry.fxType, entry.fxPrefab);
-                }
-                else
-                {
-                    Debug.LogWarning($"FX Prefab '{entry.fxType}' is already registered.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning($"FX Prefab entry with type '{entry.fxType}' is null.");
-            }
-        }
-    }
-
-    public GameObject SpawnFX(FXType fxType, Vector3 localPos)
-    {
-        if (_fxPrefabs.TryGetValue(fxType, out GameObject fxPrefab))
-        {
-            GameObject fxInstance = Instantiate(fxPrefab, UIManager.Instance.SystemCanvas.FXLayer);
-            fxInstance.transform.localPosition = localPos;
-
-            if (!_activeFXs.ContainsKey(fxType))
-            {
-                _activeFXs[fxType] = new List<GameObject>();
-            }
-            _activeFXs[fxType].Add(fxInstance);
-
-            return fxInstance;
-        }
-        else
-        {
-            Debug.LogError($"FX Prefab '{fxType}' not found.");
+            Debug.LogError($"FX Prefab '{fxID}' could not be loaded from story '{storyName}' or shared resources.");
             return null;
         }
+
+        // 로드된 프리팹을 인스턴스화하여 위치 설정
+        GameObject fxInstance = Instantiate(fxPrefab, UIManager.Instance.SystemCanvas.FXLayer);
+        fxInstance.transform.localPosition = localPos;
+
+        // 활성화된 FX 리스트에 추가
+        if (!_activeFXs.ContainsKey(fxID))
+        {
+            _activeFXs[fxID] = new List<GameObject>();
+        }
+        _activeFXs[fxID].Add(fxInstance);
+
+        return fxInstance;
     }
 
-    public List<GameObject> GetActiveFXs(FXType fxType)
+    // 특정 FX ID에 대한 활성화된 FX 리스트 반환
+    public List<GameObject> GetActiveFXs(string fxID)
     {
-        if (_activeFXs.TryGetValue(fxType, out List<GameObject> activeFXList))
+        if (_activeFXs.TryGetValue(fxID, out List<GameObject> activeFXList))
         {
             return activeFXList;
         }
         return new List<GameObject>();
     }
 
+    // 특정 FX 인스턴스를 파괴하는 메서드
     public void DestroyFX(GameObject fxInstance)
     {
         foreach (var fxList in _activeFXs.Values)
@@ -143,5 +100,30 @@ public class FXManager : MonoBehaviour
 
         // 모든 FX 리스트를 클리어하여 딕셔너리를 초기화
         _activeFXs.Clear();
+    }
+
+    // FX 프리팹을 로드하는 메서드 (스토리 자원 우선, 실패 시 공유 자원 로드)
+    private GameObject LoadFXPrefab(string fxID, string storyName)
+    {
+        // 스토리 경로에서 FX 로드 시도
+        string storyFXPath = ResourcePathManager.GetResourcePath(fxID, storyName, ResourceType.FX, false);
+        GameObject fxPrefab = Resources.Load<GameObject>(storyFXPath);
+
+        if (fxPrefab != null)
+        {
+            Debug.Log($"FX Prefab '{fxID}' loaded from Story path: '{storyFXPath}'.");
+            return fxPrefab;
+        }
+
+        // 스토리 경로에서 로드 실패 시, 공유 경로에서 로드 시도
+        string sharedFXPath = ResourcePathManager.GetResourcePath(fxID, storyName, ResourceType.FX, true);
+        GameObject sharedPrefab = Resources.Load<GameObject>(sharedFXPath);
+
+        if (sharedPrefab != null)
+        {
+            Debug.Log($"FX Prefab '{fxID}' loaded from Shared path: '{sharedFXPath}'.");
+        }
+
+        return sharedPrefab;
     }
 }

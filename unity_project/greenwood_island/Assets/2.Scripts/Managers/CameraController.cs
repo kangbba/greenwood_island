@@ -5,7 +5,6 @@ using DG.Tweening;
 /// CameraController는 카메라의 이동, 줌, 흔들림을 관리하는 클래스입니다. 
 /// PlaneLayer는 X, Y 축의 평면 이동을 담당하며, DepthLayer는 Z 축의 줌 효과를 담당합니다.
 /// ShakeLayer는 카메라의 흔들림 효과를 담당하며, MainCamera는 항상 (0, 0, 0)에 고정된 상태를 유지하여 직접적인 위치 변동이 없도록 합니다.
-/// 줌 비율(0~1)은 ZoomRange(Vector2)에 매핑되어 설정되며, 0은 가장 멀리, 1은 가장 가까운 위치를 의미합니다.
 /// </summary>
 public class CameraController : MonoBehaviour
 {
@@ -15,8 +14,10 @@ public class CameraController : MonoBehaviour
     public Transform PlaneLayer { get; private set; } // 카메라의 평면 이동을 담당하는 레이어
     public Transform ShakeLayer { get; private set; } // 카메라의 흔들림 효과를 담당하는 레이어
 
-    // 줌 비율 0 ~ 1에 매핑되는 Z 축 범위 설정 (예: 0은 Z = 10, 1은 Z = 5)
     private Vector2 _zoomRange = new Vector2(-823f, -30f); // 0은 최대 줌(멀리), 1은 최소 줌(가까이)
+    public float ZoomMaxZ => _zoomRange.y;
+    public float ZoomMinZ => _zoomRange.x;
+
 
     private Tween _planeTween; // PlaneLayer의 현재 실행 중인 트윈
     private Tween _depthTween; // DepthLayer의 현재 실행 중인 트윈
@@ -50,7 +51,7 @@ public class CameraController : MonoBehaviour
 
         // 시작 시 카메라 위치와 줌 초기화
         PlaneLayer.localPosition = Vector3.zero;
-        DepthLayer.localPosition = new Vector3(0, 0, _zoomRange.x); // 줌의 기본 위치 설정
+        DepthLayer.localPosition = new Vector3(0, 0, ZoomMinZ); // 줌의 기본 위치 설정
         ShakeLayer.localPosition = Vector3.zero;
     }
 
@@ -66,17 +67,46 @@ public class CameraController : MonoBehaviour
         _planeTween = PlaneLayer.DOLocalMove(new Vector3(targetLocalPos.x, targetLocalPos.y, PlaneLayer.localPosition.z), duration).SetEase(easeType);
     }
 
+   /// <summary>
+    /// 카메라의 줌을 조절합니다. 입력된 Z 값을 사용하여 DepthLayer의 Z 축을 설정합니다.
+    /// </summary>
+    /// <param name="localPosZ">목표 Z 위치 (DepthLayer의 로컬 Z 값)</param>
+    /// <param name="duration">줌 시간</param>
+    /// <param name="easeType">Ease 타입</param>
+    public void ZoomLocalPosZ(float localPosZ, float duration, Ease easeType = Ease.OutQuad)
+    {
+        // 입력된 Z 값이 줌 범위 내에 있는지 확인
+        float targetZ = Mathf.Clamp(localPosZ, ZoomMinZ, ZoomMaxZ);
+        _depthTween?.Kill();
+        _depthTween = DepthLayer.DOLocalMoveZ(targetZ, duration).SetEase(easeType);
+    }
+
     /// <summary>
     /// 카메라의 줌을 조절합니다. 0 ~ 1 사이의 비율로 ZoomRange 내에서 Z 축을 설정합니다.
     /// </summary>
     /// <param name="zoomFactor">줌 비율 (0: 최대 줌, 1: 최소 줌)</param>
     /// <param name="duration">줌 시간</param>
     /// <param name="easeType">Ease 타입</param>
-    public void Zoom(float zoomFactor, float duration, Ease easeType = Ease.OutQuad)
+    public void ZoomByFactor(float zoomFactor, float duration, Ease easeType = Ease.OutQuad)
     {
         float targetZ = Mathf.Lerp(_zoomRange.x, _zoomRange.y, Mathf.Clamp01(zoomFactor));
         _depthTween?.Kill();
         _depthTween = DepthLayer.DOLocalMoveZ(targetZ, duration).SetEase(easeType);
+    }
+
+    /// <summary>
+    /// 카메라의 위치를 초기값으로 복원합니다 (PlaneLayer, DepthLayer, ShakeLayer 모두).
+    /// </summary>
+    /// 
+    public void RestoreAll(float duration, Ease easeType = Ease.OutQuad)
+    {
+        _planeTween?.Kill();
+        _depthTween?.Kill();
+        _shakeTween?.Kill();
+
+        PlaneLayer.DOLocalMove(Vector3.zero, duration).SetEase(easeType);
+        DepthLayer.DOLocalMoveZ(ZoomMinZ, duration).SetEase(easeType); // 기본값으로 복원 (줌 비율 0)
+        ShakeLayer.DOLocalMove(Vector3.zero, duration).SetEase(easeType); // 흔들림 복원
     }
 
     /// <summary>
@@ -92,17 +122,4 @@ public class CameraController : MonoBehaviour
         _shakeTween = ShakeLayer.DOShakePosition(duration, strength, vibrato, randomness);
     }
 
-    /// <summary>
-    /// 카메라의 위치를 초기값으로 복원합니다 (PlaneLayer, DepthLayer, ShakeLayer 모두).
-    /// </summary>
-    public void Restore(float duration, Ease easeType = Ease.OutQuad)
-    {
-        _planeTween?.Kill();
-        _depthTween?.Kill();
-        _shakeTween?.Kill();
-
-        PlaneLayer.DOLocalMove(Vector3.zero, duration).SetEase(easeType);
-        DepthLayer.DOLocalMoveZ(_zoomRange.x, duration).SetEase(easeType); // 기본값으로 복원 (줌 비율 0)
-        ShakeLayer.DOLocalMove(Vector3.zero, duration).SetEase(easeType); // 흔들림 복원
-    }
 }

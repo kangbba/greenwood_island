@@ -72,9 +72,9 @@ public class SentenceRectMask : MonoBehaviour
         _rectMask.padding = new Vector4(0, 0, targetPaddingRight, 0);
     }
 
-    public void StartReveal(float letterDelay)
+    public void StartReveal(float speed)
     {
-        _revealCoroutine = StartCoroutine(RevealMask(letterDelay));
+        _revealCoroutine = StartCoroutine(RevealMask(speed));
     }
 
     public void RevealInstantly()

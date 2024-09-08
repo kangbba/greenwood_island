@@ -1,13 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StoryTransition : Element
 {
-    private EStoryID _storyID;
+    private string _storyID;
 
-    // 생성자를 통해 EStoryID만 받도록 설정
-    public StoryTransition(EStoryID storyID)
+    // 생성자를 통해 string storyID만 받도록 설정
+    public StoryTransition(string storyID)
     {
         _storyID = storyID;
     }

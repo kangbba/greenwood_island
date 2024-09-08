@@ -439,7 +439,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9521ed1d1d55423abfd6461d0d84564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyFolderPath: Stories
 --- !u!1 &542850890
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,14 +647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f106e70523f4db8a6281860e8ec7c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _placePrefabs:
-  - {fileID: 1053420155645376636, guid: 68818af27cdb94b798713e42aca992c4, type: 3}
-  - {fileID: 1053420155645376636, guid: ebe181e0aeb5a4cfb83e60a3e4f036b8, type: 3}
-  - {fileID: 1053420155645376636, guid: 2a20a7dc6c393407c8aace961e9eb047, type: 3}
-  - {fileID: 1053420155645376636, guid: fa8cd937dad20494fab72e38b1ffdfca, type: 3}
-  - {fileID: 1053420155645376636, guid: fead8e47ab6094e948cc544bc804f4cf, type: 3}
-  - {fileID: 1053420155645376636, guid: bf59d049d28fb4b778da7a4f0df526da, type: 3}
-  - {fileID: 1053420155645376636, guid: a64d36944c795489c8d969c2b56c07c4, type: 3}
+  _placePrefab: {fileID: 0}
 --- !u!224 &691674547 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8219515785612320796, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
@@ -1220,15 +1212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8be98b8ed8d49cb8d9d3e77f9dc080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sfxClipEntries:
-  - sfxType: 0
-    sfxClip: {fileID: 8300000, guid: 05b97387bc59f43419534f7f139c9d75, type: 3}
-  - sfxType: 1
-    sfxClip: {fileID: 8300000, guid: 20bb698a7a673465c9bc41997bff9949, type: 3}
-  - sfxType: 2
-    sfxClip: {fileID: 8300000, guid: cad0e3e20aae04d3293449f579de96e2, type: 3}
-  - sfxType: 3
-    sfxClip: {fileID: 8300000, guid: c11d112a9b83e420b8e70f8409f8b9e1, type: 3}
 --- !u!1 &1182966280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1334,6 +1317,14 @@ MonoBehaviour:
     characterPrefab: {fileID: 6495543036880168818, guid: 9a6fb32610f1e4eedabb424f9fda98fa, type: 3}
     characterName_ko: "\uB9AC\uC0AC"
     mainColor: {r: 0.8862745, g: 0.2784641, b: 0.1960784, a: 1}
+  - characterID: 6
+    characterPrefab: {fileID: 6495543036880168818, guid: cacf9dd6380d14c2ba58b4bff5dc5320, type: 3}
+    characterName_ko: '?'
+    mainColor: {r: 0.7743295, g: 1, b: 0.759434, a: 1}
+  - characterID: 7
+    characterPrefab: {fileID: 6495543036880168818, guid: 5c78b0a14bb844995bf103b2110d08c9, type: 3}
+    characterName_ko: '?'
+    mainColor: {r: 0.7764706, g: 1, b: 0.7607843, a: 1}
 --- !u!1 &1607851815
 GameObject:
   m_ObjectHideFlags: 0

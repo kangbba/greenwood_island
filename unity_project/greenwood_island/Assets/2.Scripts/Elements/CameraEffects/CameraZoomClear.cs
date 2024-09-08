@@ -26,7 +26,7 @@ public class CameraZoomClear : Element
         }
 
         // 카메라 줌을 기본값(0)으로 복원
-        CameraController.Instance.Zoom(0f, _duration, _easeType);
+        CameraController.Instance.ZoomByFactor(0f, _duration, _easeType);
         yield return new WaitForSeconds(_duration);
     }
 }

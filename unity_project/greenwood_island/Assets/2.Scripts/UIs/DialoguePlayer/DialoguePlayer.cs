@@ -19,6 +19,7 @@ public class DialoguePlayer : MonoBehaviour
     [SerializeField] private CanvasGroup _cavasGroup;
     [SerializeField] private SentenceRectMask _sentenceRectMaskPrefab;
     [SerializeField] private Transform _rectMaskParent;
+    [SerializeField] private bool _instantlyCompletable;
     [SerializeField] private TextMeshProUGUI _characterText;
     [SerializeField] private DialogueGuide _dialogueGuide;  // DialogueGuide 참조
 
@@ -141,6 +142,10 @@ public class DialoguePlayer : MonoBehaviour
 
     public void CompleteCurSentence()
     {
+        if(!_instantlyCompletable){
+            Debug.LogWarning("DialoguePlayer :: _instantlyCompletable 옵션에 의해 즉시 완성할 수 없음");
+            return;
+        }
         if (_dialogueState != EDialogueState.Typing || _currentRevealCoroutine == null || !CanCompleteInstantly)
         {
             return; // Typing 상태가 아니거나 코루틴이 실행 중이 아니거나, 즉시 완료가 불가능한 상태라면 리턴

@@ -1,42 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;  // UI 요소를 사용하기 위해 추가
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class Place : MonoBehaviour
 {
-    public EPlaceID PlaceID;  // 장소의 ID를 할당할 필드
-    private Image[] _images;  // 여러 UI 이미지 컴포넌트를 받을 배열
+    [SerializeField] private Image _imageComponent;
 
-    private void Awake()
+    // 로드된 스프라이트를 이미지에 설정하는 메서드
+    public void SetImage(Sprite sprite)
     {
-        // 게임 오브젝트의 모든 Image 컴포넌트를 배열로 가져옴
-        _images = GetComponents<Image>();
-
-        if (_images == null || _images.Length == 0)
+        if (_imageComponent != null)
         {
-            Debug.LogError("Image components are missing.");
+            _imageComponent.sprite = sprite;
+        }
+        else
+        {
+            Debug.LogWarning("No Image component found to set the sprite.");
         }
     }
 
-    // 색상을 변경하는 유틸리티 함수
+    // 이미지의 색상을 변경하는 애니메이션 메서드
     public Tween SetColor(Color color, float duration, Ease easeType)
     {
-        // 배열에 있는 모든 이미지의 색상을 변경
-        if (_images != null && _images.Length > 0)
+        if (_imageComponent != null)
         {
-            Sequence sequence = DOTween.Sequence();  // 모든 트윈을 묶는 시퀀스 생성
-
-            foreach (var image in _images)
-            {
-                // 각 이미지의 색상을 변경하는 트윈을 시퀀스에 추가
-                sequence.Join(image.DOColor(color, duration).SetEase(easeType));
-            }
-
-            return sequence;
+            // DOTween을 사용하여 이미지의 색상을 변경하고 애니메이션 적용
+            return _imageComponent.DOColor(color, duration).SetEase(easeType);
         }
-
-        return null;
+        else
+        {
+            Debug.LogWarning("Place :: No Image component found to set the color.");
+            return null;
+        }
     }
 }

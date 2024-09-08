@@ -1,27 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
-
-public enum EStoryID
-{
-    Story1 = 1,
-    
-    TestStory_KateKillLisa,
-    TestStory_PlaceEnters,
-    TestStoryTime,
-    // 다른 스토리 ID를 여기에 추가
-    TestStory_BirthdayParty
-}
 
 public class StoryManager : MonoBehaviour
 {
     public static StoryManager Instance { get; private set; }
 
-    [SerializeField] private string storyFolderPath = "Stories"; // "Stories" 폴더 경로 설정
-    private Dictionary<EStoryID, Story> _stories;
-    private StoryLoader _storyLoader; // StoryLoader 인스턴스
+    private const string STORY_FOLDER_PATH = "Stories"; // 스토리가 위치한 Resources 폴더 경로
 
     private Story _currentStory; // 현재 실행 중인 스토리
     private Story _previousStory; // 이전에 실행된 스토리
@@ -37,39 +24,45 @@ public class StoryManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        _storyLoader = new StoryLoader(storyFolderPath);
-        _stories = _storyLoader.GetLoadedStories();
     }
 
     private void Start()
     {
-        // 첫 번째 스토리를 자동으로 시작
-        if (_stories != null && _stories.Count > 0)
-        {
-            var firstStory = _stories.Values.First();
-            PlayStory(EStoryID.TestStory_BirthdayParty);
-        }
-        else
-        {
-            Debug.LogError("No stories available to start.");
-        }
+        PlayStory("Story1");
     }
 
-    public void PlayStory(EStoryID storyID)
+    // Resources 폴더 내에서 스토리 폴더의 이름을 가져오는 메서드
+    private IEnumerable<string> GetStoryFolderNames()
+    {
+        // Resources/Stories 경로를 통해 스토리 폴더들을 탐색
+        string resourcesPath = Path.Combine(Application.dataPath, "Resources", STORY_FOLDER_PATH);
+        DirectoryInfo directoryInfo = new DirectoryInfo(resourcesPath);
+
+        // Resources/Stories 폴더 내의 하위 디렉토리 이름들을 가져옴
+        DirectoryInfo[] subDirectories = directoryInfo.GetDirectories();
+
+        // 각 디렉토리 이름을 반환
+        return subDirectories.Select(dir => dir.Name);
+    }
+
+    // 스토리를 실행하는 메서드
+    public void PlayStory(string storyName)
     {
         // 현재 스토리를 이전 스토리로 설정
         _previousStory = _currentStory;
 
-        // 새로운 스토리를 찾고 실행
-        if (_stories.TryGetValue(storyID, out Story story))
+        // 스토리를 동적으로 로드
+        string storyPath = $"{STORY_FOLDER_PATH}/{storyName}/{storyName}"; // 경로 예: Stories/Story1/Story1
+        Story loadedStory = Resources.Load<Story>(storyPath);
+
+        if (loadedStory != null)
         {
-            _currentStory = story;
+            _currentStory = loadedStory;
             StartCoroutine(StoryStartRoutine());
         }
         else
         {
-            Debug.LogError($"Story with ID {storyID} not found.");
+            Debug.LogError($"Story '{storyName}' could not be loaded from path '{storyPath}'.");
         }
     }
 

@@ -5,6 +5,7 @@ public enum ResourceType
     FX,
     SFX,
     Place,
+    Story
     // 다른 리소스 타입을 여기에 추가 가능
 }
 
@@ -57,6 +58,8 @@ public static class ResourcePathManager
                 return "SFXs";
             case ResourceType.Place:
                 return "Places";
+            case ResourceType.Story:
+                return "Scripts"; // Story 타입의 리소스는 Scripts 폴더에 위치
             // 다른 리소스 타입에 대한 폴더 명을 추가할 수 있음
             default:
                 Debug.LogWarning($"Unknown resource type: {resourceType}");

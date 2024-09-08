@@ -11,9 +11,12 @@ public class ElementTester : EditorWindow
     private Vector2 _scrollPositionLeft; // 왼쪽 스크롤 위치
     private Vector2 _scrollPositionRight; // 오른쪽 스크롤 위치
     private List<Type> _elementTypes; // 모든 Element 타입 리스트
+    private List<Type> _filteredElementTypes; // 필터된 Element 리스트 (검색 및 정렬 반영)
     private Type _selectedElementType; // 현재 선택된 Element 타입
     private List<object> _parameterValues; // 생성자 파라미터 값 저장 리스트
     private ConstructorInfo _selectedConstructor; // 선택된 생성자
+    private string _searchQuery = ""; // 검색어 저장
+    private bool _isAlphabeticalOrder = true; // ABC 정렬 여부
 
     [MenuItem("GreenWoodIsland/Element Tester")]
     public static void ShowWindow()
@@ -30,12 +33,18 @@ public class ElementTester : EditorWindow
             .GetTypes()
             .Where(t => t.IsSubclassOf(typeof(Element)) && !t.IsAbstract)
             .ToList();
+
+        _filteredElementTypes = new List<Type>(_elementTypes);
+        SortElements(); // 초기 정렬
     }
 
     private void OnGUI()
     {
         EditorGUILayout.LabelField("Element Tester", EditorStyles.boldLabel);
         EditorGUILayout.Space();
+
+        // 검색 및 정렬 옵션
+        DrawSearchAndSortOptions();
 
         EditorGUILayout.BeginHorizontal();
 
@@ -48,13 +57,97 @@ public class ElementTester : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
 
+    private void DrawSearchAndSortOptions()
+    {
+        EditorGUILayout.BeginHorizontal();
+
+        // ABC 정렬 버튼
+        if (GUILayout.Button("ABC 순으로 정렬", GUILayout.Width(120)))
+        {
+            _isAlphabeticalOrder = true;
+            SortElements();
+        }
+
+        // 카테고리별 정렬 버튼
+        if (GUILayout.Button("카테고리별 보기", GUILayout.Width(120)))
+        {
+            _isAlphabeticalOrder = false;
+            SortElements();
+        }
+
+        EditorGUILayout.EndHorizontal();
+
+        // 검색 입력 필드
+        string newSearchQuery = EditorGUILayout.TextField("", _searchQuery, GUILayout.Width(240));
+        if (newSearchQuery != _searchQuery) // 검색어가 변경되었을 때 자동으로 검색
+        {
+            _searchQuery = newSearchQuery;
+            FilterElements();
+        }
+
+        EditorGUILayout.Space();
+    }
+
+    private void SortElements()
+    {
+        if (_isAlphabeticalOrder)
+        {
+            _filteredElementTypes = _filteredElementTypes.OrderBy(t => t.Name).ToList();
+        }
+        else
+        {
+            // 카테고리별 정렬 (비슷한 이름끼리 그룹화)
+            _filteredElementTypes = _filteredElementTypes
+                .OrderBy(t => GetCategoryName(t.Name)) // 카테고리 이름을 기준으로 정렬
+                .ThenBy(t => t.Name)
+                .ToList();
+        }
+    }
+
+    private string GetCategoryName(string elementName)
+    {
+        // 카테고리를 지정하는 규칙 설정
+        if (elementName.Contains("Film")) return "필름";
+        if (elementName.Contains("CutIn")) return "컷인";
+        if (elementName.Contains("Camera")) return "카메라";
+        if (elementName.Contains("Choice")) return "초이스";
+        if (elementName.Contains("Character")) return "캐릭터";
+        if (elementName.Contains("SFX")) return "사운드";
+        if (elementName.Contains("FX")) return "비주얼 이펙트";
+        if (elementName.Contains("Place")) return "장소";
+        if (elementName.Contains("Dialogue")) return "대화";
+        // 기본 카테고리
+        return "General";
+    }
+
+    private void FilterElements()
+    {
+        // 검색어에 따라 필터링, 검색어가 비어있으면 전체 표시
+        _filteredElementTypes = string.IsNullOrEmpty(_searchQuery)
+            ? new List<Type>(_elementTypes)
+            : _elementTypes.Where(t => t.Name.ToLower().Contains(_searchQuery.ToLower())).ToList();
+
+        SortElements();
+    }
+
     private void DrawElementButtons()
     {
         EditorGUILayout.BeginVertical(GUILayout.Width(position.width * 0.35f)); // 좌측 패널의 너비를 조정
         _scrollPositionLeft = EditorGUILayout.BeginScrollView(_scrollPositionLeft);
 
-        foreach (var elementType in _elementTypes)
+        string lastHeader = ""; // 마지막에 출력된 헤더를 추적하여 중복 방지
+
+        foreach (var elementType in _filteredElementTypes)
         {
+            string currentHeader = _isAlphabeticalOrder ? elementType.Name[0].ToString().ToUpper() : GetCategoryName(elementType.Name);
+
+            // 헤더가 변경될 때만 출력
+            if (currentHeader != lastHeader)
+            {
+                EditorGUILayout.LabelField(currentHeader, EditorStyles.boldLabel);
+                lastHeader = currentHeader;
+            }
+
             // 더 긴 버튼 높이 설정
             if (GUILayout.Button(elementType.Name, GUILayout.Height(40)))
             {

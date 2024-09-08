@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class Story : ScriptableObject
+public abstract class Story
 {
     /// <summary>
     /// Start, Update, Exit 단계에서 실행될 Elements를 상속받은 클래스에서 구현하도록 합니다.

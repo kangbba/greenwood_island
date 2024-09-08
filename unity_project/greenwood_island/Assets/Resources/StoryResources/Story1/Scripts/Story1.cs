@@ -43,7 +43,7 @@ public class Story1 : Story
     // 스토리의 메인 업데이트 부분
     protected override SequentialElement UpdateElements => new
     (
-        new SFXEnter("SurgeryBeep", false, 0f),
+        new SFXEnter("SurgeryBeep2", .3f, true, 0f),
         new Dialogue(
             ECharacterID.Ryan,
             new List<Line>
@@ -54,7 +54,6 @@ public class Story1 : Story
             }
         ),
 
-        new SFXEnter("SurgeryBeep", false, 0f),
         new Dialogue(
             ECharacterID.Doctor,
             new List<Line>
@@ -64,7 +63,6 @@ public class Story1 : Story
             }
         ),
 
-        new SFXEnter("SurgeryBeep", false, 0f),
         new Dialogue(
             ECharacterID.Nurse,
             new List<Line>
@@ -73,7 +71,6 @@ public class Story1 : Story
                 new Line(EEmotionID.Normal, 0, "에피네프린 1밀리그램 투여 완료. 아직도 반응이 미약합니다."),
             }
         ),
-        new SFXEnter("SurgeryBeep", false, 0f),
         new Dialogue(
             ECharacterID.Ryan,
             new List<Line>

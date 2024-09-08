@@ -8,13 +8,11 @@ using UnityEngine;
 public class PlaceEnter : Element
 {
     private string _imageID; // 이동할 새로운 장소의 이미지 ID
-    private Story _story; // 현재 스토리 객체
 
     // 생성자: 이미지 ID와 현재 스토리 객체를 받아서 초기화
-    public PlaceEnter(string imageID, Story story)
+    public PlaceEnter(string imageID)
     {
         _imageID = imageID;
-        _story = story; // 현재 스토리 설정
     }
 
     public override IEnumerator ExecuteRoutine()
@@ -22,7 +20,7 @@ public class PlaceEnter : Element
         Debug.Log("PlaceEnter :: 새로운 장소 인스턴스화 시도 했음");
 
         // 현재 스토리의 이름을 사용하여 새로운 장소 생성
-        Place newPlace = PlaceManager.Instance.CreatePlace(_imageID, _story.StoryId);
+        Place newPlace = PlaceManager.Instance.CreatePlace(_imageID);
 
         // 이미지가 정상적으로 로드되었는지 확인
         if (newPlace == null)

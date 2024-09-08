@@ -6,6 +6,9 @@ public class FXManager : MonoBehaviour
 {
     public static FXManager Instance { get; private set; }
 
+    // 람다식으로 현재 실행 중인 스토리 이름을 자동으로 가져옴
+    private string CurrentStoryName => StoryManager.Instance.GetCurrentStoryName();
+
     private Dictionary<string, List<GameObject>> _activeFXs = new Dictionary<string, List<GameObject>>(); // 활성화된 FX들
 
     private void Awake()
@@ -22,14 +25,14 @@ public class FXManager : MonoBehaviour
     }
 
     // 특정 FX를 스폰하는 메서드
-    public GameObject SpawnFX(string fxID, string storyName, Vector3 localPos)
+    public GameObject SpawnFX(string fxID, Vector3 localPos)
     {
-        // 스토리 이름과 FX ID를 사용하여 FX 프리팹 로드
-        GameObject fxPrefab = LoadFXPrefab(fxID, storyName);
+        // 현재 스토리 이름과 FX ID를 사용하여 FX 프리팹 로드
+        GameObject fxPrefab = LoadFXPrefab(fxID, CurrentStoryName);
 
         if (fxPrefab == null)
         {
-            Debug.LogError($"FX Prefab '{fxID}' could not be loaded from story '{storyName}' or shared resources.");
+            Debug.LogError($"FX Prefab '{fxID}' could not be loaded from story '{CurrentStoryName}' or shared resources.");
             return null;
         }
 

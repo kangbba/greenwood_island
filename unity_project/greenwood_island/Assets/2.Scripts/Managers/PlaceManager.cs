@@ -22,6 +22,9 @@ public class PlaceManager : MonoBehaviour
         }
     }
 
+    // 람다식으로 현재 실행 중인 스토리 이름을 자동으로 가져옴
+    private string CurrentStoryName => StoryManager.Instance.GetCurrentStoryName();
+
     public Place CurrentPlace => _currentPlace;
 
     [SerializeField]
@@ -31,15 +34,15 @@ public class PlaceManager : MonoBehaviour
     private Place _previousPlace; // 이전에 활성화된 장소
     private List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
 
-    // 이미지 ID와 스토리 이름을 받아 새로운 장소를 생성하는 메서드
-    public Place CreatePlace(string imageID, string storyName)
+    // 이미지 ID를 받아 새로운 장소를 생성하는 메서드
+    public Place CreatePlace(string imageID)
     {
-        // 이미지 로드 시도
-        Sprite placeImage = LoadPlaceImage(imageID, storyName);
+        // 현재 스토리 이름을 사용하여 이미지 로드 시도
+        Sprite placeImage = LoadPlaceImage(imageID, CurrentStoryName);
 
         if (placeImage == null)
         {
-            Debug.LogError($"Failed to load place image with ID '{imageID}' from story '{storyName}' or shared resources.");
+            Debug.LogError($"Failed to load place image with ID '{imageID}' from story '{CurrentStoryName}' or shared resources.");
             return null;
         }
 

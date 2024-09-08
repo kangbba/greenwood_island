@@ -5,17 +5,15 @@ using UnityEngine;
 public class SFXEnter : Element
 {
     private string _sfxID;
-    private Story _story; // Story 객체를 저장
-    private Vector3 _localPos;
+    private float _volume;
     private bool _isLoop;
     private float _loopTerm;
 
-    // Story 객체를 인자로 받아 스토리 정보를 활용
-    public SFXEnter(string sfxID, Story story, bool isLoop = true, float loopTerm = 0f, Vector3 localPos = default)
+    // 생성자: SFX ID, 볼륨, 반복 여부, 반복 간격을 설정
+    public SFXEnter(string sfxID, float volume = 1f, bool isLoop = true, float loopTerm = 0f)
     {
         _sfxID = sfxID;
-        _story = story; // 스토리 객체 초기화
-        _localPos = localPos == default ? Vector3.zero : localPos; // 기본값을 Vector3.zero로 설정
+        _volume = Mathf.Clamp(volume, 0f, 1f); // 볼륨을 0에서 1 사이로 제한
         _isLoop = isLoop;
         _loopTerm = loopTerm;
     }
@@ -24,15 +22,14 @@ public class SFXEnter : Element
     {
         // SFX 생성 시 SFXManager를 통해 재생
         AudioSource sfxSource;
-        string storyName = _story.StoryId; // Story 객체에서 스토리 이름을 추출
 
         if (_isLoop && _loopTerm >= 0f)
         {
-            sfxSource = SFXManager.Instance.PlaySFXLoop(_sfxID, storyName, _localPos, _loopTerm); // 스토리 이름 전달
+            sfxSource = SFXManager.Instance.PlaySFXLoop(_sfxID, _volume, _loopTerm); // 볼륨과 반복 간격을 전달
         }
         else
         {
-            sfxSource = SFXManager.Instance.PlaySFXOnce(_sfxID, storyName, _localPos); // 스토리 이름 전달
+            sfxSource = SFXManager.Instance.PlaySFXOnce(_sfxID, _volume); // 볼륨 전달
         }
 
         if (sfxSource != null)

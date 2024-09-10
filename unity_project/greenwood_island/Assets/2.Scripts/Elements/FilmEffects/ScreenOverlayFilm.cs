@@ -17,7 +17,7 @@ public class ScreenOverlayFilm : Element
     // ScreenOverlayFilm을 참조
     private Image ScreenOverlayFilmImg => UIManager.Instance.SystemCanvas.ScreenOverlayFilm;
 
-    public ScreenOverlayFilm(Color overlayColor, float duration = 1f, Ease easeType = Ease.Linear)
+    public ScreenOverlayFilm(Color overlayColor, float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         _overlayColor = overlayColor;
         _duration = duration;

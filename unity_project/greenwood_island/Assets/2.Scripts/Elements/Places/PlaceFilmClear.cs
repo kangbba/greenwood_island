@@ -12,7 +12,7 @@ public class PlaceFilmClear : Element
     private float _duration;
     private Ease _easeType;
 
-    public PlaceFilmClear(float duration = 1f, Ease easeType = Ease.Linear)
+    public PlaceFilmClear(float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         _duration = duration;
         _easeType = easeType;

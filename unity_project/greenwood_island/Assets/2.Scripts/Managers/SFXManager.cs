@@ -25,9 +25,14 @@ public class SFXManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    // 특정 SFX ID의 오디오 클립 단일 재생 코루틴 메서드
+    public void PlaySFXOnce(string sfxID, float volume)
+    {
+        StartCoroutine(PlaySFXOnceCoroutine(sfxID, volume));
+    }
 
-    // 특정 SFX ID의 오디오 클립 단일 재생 메서드
-    public AudioSource PlaySFXOnce(string sfxID, float volume)
+    // 특정 SFX ID의 오디오 클립 단일 재생 코루틴 메서드
+    public IEnumerator PlaySFXOnceCoroutine(string sfxID, float volume)
     {
         // 현재 스토리 이름을 자동으로 가져옴
         AudioClip sfxClip = LoadSFXClip(sfxID, CurrentStoryName);
@@ -35,7 +40,7 @@ public class SFXManager : MonoBehaviour
         if (sfxClip == null)
         {
             Debug.LogError($"SFX Clip '{sfxID}' could not be loaded from story '{CurrentStoryName}' or shared resources.");
-            return null;
+            yield break;
         }
 
         // 새로운 GameObject를 생성하여 AudioSource 추가
@@ -57,30 +62,59 @@ public class SFXManager : MonoBehaviour
         }
         _activeSFXs[sfxID].Add(audioSource);
 
-        return audioSource;
+        // 오디오 클립이 재생되는 동안 대기
+        yield return new WaitForSeconds(sfxClip.length);
+
+        // 재생이 끝난 후 AudioSource를 제거
+        _activeSFXs[sfxID].Remove(audioSource);
+        Destroy(audioObject); // AudioSource가 포함된 GameObject를 파괴
     }
 
     // 특정 시간 간격으로 SFX 반복 재생하는 메서드
     public AudioSource PlaySFXLoop(string sfxID, float volume, float term)
     {
-        AudioSource audioSource = PlaySFXOnce(sfxID, volume);
-        if (audioSource != null)
+        // 현재 스토리 이름을 자동으로 가져옴
+        AudioClip sfxClip = LoadSFXClip(sfxID, CurrentStoryName);
+
+        if (sfxClip == null)
         {
-            audioSource.loop = false; // 루프 설정 없음, 직접 제어
-            Debug.Log("볼륨 설정 완료" + volume);
-            audioSource.volume = volume; // 볼륨 설정
-            // 기존에 실행 중인 코루틴이 있다면 중복 방지
-            if (_activeLoops.ContainsKey(audioSource) && _activeLoops[audioSource] != null)
-            {
-                StopCoroutine(_activeLoops[audioSource]);
-            }
-            // 새로운 루프 코루틴 실행
-            Coroutine loopCoroutine = StartCoroutine(LoopWithTerm(audioSource, term));
-            _activeLoops[audioSource] = loopCoroutine;
+            Debug.LogError($"SFX Clip '{sfxID}' could not be loaded from story '{CurrentStoryName}' or shared resources.");
+            return null;
         }
+
+        // 새로운 GameObject를 생성하여 AudioSource 추가
+        GameObject audioObject = new GameObject($"SFX_{sfxID}");
+        audioObject.transform.parent = UIManager.Instance.SystemCanvas.SFXLayer;
+        audioObject.transform.localPosition = Vector2.zero;
+
+        // AudioSource 컴포넌트를 추가하고 설정
+        AudioSource audioSource = audioObject.AddComponent<AudioSource>();
+        audioSource.clip = sfxClip;
+        audioSource.volume = volume; // 볼륨 설정
+        audioSource.loop = false; // 직접 제어하기 때문에 루프 설정 없음
+        audioSource.Play(); // 오디오 재생
+
+        Debug.Log("볼륨 설정 완료 " + volume);
+
+        // 생성된 AudioSource를 _activeSFXs에 추가
+        if (!_activeSFXs.ContainsKey(sfxID))
+        {
+            _activeSFXs[sfxID] = new List<AudioSource>();
+        }
+        _activeSFXs[sfxID].Add(audioSource);
+
+        // 기존에 실행 중인 코루틴이 있다면 중복 방지
+        if (_activeLoops.ContainsKey(audioSource) && _activeLoops[audioSource] != null)
+        {
+            StopCoroutine(_activeLoops[audioSource]);
+        }
+
+        // 새로운 루프 코루틴 실행
+        Coroutine loopCoroutine = StartCoroutine(LoopWithTerm(audioSource, term));
+        _activeLoops[audioSource] = loopCoroutine;
+
         return audioSource;
     }
-
     // 특정 시간 간격으로 반복 재생하는 코루틴
     private IEnumerator LoopWithTerm(AudioSource audioSource, float term)
     {

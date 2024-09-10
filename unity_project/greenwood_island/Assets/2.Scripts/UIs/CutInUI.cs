@@ -27,6 +27,7 @@ public class CutInUI : MonoBehaviour
 
         // 강조할 이미지 설정 및 위치 조정
         _highlightImage.sprite = highlightSprite;
+        _highlightImage.SetNativeSize();
         _highlightImage.transform.localScale = Vector3.one * scaleFactor;
         _highlightImage.rectTransform.anchoredPosition = highlightOffset;
         _highlightImage.gameObject.SetActive(true);

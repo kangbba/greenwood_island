@@ -26,7 +26,7 @@ public class ChoiceSet : Element
         int chosenIndex = -1;
 
         // 선택지 UI를 표시하고 플레이어의 선택을 기다림
-        yield return CoroutineRunner.Instance.StartCoroutine(
+        yield return CoroutineUtils.StartCoroutine(
             choiceUI.DisplayChoices(
                 _question,
                 _choiceContents.Select(choice => choice.Title).ToList(),
@@ -44,7 +44,7 @@ public class ChoiceSet : Element
             _choiceContents[chosenIndex].OnSelected?.Invoke();
 
             // 선택한 SequentialElement 실행
-            yield return CoroutineRunner.Instance.StartCoroutine(_choiceContents[chosenIndex].ExecuteRoutine());
+            yield return CoroutineUtils.StartCoroutine(_choiceContents[chosenIndex].ExecuteRoutine());
         }
         else
         {

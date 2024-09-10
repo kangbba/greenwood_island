@@ -15,7 +15,7 @@ public class PlaceFilm : Element
     private float _duration;
     private Ease _easeType;
 
-    public PlaceFilm(Color effectColor, float duration = 1f, Ease easeType = Ease.Linear)
+    public PlaceFilm(Color effectColor, float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         _effectColor = effectColor;
         _duration = duration;

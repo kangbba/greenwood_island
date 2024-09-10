@@ -28,7 +28,7 @@ public class ParallelElement : Element
         for (int i = 0; i < _elements.Count; i++)
         {
             int index = i; // 클로저 문제를 피하기 위해 별도의 변수 사용
-            CoroutineRunner.Instance.StartCoroutine(ExecuteRoutineElement(_elements[index], index, isCompleted));
+            CoroutineUtils.StartCoroutine(ExecuteRoutineElement(_elements[index], index, isCompleted));
         }
 
         // 모든 실행된 코루틴이 완료될 때까지 대기

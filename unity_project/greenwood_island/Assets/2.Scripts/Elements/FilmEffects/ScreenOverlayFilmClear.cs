@@ -12,7 +12,7 @@ public class ScreenOverlayFilmClear : Element
     private Ease _easeType;
 
 
-    public ScreenOverlayFilmClear(float duration = 1f, Ease easeType = Ease.Linear)
+    public ScreenOverlayFilmClear(float duration = 1f, Ease easeType = Ease.OutQuad)
     {
         _duration = duration;
         _easeType = easeType;

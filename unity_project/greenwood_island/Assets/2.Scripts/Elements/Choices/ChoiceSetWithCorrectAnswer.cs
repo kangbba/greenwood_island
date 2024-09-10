@@ -38,7 +38,7 @@ public class ChoiceSetWithCorrectAnswer : Element
             int chosenIndex = -1;
 
             // 선택지 UI를 표시하고 플레이어의 선택을 기다림
-            yield return CoroutineRunner.Instance.StartCoroutine(
+            yield return CoroutineUtils.StartCoroutine(
                 choiceUI.DisplayChoices(
                     _question,
                     _choiceContents.Select(choice => choice.Title).ToList(),
@@ -54,7 +54,7 @@ public class ChoiceSetWithCorrectAnswer : Element
             }
 
             // 선택된 ChoiceOption의 동작 실행
-            yield return CoroutineRunner.Instance.StartCoroutine(_choiceContents[chosenIndex].ExecuteRoutine());
+            yield return CoroutineUtils.StartCoroutine(_choiceContents[chosenIndex].ExecuteRoutine());
 
             // 정답 확인 후 종료
             if (chosenIndex == _correctAnswerIndex)

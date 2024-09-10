@@ -241,7 +241,7 @@ public class ElementTester : EditorWindow
         }
         if (param.ParameterType == typeof(Ease))
         {
-            return (Ease)EditorGUILayout.EnumPopup(param.Name, currentValue != null ? (Ease)currentValue : Ease.Linear);
+            return (Ease)EditorGUILayout.EnumPopup(param.Name, currentValue != null ? (Ease)currentValue : Ease.OutQuad);
         }
         if (param.ParameterType == typeof(Vector2))
         {

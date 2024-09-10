@@ -9,6 +9,6 @@ public abstract class Element
     // Execute 메서드는 CoroutineRunner를 통해 코루틴을 실행
     public void Execute()
     {
-        CoroutineRunner.Instance.StartCoroutine(ExecuteRoutine());
+        CoroutineUtils.StartCoroutine(ExecuteRoutine());
     }
 }

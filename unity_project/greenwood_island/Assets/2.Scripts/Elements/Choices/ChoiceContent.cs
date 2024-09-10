@@ -18,6 +18,6 @@ public class ChoiceContent
     public IEnumerator ExecuteRoutine()
     {
         // SequentialElement를 사용하여 요소들을 순차적으로 실행
-        yield return CoroutineRunner.Instance.StartCoroutine(SequentialElement.ExecuteRoutine());
+        yield return CoroutineUtils.StartCoroutine(SequentialElement.ExecuteRoutine());
     }
 }

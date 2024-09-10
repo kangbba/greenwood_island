@@ -28,18 +28,17 @@ public class DialoguePlayer : MonoBehaviour
     private void Start()
     {
         ShowUp(false, 0f);
-        FadeIn(false, 0f);
         SetCharacterText("", Color.clear);
     }
 
-    public void Clear()
-    {
-        SetState(EDialogueState.NotStarted);
-        SetCharacterText("", Color.clear);
+    public void FadeInDialogueText(float duration, Ease easeType = Ease.OutQuad){
+        _dialogueText.FadeIn(duration, easeType);
+    }
+    public void FadeOutDialogueText(float duration, Ease easeType = Ease.OutQuad){
+        _dialogueText.FadeOut(duration, easeType);
     }
 
-    public void InitLine(Line line){
-        SetCharacterText("", Color.clear);
+    public void InitDialogueText(Line line){
         _dialogueText.InitText(line.Sentence);
     }
 
@@ -55,7 +54,7 @@ public class DialoguePlayer : MonoBehaviour
         _characterText.DOKill(); 
 
         // 현재 색상에서 targetColor로 색상 변경 애니메이션
-        _characterText.DOColor(targetColor, 0.5f); // 0.5초 동안 색상이 바뀌도록 설정
+        _characterText.DOColor(targetColor, 0f); // 0.5초 동안 색상이 바뀌도록 설정
     }
 
     public void CompleteCurSentence()
@@ -96,15 +95,10 @@ public class DialoguePlayer : MonoBehaviour
     {
     }
 
-
     public void ShowUp(bool show, float duration)
     {
         float offScreenY = -_panelRectTransform.rect.height;
         Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
         _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutCubic);
-    }
-    public void FadeIn(bool show, float duration)
-    {
-        _cavasGroup.DOFade(show ? 1f : 0f, duration).SetEase(Ease.OutCubic);
     }
 }

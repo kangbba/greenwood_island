@@ -5,22 +5,22 @@ using UnityEngine;
 [System.Serializable]
 public class Dialogue : Element
 {
-    private string _characterName; // 캐릭터 이름
+    private string _characterID; // 캐릭터 이름
     private List<Line> _lines;
 
-    public Dialogue(string characterName, Line line)
+    public Dialogue(string characterID, Line line)
     {
-        this._characterName = characterName;
+        this._characterID = characterID;
         this._lines = new List<Line> { line };
     }
 
-    public Dialogue(string characterName, List<Line> lines)
+    public Dialogue(string characterID, List<Line> lines)
     {
-        this._characterName = characterName;
+        this._characterID = characterID;
         this._lines = lines;
     }
 
-    public string CharacterName => _characterName;
+    public string CharacterID => _characterID;
     public List<Line> Lines => _lines;
 
     public override IEnumerator ExecuteRoutine()
@@ -32,37 +32,37 @@ public class Dialogue : Element
             Debug.LogWarning("Dialogue :: dialoguePlayer is null");
             yield break;
         }
-
         dialoguePlayer.gameObject.SetActive(true);
-
         // 캐릭터 로드 시도
-        Character character = CharacterManager.Instance.GetActiveCharacter(_characterName);
+        Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);
         if (character != null)
         {
-            Debug.LogWarning($"Dialogue :: Character '{_characterName}' not found.");
-            dialoguePlayer.SetCharacterText(_characterName, character.MainColor); // 캐릭터 색상 설정
+            Debug.LogWarning($"Dialogue :: Character '{_characterID}' not found.");
+            dialoguePlayer.SetCharacterText(_characterID, character.MainColor); // 캐릭터 색상 설정
         }
+        else{
+            dialoguePlayer.SetCharacterText(_characterID, Color.white); // 캐릭터 색상 설정
+        }
+
+        dialoguePlayer.ShowUp(true, 0.5f);
+        yield return new WaitForSeconds(0.5f);
 
         // 첫 문장 감정 상태 설정
         var firstLine = _lines[0];
-        dialoguePlayer.Clear();
-        dialoguePlayer.ShowUp(true, 0.2f);
-        dialoguePlayer.FadeIn(true, 0.2f);
-        yield return new WaitForSeconds(0.4f);
-
         EEmotionID recentEmotionID = firstLine.EmotionID;
         int recentEmotionIndex = firstLine.EmotionIndex;
-
         // 캐릭터의 감정 상태 설정
         if(character != null){
-            CharacterManager.Instance.SetCharacterEmotion(_characterName, firstLine.EmotionID, firstLine.EmotionIndex, 1f);
+            CharacterManager.Instance.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex, 1f);
         }
 
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
         {
             Line line = _lines[i];
-            dialoguePlayer.InitLine(line);
+            dialoguePlayer.InitDialogueText(line);
+            dialoguePlayer.FadeInDialogueText(.3f);
+            yield return new WaitForSeconds(.3f);
 
             EEmotionID emotionID = line.EmotionID;
             int emotionIndex = line.EmotionIndex;
@@ -70,10 +70,10 @@ public class Dialogue : Element
             bool isIdenticalEmotionSprite = (emotionID == recentEmotionID) && (emotionIndex == recentEmotionIndex);
             if (!isIdenticalEmotionSprite)
             {
-                Debug.Log($"{_characterName} 감정의 변화 {recentEmotionID}{recentEmotionIndex} -> {emotionID}{emotionIndex}");
+                Debug.Log($"{_characterID} 감정의 변화 {recentEmotionID}{recentEmotionIndex} -> {emotionID}{emotionIndex}");
                 float transitionDuration = 0.5f;
                 if(character != null){
-                        CharacterManager.Instance.SetCharacterEmotion(_characterName, line.EmotionID, line.EmotionIndex, transitionDuration);
+                        CharacterManager.Instance.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex, transitionDuration);
                 }
             }
 
@@ -83,11 +83,11 @@ public class Dialogue : Element
             
 
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            dialoguePlayer.FadeOutDialogueText(.3f);
+            yield return new WaitForSeconds(.3f);
         }
-
-        dialoguePlayer.FadeIn(false, 0.2f);
-        yield return new WaitForSeconds(0.2f);
-        dialoguePlayer.Clear();
+        dialoguePlayer.FadeOutDialogueText(1f);
+        yield return new WaitForSeconds(1f);
         dialoguePlayer.gameObject.SetActive(false);
     }
 }

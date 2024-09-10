@@ -13,7 +13,7 @@ public class SFXEnter : Element
     public SFXEnter(string sfxID, float volume = 1f, bool isLoop = true, float loopTerm = 0f)
     {
         _sfxID = sfxID;
-        _volume = Mathf.Clamp(volume, 0f, 1f); // 볼륨을 0에서 1 사이로 제한
+        _volume = volume; // 볼륨을 0에서 1 사이로 제한
         _isLoop = isLoop;
         _loopTerm = loopTerm;
     }

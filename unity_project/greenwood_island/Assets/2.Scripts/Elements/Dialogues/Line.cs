@@ -8,7 +8,7 @@ public class Line
     private string _sentence;
     private float _playSpeed;
 
-    public Line(EEmotionID emotionID, int emotionIndex, string sentence, float playSpeed = 15)
+    public Line(EEmotionID emotionID, int emotionIndex, string sentence, float playSpeed = 700)
     {
         this._emotionID = emotionID;
         this._emotionIndex = emotionIndex;

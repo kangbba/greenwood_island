@@ -67,6 +67,8 @@ public class SFXManager : MonoBehaviour
         if (audioSource != null)
         {
             audioSource.loop = false; // 루프 설정 없음, 직접 제어
+            Debug.Log("볼륨 설정 완료" + volume);
+            audioSource.volume = volume; // 볼륨 설정
             // 기존에 실행 중인 코루틴이 있다면 중복 방지
             if (_activeLoops.ContainsKey(audioSource) && _activeLoops[audioSource] != null)
             {

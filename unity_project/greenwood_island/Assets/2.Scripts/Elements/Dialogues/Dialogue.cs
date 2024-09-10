@@ -37,17 +37,15 @@ public class Dialogue : Element
 
         // 캐릭터 로드 시도
         Character character = CharacterManager.Instance.GetActiveCharacter(_characterName);
-
-        if (character == null)
+        if (character != null)
         {
             Debug.LogWarning($"Dialogue :: Character '{_characterName}' not found.");
-            yield break;
+            dialoguePlayer.SetCharacterText(_characterName, character.MainColor); // 캐릭터 색상 설정
         }
 
         // 첫 문장 감정 상태 설정
         var firstLine = _lines[0];
         dialoguePlayer.Clear();
-        dialoguePlayer.SetCharacterText(_characterName, character.MainColor); // 캐릭터 색상 설정
         dialoguePlayer.ShowUp(true, 0.2f);
         dialoguePlayer.FadeIn(true, 0.2f);
         yield return new WaitForSeconds(0.4f);
@@ -56,7 +54,9 @@ public class Dialogue : Element
         int recentEmotionIndex = firstLine.EmotionIndex;
 
         // 캐릭터의 감정 상태 설정
-        CharacterManager.Instance.SetCharacterEmotion(_characterName, firstLine.EmotionID, firstLine.EmotionIndex, 1f);
+        if(character != null){
+            CharacterManager.Instance.SetCharacterEmotion(_characterName, firstLine.EmotionID, firstLine.EmotionIndex, 1f);
+        }
 
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
@@ -72,31 +72,16 @@ public class Dialogue : Element
             {
                 Debug.Log($"{_characterName} 감정의 변화 {recentEmotionID}{recentEmotionIndex} -> {emotionID}{emotionIndex}");
                 float transitionDuration = 0.5f;
-                CharacterManager.Instance.SetCharacterEmotion(_characterName, line.EmotionID, line.EmotionIndex, transitionDuration);
+                if(character != null){
+                        CharacterManager.Instance.SetCharacterEmotion(_characterName, line.EmotionID, line.EmotionIndex, transitionDuration);
+                }
             }
 
             recentEmotionID = line.EmotionID;
             recentEmotionIndex = line.EmotionIndex;
-            dialoguePlayer.ShowNextSentence(line.PlaySpeed);
-            yield return null;
+            yield return dialoguePlayer.ShowLineRoutine(line.PlaySpeed);
+            
 
-            // 대화 상태 처리
-            while (dialoguePlayer.DialogueState != EDialogueState.Finished)
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    EDialogueState dialogueState = dialoguePlayer.DialogueState;
-                    if (dialogueState == EDialogueState.Typing)
-                    {
-                        dialoguePlayer.CompleteCurSentence();
-                    }
-                    else if (dialogueState == EDialogueState.Waiting)
-                    {
-                        dialoguePlayer.ShowNextSentence(line.PlaySpeed);
-                    }
-                }
-                yield return null;
-            }
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
         }
 

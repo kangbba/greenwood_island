@@ -24,7 +24,6 @@ public class PlaceFilm : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        Debug.Log($"PlaceFilm :: Setting color to {_effectColor}");
 
         // PlaceManager에서 현재 활성화된 장소를 가져옴
         Place currentPlace = PlaceManager.Instance.CurrentPlace;

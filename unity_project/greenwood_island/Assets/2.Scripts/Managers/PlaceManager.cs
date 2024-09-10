@@ -80,27 +80,27 @@ public class PlaceManager : MonoBehaviour
     }
 
     // 장소 이미지를 로드하는 메서드 (스토리 자원 우선, 실패 시 공유 자원 로드)
-    private Sprite LoadPlaceImage(string imageID, string storyName)
+    private Sprite LoadPlaceImage(string placeID, string storyName)
     {
         // 스토리 경로에서 이미지 로드 시도
-        string storyPlacePath = ResourcePathManager.GetResourcePath(imageID, storyName, ResourceType.Place, false);
+        string storyPlacePath = ResourcePathManager.GetResourcePath(placeID, storyName, ResourceType.Place, false);
         Sprite placeImage = Resources.Load<Sprite>(storyPlacePath);
 
         // 스토리 경로에서 로드 성공 시 로그 출력
         if (placeImage != null)
         {
-            Debug.Log($"Place image '{imageID}' loaded from Story path: '{storyPlacePath}'.");
+            Debug.Log($"Place image '{placeID}' loaded from Story path: '{storyPlacePath}'.");
             return placeImage;
         }
 
         // 스토리 경로에서 로드 실패 시, 공유 경로에서 로드 시도
-        string sharedPlacePath = ResourcePathManager.GetResourcePath(imageID, storyName, ResourceType.Place, true);
+        string sharedPlacePath = ResourcePathManager.GetResourcePath(placeID, storyName, ResourceType.Place, true);
         placeImage = Resources.Load<Sprite>(sharedPlacePath);
 
         // 공유 경로에서 로드 성공 시 로그 출력
         if (placeImage != null)
         {
-            Debug.Log($"Place image '{imageID}' loaded from Shared path: '{sharedPlacePath}'.");
+            Debug.Log($"Place image '{placeID}' loaded from Shared path: '{sharedPlacePath}'.");
         }
 
         return placeImage;

@@ -20,7 +20,7 @@ public class PlaceEnter : Element
         Debug.Log("PlaceEnter :: 새로운 장소 인스턴스화 시도 했음");
 
         // 현재 스토리의 이름을 사용하여 새로운 장소 생성
-        Place newPlace = PlaceManager.Instance.CreatePlace(_imageID);
+        Place newPlace = PlaceManager.CreatePlace(_imageID);
 
         // 이미지가 정상적으로 로드되었는지 확인
         if (newPlace == null)

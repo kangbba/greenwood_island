@@ -19,13 +19,7 @@ public class CameraShake : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        if (CameraController.Instance == null)
-        {
-            Debug.LogWarning("CameraController instance is not available.");
-            yield break;
-        }
-
-        CameraController.Instance.Shake(_duration, _strength, _vibrato, _randomness);
+        CameraController.Shake(_duration, _strength, _vibrato, _randomness);
         yield return new WaitForSeconds(_duration);
     }
 }

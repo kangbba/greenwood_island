@@ -19,7 +19,7 @@ public class CharacterExit : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 가져오기
-        Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);
+        Character character = CharacterManager.GetActiveCharacter(_characterID);
 
         if (character == null)
         {
@@ -30,6 +30,6 @@ public class CharacterExit : Element
         yield return new WaitForSeconds(_duration); // 애니메이션이 완료될 때까지 대기
 
         // 애니메이션 완료 후 캐릭터 제거
-        CharacterManager.Instance.DestroyCharacter(_characterID);
+        CharacterManager.DestroyCharacter(_characterID);
     }
 }

@@ -15,7 +15,7 @@ public class SFXsClear : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        SFXManager.Instance.FadeOutAndDestroyAllSFX(_fadeDuration);
+        SFXManager.FadeOutAndDestroyAllSFX(_fadeDuration);
         // 모든 페이드 아웃이 완료될 때까지 기다림
         yield return new WaitForSeconds(_fadeDuration);
     }

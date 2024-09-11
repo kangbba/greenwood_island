@@ -38,6 +38,26 @@ public class DialoguePlayer : MonoBehaviour
         _dialogueText.FadeOut(duration, easeType);
     }
 
+    // 텍스트를 보이게 만드는 페이드 인 메서드
+    public void FadeInCharacterText(float duration, Ease easeType = Ease.OutQuad)
+    {
+        // 텍스트의 현재 색상을 가져오고 알파 값을 1로 설정
+        Color targetColor = _characterText.color;
+        targetColor.a = 1f;
+
+        // DOTween을 사용하여 텍스트 색상을 페이드 인
+        _characterText.DOColor(targetColor, duration).SetEase(easeType);
+    }
+    public void FadeOutCharacterText(float duration, Ease easeType = Ease.OutQuad)
+    {
+        // 텍스트의 현재 색상을 가져오고 알파 값을 0으로 설정
+        Color targetColor = _characterText.color;
+        targetColor.a = 0f;
+
+        // DOTween을 사용하여 텍스트 색상을 페이드 아웃
+        _characterText.DOColor(targetColor, duration).SetEase(easeType);
+    }
+
     public void InitDialogueText(Line line){
         _dialogueText.InitText(line.Sentence);
     }

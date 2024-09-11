@@ -18,14 +18,8 @@ public class CameraMove2D : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        if (CameraController.Instance == null)
-        {
-            Debug.LogWarning("CameraController instance is not available.");
-            yield break;
-        }
-
         // CameraController의 MovePlane 메서드를 사용하여 평면 이동을 실행
-        CameraController.Instance.MovePlane(_targetLocalPos, _duration, _easeType);
+        CameraController.MovePlane(_targetLocalPos, _duration, _easeType);
         yield return new WaitForSeconds(_duration);
     }
 }

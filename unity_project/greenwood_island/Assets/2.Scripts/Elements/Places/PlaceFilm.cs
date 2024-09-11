@@ -26,7 +26,7 @@ public class PlaceFilm : Element
     {
 
         // PlaceManager에서 현재 활성화된 장소를 가져옴
-        Place currentPlace = PlaceManager.Instance.CurrentPlace;
+        Place currentPlace = PlaceManager.CurrentPlace;
         if (currentPlace == null)
         {
             Debug.LogWarning("PlaceFilm :: 현재 활성화된 장소를 찾지 못했습니다.");

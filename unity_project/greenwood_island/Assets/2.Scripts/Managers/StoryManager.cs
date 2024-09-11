@@ -3,45 +3,25 @@ using System.Collections;
 using System.Reflection;
 using UnityEngine;
 
-public class StoryManager : MonoBehaviour
+public static class StoryManager
 {
-    public static StoryManager Instance { get; private set; }
+    private static Story _currentStory; // 현재 실행 중인 스토리
+    private static Story _previousStory; // 이전에 실행된 스토리
 
-    private Story _currentStory; // 현재 실행 중인 스토리
-    private Story _previousStory; // 이전에 실행된 스토리
-
-    private void Awake()
+    // StoryManager 초기화 메서드
+    public static void Init()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        StartCoroutine(DelayStart());
-    }
-
-    IEnumerator DelayStart(){
-        yield return new WaitForEndOfFrame();
-        PlayStory("OpeningStory"); // 스토리 이름을 전달하여 실행
+        PlayStory("OpeningStory");
     }
 
     // 현재 스토리의 이름을 가져오는 메서드
-    public string GetCurrentStoryName()
+    public static string GetCurrentStoryName()
     {
         return _currentStory != null ? _currentStory.GetType().Name : string.Empty;
     }
 
     // 스토리를 실행하는 메서드
-      // 스토리를 실행하는 메서드
-    public void PlayStory(string storyName)
+    public static void PlayStory(string storyName)
     {
         _previousStory = _currentStory;
 
@@ -57,7 +37,7 @@ public class StoryManager : MonoBehaviour
         {
             // Reflection을 사용해 스토리 클래스 동적 인스턴스화 시도
             _currentStory = (Story)Activator.CreateInstance(storyType);
-            StartCoroutine(StoryStartRoutine());
+            CoroutineUtils.StartCoroutine(StoryStartRoutine());
         }
         catch (Exception e)
         {
@@ -66,7 +46,7 @@ public class StoryManager : MonoBehaviour
     }
 
     // 현재 어셈블리에서 스토리 타입을 찾는 메서드
-    private Type FindStoryType(string storyName)
+    private static Type FindStoryType(string storyName)
     {
         // 현재 실행 중인 어셈블리를 가져옴
         Assembly assembly = Assembly.GetExecutingAssembly();
@@ -77,11 +57,11 @@ public class StoryManager : MonoBehaviour
         return storyType;
     }
 
-
-    private IEnumerator StoryStartRoutine()
+    // 스토리 시작, 업데이트, 종료 루틴을 관리하는 코루틴
+    private static IEnumerator StoryStartRoutine()
     {
         float clearDuration = 1f;
-        yield return new WaitForSeconds(clearDuration);
+        yield return CoroutineUtils.WaitForSeconds(clearDuration);
 
         if (_currentStory != null)
         {
@@ -93,7 +73,8 @@ public class StoryManager : MonoBehaviour
         }
     }
 
-    private void RestoreAll(float duration)
+    // 모든 상태를 초기화하는 메서드
+    private static void RestoreAll(float duration)
     {
         Debug.Log("StoryManager :: RestoreAll Started");
         new FXsClear(duration).Execute();

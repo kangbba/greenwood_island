@@ -13,6 +13,7 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private DialoguePlayer _dialoguePlayer;
     [SerializeField] private ChoiceUI _choiceUI;
     [SerializeField] private CutInUI _cutInUI;
+    [SerializeField] private UserActionUI _userActionUI;
 
 
     public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
@@ -22,4 +23,5 @@ public class SystemCanvas : MonoBehaviour
     public ChoiceUI ChoiceUI { get => _choiceUI;  }
     public CutInUI CutInUI { get => _cutInUI; }
     public TextMeshProUGUI IntertitleText { get => _intertitleText; }
+    public UserActionUI UserActionUI {get => _userActionUI; }
 }

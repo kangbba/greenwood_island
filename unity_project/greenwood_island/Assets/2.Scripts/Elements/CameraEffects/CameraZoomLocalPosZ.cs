@@ -18,14 +18,7 @@ public class CameraZoomLocalPosZ : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        if (CameraController.Instance == null)
-        {
-            Debug.LogWarning("CameraController instance is not available.");
-            yield break;
-        }
-
-        // CameraController의 Zoom 메서드를 사용하여 줌을 조절
-        CameraController.Instance.ZoomLocalPosZ(_localPosZ, _duration, _easeType);
+        CameraController.ZoomLocalPosZ(_localPosZ, _duration, _easeType);
         yield return new WaitForSeconds(_duration);
     }
 }

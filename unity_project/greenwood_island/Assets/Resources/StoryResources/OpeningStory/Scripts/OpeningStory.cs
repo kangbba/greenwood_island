@@ -54,6 +54,35 @@ public class OpeningStory : Story
         new ScreenOverlayFilmClear(),
         new CameraMove2D(Vector2.right * 300, 3f),
 
+        new UserAction(
+            new UserActionParameter(
+                UserActionType.Gift, 
+                new SequentialElement(
+                    new Dialogue(
+                        "Mono",
+                         new Line(EEmotionID.Normal, 0, "선물을 줘야겠다")
+                    )
+                ) 
+            ),
+            new UserActionParameter(
+                UserActionType.Talk, 
+                new SequentialElement(
+                    new Dialogue(
+                        "Mono",
+                         new Line(EEmotionID.Normal, 0, "말을 해야겠다")
+                    )
+                ) 
+            ),
+            new UserActionParameter(
+                UserActionType.Search, 
+                new SequentialElement(
+                    new Dialogue(
+                        "Mono",
+                         new Line(EEmotionID.Normal, 0, "조사를 해야겠다")
+                    )
+                ) 
+            )
+        ) ,
         // 라디오의 불길한 소리
         new Dialogue(
             "라디오",
@@ -122,10 +151,6 @@ public class OpeningStory : Story
         new CameraMove2D(Vector2.zero, 0.5f),
         new ScreenOverlayFilmClear(0.5f),
 
-        new PlaceEnter("PortOutside"),
-        new CameraMove2D(Vector2.zero, 0.5f),
-        new ScreenOverlayFilmClear(0.5f),
-
         new Dialogue(
             "Mono",
             new List<Line>
@@ -137,7 +162,10 @@ public class OpeningStory : Story
                 new Line(EEmotionID.Normal, 0, "이곳이 정말 평범한 곳일까? 교신 속 불길한 목소리가 귓가에 남아 맴돈다."),
             }
         )
+
+
     );
+
 
     // 종료 부분의 요소들
     protected override SequentialElement ExitElements => new

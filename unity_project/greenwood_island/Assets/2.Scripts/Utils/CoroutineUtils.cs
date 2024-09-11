@@ -21,7 +21,7 @@ public static class CoroutineUtils
     }
 
     // 코루틴 정지
-    public static void StopCoroutine(IEnumerator coroutine)
+    public static void StopCoroutine(Coroutine coroutine)
     {
         if (coroutine != null)
         {

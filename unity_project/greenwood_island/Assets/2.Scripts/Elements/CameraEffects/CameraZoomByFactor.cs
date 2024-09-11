@@ -18,13 +18,7 @@ public class CameraZoomByFactor : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        if (CameraController.Instance == null)
-        {
-            Debug.LogWarning("CameraController instance is not available.");
-            yield break;
-        }
-
-        CameraController.Instance.ZoomByFactor(_zoomFactor, _duration, _easeType);
+        CameraController.ZoomByFactor(_zoomFactor, _duration, _easeType);
 
         yield return new WaitForSeconds(_duration);
     }

@@ -3,41 +3,28 @@ using UnityEngine;
 using System.Linq;
 using DG.Tweening;
 
-public class CharacterManager : MonoBehaviour
+public static class CharacterManager
 {
-    private static CharacterManager _instance;
-    public static CharacterManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<CharacterManager>();
-            }
-            return _instance;
-        }
-    }
+    private static Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>();
 
-    private Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>();
+    public static Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
 
-    public Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
-
-    public bool IsExist(string characterID)
+    public static bool IsExist(string characterID)
     {
         return _instantiatedCharacters.ContainsKey(characterID);
     }
 
-    public int GetActiveCharacterCount()
+    public static int GetActiveCharacterCount()
     {
         return _instantiatedCharacters.Count;
     }
 
-    public List<string> GetAllActiveCharacterIDs()
+    public static List<string> GetAllActiveCharacterIDs()
     {
         return _instantiatedCharacters.Keys.ToList();
     }
 
-    public Character InstantiateCharacter(string characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex)
+    public static Character InstantiateCharacter(string characterID, float screenPeroneX, EEmotionID initialEmotionID, int emotionIndex)
     {
         if (IsExist(characterID))
         {
@@ -64,7 +51,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         // 캐릭터를 인스턴스화
-        Character character = Instantiate(characterPrefab, UIManager.Instance.WorldCanvas.CharacterLayer.transform);
+        Character character = Object.Instantiate(characterPrefab, UIManager.Instance.WorldCanvas.CharacterLayer.transform);
         character.SetVisibility(false, 0f);
 
         _instantiatedCharacters.Add(characterID, character);
@@ -76,7 +63,7 @@ public class CharacterManager : MonoBehaviour
         return character;
     }
 
-    public void MoveCharacter(string characterID, float targetScreenPercentageX, float duration, Ease easeType)
+    public static void MoveCharacter(string characterID, float targetScreenPercentageX, float duration, Ease easeType)
     {
         Character character = GetActiveCharacter(characterID);
         if (character == null)
@@ -99,11 +86,11 @@ public class CharacterManager : MonoBehaviour
         rectTransform.DOAnchorPos(new Vector2(targetPosition.x, rectTransform.anchoredPosition.y), duration).SetEase(easeType);
     }
 
-    public void DestroyCharacter(string characterID)
+    public static void DestroyCharacter(string characterID)
     {
         if (_instantiatedCharacters.TryGetValue(characterID, out Character character))
         {
-            Destroy(character.gameObject);
+            Object.Destroy(character.gameObject);
             _instantiatedCharacters.Remove(characterID);
         }
         else
@@ -112,7 +99,7 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    public Character GetActiveCharacter(string characterID)
+    public static Character GetActiveCharacter(string characterID)
     {
         if (IsExist(characterID))
         {
@@ -125,7 +112,7 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    public void SetCharacterEmotion(string characterID, EEmotionID emotionID, int emotionIndex, float duration)
+    public static void SetCharacterEmotion(string characterID, EEmotionID emotionID, int emotionIndex, float duration)
     {
         Character character = GetActiveCharacter(characterID);
         if (character != null)
@@ -134,11 +121,11 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    public void DestroyAllCharacters()
+    public static void DestroyAllCharacters()
     {
         foreach (var character in _instantiatedCharacters.Values)
         {
-            Destroy(character.gameObject);
+            Object.Destroy(character.gameObject);
         }
         _instantiatedCharacters.Clear();
     }

@@ -21,10 +21,10 @@ public class AllCharactersVisibility : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 각 캐릭터에 대해 CharacterExit을 생성하여 실행
-        var activeCharacterIDs = CharacterManager.Instance.GetAllActiveCharacterIDs();
+        var activeCharacterIDs = CharacterManager.GetAllActiveCharacterIDs();
         foreach (var characterID in activeCharacterIDs)
         {
-            Character character = CharacterManager.Instance.GetActiveCharacter(characterID);
+            Character character = CharacterManager.GetActiveCharacter(characterID);
             character.SetVisibility(_alpha, _duration, _easeType);
         }
         yield return new WaitForSeconds(_duration);

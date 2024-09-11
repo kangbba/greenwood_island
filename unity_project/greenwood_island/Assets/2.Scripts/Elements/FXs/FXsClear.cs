@@ -14,7 +14,7 @@ public class FXsClear : Element
     public override IEnumerator ExecuteRoutine()
     {
         // FXManager를 통해 모든 활성화된 FX를 페이드 아웃 후 제거
-        FXManager.Instance.FadeOutAndDestroyAllFX(_duration);
+        FXManager.FadeOutAndDestroyAllFX(_duration);
 
         // 페이드 아웃 완료까지 대기
         yield return new WaitForSeconds(_duration);

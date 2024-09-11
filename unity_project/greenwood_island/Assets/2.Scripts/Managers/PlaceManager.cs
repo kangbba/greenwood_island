@@ -1,41 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaceManager : MonoBehaviour
+public static class PlaceManager
 {
-    private static PlaceManager _instance;
-    public static PlaceManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<PlaceManager>();
+    private static Place _currentPlace; // 현재 활성화된 장소
+    private static Place _previousPlace; // 이전에 활성화된 장소
+    private static List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
 
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("PlaceManager");
-                    _instance = go.AddComponent<PlaceManager>();
-                }
-            }
-            return _instance;
-        }
-    }
+    // 현재 스토리 이름을 가져옴
+    private static string CurrentStoryName => StoryManager.GetCurrentStoryName();
 
-    // 람다식으로 현재 실행 중인 스토리 이름을 자동으로 가져옴
-    private string CurrentStoryName => StoryManager.Instance.GetCurrentStoryName();
+    // 현재 활성화된 장소 반환
+    public static Place CurrentPlace => _currentPlace;
 
-    public Place CurrentPlace => _currentPlace;
-
-    [SerializeField]
-    private Place _placePrefab; // 빈 프리팹을 참조할 변수
-
-    private Place _currentPlace; // 현재 활성화된 장소
-    private Place _previousPlace; // 이전에 활성화된 장소
-    private List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
-
-    // 이미지 ID를 받아 새로운 장소를 생성하는 메서드
-    public Place CreatePlace(string imageID)
+    // 새로운 장소를 생성하는 메서드
+    public static Place CreatePlace(string imageID)
     {
         // 현재 스토리 이름을 사용하여 이미지 로드 시도
         Sprite placeImage = LoadPlaceImage(imageID, CurrentStoryName);
@@ -46,8 +25,16 @@ public class PlaceManager : MonoBehaviour
             return null;
         }
 
+        // PlacePrefab 로드
+        Place placePrefab = Resources.Load<Place>("PlacePrefab");
+        if (placePrefab == null)
+        {
+            Debug.LogError("Failed to load PlacePrefab from Resources/PlacePrefab. Ensure the prefab exists and has a Place component attached.");
+            return null;
+        }
+
         // 새로운 장소를 인스턴스화
-        _currentPlace = Instantiate(_placePrefab, UIManager.Instance.WorldCanvas.PlaceLayer);
+        _currentPlace = Object.Instantiate(placePrefab, UIManager.Instance.WorldCanvas.PlaceLayer);
 
         if (_currentPlace == null)
         {
@@ -65,7 +52,7 @@ public class PlaceManager : MonoBehaviour
     }
 
     // 특정 placeID에 해당하는 활성화된 Place 반환
-    public Place GetActivePlace(string placeID)
+    public static Place GetActivePlace(string placeID)
     {
         foreach (var place in _activePlaces)
         {
@@ -80,7 +67,7 @@ public class PlaceManager : MonoBehaviour
     }
 
     // 장소 이미지를 로드하는 메서드 (스토리 자원 우선, 실패 시 공유 자원 로드)
-    private Sprite LoadPlaceImage(string placeID, string storyName)
+    private static Sprite LoadPlaceImage(string placeID, string storyName)
     {
         // 스토리 경로에서 이미지 로드 시도
         string storyPlacePath = ResourcePathManager.GetResourcePath(placeID, storyName, ResourceType.Place, false);
@@ -106,8 +93,8 @@ public class PlaceManager : MonoBehaviour
         return placeImage;
     }
 
-    // 이전 장소 파괴는 이제 수동으로 처리할 예정이므로 이 메서드는 호출하지 않음
-    private void DestroyPreviousPlace()
+    // 이전 장소를 파괴하는 메서드
+    private static void DestroyPreviousPlace()
     {
         if (_previousPlace == null)
         {
@@ -115,6 +102,6 @@ public class PlaceManager : MonoBehaviour
             return;
         }
         _activePlaces.Remove(_previousPlace); // 리스트에서 제거
-        Destroy(_previousPlace.gameObject);
+        Object.Destroy(_previousPlace.gameObject);
     }
 }

@@ -15,14 +15,7 @@ public class CameraMove2DClear : Element
     }
 
     public override IEnumerator ExecuteRoutine()
-    {
-        if (CameraController.Instance == null)
-        {
-            Debug.LogWarning("CameraController instance is not available.");
-            yield break;
-        }
-
-        // 평면 이동을 원래 위치(Vector2.zero)로 복원
+    { // 평면 이동을 원래 위치(Vector2.zero)로 복원
         yield return new CameraMove2D(Vector2.zero, _duration, _easeType).ExecuteRoutine();
     }
 }

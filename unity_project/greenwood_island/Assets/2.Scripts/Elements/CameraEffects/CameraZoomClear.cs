@@ -18,15 +18,8 @@ public class CameraZoomClear : Element
     }
 
     public override IEnumerator ExecuteRoutine()
-    {
-        if (CameraController.Instance == null)
-        {
-            Debug.LogWarning("CameraController instance is not available.");
-            yield break;
-        }
-
-        // 카메라 줌을 기본값(0)으로 복원
-        CameraController.Instance.ZoomByFactor(0f, _duration, _easeType);
+    { // 카메라 줌을 기본값(0)으로 복원
+        CameraController.ZoomByFactor(0f, _duration, _easeType);
         yield return new WaitForSeconds(_duration);
     }
 }

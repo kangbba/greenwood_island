@@ -14,7 +14,7 @@ public class StoryTransition : Element
     public override IEnumerator ExecuteRoutine()
     {
         // StoryManager를 통해 스토리 실행
-        StoryManager.Instance.PlayStory(_storyID);
+        StoryManager.PlayStory(_storyID);
 
         yield return null;
     }

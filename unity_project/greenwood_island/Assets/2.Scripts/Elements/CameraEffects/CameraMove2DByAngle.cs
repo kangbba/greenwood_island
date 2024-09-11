@@ -26,23 +26,17 @@ public class CameraMove2DByAngle : Element
         Vector2 direction = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)).normalized;
 
         // 현재 PlaneLayer의 localPosition에 direction * radius를 더하여 목표 위치 계산
-        Vector2 currentLocalPos = new Vector2(CameraController.Instance.PlaneLayer.localPosition.x, CameraController.Instance.PlaneLayer.localPosition.y);
+        Vector2 currentLocalPos = new Vector2(CameraController.PlaneLayer.localPosition.x, CameraController.PlaneLayer.localPosition.y);
         return currentLocalPos + direction * _radius;
     }
 
     public override IEnumerator ExecuteRoutine()
     {
-        if (CameraController.Instance == null)
-        {
-            Debug.LogWarning("CameraController instance is not available.");
-            yield break;
-        }
-
         // TargetLocalPosition을 계산하여 카메라를 이동
         Vector2 targetLocalPos = CalculateTargetLocalPosition();
 
         // CameraMovePlane을 이용하여 카메라를 이동시키고, 이후 추가 연출 가능
-        CameraController.Instance.MovePlane(targetLocalPos, _duration, _easeType);
+        CameraController.MovePlane(targetLocalPos, _duration, _easeType);
 
         // 이동 시간만큼 대기
         yield return new WaitForSeconds(_duration);

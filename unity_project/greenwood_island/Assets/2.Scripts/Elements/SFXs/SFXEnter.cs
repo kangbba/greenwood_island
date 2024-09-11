@@ -26,12 +26,12 @@ public class SFXEnter : Element
         if (_isLoop && _loopTerm >= 0f)
         {
             // 반복 재생 시 SFXManager의 PlaySFXLoop 사용
-            sfxSource = SFXManager.Instance.PlaySFXLoop(_sfxID, _volume, _loopTerm); // 볼륨과 반복 간격을 전달
+            sfxSource = SFXManager.PlaySFXLoop(_sfxID, _volume, _loopTerm); // 볼륨과 반복 간격을 전달
         }
         else
         {
             // 단일 재생 시 코루틴을 기다리면서 실행
-            SFXManager.Instance.PlaySFXOnce(_sfxID, _volume); // SFXManager에서 PlaySFXOnceCoroutine 호출
+            SFXManager.PlaySFXOnce(_sfxID, _volume); // SFXManager에서 PlaySFXOnceCoroutine 호출
         }
         yield return null;
     }

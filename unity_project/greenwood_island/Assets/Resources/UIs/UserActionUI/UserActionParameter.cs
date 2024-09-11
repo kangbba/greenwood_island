@@ -5,8 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class UserActionParameter
 {
-    public UserActionType actionType; // 액션 타입
+    private UserActionType actionType; // 액션 타입
     public Action action; // 버튼이 눌렸을 때 실행될 액션
+
+    public UserActionType ActionType { get => actionType; }
 
     public UserActionParameter(UserActionType actionType, Action action)
     {

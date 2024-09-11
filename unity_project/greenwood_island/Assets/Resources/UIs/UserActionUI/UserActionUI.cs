@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System.Linq;
 
 // UserActionType Enum 정의
 public enum UserActionType
 {
+    Exit = 0,
     Talk,
     Search,
-    Gift
+    Gift,
 }
 
 // UserActionConfig 클래스: 각 액션 타입에 대한 설정을 관리하는 클래스
@@ -33,24 +35,37 @@ public class UserActionUI : MonoBehaviour
     [SerializeField] private Image _backgroundBorderImg; // 패널의 배경 테두리 이미지
     [SerializeField] private CanvasGroup _canvasGroup; // 페이드 인/아웃을 위한 CanvasGroup
     [SerializeField] private List<UserActionConfig> _actionConfigs; // 각 액션 타입의 설정 리스트
-    [SerializeField] private Button _finishButton; // 끝내기 버튼
 
     private List<UserActionBtn> _activeButtons = new List<UserActionBtn>(); // 현재 활성화된 버튼들
-    private const float BUTTON_HEIGHT = 200; // 버튼당 높이
-    private const float TOP_PADDING = 0; // 위 여백
-    private const float BOTTOM_PADDING = 50; // 아래 여백
+    private Dictionary<UserActionType, UserActionBtn> _activeBtnsDictionary = new Dictionary<UserActionType, UserActionBtn>();
+    private const float BUTTON_HEIGHT = 150; // 버튼당 높이
+    private const float TOP_PADDING = 100; // 위 여백
+    private const float BOTTOM_PADDING = 100; // 아래 여백
     private float _initialHeight; // 패널의 초기 높이
     private HashSet<UserActionType> _clickedActions = new HashSet<UserActionType>(); // 클릭된 액션 타입들
 
-    public bool IsActionFinished { get; private set; } // 액션이 완료되었는지 판단하는 프로퍼티
+    public bool IsActionFinished
+    {
+        get
+        {
+            // Exit 버튼이 실행되었는지 확인
+            if (_activeBtnsDictionary.ContainsKey(UserActionType.Exit) && _activeBtnsDictionary[UserActionType.Exit].IsActionExecuted)
+            {
+                return true;
+            }
+
+            // 모든 버튼이 실행되었는지 확인
+            bool allActionsExecuted = _activeButtons.All(button => button.IsActionExecuted);
+            
+            return allActionsExecuted;
+        }
+    }
+
 
     private void Awake()
     {
         // 초기화 시 UI 비활성화
         _canvasGroup.alpha = 0f; // 초기 상태에서 투명하게 설정
-
-        // 끝내기 버튼에 대한 리스너 추가
-        _finishButton.onClick.AddListener(() => FinishAction());
     }
 
     // UI 초기화 메서드: 액션 파라미터 리스트를 받아 설정
@@ -59,7 +74,11 @@ public class UserActionUI : MonoBehaviour
         // 기존 버튼 제거
         ClearButtons();
         _clickedActions.Clear(); // 클릭된 액션 타입들 초기화
-        IsActionFinished = false; // 액션 완료 상태 초기화
+
+        bool hasExitAction = actionParameters.Exists(param => param.ActionType == UserActionType.Exit);
+        if(!hasExitAction){
+            actionParameters.Add(new UserActionParameter(UserActionType.Exit, (Action)null));
+        }
 
         // 패널 크기를 먼저 계산하여 설정
         float totalHeight = TOP_PADDING + actionParameters.Count * BUTTON_HEIGHT + BOTTOM_PADDING;
@@ -68,8 +87,9 @@ public class UserActionUI : MonoBehaviour
         // 액션 파라미터에 따른 버튼 생성
         for (int i = 0; i < actionParameters.Count; i++)
         {
-            CreateActionButton(actionParameters[i].actionType, actionParameters[i].action, i);
+            CreateActionButton(actionParameters[i].ActionType, actionParameters[i].action, i);
         }
+
     }
 
     // UI 열기 메서드
@@ -119,9 +139,8 @@ public class UserActionUI : MonoBehaviour
         UserActionBtn newButton = Instantiate(_userActionBtnPrefab, _btnParent);
         newButton.Init(config.icon, config.displayName, () =>
         {
-            action.Invoke();
+            action?.Invoke();
             _clickedActions.Add(actionType);
-            CheckIfAllActionsCompleted();
         });
 
         // 버튼의 앵커 포지션을 설정하여 배치
@@ -129,23 +148,9 @@ public class UserActionUI : MonoBehaviour
         buttonRect.anchoredPosition = new Vector2(0, -index * BUTTON_HEIGHT);
 
         _activeButtons.Add(newButton); // 생성된 버튼을 리스트에 추가
+        _activeBtnsDictionary.Add(actionType, newButton);
     }
 
-    // 모든 액션이 완료되었는지 체크하는 메서드
-    private void CheckIfAllActionsCompleted()
-    {
-        // 모든 액션 타입이 클릭되었는지 확인
-        if (_clickedActions.Count == _activeButtons.Count && _activeButtons.TrueForAll(b => b.IsActionExecuted))
-        {
-            FinishAction();
-        }
-    }
-
-    // 액션 완료 처리 메서드
-    private void FinishAction()
-    {
-        IsActionFinished = true; // 액션 완료 상태로 설정
-    }
 
     // 패널의 크기를 설정하는 메서드
     private void AdjustPanelSize(float totalHeight)

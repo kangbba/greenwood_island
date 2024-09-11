@@ -18,7 +18,7 @@ public class ElementTester : EditorWindow
     private string _searchQuery = ""; // 검색어 저장
     private bool _isAlphabeticalOrder = true; // ABC 정렬 여부
 
-    [MenuItem("GreenWoodIsland/Element Tester")]
+    [MenuItem("GreenwoodIsland/Element Tester")]
     public static void ShowWindow()
     {
         ElementTester window = GetWindow<ElementTester>("Element Tester");

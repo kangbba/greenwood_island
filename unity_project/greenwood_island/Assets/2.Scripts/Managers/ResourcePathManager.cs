@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 public enum ResourceType
@@ -6,14 +7,20 @@ public enum ResourceType
     SFX,
     Place,
     Story,
-    Character // Character 타입 추가
-    // 다른 리소스 타입을 여기에 추가 가능
+    Character
 }
 
 public static class ResourcePathManager
 {
     private const string SHARED_RESOURCE_PATH = "SharedResources"; // 공유 자원의 기본 경로
     private const string STORY_RESOURCE_BASE_PATH = "StoryResources"; // 스토리별 자원의 기본 경로
+    private const string ASSETS_PATH = "Assets/Resources"; // Resources 폴더의 루트 경로
+
+    // 스토리 기본 경로를 반환하는 메서드
+    public static string GetStoryResourcesBasePath()
+    {
+        return Path.Combine(ASSETS_PATH, STORY_RESOURCE_BASE_PATH);
+    }
 
     /// <summary>
     /// 리소스 타입과 스토리 이름을 바탕으로 적합한 경로를 반환합니다.
@@ -49,7 +56,7 @@ public static class ResourcePathManager
                 resourcePath = $"{basicFolderPath}/Scripts/{resourceID}";
                 break;
 
-            case ResourceType.Character: // Character 타입 경로 추가
+            case ResourceType.Character:
                 resourcePath = $"{basicFolderPath}/Characters/{resourceID}/{resourceID}";
                 break;
 

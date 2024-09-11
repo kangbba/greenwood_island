@@ -22,7 +22,7 @@ public class EmotionPlansData : ScriptableObject
     public List<EmotionPlan> EmotionPlans => _emotionPlans;
 
     // 상단 메뉴에서 EmotionPlansData를 생성하도록 MenuItem 추가
-    [MenuItem("GreenWoodIsland/Create Emotion Plans Data")]
+    [MenuItem("GreenwoodIsland/Create Emotion Plans Data")]
     public static void CreateEmotionPlansData()
     {
         // 기본 경로 설정

@@ -101,14 +101,25 @@ public static class SFXManager
     // 특정 시간 간격으로 반복 재생하는 코루틴
     private static IEnumerator LoopWithTerm(AudioSource audioSource, float term)
     {
+        int playCount = 0; // 재생 횟수를 카운트하는 변수
+
         while (audioSource != null)
         {
             if (audioSource.clip == null) yield break; // 클립이 없으면 종료
-            Debug.Log($"SFXManager :: 음원이 반복 재생중입니다. 의도된 동작인지 확인하세요 term : {term}");
+            
+            // 재생 횟수를 10으로 나눈 나머지가 0일 때만 로그를 출력
+            if (playCount % 10 == 0)
+            {
+                Debug.Log($"SFXManager :: 음원이 반복 재생중입니다. AudioSource: {audioSource.name}, Term: {term}. 의도된 동작인지 확인하세요.");
+            }
+            
             audioSource.Play(); // 오디오 재생
             yield return CoroutineUtils.WaitForSeconds(audioSource.clip.length + term); // 클립 재생 시간과 간격만큼 대기
+            
+            playCount++; // 재생 횟수 증가
         }
     }
+
 
     // 특정 SFX ID에 대한 활성화된 SFX 리스트 반환
     public static List<AudioSource> GetActiveSFXs(string sfxID)

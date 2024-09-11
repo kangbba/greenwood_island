@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using System.IO;
 
 public class StoryFileInfo
 {
@@ -7,6 +8,7 @@ public class StoryFileInfo
     public Texture2D Thumbnail { get; }
     public bool IsSprite { get; }
     public string RelativePath { get; }
+    public string FullPath => Path.Combine(Application.dataPath, RelativePath.Substring("Assets".Length)).Replace("\\", "/");
 
     public StoryFileInfo(string fileName, string relativePath)
     {

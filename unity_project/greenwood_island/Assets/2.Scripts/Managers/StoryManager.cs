@@ -11,7 +11,7 @@ public static class StoryManager
     // StoryManager 초기화 메서드
     public static void Init()
     {
-        PlayStory("OpeningStory");
+        PlayStory("FirstKateStory");
     }
 
     // 현재 스토리의 이름을 가져오는 메서드

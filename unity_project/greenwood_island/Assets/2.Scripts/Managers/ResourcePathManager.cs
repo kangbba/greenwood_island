@@ -7,7 +7,7 @@ public enum ResourceType
     SFX,
     Place,
     Story,
-    Character
+    CharacterData
 }
 
 public static class ResourcePathManager
@@ -56,8 +56,8 @@ public static class ResourcePathManager
                 resourcePath = $"{basicFolderPath}/Scripts/{resourceID}";
                 break;
 
-            case ResourceType.Character:
-                resourcePath = $"{basicFolderPath}/Characters/{resourceID}/{resourceID}";
+            case ResourceType.CharacterData:
+                resourcePath = $"{basicFolderPath}/CharacterDatas/{resourceID}";
                 break;
 
             default:

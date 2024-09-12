@@ -3,50 +3,43 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public enum EEmotionID
+public class Character : MonoBehaviour
 {
-    Happy,
-    Smile,
-    Normal,
-    Sad,
-    Crying,
-    Angry,
-    Panic,
-    Stumped,
-    CryingHappy,
-}
-
-public abstract class Character : MonoBehaviour
-{
-    // 반드시 상속받는 클래스에서 구현해야 하는 추상 속성
-    protected abstract string CharacterName_KO { get; }
-
-    [SerializeField] private CanvasGroup _graphic;
-    [SerializeField] private RectTransform _rectTransform;
+    [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Image _img; // 캐릭터 스프라이트용 이미지 컴포넌트
-    [SerializeField] private EmotionPlansData _emotionPlansData; // 감정 계획을 관리하는 ScriptableObject
-    [SerializeField] private Color _mainColor; // 캐릭터의 메인 색상
+    private CharacterData _characterData; // 캐릭터 정보 관리용 ScriptableObject
 
-    protected virtual List<EmotionPlan> EmotionPlans => _emotionPlansData != null ? _emotionPlansData.EmotionPlans : new List<EmotionPlan>();
+    // 감정 계획을 관리하는 속성
+    protected List<EmotionPlan> EmotionPlans => _characterData != null ? _characterData.EmotionPlans : new List<EmotionPlan>();
 
-    public EmotionPlansData EmotionPlansData => _emotionPlansData;
-    public Color MainColor => _mainColor; // 메인 색상에 대한 공개 속성
+    public Color MainColor => _characterData != null ? _characterData.MainColor : Color.white;
+    public string CharacterName_KO => _characterData != null ? _characterData.CharacterName_KO : "Unknown";
 
-    // 상속받는 클래스의 이름을 CharacterID로 반환
-    protected virtual string CharacterID => GetType().Name;
+    // 캐릭터의 ID를 바인딩
+    protected string CharacterID => _characterData != null ? _characterData.name : GetType().Name;
 
-    public virtual void SetVisibility(bool visible, float duration, Ease easeType = Ease.OutQuad)
+    // RectTransform은 _img에서 가져옴
+    private RectTransform RectTransform => _img.GetComponent<RectTransform>();
+
+    // CharacterData를 초기화하는 메서드
+    public void Init(CharacterData characterData)
+    {
+        _characterData = characterData;
+        Debug.Log($"Character initialized with data: {CharacterName_KO}");
+    }
+
+    public void SetVisibility(bool visible, float duration, Ease easeType = Ease.OutQuad)
     {
         float targetAlpha = visible ? 1f : 0f;
-        _graphic.DOFade(targetAlpha, duration).SetEase(easeType);
+        _canvasGroup.DOFade(targetAlpha, duration).SetEase(easeType);
     }
 
-    public virtual void SetVisibility(float targetAlpha, float duration, Ease easeType = Ease.OutQuad)
+    public void SetVisibility(float targetAlpha, float duration, Ease easeType = Ease.OutQuad)
     {
-        _graphic.DOFade(targetAlpha, duration).SetEase(easeType);
+        _canvasGroup.DOFade(targetAlpha, duration).SetEase(easeType);
     }
 
-    public virtual void ChangeEmotion(EEmotionID emotionID, int index, float duration = 1f)
+    public void ChangeEmotion(string emotionID, int index, float duration = 1f)
     {
         // 해당 감정을 EmotionPlans에서 찾음
         EmotionPlan selectedPlan = EmotionPlans.Find(plan => plan.EmotionID == emotionID);
@@ -63,14 +56,25 @@ public abstract class Character : MonoBehaviour
             return;
         }
 
-        // 새로운 스프라이트 설정
-        Sprite newSprite = selectedPlan.EmotionSprites[index];
+        // 스프라이트와 설정 가져오기
+        SpriteWithSettings spriteSettings = selectedPlan.EmotionSprites[index];
+        Sprite newSprite = spriteSettings.Sprite;
 
         // duration이 0일 때: 즉시 이미지 변경
         if (duration <= 0f)
         {
             _img.sprite = newSprite;
-            _img.color = new Color(_img.color.r, _img.color.g, _img.color.b, 1f); // 알파 값을 1로 설정
+            _img.SetNativeSize();
+            _img.color = Color.white;
+
+            // 스프라이트 피벗에 맞춰 RectTransform 피벗 조정
+            if (newSprite != null)
+            {
+                RectTransform.pivot = newSprite.pivot / newSprite.rect.size;
+                RectTransform.localScale = spriteSettings.LocalScaleFactor * Vector3.one;
+                RectTransform.anchoredPosition = spriteSettings.Offset; // 오프셋 적용
+            }
+
             Debug.Log($"Emotion changed to '{emotionID} {index}' instantly.");
             return;
         }
@@ -82,6 +86,14 @@ public abstract class Character : MonoBehaviour
         // 새로운 스프라이트를 투명하게 설정
         _img.sprite = newSprite;
         _img.color = new Color(_img.color.r, _img.color.g, _img.color.b, 0);
+
+        // 스프라이트 피벗에 맞춰 RectTransform 피벗 조정
+        if (newSprite != null)
+        {
+            RectTransform.pivot = newSprite.pivot / newSprite.rect.size;
+            RectTransform.localScale = spriteSettings.LocalScaleFactor * Vector3.one;
+            RectTransform.anchoredPosition = spriteSettings.Offset; // 오프셋 적용
+        }
 
         // 시퀀스로 애니메이션 처리: 이전 스프라이트는 사라지고, 새로운 스프라이트는 나타남
         Sequence transitionSequence = DOTween.Sequence();

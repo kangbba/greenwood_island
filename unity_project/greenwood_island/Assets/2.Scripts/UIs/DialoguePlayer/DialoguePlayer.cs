@@ -27,12 +27,14 @@ public class DialoguePlayer : MonoBehaviour
     private void Start()
     {
         ShowUp(false, 0f);
-        ClearAll(0f);
     }
-    public void ClearAll(float duration){
-        SetCharacterText("", Color.clear, duration);
+    public void ClearDialogueText(){
         _dialogueText.ClearText();
-    }  
+    }
+    public void ClearCharacterText(){
+
+        SetCharacterText("");
+    }
 
    // CanvasGroup을 페이드 아웃하는 메서드
     public void FadeInDialogueText(float duration)
@@ -43,18 +45,17 @@ public class DialoguePlayer : MonoBehaviour
     {
         _dialogueText.FadeOut(duration);
     }
+    public void SetCharacterTextClor(Color targetColor, float duration){
+        _characterText.DOColor(targetColor, duration);
+    }
     public IEnumerator ShowLineRoutine(Line line, float speed){
         _dialogueText.InitText(line.Sentence);
         yield return _dialogueText.ShowTextRoutine(speed, TextDisplayer.RevealStyle.WithMouseClick);
     }
 
-    public void SetCharacterText(string s, Color targetColor, float duration)
+    public void SetCharacterText(string s)
     {
         _characterText.SetText(s);
-        // 현재 색상에서 targetColor로 색상 변경 애니메이션
-        _characterText.DOKill();
-        _characterText.color = Color.clear;
-        _characterText.DOColor(targetColor, duration);
     }
 
     public void CompleteCurSentence()

@@ -3,12 +3,12 @@
 [System.Serializable]
 public class Line
 {
-    private EEmotionID _emotionID;
+    private string _emotionID;
     private int _emotionIndex;
     private string _sentence;
     private float _playSpeed;
 
-    public Line(EEmotionID emotionID, int emotionIndex, string sentence, float playSpeed = 700)
+    public Line(string sentence, string emotionID = "Normal", int emotionIndex = 0, float playSpeed = 1000)
     {
         this._emotionID = emotionID;
         this._emotionIndex = emotionIndex;
@@ -16,7 +16,7 @@ public class Line
         this._playSpeed = playSpeed;
     }
 
-    public EEmotionID EmotionID { get => _emotionID;  }
+    public string EmotionID { get => _emotionID;  }
     public int EmotionIndex { get => _emotionIndex; }
     public string Sentence { get => _sentence; }
     public float PlaySpeed { get => _playSpeed; }

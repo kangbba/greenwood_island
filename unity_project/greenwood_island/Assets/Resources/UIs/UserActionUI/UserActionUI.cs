@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using System.Linq;
+using System.Collections;
 
 // UserActionType Enum 정의
 public enum UserActionType
@@ -42,7 +43,6 @@ public class UserActionUI : MonoBehaviour
     private const float TOP_PADDING = 100; // 위 여백
     private const float BOTTOM_PADDING = 100; // 아래 여백
     private float _initialHeight; // 패널의 초기 높이
-    private HashSet<UserActionType> _clickedActions = new HashSet<UserActionType>(); // 클릭된 액션 타입들
 
     public bool IsActionFinished
     {
@@ -73,11 +73,10 @@ public class UserActionUI : MonoBehaviour
     {
         // 기존 버튼 제거
         ClearButtons();
-        _clickedActions.Clear(); // 클릭된 액션 타입들 초기화
 
         bool hasExitAction = actionParameters.Exists(param => param.ActionType == UserActionType.Exit);
         if(!hasExitAction){
-            actionParameters.Add(new UserActionParameter(UserActionType.Exit, (Action)null));
+            actionParameters.Add(new UserActionParameter(UserActionType.Exit, null));
         }
 
         // 패널 크기를 먼저 계산하여 설정
@@ -87,7 +86,7 @@ public class UserActionUI : MonoBehaviour
         // 액션 파라미터에 따른 버튼 생성
         for (int i = 0; i < actionParameters.Count; i++)
         {
-            CreateActionButton(actionParameters[i].ActionType, actionParameters[i].action, i);
+            CreateActionButton(actionParameters[i].ActionType, actionParameters[i].actionCoroutine, i);
         }
 
     }
@@ -122,11 +121,8 @@ public class UserActionUI : MonoBehaviour
         }
         _activeButtons.Clear();
     }
-
-    // 버튼 생성 메서드: 액션 타입과 액션을 받아 버튼 생성 및 초기화
-    private void CreateActionButton(UserActionType actionType, Action action, int index)
+    private void CreateActionButton(UserActionType actionType, Func<IEnumerator> actionCoroutine, int index)
     {
-        // 액션 타입에 맞는 설정을 찾음
         var config = _actionConfigs.Find(c => c.actionType == actionType);
 
         if (config == null)
@@ -135,21 +131,29 @@ public class UserActionUI : MonoBehaviour
             return;
         }
 
-        // 버튼 인스턴스 생성
         UserActionBtn newButton = Instantiate(_userActionBtnPrefab, _btnParent);
-        newButton.Init(config.icon, config.displayName, () =>
-        {
-            action?.Invoke();
-            _clickedActions.Add(actionType);
-        });
+        newButton.Init(config.icon, config.displayName, () => ButtonActionCoroutine(actionType, actionCoroutine));
 
-        // 버튼의 앵커 포지션을 설정하여 배치
         RectTransform buttonRect = newButton.GetComponent<RectTransform>();
         buttonRect.anchoredPosition = new Vector2(0, -index * BUTTON_HEIGHT);
 
-        _activeButtons.Add(newButton); // 생성된 버튼을 리스트에 추가
+        _activeButtons.Add(newButton);
         _activeBtnsDictionary.Add(actionType, newButton);
     }
+
+    private IEnumerator ButtonActionCoroutine(UserActionType actionType, Func<IEnumerator> actionCoroutine)
+    {
+        if(actionCoroutine == null){
+            yield break;
+        }
+        Close(0.5f); // UI를 닫는 애니메이션 실행
+        yield return new WaitForSeconds(0.5f); // 닫는 애니메이션 대기
+
+        yield return StartCoroutine(actionCoroutine?.Invoke()); // 액션 코루틴 실행
+        Open(0.5f); // UI를 여는 애니메이션 실행
+        yield return new WaitForSeconds(0.5f); // 여는 애니메이션 대기
+    }
+
 
 
     // 패널의 크기를 설정하는 메서드

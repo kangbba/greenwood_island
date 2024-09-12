@@ -73,11 +73,25 @@ public class StoryEditor : EditorWindow
     {
         foreach (var folder in _storyFolders)
         {
-            if (GUILayout.Button(folder, GUILayout.Height(60), GUILayout.Width(200)))
+            EditorGUILayout.BeginHorizontal();
+
+            // 스토리 버튼
+            if (GUILayout.Button(folder, GUILayout.Height(60), GUILayout.Width(160)))
             {
                 _selectedFolder = folder;
                 LoadFolderContents();
             }
+
+            // 삭제 버튼
+            if (GUILayout.Button("X", GUILayout.Height(60), GUILayout.Width(30)))
+            {
+                if (EditorUtility.DisplayDialog("폴더 삭제", $"정말 '{folder}' 폴더를 삭제하시겠습니까?", "삭제", "취소"))
+                {
+                    DeleteStoryFolder(folder);
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
         if (GUILayout.Button("+", GUILayout.Height(60), GUILayout.Width(200)))
@@ -112,7 +126,8 @@ public class StoryEditor : EditorWindow
             GUILayout.Label("선택된 폴더에 파일이 없습니다.");
         }
     }
-    // StoryEditor.cs에서의 스토리 폴더 생성 메서드
+
+    // 스토리 폴더와 스토리 스크립트를 생성하는 메서드
     public void CreateStoryFolders(string storyName)
     {
         string basePath = ResourcePathManager.GetStoryResourcesBasePath();
@@ -128,9 +143,104 @@ public class StoryEditor : EditorWindow
             }
         }
 
+        // 스토리 스크립트 생성
+        CreateStoryScript(storyName);
+
         AssetDatabase.Refresh();
         Debug.Log($"새로운 스토리 '{storyName}' 생성이 완료되었습니다.");
         LoadStoryFolders();
     }
 
+    // 스토리 스크립트를 생성하고 추상 클래스 구현을 수행하는 메서드
+    private void CreateStoryScript(string storyName)
+    {
+        string scriptPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), storyName, "Scripts");
+        string scriptFilePath = Path.Combine(scriptPath, $"{storyName}.cs");
+
+        if (!Directory.Exists(scriptPath))
+        {
+            Directory.CreateDirectory(scriptPath);
+        }
+
+        if (!File.Exists(scriptFilePath))
+        {
+            string scriptContent = $@"
+using UnityEngine;
+
+public class {storyName} : Story
+{{
+    // {storyName} 스토리의 스크립트 로직을 여기에 작성하세요.
+}}
+";
+            File.WriteAllText(scriptFilePath, scriptContent);
+            Debug.Log($"{storyName}.cs 스크립트가 생성되었습니다.");
+
+            // 스크립트 생성 후 AssetDatabase 업데이트
+            AssetDatabase.Refresh();
+        }
+        else
+        {
+            Debug.LogWarning($"{storyName}.cs 스크립트는 이미 존재합니다.");
+        }
+    }
+
+    private void DeleteStoryFolder(string folderName)
+    {
+        string folderPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), folderName);
+
+        if (Directory.Exists(folderPath))
+        {
+            try
+            {
+                // 폴더가 사용 중이거나 잠겨있는 경우를 대비해 폴더 삭제를 몇 번 시도
+                DeleteFolderWithRetries(folderPath, 5); // 최대 5회 시도
+                
+                AssetDatabase.Refresh(); // 자산 데이터베이스 갱신
+                
+                EditorApplication.delayCall += () =>
+                {
+                    LoadStoryFolders(); // 변경된 폴더 내용 다시 로드
+                    Repaint(); // 에디터 창 다시 그리기
+                };
+                
+                Debug.Log($"{folderName} 폴더가 삭제되었습니다.");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"폴더 삭제 중 오류가 발생했습니다: {e.Message}");
+                EditorApplication.delayCall += () => AssetDatabase.Refresh();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("삭제할 폴더를 찾을 수 없습니다.");
+        }
+    }
+
+    // 폴더를 삭제하며 최대 시도 횟수를 설정하는 메서드
+    private void DeleteFolderWithRetries(string folderPath, int maxRetries)
+    {
+        for (int attempt = 0; attempt < maxRetries; attempt++)
+        {
+            try
+            {
+                Directory.Delete(folderPath, false); // 폴더와 하위 내용 모두 삭제
+                if (!Directory.Exists(folderPath)) // 삭제가 성공했는지 확인
+                {
+                    return;
+                }
+            }
+            catch (IOException)
+            {
+                System.Threading.Thread.Sleep(500); // 0.5초 대기 후 재시도
+            }
+            catch (UnauthorizedAccessException)
+            {
+                System.Threading.Thread.Sleep(500); // 0.5초 대기 후 재시도
+            }
+        }
+
+        // 삭제 실패 시 예외 발생
+        throw new IOException($"폴더를 삭제할 수 없습니다: {folderPath}");
+    }
 }

@@ -5,7 +5,7 @@ public static class PunctuationUtils
     // 구두점 우선순위 배열, 긴 구두점이 먼저
     public static readonly string[] PrioritizedPunctuations = new string[]
     {
-        "...", "..?", "..!", "!!", "..", "?", "!", ".", "~", ","
+        "...", "..?", "..!", "!!", "..", "?", "!", ".", "~"
     };
 
     // 주어진 문자열이 커스텀 구두점에 해당하는지 확인하는 함수

@@ -32,34 +32,35 @@ public class Dialogue : Element
             Debug.LogWarning("Dialogue :: dialoguePlayer is null");
             yield break;
         }
-        dialoguePlayer.gameObject.SetActive(true);
-        dialoguePlayer.ShowUp(true, 0.5f);
-        yield return new WaitForSeconds(0.5f);
 
-        // 첫 문장 감정 상태 설정
+        //클리어
+        dialoguePlayer.gameObject.SetActive(true);
+        dialoguePlayer.ClearAll(0f);
+
+        // 캐릭터 텍스트, 이미지
         var firstLine = _lines[0];
         EEmotionID recentEmotionID = firstLine.EmotionID;
         int recentEmotionIndex = firstLine.EmotionIndex;
-
-        // 캐릭터 로드 시도
         Character character = CharacterManager.GetActiveCharacter(_characterID);
         if (character != null)
         {
             Debug.LogWarning($"Dialogue :: Character '{_characterID}' not found.");
-            dialoguePlayer.SetCharacterText(_characterID, character.MainColor); // 캐릭터 색상 설정
-            CharacterManager.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex, 1f);
+            dialoguePlayer.SetCharacterText(_characterID, character.MainColor, .5f); // 캐릭터 색상 설정
+            CharacterManager.SetCharacterEmotion(_characterID, firstLine.EmotionID, firstLine.EmotionIndex, .3f);
         }
         else{
-            dialoguePlayer.SetCharacterText(_characterID, Color.white); // 캐릭터 색상 설정
+            dialoguePlayer.SetCharacterText(_characterID, Color.white, .3f); // 캐릭터 색상 설정
         }
+
+        //다이얼로그 텍스트
+        dialoguePlayer.FadeInDialogueText(.3f);
+        dialoguePlayer.ShowUp(true, .3f);
+        yield return new WaitForSeconds(.3f);
+
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
         {
             Line line = _lines[i];
-            dialoguePlayer.InitDialogueText(line);
-            dialoguePlayer.FadeInCharacterText(.3f);
-            dialoguePlayer.FadeInDialogueText(.3f);
-            yield return new WaitForSeconds(.3f);
 
             EEmotionID emotionID = line.EmotionID;
             int emotionIndex = line.EmotionIndex;
@@ -76,17 +77,18 @@ public class Dialogue : Element
 
             recentEmotionID = line.EmotionID;
             recentEmotionIndex = line.EmotionIndex;
-            yield return dialoguePlayer.ShowLineRoutine(line.PlaySpeed);
-            
 
+            dialoguePlayer.ClearAll(0f);
+            dialoguePlayer.FadeInDialogueText(.3f);
+            yield return new WaitForSeconds(.3f);
+
+            yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeed);
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-            dialoguePlayer.FadeOutCharacterText(.3f);
+            
             dialoguePlayer.FadeOutDialogueText(.3f);
             yield return new WaitForSeconds(.3f);
         }
-        dialoguePlayer.FadeOutCharacterText(1f); // 캐릭터 색상 설정
-        dialoguePlayer.FadeOutDialogueText(1f);
-        yield return new WaitForSeconds(1f);
-        dialoguePlayer.gameObject.SetActive(false);
+        dialoguePlayer.FadeOutDialogueText(.3f);
+        yield return new WaitForSeconds(.3f);
     }
 }

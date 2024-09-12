@@ -32,36 +32,36 @@ public class TextDisplayer : MonoBehaviour
             _canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
     }
-    // 텍스트를 페이드 아웃하는 함수
-    public void FadeOut(float duration, Ease ease = Ease.OutQuad)
-    {
-        _canvasGroup.DOFade(0f, duration).SetEase(ease).OnComplete(() =>
-        {
-            _canvasGroup.interactable = false;
-            _canvasGroup.blocksRaycasts = false;
-        });
-    }
 
     // 텍스트를 페이드 인하는 함수
     public void FadeIn(float duration, Ease ease = Ease.OutQuad)
     {
         _canvasGroup.DOFade(1f, duration).SetEase(ease).OnStart(() =>
         {
-            _canvasGroup.interactable = true;
-            _canvasGroup.blocksRaycasts = true;
         });
     }
-
-    public void InitText(string text)
+    // 텍스트를 페이드 아웃하는 함수
+    public void FadeOut(float duration, Ease ease = Ease.OutQuad)
     {
+        _canvasGroup.DOFade(0f, duration).SetEase(ease).OnComplete(() =>
+        {
+        });
+    }
+    public void ClearText(){
         StopAllCoroutines();
-        _mainText.text = text; // 메인 텍스트에 먼저 텍스트를 설정하여 줄 정보를 가져옴
+        _mainText.text = ""; // 메인 텍스트에 먼저 텍스트를 설정하여 줄 정보를 가져옴
         // 기존 컨테이너 제거
         foreach (var container in _lineContainers)
         {
             Destroy(container.gameObject);
         }
         _lineContainers.Clear();
+    }
+    public void InitText(string text)
+    {
+        StopAllCoroutines();
+        ClearText();
+        _mainText.text = text; // 메인 텍스트에 먼저 텍스트를 설정하여 줄 정보를 가져옴
 
         // TMP 라인 정보 가져오기
         _mainText.ForceMeshUpdate(); // 텍스트 레이아웃 강제 업데이트

@@ -54,35 +54,35 @@ public class OpeningStory : Story
         new ScreenOverlayFilmClear(),
         new CameraMove2D(Vector2.right * 300, 3f),
 
-        new UserAction(
-            new UserActionParameter(
-                UserActionType.Gift, 
-                new SequentialElement(
-                    new Dialogue(
-                        "Mono",
-                         new Line(EEmotionID.Normal, 0, "선물을 줘야겠다")
-                    )
-                ) 
-            ),
-            new UserActionParameter(
-                UserActionType.Talk, 
-                new SequentialElement(
-                    new Dialogue(
-                        "Mono",
-                         new Line(EEmotionID.Normal, 0, "말을 해야겠다")
-                    )
-                ) 
-            ),
-            new UserActionParameter(
-                UserActionType.Search, 
-                new SequentialElement(
-                    new Dialogue(
-                        "Mono",
-                         new Line(EEmotionID.Normal, 0, "조사를 해야겠다")
-                    )
-                ) 
-            )
-        ) ,
+        // new UserAction(
+        //     new UserActionParameter(
+        //         UserActionType.Gift, 
+        //         new SequentialElement(
+        //             new Dialogue(
+        //                 "Mono",
+        //                  new Line(EEmotionID.Normal, 0, "선물을 줘야겠다")
+        //             )
+        //         ) 
+        //     ),
+        //     new UserActionParameter(
+        //         UserActionType.Talk, 
+        //         new SequentialElement(
+        //             new Dialogue(
+        //                 "Mono",
+        //                  new Line(EEmotionID.Normal, 0, "말을 해야겠다")
+        //             )
+        //         ) 
+        //     ),
+        //     new UserActionParameter(
+        //         UserActionType.Search, 
+        //         new SequentialElement(
+        //             new Dialogue(
+        //                 "Mono",
+        //                  new Line(EEmotionID.Normal, 0, "조사를 해야겠다")
+        //             )
+        //         ) 
+        //     )
+        // ) ,
         // 라디오의 불길한 소리
         new Dialogue(
             "라디오",
@@ -95,7 +95,7 @@ public class OpeningStory : Story
 
         // 라이언의 독백
         new Dialogue(
-            "Mono",
+            "",
             new List<Line>
             {
                 new Line(EEmotionID.Normal, 0, "배는 거친 파도에 휘청거리고, 바깥에서는 빗방울이 떨어지며 윈드실드에 부딪힌다."),
@@ -108,7 +108,7 @@ public class OpeningStory : Story
         new CameraShake(),
 
         new Dialogue(
-            "Mono",
+            "",
             new List<Line>
             {
                 new Line(EEmotionID.Normal, 0, "한 노인은 선실 구석에 앉아, 아무 말 없이 파도만 바라보고 있다."),
@@ -152,7 +152,7 @@ public class OpeningStory : Story
         new ScreenOverlayFilmClear(0.5f),
 
         new Dialogue(
-            "Mono",
+            "",
             new List<Line>
             {
                 new Line(EEmotionID.Normal, 0, "배는 점차 안정을 찾고, 안개가 서서히 걷히며 그린우드 섬의 고요한 전경이 모습을 드러낸다."),

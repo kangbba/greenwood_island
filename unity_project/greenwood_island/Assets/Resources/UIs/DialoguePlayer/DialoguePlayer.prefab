@@ -261,7 +261,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _showDebug: 0
   _panelRectTransform: {fileID: 8219515785612320796}
-  _cavasGroup: {fileID: 6506748226271867384}
   _characterText: {fileID: 768922501430428279}
   _dialogueText: {fileID: 3141314635230122350}
   _dialogueGuide: {fileID: 7917896055654264134}
@@ -498,6 +497,7 @@ GameObject:
   - component: {fileID: 933266183352198294}
   - component: {fileID: 3342513146408406587}
   - component: {fileID: 3141314635230122350}
+  - component: {fileID: 5632661219750844094}
   m_Layer: 5
   m_Name: Text Displayer
   m_TagString: Untagged
@@ -633,3 +633,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d886f81371b80442bb685ceeb8153e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &5632661219750844094
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8472997731612493544}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

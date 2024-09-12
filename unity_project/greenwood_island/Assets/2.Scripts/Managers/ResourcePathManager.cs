@@ -7,7 +7,8 @@ public enum ResourceType
     SFX,
     Place,
     Story,
-    CharacterData
+    CharacterData,
+    Imagination,
 }
 
 public static class ResourcePathManager
@@ -60,6 +61,10 @@ public static class ResourcePathManager
                 resourcePath = $"{basicFolderPath}/CharacterDatas/{resourceID}";
                 break;
 
+            case ResourceType.Imagination:
+                resourcePath = $"{basicFolderPath}/Imaginations/{resourceID}";
+                break;
+                
             default:
                 Debug.LogWarning($"Unknown resource type: {resourceType}");
                 break;

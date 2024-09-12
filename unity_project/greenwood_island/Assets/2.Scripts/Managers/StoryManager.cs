@@ -11,7 +11,7 @@ public static class StoryManager
     // StoryManager 초기화 메서드
     public static void Init()
     {
-        PlayStory("FirstKateStory");
+        PlayStory("OpeningStory");
     }
 
     // 현재 스토리의 이름을 가져오는 메서드
@@ -86,6 +86,7 @@ public static class StoryManager
         new CutInClear(duration).Execute();
         new PlaceOverlayFilmClear(duration).Execute();
         new ScreenOverlayFilmClear(duration).Execute();
+        new ImaginationClear(duration).Execute();
         Debug.Log("StoryManager :: RestoreAll Completed");
     }
 }

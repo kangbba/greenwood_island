@@ -14,6 +14,7 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private ChoiceUI _choiceUI;
     [SerializeField] private CutInUI _cutInUI;
     [SerializeField] private UserActionUI _userActionUI;
+    [SerializeField] private Transform _imaginationLayer;
 
 
     public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
@@ -24,4 +25,5 @@ public class SystemCanvas : MonoBehaviour
     public CutInUI CutInUI { get => _cutInUI; }
     public TextMeshProUGUI IntertitleText { get => _intertitleText; }
     public UserActionUI UserActionUI {get => _userActionUI; }
+    public Transform ImaginationLayer { get => _imaginationLayer; }
 }

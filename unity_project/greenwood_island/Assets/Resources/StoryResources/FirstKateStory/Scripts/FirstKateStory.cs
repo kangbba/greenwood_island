@@ -1,9 +1,6 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
-/*처음에는 태풍 속에 도착했는데, 지금은 너무나  이곳에 조금씩 익숙해지는 내가 신기할 정도다. 오늘도 케이트는 빵집 앞에서 바쁘게 움직인다. 아침마다 빵 냄새를 풍기면서 일하는 게 일상인 사람이라니, 정말 대단하다.
-*/
 public class FirstKateStory : Story
 {
     // FirstKateStory 스토리의 스크립트 로직을 여기에 작성하세요.
@@ -11,7 +8,9 @@ public class FirstKateStory : Story
         new ScreenOverlayFilm(Color.black),
         new PlaceEnter("BakeryFront"),
         new CameraZoomByFactor(zoomFactor: 0.3f, duration: 0f),
-        new CameraMove2DByAngle(-80, 160f, duration: 0f)
+        new CameraMove2DByAngle(-80, 160f, duration: 0f),
+        new SFXEnter("BirdChirp1", 1f, true, 1f),
+        new SFXEnter("BirdChirpLong1", 1f, true, 3f)
     );
 
     protected override SequentialElement UpdateElements => new (
@@ -46,7 +45,7 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line( "라이언! 또 왔네? 빵 냄새가 그렇게 좋아?")
+                new Line("라이언! 또 왔네? 빵 냄새가 그렇게 좋아?")
             }
         ),
 
@@ -54,9 +53,9 @@ public class FirstKateStory : Story
             "",
             new List<Line>
             {
-                new Line( "케이트, 그녀는 이 마을에서 작은 베이커리를 운영하고 있다."),
-                new Line( "내가 마을에 도착하자마자 말을 걸어주며 마을에 적응하는데 도움을 주었다."),
-                new Line( "작은 베이커리이지만 그 맛은 훌륭하다. 마을 사람들도 이곳을 참 좋아한다."),
+                new Line("케이트, 그녀는 이 마을에서 작은 베이커리를 운영하고 있다."),
+                new Line("내가 마을에 도착하자마자 말을 걸어주며 마을에 적응하는데 도움을 주었다."),
+                new Line("작은 베이커리이지만 그 맛은 훌륭하다. 마을 사람들도 이곳을 참 좋아한다."),
             }
         ),
 
@@ -103,26 +102,32 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("당연하지. 오늘은 크러스트를 더 바삭하게 만들려고 일부러 굽는 온도를 조금 높였어. 식감이 달라질 거야.", "Normal"),
+                new Line("당연하지. 오늘은 빵 속이 더 폭신폭신하고 부드럽게 만들어보려고 조금 더 시간을 들였어. 먹으면 네가 바로 알 거야.", "Normal"),
             }
         ),
 
+        new ImaginationEnter(
+            "Bread",
+            .35f,
+            1f
+        ),
         new Dialogue(
             "",
             new List<Line>
             {
                 new Line("그녀가 내미는 빵은 언제나 특별하다."),
-                new Line("맛있다는 말로는 설명이 안 되는, 뭔가 더 깊은 게 있다."),
+                new Line("화려하지 않고 소박하지만, 말로는 설명 할 수 없는, 뭔가 더 깊은 게 있다."),
                 new Line("아마 케이트의 열정과 정성이 담겨 있어서 그런 거겠지."),
-                new Line("한 입 베어 물 때마다 이 섬에서의 일상이 점점 더 좋아진다."),
+                new Line("한 입 베어 물 때마다 입안 가득 퍼지는 폭신한 식감이, 이 섬에서의 일상이 점점 더 좋아진다."),
             }
         ),
 
+        new ImaginationClear(),
         new Dialogue(
             "Ryan",
             new List<Line>
             {
-                new Line("확실히... 바삭하네. 네가 왜 이 빵을 그렇게 자랑하는지 알겠어."),
+                new Line("확실히... 진짜 부드럽네. 네가 왜 이 빵을 그렇게 자랑하는지 알겠어."),
             }
         ),
 
@@ -143,7 +148,6 @@ public class FirstKateStory : Story
                 new Line("케이트의 웃음과 빵 냄새가 가득한 이 마을에서, 오늘도 하루가 이렇게 흘러간다."),
             }
         )
-
     );
 
     protected override SequentialElement ExitElements => new ();

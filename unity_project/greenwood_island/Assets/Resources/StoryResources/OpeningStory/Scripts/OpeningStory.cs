@@ -78,6 +78,11 @@ public class OpeningStory : Story
         ),
         new CameraShake(),
 
+        new ImaginationEnter(
+            "FerryOldMan",
+            1f,
+            ColorUtils.CustomColor("516FB7")
+        ),
         new Dialogue(
             "",
             new List<Line>
@@ -98,6 +103,7 @@ public class OpeningStory : Story
         ),
         new CameraShake(),
         new CameraShake(3),
+        new ImaginationClear(),
         new Dialogue(
             "Mono",
             new List<Line>
@@ -115,24 +121,28 @@ public class OpeningStory : Story
         ),
         new ParallelElement(
             new PlaceFilm(Color.clear, 1f),
-            new PlaceEnter("LessStormSky"),
+            new PlaceEnter("ShipSide"),
             new PlaceFilm(Color.clear, 0f),
+            new CameraMove2D(Vector2.right * -497f, 0f),
             new PlaceFilmClear(1f)
         ),
-        new CameraMove2D(Vector2.zero, 0.5f),
-        new ScreenOverlayFilmClear(0.5f),
 
-        new Dialogue(
-            "",
-            new List<Line>
-            {
-                new Line("배는 점차 안정을 찾고, 안개가 서서히 걷히며 그린우드 섬의 고요한 전경이 모습을 드러낸다."),
-                new Line("평화로운 해안과 오래된 건물들이 마치 시간이 멈춘 듯 라이언의 눈앞에 펼쳐진다."),
-                new Line("방금 전의 긴장은 거짓말처럼 사라지지만, 남은 여운은 가시지 않는다."),
-                new Line("섬에 도착했지만, 어딘지 모르게 편치 않다."),
-                new Line("이곳이 정말 평범한 곳일까? 교신 속 불길한 목소리가 귓가에 남아 맴돈다."),
-            }
+        new ParallelElement(
+            new Dialogue(
+                "",
+                new List<Line>
+                {
+                    new Line("배는 점차 안정을 찾고, 안개가 서서히 걷히며 그린우드 섬의 고요한 전경이 모습을 드러낸다."),
+                    new Line("평화로운 해안과 오래된 건물들이 마치 시간이 멈춘 듯 라이언의 눈앞에 펼쳐진다."),
+                    new Line("방금 전의 긴장은 거짓말처럼 사라지지만, 남은 여운은 가시지 않는다."),
+                    new Line("섬에 도착했지만, 어딘지 모르게 편치 않다."),
+                    new Line("이곳이 정말 평범한 곳일까? 교신 속 불길한 목소리가 귓가에 남아 맴돈다."),
+                }
+            ),
+            new CameraMove2D(Vector2.right * 187, 5f),
+            new ScreenOverlayFilmClear(2f)
         )
+
     );
 
     // 종료 부분의 요소들

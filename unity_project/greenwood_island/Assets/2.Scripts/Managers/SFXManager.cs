@@ -139,7 +139,7 @@ public static class SFXManager
         // 페이드 아웃과 제거를 DOTween으로 수행
         audioSource.DOFade(0f, fadeDuration).OnComplete(() =>
         {
-            RemoveSFX(audioSource);
+            GameObject.Destroy(audioSource.gameObject);
         });
     }
 

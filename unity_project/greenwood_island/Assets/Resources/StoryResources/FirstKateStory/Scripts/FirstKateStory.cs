@@ -108,8 +108,8 @@ public class FirstKateStory : Story
 
         new ImaginationEnter(
             "Bread",
-            .35f,
-            1f
+            1f,
+            Color.white
         ),
         new Dialogue(
             "",

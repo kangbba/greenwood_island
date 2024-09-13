@@ -7,12 +7,10 @@ public class SpriteWithSettings
 {
     [SerializeField] private Sprite _sprite; // 스프라이트 이미지
     [SerializeField] private Vector2 _offset; // 스프라이트의 오프셋
-    [SerializeField] private float _localScaleFactor = 1f; // 스프라이트의 로컬 스케일
 
     // Encapsulated properties for access
     public Sprite Sprite => _sprite;
     public Vector2 Offset => _offset;
-    public float LocalScaleFactor { get => _localScaleFactor; }
 }
 
 [System.Serializable]

@@ -25,7 +25,6 @@ public class PlaceOverlayFilm : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-
         if (PlaceOverlayFilmImg == null)
         {
             Debug.LogWarning("PlaceOverlayFilm not found on WorldCanvas.");

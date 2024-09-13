@@ -9,20 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: c0b638356e747407b8cbef6213098cdb, type: 3}
   m_Name: Kate
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  m_EditorClassIdentifier: 
   _characterID: Kate
   _characterName_KO: "\uCF00\uC774\uD2B8"
-  _mainColor: {r: 0.9977057, g: 1, b: 0.023584902, a: 1}
+  _mainColor: {r: 0.9607843, g: 0.8166822, b: 0.5019608, a: 1}
   _emotionPlans:
   - _emotionID: Normal
     _emotionSprites:
-    - _sprite: {fileID: 21300000, guid: f8d12d2548cb04a4293ed9f4dffb546c, type: 3}
+    - _sprite: {fileID: 21300000, guid: ef289872a1e4843aa856467e3b1ef947, type: 3}
       _offset: {x: 0, y: 0}
-      _localScaleFactor: 1
+      _localScaleFactor: 0
   - _emotionID: Smile
     _emotionSprites:
-    - _sprite: {fileID: 21300000, guid: b3065939a3b4d46779d21d11a1a09cbe, type: 3}
+    - _sprite: {fileID: 21300000, guid: 2ff3e110691d24f7bb44182062b371c6, type: 3}
       _offset: {x: 0, y: 0}
-      _localScaleFactor: 1
+      _localScaleFactor: 0

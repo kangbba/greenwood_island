@@ -8,6 +8,8 @@ public class Character : MonoBehaviour
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Image _img; // 캐릭터 스프라이트용 이미지 컴포넌트
     private CharacterData _characterData; // 캐릭터 정보 관리용 ScriptableObject
+    private string _previousEmotionID; // 이전 이모션 ID 저장
+    private int _previousEmotionIndex; // 이전 이모션 인덱스 저장
 
     // 감정 계획을 관리하는 속성
     protected List<EmotionPlan> EmotionPlans => _characterData != null ? _characterData.EmotionPlans : new List<EmotionPlan>();
@@ -39,8 +41,16 @@ public class Character : MonoBehaviour
         _canvasGroup.DOFade(targetAlpha, duration).SetEase(easeType);
     }
 
+    // 감정 변경 메서드
     public void ChangeEmotion(string emotionID, int index, float duration = 1f)
     {
+        // 같은 이모션과 인덱스가 요청된 경우 변경하지 않음
+        if (_previousEmotionID == emotionID && _previousEmotionIndex == index)
+        {
+            Debug.Log($"Emotion '{emotionID} {index}' is already active. No changes made.");
+            return;
+        }
+
         // 해당 감정을 EmotionPlans에서 찾음
         EmotionPlan selectedPlan = EmotionPlans.Find(plan => plan.EmotionID == emotionID);
 
@@ -60,25 +70,6 @@ public class Character : MonoBehaviour
         SpriteWithSettings spriteSettings = selectedPlan.EmotionSprites[index];
         Sprite newSprite = spriteSettings.Sprite;
 
-        // duration이 0일 때: 즉시 이미지 변경
-        if (duration <= 0f)
-        {
-            _img.sprite = newSprite;
-            _img.SetNativeSize();
-            _img.color = Color.white;
-
-            // 스프라이트 피벗에 맞춰 RectTransform 피벗 조정
-            if (newSprite != null)
-            {
-                RectTransform.pivot = newSprite.pivot / newSprite.rect.size;
-                RectTransform.localScale = spriteSettings.LocalScaleFactor * Vector3.one;
-                RectTransform.anchoredPosition = spriteSettings.Offset; // 오프셋 적용
-            }
-
-            Debug.Log($"Emotion changed to '{emotionID} {index}' instantly.");
-            return;
-        }
-
         // 현재 이미지의 투명도 조정 및 새로운 스프라이트 설정 후 등장
         Image tempImage = Instantiate(_img, _img.transform.parent); // 현재 이미지의 복제본을 만듦
         tempImage.sprite = _img.sprite; // 이전 스프라이트를 할당
@@ -91,7 +82,6 @@ public class Character : MonoBehaviour
         if (newSprite != null)
         {
             RectTransform.pivot = newSprite.pivot / newSprite.rect.size;
-            RectTransform.localScale = spriteSettings.LocalScaleFactor * Vector3.one;
             RectTransform.anchoredPosition = spriteSettings.Offset; // 오프셋 적용
         }
 
@@ -106,6 +96,10 @@ public class Character : MonoBehaviour
                         });
 
         transitionSequence.Play();
+
+        // 이전 이모션과 인덱스를 저장
+        _previousEmotionID = emotionID;
+        _previousEmotionIndex = index;
 
         // 로그 메시지 간소화 및 스크립트 이름 추가
         Debug.Log($"Emotion changed to '{emotionID} {index}' (duration: {duration}s).");

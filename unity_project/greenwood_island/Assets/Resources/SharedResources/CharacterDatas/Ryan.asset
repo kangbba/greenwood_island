@@ -15,4 +15,8 @@ MonoBehaviour:
   _characterID: Ryan
   _characterName_KO: "\uB77C\uC774\uC5B8"
   _mainColor: {r: 0.35555357, g: 0.8083394, b: 0.8867924, a: 1}
-  _emotionPlans: []
+  _emotionPlans:
+  - _emotionID: 
+    _emotionSprites:
+    - _sprite: {fileID: 0}
+      _offset: {x: 0, y: 0}

@@ -7,21 +7,35 @@ public static class CharacterManager
 {
     private static Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>();
     private static Dictionary<string, CharacterData> _characterDataDictionary = new Dictionary<string, CharacterData>();
+    private static Dictionary<string, CharacterData> _sharedCharacterDataDictionary = new Dictionary<string, CharacterData>();
 
     public static Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
     public static Dictionary<string, CharacterData> CharacterDataDictionary => _characterDataDictionary;
+    public static Dictionary<string, CharacterData> SharedCharacterDataDictionary => _sharedCharacterDataDictionary;
 
-    // 클래스 초기화 시 모든 CharacterData를 미리 로드하여 Dictionary에 저장
+    private static GameObject _characterHost;
+    private static MonoBehaviour _characterHandler;
+
+    // Coroutine을 실행할 임시 오브젝트와 컴포넌트 초기화
     static CharacterManager()
     {
+        _characterHost = new GameObject("CoroutineUtilsHost");
+        _characterHandler = _characterHost.AddComponent<CharacterHandler>();
         LoadAllCharacterData();
+        Object.DontDestroyOnLoad(_characterHost);
     }
+
+    // MonoBehaviour를 상속한 임시 핸들러 클래스
+    private class CharacterHandler : MonoBehaviour { }
 
     // CharacterData를 미리 로드하는 메서드
     private static void LoadAllCharacterData()
     {
+        string currentStoryName = StoryManager.GetCurrentStoryName();
+
         // 스토리 리소스에서 모든 CharacterData 로드
-        CharacterData[] storyCharacterDatas = Resources.LoadAll<CharacterData>("StoryResources/CharacterDatas");
+        string storyResourcePath = ResourcePathManager.GetResourcePath(string.Empty, currentStoryName, ResourceType.CharacterData, false);
+        CharacterData[] storyCharacterDatas = Resources.LoadAll<CharacterData>(storyResourcePath);
         foreach (var data in storyCharacterDatas)
         {
             if (!_characterDataDictionary.ContainsKey(data.name))
@@ -31,16 +45,18 @@ public static class CharacterManager
         }
 
         // 공유 리소스에서 모든 CharacterData 로드
-        CharacterData[] sharedCharacterDatas = Resources.LoadAll<CharacterData>("SharedResources/CharacterDatas");
+        string sharedResourcePath = ResourcePathManager.GetResourcePath(string.Empty, currentStoryName, ResourceType.CharacterData, true);
+        CharacterData[] sharedCharacterDatas = Resources.LoadAll<CharacterData>(sharedResourcePath);
         foreach (var data in sharedCharacterDatas)
         {
-            if (!_characterDataDictionary.ContainsKey(data.name))
+            if (!_sharedCharacterDataDictionary.ContainsKey(data.name))
             {
-                _characterDataDictionary.Add(data.name, data);
+                _sharedCharacterDataDictionary.Add(data.name, data);
             }
         }
 
-        Debug.Log($"Loaded {_characterDataDictionary.Count} CharacterData assets.");
+        Debug.Log($"Loaded {_characterDataDictionary.Count} CharacterData assets from Story Resources.");
+        Debug.Log($"Loaded {_sharedCharacterDataDictionary.Count} CharacterData assets from Shared Resources.");
     }
 
     public static bool IsExist(string characterID)
@@ -61,7 +77,12 @@ public static class CharacterManager
     // CharacterID를 통해 CharacterData를 찾는 함수
     public static CharacterData GetCharacterData(string characterID)
     {
+        // 스토리 리소스에서 먼저 찾고, 없으면 공유 리소스에서 찾음
         if (_characterDataDictionary.TryGetValue(characterID, out CharacterData characterData))
+        {
+            return characterData;
+        }
+        else if (_sharedCharacterDataDictionary.TryGetValue(characterID, out characterData))
         {
             return characterData;
         }

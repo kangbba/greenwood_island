@@ -11,7 +11,8 @@ public static class StoryManager
     // StoryManager 초기화 메서드
     public static void Init()
     {
-        PlayStory("OpeningStory");
+      //  PlayStory("OpeningStory");
+        PlayStory("FirstKateStory");
     }
 
     // 현재 스토리의 이름을 가져오는 메서드
@@ -65,11 +66,11 @@ public static class StoryManager
 
         if (_currentStory != null)
         {
+            RestoreAll(clearDuration);
             yield return _currentStory.StartRoutine();
             yield return _currentStory.UpdateRoutine();
             yield return _currentStory.ExitRoutine();
             Debug.Log("스토리 끝");
-            RestoreAll(clearDuration);
         }
     }
 

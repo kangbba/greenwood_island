@@ -8,7 +8,7 @@ using TMPro;
 /// <summary>
 /// ActionMenuButton은 ActionMenuUI 내의 각 버튼을 관리하는 클래스입니다.
 /// </summary>
-public class ActionMenuButton : MonoBehaviour
+public class UserActionBtn : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI buttonText; // 버튼의 텍스트 컴포넌트
     [SerializeField] private CanvasGroup _graphics;
@@ -16,9 +16,9 @@ public class ActionMenuButton : MonoBehaviour
     [SerializeField] private Image arrowImage; // 우측 화살표 이미지
 
     private int _index;
-    private ActionMenuButton _parentBtn; // 연동된 ActionMenu 객체
-    private ActionMenu _actionMenu; // 연동된 ActionMenu 객체
-    private List<ActionMenuButton> _subButtons = new List<ActionMenuButton>(); // 하위 버튼 리스트
+    private UserActionBtnContent _btnContent; // 연동된 ActionMenu 객체
+    private UserActionBtn _parentBtn; // 연동된 ActionMenu 객체
+    private List<UserActionBtn> _subButtons = new List<UserActionBtn>(); // 하위 버튼 리스트
     private bool _isExecuting = false; // 현재 액션이 실행 중인지 여부
     private bool _isExpanded = false; // 하위 버튼이 펼쳐졌는지 여부
     private int _depth; // 현재 버튼의 Depth
@@ -27,30 +27,31 @@ public class ActionMenuButton : MonoBehaviour
     public int Depth => _depth;
 
     // 람다 식으로 최하위 버튼 여부를 판단
-    public bool IsLeafBtn => _actionMenu.SubMenus == null || _actionMenu.SubMenus.Count == 0;
+    public bool IsLeafBtn => _btnContent.SubBtnContents == null || _btnContent.SubBtnContents.Count == 0;
 
     /// <summary>
     /// 버튼을 초기화하는 메서드
     /// </summary>
    
     // 버튼을 초기화하는 메서드
-    public void Init(ActionMenuUI actionMenuUI, ActionMenuButton parentBtn, ActionMenu actionMenu, int index, int depth)
+    public void Init(UserActionUI userActionUI, UserActionBtn parentBtn, UserActionBtnContent btnContent, int index, int depth)
     {
         _parentBtn = parentBtn;
-        _actionMenu = actionMenu;
+        _btnContent = btnContent;
         _index = index;
         _depth = depth;
-        buttonText.text = actionMenu.Title;
+
+        buttonText.text = btnContent.Title;
         arrowImage.gameObject.SetActive(!IsLeafBtn); // 하위 메뉴가 있을 때만 화살표 표시
-        name = actionMenu.Title; // 버튼 이름을 인풋 타이틀과 동일하게 설정
+        name = btnContent.Title; // 버튼 이름을 인풋 타이틀과 동일하게 설정
         button.onClick.AddListener(() => OnButtonClicked());
 
         _subButtons.Clear();
-        if(actionMenu.SubMenus != null){
-            for(int i = 0 ; i < actionMenu.SubMenus.Count ; i++){
-                ActionMenu subMenu = actionMenu.SubMenus[i];
-                ActionMenuButton actionMenuButton = actionMenuUI.CreateActionMenuBtn(this, subMenu, i, _depth + 1);
-                _subButtons.Add(actionMenuButton);
+        if(btnContent.SubBtnContents != null){
+            for(int i = 0 ; i < btnContent.SubBtnContents.Count ; i++){
+                UserActionBtnContent subBtnContent = btnContent.SubBtnContents[i];
+                UserActionBtn instSubBtn = userActionUI.CreateActionMenuBtn(this, subBtnContent, i, _depth + 1);
+                _subButtons.Add(instSubBtn);
             }
         }
         else{
@@ -93,13 +94,13 @@ public class ActionMenuButton : MonoBehaviour
             Debug.Log("눌림");
         if (_isExecuting)
         {
-            Debug.Log($"Button '{_actionMenu.Title}' is already executing.");
+            Debug.Log($"Button '{_btnContent.Title}' is already executing.");
             return;
         }
         if (IsLeafBtn)
         {
             // 최하위 버튼의 액션 실행
-            if (_actionMenu.onClickedAction != null)
+            if (_btnContent.onClickedAction != null)
             {
                 _isExecuting = true;
                 StartCoroutine(ExecuteAction());
@@ -119,9 +120,9 @@ public class ActionMenuButton : MonoBehaviour
     // 액션을 실행하고 완료된 후 상태를 갱신하는 메서드
     private IEnumerator ExecuteAction()
     {
-        yield return _actionMenu.onClickedAction.ExecuteRoutine();
+        yield return _btnContent.onClickedAction.ExecuteRoutine();
         _isExecuting = false;
-        Debug.Log($"Action '{_actionMenu.Title}' completed.");
+        Debug.Log($"Action '{_btnContent.Title}' completed.");
     }
 
     // 버튼을 시각적으로 표시하는 메서드

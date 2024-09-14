@@ -20,9 +20,7 @@ MonoBehaviour:
     _emotionSprites:
     - _sprite: {fileID: 21300000, guid: ef289872a1e4843aa856467e3b1ef947, type: 3}
       _offset: {x: 0, y: 0}
-      _localScaleFactor: 0
   - _emotionID: Smile
     _emotionSprites:
-    - _sprite: {fileID: 21300000, guid: 2ff3e110691d24f7bb44182062b371c6, type: 3}
+    - _sprite: {fileID: 21300000, guid: fa1d4467fd42b4b8ab66fa8ee1db8b5a, type: 3}
       _offset: {x: 0, y: 0}
-      _localScaleFactor: 0

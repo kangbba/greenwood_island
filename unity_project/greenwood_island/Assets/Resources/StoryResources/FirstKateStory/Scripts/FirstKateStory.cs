@@ -221,17 +221,19 @@ public class FirstKateStory : Story
         new PlaceEnter("BakeryFront"),
         new ScreenOverlayFilmClear(),
 
-        new ActionMenu("다음 행동은?", new List<ActionMenu>{
-            new ActionMenu(
-                "대화하기",
-                new SequentialElement(
-                    new Dialogue("Kate", new List<Line>
-                    {
-                        new Line("준비됐어? 얼른 가자!", "Normal")
-                    })
+        new UserActionEnter(
+            new List<UserActionBtnContent>{
+                new UserActionBtnContent(
+                    "대화하기",
+                    new SequentialElement(
+                        new Dialogue("Kate", new List<Line>
+                        {
+                            new Line("준비됐어? 얼른 가자!", "Normal")
+                        })
+                    )
                 )
-            )
-        })
+            }
+        )
 
 
 

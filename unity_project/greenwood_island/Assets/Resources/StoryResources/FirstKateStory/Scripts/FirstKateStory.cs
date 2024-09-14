@@ -147,59 +147,78 @@ public class FirstKateStory : Story
                 new Line("평범한 일상 속에서 느껴지는 작은 행복이 이곳에 나를 묶어두는 것 같다."),
             }
         ),
+
+        // 케이트가 조셉 할아버지에 대한 이야기를 꺼내는 부분
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("근데 있잖아, 라이언! 내가 너한테 소개해줄 사람이 있는데 말이야..."),
-                new Line("케이트가 기대에 찬 표정으로 나를 바라보며 말했다."),
+                new Line("아, 맞다. 조셉 할아버지께 드릴 물건이 있는데, 요즘은 직접 오시기 힘들어 보이셔서 내가 가져다드리려고 해."),
+                new Line("며칠 전에 빵을 가져다드렸는데, 그때도 몸이 많이 안 좋아 보이시더라구."),
             }
         ),
+
+        // 라이언의 독백으로 조셉 할아버지에 대한 기억을 떠올리는 장면
+        new Dialogue(
+            "",
+            new List<Line>
+            {
+                new Line("조셉 할아버지... 어렴풋하게 들은 기억이 있다."),
+                new Line("마을 사람들 사이에서 종종 이름이 오갔다. 해안가에 있는 카페 주인이라던가, 건강이 좋지 않다는 소리도 어딘가에서 들었던 것 같다."),
+                new Line("그가 이 마을에서 중요한 인물이라는 건 알겠지만, 정작 얼굴은 한 번도 본 적이 없다."),
+            }
+        ),
+
+        // 케이트가 조셉을 소개하며 라이언을 설득하는 대사
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("해안가에서 카페 씨브리즈를 운영하시는 분이야. 건강이 안 좋으셔서 한 달 넘게 문을 닫으셨다가 최근에 다시 매장을 여셨어."),
+                new Line("마을 사람들이 다들 걱정할 정도로 열심히 사시는 분인데, 요즘은 어딘가 조금 달라졌다고 해야 할까...", "Concerned"),
+                new Line("내가 가는 김에 너도 같이 갈래? 너도 한 번쯤 만나뵈면 좋을 거야. 커피도 맛있고, 그분 이야기도 흥미로울 거야.", "Smile"),
+            }
+        ),
+
+        // 선택지를 통해 라이언의 반응을 유도
         new ChoiceSet(
             "어떻게 반응할까?",
             new List<ChoiceContent>
             {
                 new ChoiceContent(
-                    "누군데? 갑자기 왜?",
+                    "귀찮은데… 다음에 가면 안 될까?",
                     new SequentialElement(
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("누군데? 갑자기 왜?", "Normal"),
+                            new Line("귀찮은데… 다음에 가면 안 될까?", "Normal"),
                         }),
                         new Dialogue("Kate", new List<Line>
                         {
-                            new Line("우리 마을에서 중요한 사람이야. 직접 만나보면 너도 이해할 거야.", "Smile")
+                            new Line("사실 할아버지가 요즘 사람을 잘 안 만나려 하셔서, 나 혼자 가면 괜히 더 불편해하실 것 같아.", "Concerned"),
+                            new Line("네가 같이 가면 이야기도 나누시고, 기분도 조금 나아지실 거야. 건강도 안 좋으신데 요즘 너무 외로워 보이셔.", "Concerned"),
+                            new Line("라이언, 나랑 같이 가주면 안 될까? 네가 가면 할아버지도 좀 웃으실 것 같아.", "Smile"),
                         }),
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("갑작스럽지만... 좋아, 갈게!", "Normal")
+                            new Line("그래... 알았어. 그러면 같이 가지.", "Normal"),
                         })
                     )
                 ),
                 new ChoiceContent(
-                    "귀찮은데… 그냥 다음에 만나면 안 돼?",
+                    "좋아, 어디 한번 같이 가보자.",
                     new SequentialElement(
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("귀찮은데… 그냥 다음에 만나면 안 돼?", "Normal")
+                            new Line("좋아, 어디 한번 같이 가보자.", "Normal"),
                         }),
                         new Dialogue("Kate", new List<Line>
                         {
-                            new Line("라이언, 이건 놓치면 후회할걸? 조셉 할아버지는 특별한 분이야.", "Surprised"),
-                            new Line("다녀오면 분명 나중에 고마워할 거야. 나만 믿어봐!", "Smile")
+                            new Line("정말 고마워, 라이언! 할아버지가 요즘 예전 같지 않으셔서 걱정이 많았어.", "Relieved"),
+                            new Line("네가 같이 가면 할아버지께도 큰 힘이 될 거야. 가서 커피 한 잔 하면서 이런저런 얘기도 나눠보자.", "Smile"),
                         }),
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("알았어, 알았어. 가면 되는 거지?", "Normal")
-                        })
-                    )
-                ),
-                new ChoiceContent(
-                    "좋아, 어디 한번 만나보자고.",
-                    new SequentialElement(
-                        new Dialogue("Ryan", new List<Line>
-                        {
-                            new Line("좋아, 어디 한번 만나보자고.", "Normal")
+                            new Line("조셉 할아버지가 어떤 분인지 직접 만나보면 더 잘 알겠지.", "Normal"),
                         })
                     )
                 )
@@ -208,35 +227,40 @@ public class FirstKateStory : Story
         new Dialogue("Kate", new List<Line>
         {
             new Line("정말? 라이언이라면 그렇게 말해 줄 줄 알았다구!", "Smile"),
-            new Line("그럼 이따 가게 앞으로 와 줘.", "Smile"),
+            new Line("그럼 이따 마을 입구에서 보자!", "Smile"),
         }),
         new Dialogue("", new List<Line>
         {
             new Line("케이트는 이 마을에서 처음 나를 맞아준 사람이고, 지금까지 항상 내 편이 되어줬다. 그녀의 말이라면 믿어도 되겠지.", "Normal"),
             new Line("그 사람은 어떤 사람일까?", "Normal"),
         }),
-
-        new ScreenOverlayFilm(Color.black, 1f),
         new SFXsClear(1f),
-        new PlaceEnter("BakeryFront"),
+        new ScreenOverlayFilm(Color.white, 1f),
+        new AllCharactersClear(0f),
+        new PlaceEnter("Town1"),
+        new CameraMove2D(new Vector2(16, 177), 0f),
+        new CameraZoomLocalPosZ(-508, 0f),
         new ScreenOverlayFilmClear(),
 
+        new CameraMove2DClear(1f),
+        new CameraZoomClear(1f),
+
+        new CharacterEnter("Kate", .5f, "Smile", 0),
+        new Dialogue("Kate", new List<Line>
+        {
+            new Line("준비는 다 됐어? 준비가 다 됐다면 말해줘", "Smile"),
+        }),
         new UserActionEnter(
-            new List<UserActionBtnContent>{
-                new UserActionBtnContent(
-                    "대화하기",
-                    new SequentialElement(
-                        new Dialogue("Kate", new List<Line>
-                        {
-                            new Line("준비됐어? 얼른 가자!", "Normal")
-                        })
-                    )
+            new UserActionBtnContent(
+                "케이트에게 말하기",
+                new SequentialElement(
+                    new Dialogue("Kate", new List<Line>
+                    {
+                        new Line("갈 준비가 됐구나? 얼른 가자!", "Normal")
+                    })
                 )
-            }
+            )
         )
-
-
-
     );
 
     protected override SequentialElement ExitElements => new ();
@@ -244,153 +268,5 @@ public class FirstKateStory : Story
     protected override string StoryDesc => "";
 
 
-    // ActionMenu actionMenu = new ActionMenu(
-    //     "다음 행동은?",
-    //     new List<ActionMenu>
-    //     {
-    //         // 첫 번째 상위 메뉴: 말을 건다
-    //         new ActionMenu("말을 건다", new List<ActionMenu>
-    //         {
-    //             // 첫 번째 메뉴의 하위 메뉴들
-    //             new ActionMenu("아말리안 밀에 대해 묻는다", new SequentialElement(
-    //                 new Dialogue("캐릭터A", new List<Line>
-    //                 {
-    //                     new Line("아말리안 밀은 오래된 곳이지만 여전히 굳건해."),
-    //                 })
-    //             )),
-    //             new ActionMenu("오늘 일상에 대해 묻는다", new SequentialElement(
-    //                 new Dialogue("캐릭터B", new List<Line>
-    //                 {
-    //                     new Line("오늘은 평화로웠어, 이상한 일도 없었고."),
-    //                 })
-    //             )),
-    //             new ActionMenu(
-    //                 "새로운 방문자에 대해 묻는다", 
-    //                 new List<ActionMenu>
-    //                 {
-    //                     new ActionMenu(
-    //                         "방문자의 목적은?", 
-    //                         new SequentialElement(
-    //                         new Dialogue("캐릭터A", new List<Line>
-    //                             {
-    //                                 new Line("그는 자신을 연구자라 소개했어."),
-    //                             })
-    //                         )),
-    //                         new ActionMenu("방문자의 외모는?", new SequentialElement(
-    //                             new Dialogue("캐릭터B", new List<Line>
-    //                             {
-    //                                 new Line("키가 크고, 검은 옷을 입고 있었지."),
-    //                             })
-    //                         )
-    //                     )
-    //                 })
-    //         }),
-
-    //         // 두 번째 상위 메뉴: 주위를 둘러본다
-    //         new ActionMenu("주위를 둘러본다", new List<ActionMenu>
-    //         {
-    //             // 두 번째 메뉴의 하위 메뉴들
-    //             new ActionMenu("창문 밖을 본다", new SequentialElement(
-    //                 new Dialogue("나", new List<Line>
-    //                 {
-    //                     new Line("바깥에는 잿빛 하늘과 흔들리는 나무들만 보인다."),
-    //                 })
-    //             )),
-    //             new ActionMenu("방 안을 살핀다", new List<ActionMenu>
-    //             {
-    //                 new ActionMenu("테이블 위를 살핀다", new SequentialElement(
-    //                     new Dialogue("나", new List<Line>
-    //                     {
-    //                         new Line("테이블 위에는 먼지 쌓인 책과 찻잔이 놓여 있다."),
-    //                     })
-    //                 )),
-    //                 new ActionMenu("벽에 걸린 그림을 본다", new List<ActionMenu>
-    //                 {
-    //                     new ActionMenu("그림의 제목을 확인한다", new SequentialElement(
-    //                         new Dialogue("나", new List<Line>
-    //                         {
-    //                             new Line("그림의 제목은 '기억의 풍경'."),
-    //                         })
-    //                     )),
-    //                     new ActionMenu("그림의 세부 사항을 살핀다", new List<ActionMenu>
-    //                     {
-    //                         new ActionMenu("그림 속 사람들을 본다", new SequentialElement(
-    //                             new Dialogue("나", new List<Line>
-    //                             {
-    //                                 new Line("그림 속 사람들은 어딘가 슬퍼 보인다."),
-    //                             })
-    //                         )),
-    //                         new ActionMenu("그림의 배경을 본다", new SequentialElement(
-    //                             new Dialogue("나", new List<Line>
-    //                             {
-    //                                 new Line("배경은 바람에 흔들리는 초원이 그려져 있다."),
-    //                             })
-    //                         ))
-    //                     })
-    //                 })
-    //             })
-    //         }),
-
-    //         // 세 번째 상위 메뉴: 물건을 조사한다
-    //         new ActionMenu("물건을 조사한다", new List<ActionMenu>
-    //         {
-    //             // 세 번째 메뉴의 하위 메뉴들
-    //             new ActionMenu("책을 조사한다", new List<ActionMenu>
-    //             {
-    //                 new ActionMenu("표지를 본다", new SequentialElement(
-    //                     new Dialogue("나", new List<Line>
-    //                     {
-    //                         new Line("책의 표지는 낡았고, 제목은 희미하게 보인다."),
-    //                     })
-    //                 )),
-    //                 new ActionMenu("책의 첫 페이지를 넘긴다", new List<ActionMenu>
-    //                 {
-    //                     new ActionMenu("첫 문장을 읽는다", new SequentialElement(
-    //                         new Dialogue("나", new List<Line>
-    //                         {
-    //                             new Line("첫 문장은 '여정의 시작은 언제나 고요했다.'"),
-    //                         })
-    //                     )),
-    //                     new ActionMenu("책갈피를 발견한다", new SequentialElement(
-    //                         new Dialogue("나", new List<Line>
-    //                         {
-    //                             new Line("책갈피는 오래된 사진이다."),
-    //                         })
-    //                     ))
-    //                 })
-    //             }),
-    //             new ActionMenu("의자를 조사한다", new SequentialElement(
-    //                 new Dialogue("나", new List<Line>
-    //                 {
-    //                     new Line("의자는 튼튼해 보이지만 오래된 티가 난다."),
-    //                 })
-    //             )),
-    //             new ActionMenu("탁자를 조사한다", new List<ActionMenu>
-    //             {
-    //                 new ActionMenu("서랍을 열어본다", new SequentialElement(
-    //                     new Dialogue("나", new List<Line>
-    //                     {
-    //                         new Line("서랍 안에는 오래된 편지가 있다."),
-    //                     })
-    //                 )),
-    //                 new ActionMenu("탁자 위의 물건을 본다", new List<ActionMenu>
-    //                 {
-    //                     new ActionMenu("촛대를 살핀다", new SequentialElement(
-    //                         new Dialogue("나", new List<Line>
-    //                         {
-    //                             new Line("촛대는 새것처럼 깨끗하다."),
-    //                         })
-    //                     )),
-    //                     new ActionMenu("낡은 시계를 본다", new SequentialElement(
-    //                         new Dialogue("나", new List<Line>
-    //                         {
-    //                             new Line("시계는 멈춰 있었다."),
-    //                         })
-    //                     ))
-    //                 })
-    //             })
-    //         })
-    //     }
-    // );
 
 }

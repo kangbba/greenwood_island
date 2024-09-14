@@ -28,6 +28,12 @@ public class DialoguePlayer : MonoBehaviour
     {
         ShowUp(false, 0f);
     }
+
+    private void Update(){
+        if(Input.GetKeyDown(KeyCode.Space)){
+            CompleteCurSentence();
+        }
+    }
     public void ClearDialogueText(){
         _dialogueText.ClearText();
     }
@@ -60,6 +66,7 @@ public class DialoguePlayer : MonoBehaviour
 
     public void CompleteCurSentence()
     {
+        _dialogueText.SetAllCompleted();
     }
 
     public void SetState(EDialogueState newState)

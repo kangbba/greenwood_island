@@ -11,6 +11,12 @@ public class LineContainer
     private List<bool> isPunctuationList = new List<bool>(); // 각 TextMeshProUGUI가 구두점에 의해 나뉘어진 것인지 여부
     private int currentTextIndex = 0; // 현재 보여줄 텍스트 인덱스
 
+    private bool _isCompleted = false;
+
+    public void SetCompleted(){
+        _isCompleted = true;
+    }
+
     // 생성자: LineContainer의 생성 및 설정
     public LineContainer(Transform parent, string lineText, TextMeshProUGUI mainText, TMP_LineInfo lineInfo, int index)
     {
@@ -136,10 +142,6 @@ public class LineContainer
     }
 
 
-
-
-
-
     // 텍스트를 하나씩 드러나게 하는 함수
     public IEnumerator RevealNextText(float speed, TextDisplayer.RevealStyle style)
     {
@@ -177,7 +179,7 @@ public class LineContainer
         float timeToReveal = initialPadding / speed; // 텍스트가 완전히 드러나는 데 걸리는 총 시간
         float elapsedTime = 0f;
 
-        while (elapsedTime < timeToReveal)
+        while (elapsedTime < timeToReveal && !_isCompleted)
         {
             elapsedTime += Time.unscaledDeltaTime; // 시간 흐름에 영향을 받지 않는 DeltaTime 사용
             float progress = Mathf.Clamp01(elapsedTime / timeToReveal);

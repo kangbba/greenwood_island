@@ -92,4 +92,12 @@ public class TextDisplayer : MonoBehaviour
             yield return container.RevealNextText(revealSpeed, revealStyle); // 연속적으로 텍스트를 표시
         }
     }
+
+    public void SetAllCompleted(){
+        // 기존 컨테이너 제거
+        foreach (var container in _lineContainers)
+        {
+            container.SetCompleted();
+        }
+    }
 }

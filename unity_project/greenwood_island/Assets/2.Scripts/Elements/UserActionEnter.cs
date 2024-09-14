@@ -37,9 +37,9 @@ public class UserActionEnter : Element
 
     public List<UserActionBtnContent> UserActionBtnContents { get => _userActionBtnContents; }
     // 생성자 (최하위 메뉴용)
-    public UserActionEnter(List<UserActionBtnContent> userActionBtnContents)
+    public UserActionEnter(params UserActionBtnContent[] userActionBtnContents)
     {
-        _userActionBtnContents = userActionBtnContents;
+        _userActionBtnContents = new List<UserActionBtnContent>(userActionBtnContents);
     }
 
 
@@ -50,9 +50,12 @@ public class UserActionEnter : Element
         // UIManager를 통해 ActionMenuUI를 초기화하고, ActionMenu를 전달하여 UI를 생성
         userActionUI.gameObject.SetActive(true);
         userActionUI.Init(_userActionBtnContents);
-
+        userActionUI.Show(1f);
+        yield return new WaitForSeconds(1f);
         // ActionMenuUI의 모든 작업이 완료될 때까지 대기
-        yield return new WaitUntil(() => false);
+        yield return new WaitUntil(() => userActionUI.IsAllCompleted);
+        userActionUI.Hide(.5f);
+        yield return new WaitForSeconds(.5f);
 
         userActionUI.gameObject.SetActive(false);
     }

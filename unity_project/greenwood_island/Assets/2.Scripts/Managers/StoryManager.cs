@@ -11,8 +11,8 @@ public static class StoryManager
     // StoryManager 초기화 메서드
     public static void Init()
     {
-      //  PlayStory("OpeningStory");
-        PlayStory("FirstKateStory");
+        PlayStory("OpeningStory");
+    //        PlayStory("FirstKateStory");
     }
 
     // 현재 스토리의 이름을 가져오는 메서드
@@ -66,28 +66,11 @@ public static class StoryManager
 
         if (_currentStory != null)
         {
-            RestoreAll(clearDuration);
+            yield return _currentStory.ClearRoutine(1f);
             yield return _currentStory.StartRoutine();
             yield return _currentStory.UpdateRoutine();
             yield return _currentStory.ExitRoutine();
             Debug.Log("스토리 끝");
         }
-    }
-
-    // 모든 상태를 초기화하는 메서드
-    private static void RestoreAll(float duration)
-    {
-        Debug.Log("StoryManager :: RestoreAll Started");
-        new FXsClear(duration).Execute();
-        new SFXsClear(duration).Execute();
-        new PlaceFilmClear(duration).Execute();
-        new CameraMove2DClear(duration).Execute();
-        new CameraZoomClear(duration).Execute();
-        new AllCharactersClear(duration).Execute();
-        new CutInClear(duration).Execute();
-        new PlaceOverlayFilmClear(duration).Execute();
-        new ScreenOverlayFilmClear(duration).Execute();
-        new ImaginationClear(duration).Execute();
-        Debug.Log("StoryManager :: RestoreAll Completed");
     }
 }

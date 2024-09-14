@@ -263,7 +263,10 @@ public class FirstKateStory : Story
         )
     );
 
-    protected override SequentialElement ExitElements => new ();
+    protected override SequentialElement ExitElements => new (
+
+        new ScreenOverlayFilm(Color.black)
+    );
 
     protected override string StoryDesc => "";
 

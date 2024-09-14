@@ -18,6 +18,12 @@ public abstract class Story
     protected abstract string StoryDesc { get; }
 
     // Start 단계의 Elements를 실행하는 메서드
+    public IEnumerator ClearRoutine(float duration)
+    {
+        Element element = new AllClear(duration);
+        yield return element.ExecuteRoutine();
+    }
+
     public IEnumerator StartRoutine()
     {
         yield return StartElements.ExecuteRoutine();

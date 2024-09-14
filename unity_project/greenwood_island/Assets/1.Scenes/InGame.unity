@@ -1013,7 +1013,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.42070132, g: 0.46301502, b: 0.5471698, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1963,8 +1963,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 871915259}
-  - {fileID: 1607851816}
   - {fileID: 1974904762}
+  - {fileID: 1607851816}
   - {fileID: 1531285569}
   - {fileID: 117920918}
   - {fileID: 1693987522}

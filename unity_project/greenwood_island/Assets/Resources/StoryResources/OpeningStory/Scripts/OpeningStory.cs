@@ -96,22 +96,9 @@ public class OpeningStory : Story
         // 신사와 부인의 대화
         new Dialogue(
             "노인",
-            new List<Line>
-            {
-                new Line("바다가… 다 기억해… 내가 본 것들… 물속에 잠겼어… 저 깊은 곳에…"),
-            }
+            new Line("바다가… 다 기억해… 내가 본 것들… 물속에 잠겼어… 저 깊은 곳에…")
         ),
-        new CameraShake(),
-        new CameraShake(3),
         new ImaginationClear(),
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("나는 그저 이 배를 흔드는 태풍이 조금 잠잠해지기를 바랄 뿐이다."),
-            }
-        ),
-        // 라디오의 음성
         new Dialogue(
             "라디오",
             new List<Line>
@@ -119,35 +106,93 @@ public class OpeningStory : Story
                 new Line("경로… 접근 중… 보고… 대기…"),
             }
         ),
+        new CameraShake(),
+        new CameraShake(3),
         new ParallelElement(
-            new PlaceFilm(Color.clear, 1f),
-            new PlaceEnter("ShipSide"),
-            new PlaceFilm(Color.clear, 0f),
-            new CameraMove2D(Vector2.right * -497f, 0f),
-            new PlaceFilmClear(1f)
+            new SFXEnter("Thunder2", 0.4f, false, 0f),
+            new CameraShake(4f),
+            new ScreenOverlayFilm(Color.black, 0.5f)// 눈을 질끈 감을 때 어두워지는 연출
+        ),
+        new Dialogue(
+            "",
+            new List<Line>
+            {
+                new Line("갑작스러운 굉음과 함께 배가 크게 흔들린다. 중심을 잃고 몸이 기울어지는 게 느껴진다."),
+                new Line("바닥에 굴러떨어지는 짐들, 깨진 유리, 비명 섞인 소리들이 혼란스럽게 섞여 들린다."),
+                new Line("심장이 미친 듯이 뛰고, 숨이 막혀온다. 모든 것이 뒤집히는 듯한 공포가 엄습해 온다."),
+                new Line("안전벨트 하나 없는 이곳에서, 인간이 이렇게 나약한 존재일 줄이야. 손에 땀이 배어 무언가를 붙잡으려 하지만, 아무것도 잡히지 않는다."),
+                new Line("그저 바닥에 엎드려 눈을 질끈 감았다. 왜 이 섬에 오기로 한 걸까. 이 순간만큼은 그 선택을 후회했다."),
+                new Line("이대로 끝나는 걸까? 모든 것이 한순간에 무너질 것만 같다. 나는 그저 이 순간이 빨리 끝나기를 바랄 뿐이다."),
+            }
+        ),
+        new ScreenOverlayFilmClear(2f),
+
+        new ImaginationEnter(
+            "FerryOldMan",
+            1f,
+            ColorUtils.CustomColor("516FB7")
+        ),
+        // 노인의 재등장과 불길한 대사
+        new Dialogue(
+            "",
+            new List<Line>
+            {
+                new Line("고개를 들자 노인의 모습이 희미하게 보인다. 그는 여전히 자리에 앉아 창밖을 바라보고 있다."),
+                new Line("흔들리는 배에도 전혀 동요하지 않는다. 마치 이런 일이 익숙하다는 듯이."),
+                new Line("두려움을 느끼지 않는 노인의 모습에 오히려 더 섬뜩한 기분이 든다."),
+            }
+        ),
+        new Dialogue(
+            "노인",
+            new List<Line>
+            {
+                new Line("파도는... 모든 걸 기억하지. 이곳에 묻힌 모든 것들을...", "Calm"),
+                new Line("나는 그저 바다가 되돌려줄 날만 기다리고 있을 뿐이지.", "Whisper"),
+            }
+        ),
+        new CameraShake(3),
+        new ImaginationClear(),
+        new Dialogue(
+            "",
+            new List<Line>
+            {
+                new Line("노인의 혼잣말이 귓가에 맴돈다. 마치 이 배의 마지막을 예언하는 듯한 불길한 목소리..."),
+                new Line("몸이 떨린다. 이대로 가라앉는 게 아닐까, 그런 생각이 머리를 스친다."),
+            }
         ),
 
-        new ParallelElement(
-            new Dialogue(
-                "",
-                new List<Line>
-                {
-                    new Line("배는 점차 안정을 찾고, 안개가 서서히 걷히며 그린우드 섬의 고요한 전경이 모습을 드러낸다."),
-                    new Line("평화로운 해안과 오래된 건물들이 마치 시간이 멈춘 듯 라이언의 눈앞에 펼쳐진다."),
-                    new Line("방금 전의 긴장은 거짓말처럼 사라지지만, 남은 여운은 가시지 않는다."),
-                    new Line("섬에 도착했지만, 어딘지 모르게 편치 않다."),
-                    new Line("이곳이 정말 평범한 곳일까? 교신 속 불길한 목소리가 귓가에 남아 맴돈다."),
-                }
-            ),
-            new CameraMove2D(Vector2.right * 187, 5f),
-            new ScreenOverlayFilmClear(2f)
-        )
+        new ImaginationEnter("ShipSide", 1f, Color.white, 1f),
 
+        new Dialogue(
+            "",
+            new List<Line>
+            {
+                new Line("서서히 소음이 멈추고, 배가 서서히 안정되기 시작한다."),
+                new Line("천천히 눈을 떠보니, 배는 어느새 안정을 되찾고 있다."),
+            }
+        ),
+        new ParallelElement(
+            new ImaginationClear(1f),
+            new ImaginationEnter("FarTown", 1f, Color.white, 1f)
+        ),
+        
+        // 그린우드 섬이 드러나는 장면
+        new Dialogue(
+            "",
+            new List<Line>
+            {
+                new Line("안개가 서서히 걷히며, 그린우드 섬의 고요한 전경이 눈앞에 모습을 드러낸다."),
+                new Line("평화로운 해안과 오래된 건물들이 마치 시간이 멈춘 듯 서 있다."),
+                new Line("방금 전의 공포가 거짓말처럼 사라졌지만, 마음속에 남은 찝찝함은 가시지 않는다."),
+                new Line("이곳이… 그린우드인가."),
+            }
+        )
     );
 
     // 종료 부분의 요소들
     protected override SequentialElement ExitElements => new
     (
+        new ScreenOverlayFilm(Color.black, 1f),
         new StoryTransition("FirstKateStory")
     );
 }

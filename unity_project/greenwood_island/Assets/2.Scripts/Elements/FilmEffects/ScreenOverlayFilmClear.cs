@@ -8,19 +8,21 @@ using UnityEngine.UI;
 /// </summary>
 public class ScreenOverlayFilmClear : Element
 {
+    private bool _isBlackClear = false;
     private float _duration;
     private Ease _easeType;
 
 
-    public ScreenOverlayFilmClear(float duration = 1f, Ease easeType = Ease.OutQuad)
+    public ScreenOverlayFilmClear(float duration = 1f, Ease easeType = Ease.OutQuad, bool isBlackClear = false)
     {
+        _isBlackClear = isBlackClear;
         _duration = duration;
         _easeType = easeType;
     }
 
     public override IEnumerator ExecuteRoutine()
     {
-        new ScreenOverlayFilm(Color.clear, _duration, _easeType).Execute();
+        new ScreenOverlayFilm(_isBlackClear ? Color.black : Color.clear, _duration, _easeType).Execute();
         yield return new WaitForSeconds(_duration);
     }
 }

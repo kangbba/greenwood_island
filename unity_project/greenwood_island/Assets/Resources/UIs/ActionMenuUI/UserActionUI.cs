@@ -104,10 +104,6 @@ public class UserActionUI : MonoBehaviour
     public void OnBtnClicked(UserActionBtn userActionBtn){
 
         const float animatingSec = .3f;
-        if(_targetDepth != userActionBtn.Depth){
-            _targetDepth = userActionBtn.Depth;
-             SetBackgroundSize(WIDTH_PER_DEPTH * _targetDepth, animatingSec);
-        }
         if (userActionBtn.IsLeafBtn)
         {
             if (userActionBtn.IsExecuting)
@@ -127,19 +123,23 @@ public class UserActionUI : MonoBehaviour
             for(int i = 0 ; i < identicalDepthBtns.Count ; i++){
                 UserActionBtn btn = identicalDepthBtns[i];
                 if(btn == userActionBtn){
-                    Debug.Log("눌림");
                     if(btn.IsExpanded){
+                        _targetDepth = userActionBtn.Depth;
                         btn.Fold(animatingSec);
                     }
                     else{
+                        _targetDepth = userActionBtn.Depth + 1;
                         btn.Expand(animatingSec);
                     }
                 }
                 else{
+                    _targetDepth = userActionBtn.Depth;
                     btn.Fold(animatingSec);
                 }
+                Debug.Log($"눌림 target depth : {_targetDepth}");
             }
         }
+        SetBackgroundSize(WIDTH_PER_DEPTH * (_targetDepth + 1), animatingSec);
     }
     // 액션을 실행하고 완료된 후 상태를 갱신하는 메서드
     public IEnumerator ExecuteAction(UserActionBtn userActionBtn)
@@ -158,10 +158,12 @@ public class UserActionUI : MonoBehaviour
 
     public UserActionBtn CreateActionMenuBtn(UserActionBtn parentBtn, UserActionBtnContent btnContent, int index, int depth){
 
-        UserActionBtn instBtn = Instantiate(_userActionBtnPrefab.gameObject, (parentBtn == null) ? _btnParent : parentBtn.transform).GetComponent<UserActionBtn>();
+        UserActionBtn instBtn = Instantiate(_userActionBtnPrefab.gameObject).GetComponent<UserActionBtn>();
         instBtn.Init(this, parentBtn, btnContent, index, depth);
-        instBtn.transform.SetParent((parentBtn == null) ? transform : parentBtn.transform);
-        instBtn.transform.localPosition = WIDTH_PER_DEPTH * Vector3.right + 100 * index * Vector3.down;
+        instBtn.transform.SetParent((parentBtn == null) ? _btnParent : parentBtn.transform);
+        instBtn.transform.localPosition = 
+            (depth != 0 ? WIDTH_PER_DEPTH : 0 ) * Vector3.right 
+            + 100 * index * Vector3.down;
         instBtn.name = $"{btnContent.Title} {depth}";
         _allBtns.Add(instBtn);
         

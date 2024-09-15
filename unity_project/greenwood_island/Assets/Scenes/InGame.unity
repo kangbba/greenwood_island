@@ -1156,6 +1156,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: ActionMenuUI
       objectReference: {fileID: 0}
+    - target: {fileID: 1253171377657053049, guid: b1378b74c2529426fa40a79c00171c68, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060674160453643163, guid: b1378b74c2529426fa40a79c00171c68, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060674160453643163, guid: b1378b74c2529426fa40a79c00171c68, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060674160453643163, guid: b1378b74c2529426fa40a79c00171c68, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060674160453643163, guid: b1378b74c2529426fa40a79c00171c68, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7189475250139059850, guid: b1378b74c2529426fa40a79c00171c68, type: 3}
       propertyPath: m_Pivot.x
       value: 0

@@ -5,13 +5,13 @@ using UnityEngine;
 public class TestStory : Story
 {
     // TestStory 스토리의 스크립트 로직을 여기에 작성하세요.
-    protected override SequentialElement StartElements => throw new System.NotImplementedException();
+    protected override SequentialElement StartElements => new ();
 
-    protected override SequentialElement UpdateElements => new SequentialElement(
+    protected override SequentialElement UpdateElements => new (
         _testUserActionEnter
     );
 
-    protected override SequentialElement ExitElements => throw new System.NotImplementedException();
+    protected override SequentialElement ExitElements => new ();
 
     protected override string StoryDesc => "";
 

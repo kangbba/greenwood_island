@@ -8,12 +8,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class TextDisplayer : MonoBehaviour
 {
-    // 텍스트 드러내는 스타일을 정의하는 enum
-    public enum RevealStyle
-    {
-        Continuously,
-        WithMouseClick
-    }
 
     private TextMeshProUGUI _mainText; // 최상위 TextMeshProUGUI
     private CanvasGroup _canvasGroup; // 페이드 효과를 위한 CanvasGroup
@@ -85,11 +79,12 @@ public class TextDisplayer : MonoBehaviour
     }
 
     // 텍스트를 표시하는 함수
-    public IEnumerator ShowTextRoutine(float revealSpeed, RevealStyle revealStyle)
+    public IEnumerator ShowTextRoutine(float revealSpeed, IEnumerator waitForInputCoroutine, System.Action onLineStarted = null, System.Action onLineComplete = null)
     {
         foreach (var container in _lineContainers)
         {
-            yield return container.RevealNextText(revealSpeed, revealStyle); // 연속적으로 텍스트를 표시
+            yield return container.RevealNextText(revealSpeed, waitForInputCoroutine, onLineStarted, onLineComplete); // 연속적으로 텍스트를 표시
+            Debug.Log("텥스트 2");
         }
     }
 

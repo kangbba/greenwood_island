@@ -141,29 +141,27 @@ public class LineContainer
         return result;
     }
 
-
-    // 텍스트를 하나씩 드러나게 하는 함수
-    public IEnumerator RevealNextText(float speed, TextDisplayer.RevealStyle style)
+    public IEnumerator RevealNextText(float speed, IEnumerator waitForInputCoroutine = null, System.Action onLineStarted = null, System.Action onLineComplete = null)
     {
         while (currentTextIndex < textMeshes.Count)
         {
+            onLineStarted?.Invoke();  // 라인 시작 콜백 호출
+
             yield return RevealOneText(textMeshes[currentTextIndex], speed);
-            yield return new WaitForEndOfFrame();
-            if (isPunctuationList[currentTextIndex])
-            {
-                if (style == TextDisplayer.RevealStyle.WithMouseClick)
+
+            bool isTextEnd = isPunctuationList[currentTextIndex];
+            if (isTextEnd)
+            {   
+                onLineComplete?.Invoke();  // 라인 완료 콜백 호출
+                if (waitForInputCoroutine != null)
                 {
-                    yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-                }
-                else if (style == TextDisplayer.RevealStyle.Continuously)
-                {
-                    // 아무런 동작을 하지 않음, 그냥 넘어감
+                    yield return waitForInputCoroutine;
                 }
             }
-
             currentTextIndex++;
         }
     }
+
 
     // 개별 텍스트를 드러나게 하는 코루틴
     private IEnumerator RevealOneText(TextMeshProUGUI textMesh, float speed)

@@ -22,7 +22,7 @@ public class AllCharactersClear : Element
         var activeCharacterIDs = CharacterManager.GetAllActiveCharacterIDs();
         foreach (var characterID in activeCharacterIDs)
         {
-            new CharacterExit(characterID, _duration, _easeType).Execute();
+            new CharacterExit(characterID, _duration).Execute();
         }
         yield return new WaitForSeconds(_duration);
 

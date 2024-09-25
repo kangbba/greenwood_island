@@ -25,14 +25,13 @@ public class CharacterEnter : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 생성 및 위치 설정
-        Character character = CharacterManager.InstantiateCharacter(_characterID, _screenPeroneX);
-        character.ChangeEmotion(_initialEmotionID, _emotionIndex);
+        Character character = CharacterManager.CreateCharacter(_characterID, _screenPeroneX);
         if (character == null)
         {
             Debug.LogWarning($"Failed to instantiate character with ID: {_characterID}");
             yield break;
         }
-        character.SetVisibility(true, _duration, _easeType);
+        character.ChangeEmotion(_initialEmotionID, _emotionIndex);
         // 애니메이션 완료까지 대기
         yield return new WaitForSeconds(_duration);
     }

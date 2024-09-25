@@ -5,13 +5,11 @@ using DG.Tweening;
 
 public static class CharacterManager
 {
-    private static Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>();
-    private static Dictionary<string, CharacterData> _characterDataDictionary = new Dictionary<string, CharacterData>();
-    private static Dictionary<string, CharacterData> _sharedCharacterDataDictionary = new Dictionary<string, CharacterData>();
+    private static Dictionary<string, GameObject> _characterPrefabs = new Dictionary<string, GameObject>(); // 모든 캐릭터 프리팹
+    private static Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>(); // 인스턴스화된 캐릭터
 
+    public static Dictionary<string, GameObject> CharacterPrefabs => _characterPrefabs;
     public static Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
-    public static Dictionary<string, CharacterData> CharacterDataDictionary => _characterDataDictionary;
-    public static Dictionary<string, CharacterData> SharedCharacterDataDictionary => _sharedCharacterDataDictionary;
 
     private static GameObject _characterHost;
     private static MonoBehaviour _characterHandler;
@@ -21,79 +19,14 @@ public static class CharacterManager
     {
         _characterHost = new GameObject("CoroutineUtilsHost");
         _characterHandler = _characterHost.AddComponent<CharacterHandler>();
-        LoadAllCharacterData();
         Object.DontDestroyOnLoad(_characterHost);
     }
 
     // MonoBehaviour를 상속한 임시 핸들러 클래스
     private class CharacterHandler : MonoBehaviour { }
 
-    // CharacterData를 미리 로드하는 메서드
-    private static void LoadAllCharacterData()
-    {
-        string currentStoryName = StoryManager.GetCurrentStoryName();
-
-        // 스토리 리소스에서 모든 CharacterData 로드
-        string storyResourcePath = ResourcePathManager.GetResourcePath(string.Empty, currentStoryName, ResourceType.CharacterData, false);
-        CharacterData[] storyCharacterDatas = Resources.LoadAll<CharacterData>(storyResourcePath);
-        foreach (var data in storyCharacterDatas)
-        {
-            if (!_characterDataDictionary.ContainsKey(data.name))
-            {
-                _characterDataDictionary.Add(data.name, data);
-            }
-        }
-
-        // 공유 리소스에서 모든 CharacterData 로드
-        string sharedResourcePath = ResourcePathManager.GetResourcePath(string.Empty, currentStoryName, ResourceType.CharacterData, true);
-        CharacterData[] sharedCharacterDatas = Resources.LoadAll<CharacterData>(sharedResourcePath);
-        foreach (var data in sharedCharacterDatas)
-        {
-            if (!_sharedCharacterDataDictionary.ContainsKey(data.name))
-            {
-                _sharedCharacterDataDictionary.Add(data.name, data);
-            }
-        }
-
-        Debug.Log($"Loaded {_characterDataDictionary.Count} CharacterData assets from Story Resources.");
-        Debug.Log($"Loaded {_sharedCharacterDataDictionary.Count} CharacterData assets from Shared Resources.");
-    }
-
-    public static bool IsExist(string characterID)
-    {
-        return _instantiatedCharacters.ContainsKey(characterID);
-    }
-
-    public static int GetActiveCharacterCount()
-    {
-        return _instantiatedCharacters.Count;
-    }
-
-    public static List<string> GetAllActiveCharacterIDs()
-    {
-        return _instantiatedCharacters.Keys.ToList();
-    }
-
-    // CharacterID를 통해 CharacterData를 찾는 함수
-    public static CharacterData GetCharacterData(string characterID)
-    {
-        // 스토리 리소스에서 먼저 찾고, 없으면 공유 리소스에서 찾음
-        if (_characterDataDictionary.TryGetValue(characterID, out CharacterData characterData))
-        {
-            return characterData;
-        }
-        else if (_sharedCharacterDataDictionary.TryGetValue(characterID, out characterData))
-        {
-            return characterData;
-        }
-        else
-        {
-            Debug.LogWarning($"CharacterData not found for ID: {characterID}");
-            return null;
-        }
-    }
-
-    public static Character InstantiateCharacter(string characterID, float screenPeroneX)
+    // 캐릭터 프리팹을 로드하여 인스턴스화하는 함수
+    public static Character CreateCharacter(string characterID, float screenPeroneX)
     {
         if (IsExist(characterID))
         {
@@ -101,14 +34,14 @@ public static class CharacterManager
             return _instantiatedCharacters[characterID];
         }
 
-        // 빈 캐릭터 프리팹을 Resources/CharacterPrefab에서 로드
-        string characterPrefabPath = "CharacterPrefab";
-        GameObject characterPrefab = Resources.Load<GameObject>(characterPrefabPath);
+        // 캐릭터 프리팹 경로 설정 및 로드
+        string path = ResourcePathManager.GetResourcePath(characterID, StoryManager.GetCurrentStoryName(), ResourceType.Character, isShared: true); // 경로 가져오기
+        GameObject characterPrefab = Resources.Load<GameObject>(path);
 
         // 프리팹을 찾지 못했을 경우
         if (characterPrefab == null)
         {
-            Debug.LogError($"Failed to load character prefab from path '{characterPrefabPath}'.");
+            Debug.LogError($"Character prefab with ID '{characterID}' not found at path '{path}'.");
             return null;
         }
 
@@ -116,37 +49,68 @@ public static class CharacterManager
         Character characterComponent = characterPrefab.GetComponent<Character>();
         if (characterComponent == null)
         {
-            Debug.LogError($"The prefab at '{characterPrefabPath}' does not have a Character script attached.");
-            return null;
-        }
-
-        // 캐릭터 데이터를 딕셔너리에서 로드
-        CharacterData characterData = GetCharacterData(characterID);
-
-        // 캐릭터 데이터를 찾지 못했을 경우
-        if (characterData == null)
-        {
-            Debug.LogError($"Failed to find CharacterData for ID '{characterID}'.");
+            Debug.LogError($"The prefab '{characterID}' does not have a Character script attached.");
             return null;
         }
 
         // 캐릭터를 인스턴스화
         GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.Instance.WorldCanvas.CharacterLayer.transform);
         Character character = characterObject.GetComponent<Character>();
-        character.transform.localScale = Vector3.one * .4f;
-        character.transform.localPosition = Vector3.down * 356;
-        character.SetVisibility(false, 0f);
 
-        // CharacterData를 사용하여 캐릭터 초기화
-        character.Init(characterData);
-
+        // 캐릭터 등록
         _instantiatedCharacters.Add(characterID, character);
 
+        // 캐릭터 위치 이동
         MoveCharacter(characterID, screenPeroneX, 0f, Ease.Linear);
 
         return character;
     }
 
+    // 캐릭터 프리팹을 가져오는 함수 (인스턴스화되지 않은 경우에도)
+    public static GameObject GetCharacterPrefab(string characterID)
+    {
+        if (_characterPrefabs.TryGetValue(characterID, out GameObject prefab))
+        {
+            return prefab;
+        }
+
+        // 프리팹을 로드하지 않았다면, 해당 경로에서 로드
+        string path = ResourcePathManager.GetResourcePath(characterID, StoryManager.GetCurrentStoryName(), ResourceType.Character, isShared: true);
+        prefab = Resources.Load<GameObject>(path);
+
+        if (prefab != null)
+        {
+            _characterPrefabs.Add(prefab.name, prefab); // 로드한 프리팹을 캐싱
+            return prefab;
+        }
+        else
+        {
+            Debug.LogWarning($"Character prefab with ID '{characterID}' not found at path '{path}'.");
+            return null;
+        }
+    }
+
+    // 인스턴스화된 캐릭터를 가져오는 함수
+    public static Character GetActiveCharacter(string characterID)
+    {
+        if (IsExist(characterID))
+        {
+            return _instantiatedCharacters[characterID];
+        }
+        else
+        {
+            Debug.LogWarning($"No active character found with ID {characterID}.");
+            return null;
+        }
+    }
+
+    // 캐릭터 존재 확인 함수
+    public static bool IsExist(string characterID)
+    {
+        return _instantiatedCharacters.ContainsKey(characterID);
+    }
+
+    // 캐릭터 위치 이동 함수
     public static void MoveCharacter(string characterID, float targetScreenPercentageX, float duration, Ease easeType)
     {
         Character character = GetActiveCharacter(characterID);
@@ -170,6 +134,7 @@ public static class CharacterManager
         rectTransform.DOAnchorPos(new Vector2(targetPosition.x, rectTransform.anchoredPosition.y), duration).SetEase(easeType);
     }
 
+    // 캐릭터 파괴 함수
     public static void DestroyCharacter(string characterID)
     {
         if (_instantiatedCharacters.TryGetValue(characterID, out Character character))
@@ -183,28 +148,7 @@ public static class CharacterManager
         }
     }
 
-    public static Character GetActiveCharacter(string characterID)
-    {
-        if (IsExist(characterID))
-        {
-            return _instantiatedCharacters[characterID];
-        }
-        else
-        {
-            Debug.LogWarning($"No active character found with ID {characterID}.");
-            return null;
-        }
-    }
-
-    public static void SetCharacterEmotion(string characterID, string emotionID, int emotionIndex, float duration)
-    {
-        Character character = GetActiveCharacter(characterID);
-        if (character != null)
-        {
-            character.ChangeEmotion(emotionID, emotionIndex, duration);
-        }
-    }
-
+    // 모든 캐릭터 파괴 함수
     public static void DestroyAllCharacters()
     {
         foreach (var character in _instantiatedCharacters.Values)
@@ -213,4 +157,10 @@ public static class CharacterManager
         }
         _instantiatedCharacters.Clear();
     }
+
+    public static List<string> GetAllActiveCharacterIDs()
+    {
+        return _instantiatedCharacters.Keys.ToList();
+    }
+
 }

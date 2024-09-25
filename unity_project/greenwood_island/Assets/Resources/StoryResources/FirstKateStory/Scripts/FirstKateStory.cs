@@ -111,6 +111,7 @@ public class FirstKateStory : Story
             1f,
             Color.white
         ),
+        new SFXsClear(),
         new Dialogue(
             "",
             new List<Line>
@@ -265,7 +266,8 @@ public class FirstKateStory : Story
 
     protected override SequentialElement ExitElements => new (
 
-        new ScreenOverlayFilm(Color.black)
+        new ScreenOverlayFilm(Color.black),
+        new StoryTransition("FirstJosephStory")
     );
 
     protected override string StoryDesc => "";

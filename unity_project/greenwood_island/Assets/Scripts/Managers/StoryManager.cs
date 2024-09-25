@@ -11,7 +11,7 @@ public static class StoryManager
     // StoryManager 초기화 메서드
     public static void Init()
     {
-             PlayStory("TestStory");
+             PlayStory("FirstJosephStory");
    //     PlayStory("OpeningStory");
     //        PlayStory("FirstKateStory");
     }

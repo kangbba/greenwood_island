@@ -32,7 +32,6 @@ public static class ImaginationManager
 
         // Image 컴포넌트 추가 및 초기화
         Image img = imaginationObject.AddComponent<Image>();
-        img.rectTransform.sizeDelta = new Vector2(1920, 1080);
         img.rectTransform.anchoredPosition = Vector2.zero;
         img.transform.localScale = Vector2.one * scaleFactor;
 
@@ -58,6 +57,7 @@ public static class ImaginationManager
             Object.Destroy(imaginationObject); // 이미지 로드 실패 시 오브젝트 제거
             return null;
         }
+        img.SetNativeSize();
 
         // 딕셔너리에 등록
         _activeImaginations.Add(imaginationID, img);

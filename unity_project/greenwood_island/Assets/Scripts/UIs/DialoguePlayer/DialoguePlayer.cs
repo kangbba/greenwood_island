@@ -54,9 +54,16 @@ public class DialoguePlayer : MonoBehaviour
     public void SetCharacterTextClor(Color targetColor, float duration){
         _characterText.DOColor(targetColor, duration);
     }
-    public IEnumerator ShowLineRoutine(Line line, float speed){
+    public IEnumerator ShowLineRoutine(Line line, float speed, System.Action OnLineStarted, System.Action OnLineComplete)
+    {
         _dialogueText.InitText(line.Sentence);
-        yield return _dialogueText.ShowTextRoutine(speed, TextDisplayer.RevealStyle.WithMouseClick);
+        yield return _dialogueText.ShowTextRoutine(speed, WaitForInputRoutine(), OnLineStarted, OnLineComplete);
+    }
+
+
+    IEnumerator WaitForInputRoutine(){
+        yield return new WaitForEndOfFrame();
+        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
     }
 
     public void SetCharacterText(string s)

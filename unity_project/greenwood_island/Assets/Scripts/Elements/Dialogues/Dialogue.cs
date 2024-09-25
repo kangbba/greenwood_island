@@ -38,16 +38,14 @@ public class Dialogue : Element
 
         // 캐릭터 텍스트, 이미지
         var firstLine = _lines[0];
-        string recentEmotionID = firstLine.EmotionID;
-        int recentEmotionIndex = firstLine.EmotionIndex;
 
         Character activeCharacter = CharacterManager.GetActiveCharacter(_characterID);
-        CharacterData characterData = CharacterManager.GetCharacterData(_characterID);
+        Character characterPrefab =  CharacterManager.GetCharacterPrefab(_characterID) != null ? CharacterManager.GetCharacterPrefab(_characterID).GetComponent<Character>() : null;
 
         //캐릭터 텍스트
         dialoguePlayer.ClearCharacterText();
-        string characterStr = characterData != null ? characterData.CharacterName_KO : _characterID;
-        Color characterStrColor = characterData != null ? characterData.MainColor : Color.white;
+        string characterStr = characterPrefab != null ? characterPrefab.CharacterName_KO : _characterID;
+        Color characterStrColor = characterPrefab != null ? characterPrefab.MainColor : Color.white;
         dialoguePlayer.SetCharacterText(characterStr);
         dialoguePlayer.SetCharacterTextClor(Color.clear, 0f);
         dialoguePlayer.SetCharacterTextClor(characterStrColor, .3f);
@@ -64,18 +62,29 @@ public class Dialogue : Element
             string emotionID = line.EmotionID;
             int emotionIndex = line.EmotionIndex;
            
-            Debug.Log($"{_characterID} 감정의 변화 {recentEmotionID}{recentEmotionIndex} -> {emotionID}{emotionIndex}");
-            float transitionDuration = 0.5f;
             if(activeCharacter != null){
-                CharacterManager.SetCharacterEmotion(_characterID, line.EmotionID, line.EmotionIndex, transitionDuration);
+                Debug.Log("StartTalking 시작");
+                activeCharacter.ChangeEmotion(line.EmotionID, line.EmotionIndex);
             }
-
-            recentEmotionID = line.EmotionID;
-            recentEmotionIndex = line.EmotionIndex;
 
             dialoguePlayer.ClearDialogueText();
             dialoguePlayer.FadeInDialogueText(0f);
-            yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeed);
+            // ShowLineRoutine에 콜백 추가
+            yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeed, 
+            () =>{
+                Debug.Log("테스트");
+                if (activeCharacter != null)
+                {
+                    activeCharacter.CurrentEmotion.StartTalking(true);  // 텍스트 표시가 완료되면 말하기 중지
+                }
+            },
+            () =>{
+                Debug.Log("테스트");
+                if (activeCharacter != null)
+                {
+                    activeCharacter.CurrentEmotion.StartTalking(false);  // 텍스트 표시가 완료되면 말하기 중지
+                }
+            });
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             dialoguePlayer.FadeOutDialogueText(.15f);
             yield return new WaitForSeconds(.15f);

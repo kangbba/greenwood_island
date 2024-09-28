@@ -5,10 +5,9 @@ using DG.Tweening;
 
 public static class CharacterManager
 {
-    private static Dictionary<string, GameObject> _characterPrefabs = new Dictionary<string, GameObject>(); // 모든 캐릭터 프리팹
     private static Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>(); // 인스턴스화된 캐릭터
+    private static Dictionary<string, CharacterData> _characterDataCache = new Dictionary<string, CharacterData>(); // 캐릭터 데이터 캐시
 
-    public static Dictionary<string, GameObject> CharacterPrefabs => _characterPrefabs;
     public static Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
 
     private static GameObject _characterHost;
@@ -66,28 +65,26 @@ public static class CharacterManager
         return character;
     }
 
-    // 캐릭터 프리팹을 가져오는 함수 (인스턴스화되지 않은 경우에도)
-    public static GameObject GetCharacterPrefab(string characterID)
+    // 캐릭터 데이터 로드 함수
+    public static CharacterData GetCharacterData(string characterID)
     {
-        if (_characterPrefabs.TryGetValue(characterID, out GameObject prefab))
+        if (_characterDataCache.TryGetValue(characterID, out CharacterData characterData))
         {
-            return prefab;
+            return characterData;
         }
 
-        // 프리팹을 로드하지 않았다면, 해당 경로에서 로드
-        string path = ResourcePathManager.GetResourcePath(characterID, StoryManager.GetCurrentStoryName(), ResourceType.Character, isShared: true);
-        prefab = Resources.Load<GameObject>(path);
+        // 캐릭터 데이터 경로 설정 및 로드
+        string path = $"SharedResources/CharacterDatas/CharacterData_{characterID}";
+        characterData = Resources.Load<CharacterData>(path);
 
-        if (prefab != null)
+        if (characterData == null)
         {
-            _characterPrefabs.Add(prefab.name, prefab); // 로드한 프리팹을 캐싱
-            return prefab;
-        }
-        else
-        {
-            Debug.LogWarning($"Character prefab with ID '{characterID}' not found at path '{path}'.");
             return null;
         }
+
+        // 캐시 저장
+        _characterDataCache.Add(characterID, characterData);
+        return characterData;
     }
 
     // 인스턴스화된 캐릭터를 가져오는 함수
@@ -162,5 +159,4 @@ public static class CharacterManager
     {
         return _instantiatedCharacters.Keys.ToList();
     }
-
 }

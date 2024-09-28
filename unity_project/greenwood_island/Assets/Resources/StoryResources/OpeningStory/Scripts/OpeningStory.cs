@@ -66,7 +66,7 @@ public class OpeningStory : Story
 
         // 라이언의 독백
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("배는 거친 파도에 휘청거리고, 바깥에서는 빗방울이 떨어지며 윈드실드에 부딪힌다."),
@@ -84,7 +84,7 @@ public class OpeningStory : Story
             ColorUtils.CustomColor("516FB7")
         ),
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("한 노인은 선실 구석에 앉아, 아무 말 없이 파도만 바라보고 있다."),
@@ -114,7 +114,7 @@ public class OpeningStory : Story
             new ScreenOverlayFilm(Color.black, 0.5f)// 눈을 질끈 감을 때 어두워지는 연출
         ),
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("갑작스러운 굉음과 함께 배가 크게 흔들린다. 중심을 잃고 몸이 기울어지는 게 느껴진다."),
@@ -134,7 +134,7 @@ public class OpeningStory : Story
         ),
         // 노인의 재등장과 불길한 대사
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("고개를 들자 노인의 모습이 희미하게 보인다. 그는 여전히 자리에 앉아 창밖을 바라보고 있다."),
@@ -153,7 +153,7 @@ public class OpeningStory : Story
         new CameraShake(3),
         new ImaginationClear(),
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("노인의 혼잣말이 귓가에 맴돈다. 마치 이 배의 마지막을 예언하는 듯한 불길한 목소리..."),
@@ -164,7 +164,7 @@ public class OpeningStory : Story
         new ImaginationEnter("ShipSide", 1f, Color.white, 1f),
 
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("서서히 소음이 멈추고, 배가 서서히 안정되기 시작한다."),
@@ -178,7 +178,7 @@ public class OpeningStory : Story
         
         // 그린우드 섬이 드러나는 장면
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("안개가 서서히 걷히며, 그린우드 섬의 고요한 전경이 눈앞에 모습을 드러낸다."),
@@ -193,6 +193,6 @@ public class OpeningStory : Story
     protected override SequentialElement ExitElements => new
     (
         new ScreenOverlayFilm(Color.black, 1f),
-        new StoryTransition("FirstKateStory")
+        new StoryTransition(new FirstKateStory())
     );
 }

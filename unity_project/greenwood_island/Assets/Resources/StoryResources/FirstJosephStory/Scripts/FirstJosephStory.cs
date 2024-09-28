@@ -3,123 +3,13 @@ using UnityEngine;
 
 public class FirstJosephStory : Story
 {
-    // FirstKateStory 스토리의 스크립트 로직을 여기에 작성하세요.
-    protected override SequentialElement StartElements => new (
-        new ScreenOverlayFilm(Color.black),
-        new PlaceEnter("SeaSidewalk"),
-        new CameraZoomByFactor(zoomFactor: 0.3f, duration: 0f),
-        new CameraMove2DByAngle(-80, 160f, duration: 0f)
-    );
+    // FirstJosephStory 스토리의 스크립트 로직을 여기에 작성하세요.
+    protected override SequentialElement StartElements => new ();
 
     protected override SequentialElement UpdateElements => new (
-        new ParallelElement(
-            new ScreenOverlayFilmClear(),
-            new CameraZoomClear(1f),
-            new CameraMove2DClear(3f)
-        ),
 
-        new ScreenOverlayFilmClear(1f),
-
-
-        new CharacterEnter(
-            "Kate",
-            .5f,
-            "Normal",
-            0
-        ),
-        // 라이언이 처음 걸어보는 해변가 길에 대한 감상
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("이 길로는 처음 와보네. 마을에 온 지 한 달이 넘었지만, 해변가 쪽은 잘 안 오게 되더라."),
-                new Line("날씨도 그렇고, 뭔가 익숙해질 만하면 태풍이 불어오니까…"),
-            }
-        ),
-
-        // 케이트의 답변
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("그래, 이쪽은 좀 한적하긴 하지. 대부분 사람들이 마을 중심가 쪽에 모이니까."),
-                new Line("하지만 난 가끔 여기 걸어. 바닷바람 맞으면서 생각도 정리되고, 조용해서 좋거든.", "Smile"),
-            }
-        ),
-
-        // 라이언의 독백
-        new Dialogue(
-            "",
-            new List<Line>
-            {
-                new Line("바닷바람이 불어오자 케이트의 말처럼 기분이 차분해지는 느낌이다."),
-                new Line("파도 소리가 귓가에 울리고, 발밑으로는 모래가 부드럽게 미끄러진다."),
-                new Line("이 길로는 처음 와봤지만, 그동안 왜 안 왔을까 싶을 정도로 평화롭고 고요하다."),
-            }
-        ),
-
-        // 케이트가 조셉 할아버지에 대한 설명을 이어감
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("조셉 할아버지, 참 대단한 분이야. 나 어렸을 때부터 저 카페를 운영하셨거든."),
-                new Line("지금은 몸이 안 좋으셔서 많이 힘들어 보이시지만, 그래도 여전히 카페에 나와 계셔.", "Concerned"),
-                new Line("그분이 해주는 커피는 정말 특별해. 할아버지 손길이 닿으면 모든 게 다르게 느껴져.", "Smile"),
-            }
-        ),
-
-        // 라이언이 조셉 할아버지에 대해 궁금증을 품음
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("그분이 그렇게 대단하신 분이야? 난 아직 한 번도 본 적이 없는데…"),
-                new Line("사람들이 그분 얘기를 많이 하더라. 그 카페도 마을 사람들한테는 굉장히 소중한 장소라고 하던데."),
-            }
-        ),
-
-        // 케이트가 조셉 할아버지를 만나면 좋을 거라고 설득하는 대사
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("응, 한 번쯤 만나보면 좋을 거야. 조셉 할아버지가 하는 얘기는 다 귀담아 들을 만해.", "Smile"),
-                new Line("그리고... 네가 만나면 할아버지도 분명 좋아하실 거야. 요즘 외로워 보이시더라고.", "Concerned"),
-            }
-        ),
-
-        // 라이언이 고개를 끄덕이며 동의함
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("그래, 한 번 만나봐야겠네. 커피도 궁금하고... 할아버지가 어떤 분인지 직접 알아보면 좋을 것 같아."),
-            }
-        ),
-
-        // 바다 풍경을 강조하는 연출
-        new ImaginationEnter(
-            "SeaView",
-            1f,
-            Color.white
-        ),
-        new Dialogue(
-            "",
-            new List<Line>
-            {
-                new Line("멀리서 파도가 부서지는 소리가 들려온다."),
-                new Line("짙은 푸른빛의 바다와 그 위로 반짝이는 햇살이 한데 어우러져 있다."),
-                new Line("케이트와 나는 해변을 따라 조용히 걸어가고, 머릿속엔 조셉 할아버지에 대한 생각이 가득했다."),
-            }
-        ),
-
-        new ImaginationClear(),
-
-        new AllCharactersClear(1f),
-        
         // 씨브리즈 카페 앞에 도착하는 장면
-        new PlaceEnter("SeabreezeCafeFront"), // 씨브리즈 카페 외부로 장소 전환
+        new PlaceEnter("CafeSeabreezeFront"), // 씨브리즈 카페 외부로 장소 전환
         new ScreenOverlayFilmClear(),
         new CharacterEnter(
             "Kate",
@@ -130,12 +20,13 @@ public class FirstJosephStory : Story
 
         // 카페 앞에서의 장면
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
-                new Line("조셉 할아버지의 카페, 씨브리즈는 해안가에 자리 잡고 있었다."),
-                new Line("오래된 나무로 지어진 이 카페는 소박하지만 따뜻한 분위기를 자아냈다."),
-                new Line("한 달 넘게 문을 닫아둔 탓인지, 밖은 한적했지만 창문 너머로는 불빛이 따뜻하게 비쳤다."),
+                new Line("해안가를 따라 조용히 걷다 보니 씨브리즈 카페가 보였다."),
+                new Line("바닷바람에 이따금 흔들리는 나무 간판은 오래되었지만, 그 안에서 느껴지는 따뜻함은 여전히 건재했다."),
+                new Line("한동안 문이 닫혀 있던 카페는 외부가 다소 황량해 보였지만, 창 너머로 새어 나오는 불빛은 오히려 더 따뜻해 보였다."),
+                new Line("케이트는 잠시 망설이다가 문을 두드렸다. 문 뒤에서 작은 떨림이 느껴지는 듯했다.")
             }
         ),
 
@@ -144,14 +35,18 @@ public class FirstJosephStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("조셉 할아버지, 저예요! 케이트."),
+                new Line("조셉 할아버지, 저예요! 케이트예요. 들어가도 될까요?")
             }
         ),
+
+        // 긴장감을 유지한 채, 문이 열리는 순간
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
-                new Line("안에서 무거운 발걸음 소리가 들리더니, 문이 천천히 열렸다."),
+                new Line("바람 소리만 들리는 고요한 순간이 지나고, 안에서 느릿하게 발걸음 소리가 들렸다."),
+                new Line("덜컥, 문이 열리는 소리가 해안의 조용한 바람에 퍼졌다."),
+                new Line("그 안에서 조셉 할아버지가 천천히 모습을 드러냈다.")
             }
         ),
 
@@ -168,7 +63,8 @@ public class FirstJosephStory : Story
             "Joseph",
             new List<Line>
             {
-                new Line("케이트? 이 시간에 무슨 일인가?")
+                new Line("케이트야, 이 시간에 무슨 일이냐?"),
+                new Line("아직 가게는 문을 열지도 않았는데...")
             }
         ),
 
@@ -177,7 +73,7 @@ public class FirstJosephStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("조셉 할아버지, 잘 지내셨죠? 몸은 좀 괜찮으세요?")
+                new Line("할아버지, 잘 지내셨어요? 몸은 좀 괜찮아지셨어요?")
             }
         ),
 
@@ -186,7 +82,8 @@ public class FirstJosephStory : Story
             "Joseph",
             new List<Line>
             {
-                new Line("응, 많이 나아졌네. 그래도 아직 완전히 회복된 건 아니야."),
+                new Line("하하, 많이 나아졌네. 다만, 옛날처럼 다시 팔팔해지긴 어렵겠지."),
+                new Line("그래도 이렇게 찾아와 주니 고맙구나.")
             }
         ),
 
@@ -195,16 +92,16 @@ public class FirstJosephStory : Story
             "Joseph",
             new List<Line>
             {
-                new Line("그리고... 이 사람은?")
+                new Line("그런데... 저 뒤에 있는 사람은 누구냐? 낯선 얼굴이로군.")
             }
         ),
 
-        // 라이언이 자기소개
+        // 라이언의 자기소개, 직업은 말하지 않고 모호하게
         new Dialogue(
             "Ryan",
             new List<Line>
             {
-                new Line("안녕하세요. 라이언입니다. 신문사에서 일하고 있어요. 처음 뵙겠습니다.")
+                new Line("안녕하세요. 처음 뵙겠습니다. 저는 라이언입니다. 케이트와 함께 왔습니다.")
             }
         ),
 
@@ -213,17 +110,27 @@ public class FirstJosephStory : Story
             "Joseph",
             new List<Line>
             {
-                new Line("신문사에서 왔다고? 흥미롭군."),
-                new Line("케이트가 데리고 올 만한 사람이니 믿을 만하겠지.")
+                new Line("그래, 케이트와 함께라면 믿을 만한 사람이겠지."),
+                new Line("얼굴을 보니 뭔가 사연이 많아 보이는구나. 이곳엔 무슨 일로 온 건가?")
             }
         ),
 
-        // 조셉 할아버지가 카페로 초대하는 대사
+        // 라이언이 답을 회피하며
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그저... 여러 가지로 알아보러 온 거죠. 마을을 둘러보는 중입니다.")
+            }
+        ),
+
+        // 조셉 할아버지가 차를 대접하겠다고 제안
         new Dialogue(
             "Joseph",
             new List<Line>
             {
-                new Line("카페는 아직 문을 열진 않았지만, 안에서 차라도 한 잔 하며 이야기 나누세.")
+                new Line("흠, 마을을 둘러본다라... 그렇군. 그럼, 차라도 한 잔 하면서 이야기를 나눠 보세."),
+                new Line("가게는 아직 닫았지만, 안으로 들어와. 따뜻한 차 한 잔 정도는 괜찮겠지.")
             }
         ),
 
@@ -232,33 +139,60 @@ public class FirstJosephStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("그럼, 우리 안으로 들어가요!")
+                new Line("할아버지 차는 언제나 특별하니까요. 그럼, 우리 안으로 들어가요."),
+                new Line("라이언, 할아버지 차를 마셔보면 당신도 이 마을이 좀 더 친숙하게 느껴질 거예요.")
             }
         ),
 
-        // 모두가 카페 안으로 들어가는 장면
-        new PlaceEnter("SeabreezeCafeInterior"),
+        // 카페 안으로 들어가는 장면
+        new ScreenOverlayFilm(Color.black, 1f),
+        new PlaceEnter("CafeSeabreezeInside"),
         new ScreenOverlayFilmClear(1f),
 
-        // 카페 안에서의 대화 장면으로 연결
+        // 카페 안에서의 대화 장면
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
-                new Line("씨브리즈 카페 안은 오래된 나무 가구들로 아늑한 분위기를 자아내고 있었다."),
-                new Line("조셉 할아버지는 주전자를 꺼내 차를 준비하며 나를 흥미롭게 바라보았다."),
+                new Line("씨브리즈 카페 안은 오래된 나무 향과 따뜻한 차 냄새가 가득했다."),
+                new Line("작은 공간이지만, 그 안에선 무언가 오래된 시간들이 숨쉬고 있는 듯했다."),
+                new Line("조셉 할아버지는 조용히 주전자를 꺼내 물을 데우며 나를 한 번 흘긋 보았다."),
+                new Line("그의 시선은 나를 관찰하는 듯하면서도, 무언가를 읽어내려는 것 같았다.")
+            }
+        ),
+
+        // 조셉 할아버지가 차를 준비하며 대화를 이어가는 장면
+        new Dialogue(
+            "Joseph",
+            new List<Line>
+            {
+                new Line("마을은 조용하지 않나? 이런 시골에서는 시끌벅적한 일도 없을 텐데..."),
+                new Line("그런데 너 같은 사람이 이곳에 온 걸 보면, 뭔가 목적이 있는 게겠지.")
+            }
+        ),
+
+        // 라이언이 어색하게 반응하는 장면
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그냥... 여유를 찾고 싶었을 뿐입니다. 마을이 꽤 평온해서요."),
+                new Line("솔직히 말하면 아직 이곳이 조금 낯설기도 하고요.")
+            }
+        ),
+
+        // 조셉 할아버지가 가볍게 웃으며 반응하는 장면
+        new Dialogue(
+            "Joseph",
+            new List<Line>
+            {
+                new Line("하하, 낯설다라... 누구나 처음엔 다 그런 법이지."),
+                new Line("하지만 곧 익숙해질 거다. 이 마을은... 사람을 금방 품어주거든.")
             }
         )
     );
 
-
-    protected override SequentialElement ExitElements => new (
-
-        new ScreenOverlayFilm(Color.black)
-    );
+    protected override SequentialElement ExitElements => new ();
 
     protected override string StoryDesc => "";
-
-
-
 }

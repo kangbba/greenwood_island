@@ -32,9 +32,19 @@ public class StoryEditor : EditorWindow
     {
         StoryEditorFileHandler.DisposeFileWatcher();
     }
-
     private void OnGUI()
     {
+        // 우측 상단에 Refresh 버튼 추가
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        
+        if (GUILayout.Button("Refresh", GUILayout.Width(100)))
+        {
+            LoadStoryFolders(); // 폴더 현황을 다시 로드
+        }
+        
+        EditorGUILayout.EndHorizontal();
+        
         EditorGUILayout.Space(20);
         EditorGUILayout.BeginHorizontal();
 
@@ -45,6 +55,7 @@ public class StoryEditor : EditorWindow
 
         StoryEditorFileHandler.HandleDragAndDrop(_selectedFolder, _folderContents, LoadFolderContents, Repaint);
     }
+
 
     private void DrawLeftPanel()
     {
@@ -68,7 +79,6 @@ public class StoryEditor : EditorWindow
     {
         _storyFolders = StoryEditorFileHandler.GetStoryFolders();
     }
-
     private void DrawStoryFolders()
     {
         foreach (var folder in _storyFolders)
@@ -82,8 +92,14 @@ public class StoryEditor : EditorWindow
                 LoadFolderContents();
             }
 
+            // Rename 버튼
+            if (GUILayout.Button("Rename", GUILayout.Height(30), GUILayout.Width(50)))
+            {
+                StoryRenamePopUp.ShowWindow(this, folder);  // 팝업창을 띄움
+            }
+
             // 삭제 버튼
-            if (GUILayout.Button("X", GUILayout.Height(60), GUILayout.Width(30)))
+            if (GUILayout.Button("X", GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (EditorUtility.DisplayDialog("폴더 삭제", $"정말 '{folder}' 폴더를 삭제하시겠습니까?", "삭제", "취소"))
                 {
@@ -94,11 +110,56 @@ public class StoryEditor : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
 
-        if (GUILayout.Button("+", GUILayout.Height(60), GUILayout.Width(200)))
+        if (GUILayout.Button("+", GUILayout.Height(60), GUILayout.Width(240))) // 폭을 넓혀줌
         {
             StoryCreationWindow.ShowWindow(this);
         }
     }
+    public void RenameStoryFolder(string oldFolderName, string newFolderName)
+    {
+        string oldFolderPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), oldFolderName);
+        string newFolderPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), newFolderName);
+
+        // 폴더 이름 변경
+        if (Directory.Exists(oldFolderPath) && !Directory.Exists(newFolderPath))
+        {
+            Directory.Move(oldFolderPath, newFolderPath);
+            Debug.Log($"{oldFolderName} 폴더가 {newFolderName}으로 변경되었습니다.");
+        }
+        else
+        {
+            Debug.LogError($"'{newFolderName}'이라는 이름의 폴더가 이미 존재합니다.");
+            return;
+        }
+
+        // .cs 파일 이름 변경 및 클래스 이름 변경
+        string oldScriptPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), newFolderName, "Scripts", $"{oldFolderName}.cs");
+        string newScriptPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), newFolderName, "Scripts", $"{newFolderName}.cs");
+
+        if (File.Exists(oldScriptPath) && !File.Exists(newScriptPath))
+        {
+            // 파일 이름 변경
+            File.Move(oldScriptPath, newScriptPath);
+
+            // 파일 내용에서 클래스 이름 변경
+            string scriptContent = File.ReadAllText(newScriptPath);
+            scriptContent = scriptContent.Replace($"class {oldFolderName}", $"class {newFolderName}");
+            File.WriteAllText(newScriptPath, scriptContent);
+
+            Debug.Log($"{oldFolderName}.cs 스크립트가 {newFolderName}.cs로 변경되었고, 클래스 이름이 {newFolderName}으로 변경되었습니다.");
+        }
+        else
+        {
+            Debug.LogError($"{newFolderName}.cs 스크립트가 이미 존재하거나 변경할 수 없습니다.");
+        }
+
+        // 변경 후 AssetDatabase 갱신
+        AssetDatabase.Refresh();
+
+        // 스토리 폴더 다시 로드
+        LoadStoryFolders();
+    }
+
 
     private void LoadFolderContents()
     {
@@ -166,6 +227,7 @@ public class StoryEditor : EditorWindow
         {
             string scriptContent = $@"
 using UnityEngine;
+using System.Collections.Generic;
 
 public class {storyName} : Story
 {{

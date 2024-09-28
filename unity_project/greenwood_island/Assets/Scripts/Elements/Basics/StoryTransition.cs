@@ -3,18 +3,25 @@ using UnityEngine;
 
 public class StoryTransition : Element
 {
-    private string _storyID;
+    private Story _storyInstance;
 
-    // 생성자를 통해 string storyID만 받도록 설정
-    public StoryTransition(string storyID)
+    // 생성자를 통해 Story 인스턴스를 받도록 설정
+    public StoryTransition(Story storyInstance)
     {
-        _storyID = storyID;
+        _storyInstance = storyInstance;
     }
 
     public override IEnumerator ExecuteRoutine()
     {
         // StoryManager를 통해 스토리 실행
-        StoryManager.PlayStory(_storyID);
+        if (_storyInstance != null)
+        {
+            StoryManager.PlayStory(_storyInstance);
+        }
+        else
+        {
+            Debug.LogError("Story instance is null.");
+        }
 
         yield return null;
     }

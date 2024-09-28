@@ -12,6 +12,11 @@ public class Place : MonoBehaviour
         if (_imageComponent != null)
         {
             _imageComponent.sprite = sprite;
+            _imageComponent.SetNativeSize();
+            Vector2 nativeImgSize = _imageComponent.rectTransform.sizeDelta;
+            float heightRatio = 1080 / nativeImgSize.y;
+
+            _imageComponent.rectTransform.sizeDelta = new Vector2(nativeImgSize.x * heightRatio, 1080);
         }
         else
         {

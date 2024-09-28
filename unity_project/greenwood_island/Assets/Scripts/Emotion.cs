@@ -2,14 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class Emotion : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _canvasGroup;  // 감정 페이드 처리를 위한 CanvasGroup
     [SerializeField] private Image _openedEyesImg;      // 눈을 뜰 때 사용할 오버레이 이미지
     [SerializeField] private Image[] _mouthImages;      // 말할 때 입 모양 이미지 배열
-    [SerializeField] private float _blinkInterval = 3f; // 눈 깜박임 간격
-    [SerializeField] private float _talkInterval = 0.2f; // 말하는 간격
+
+    private Vector2[] _mouthImgInitialScales;
+    private Vector2 _blinkIntervalRange = new Vector2(2f, 5f); // 눈 깜박임 간격
+    private Vector2 _talkIntervalRange = new Vector2(.05f, .25f); // 말하는 간격
 
     private bool _isActivated = false;
     private bool _isBlinking = false;
@@ -18,6 +21,17 @@ public class Emotion : MonoBehaviour
     private bool _isBlinkRoutinePlaying = false;
     private bool _isTalkingRoutinePlaying = false;
 
+    private void Start(){
+        _mouthImgInitialScales = new Vector2[_mouthImages.Length];
+
+        for (int i = 0; i < _mouthImages.Length; i++)
+        {
+            if (_mouthImages[i] != null)  
+            {
+                _mouthImgInitialScales[i] = _mouthImages[i].transform.localScale;
+            }
+        }
+    }
     private void Update()
     {
         if(!_isActivated){
@@ -36,14 +50,12 @@ public class Emotion : MonoBehaviour
     // 눈 깜박임 시작/중지 함수
     public void StartBlink(bool b)
     {
-        Debug.Log($"StartBlink {b}");
         _isBlinking = b;
     }
 
     // 말하기 시작/중지 함수
     public void StartTalking(bool b)
     {
-        Debug.Log($"StartTalking {b}");
         _isTalking = b;
     }
 
@@ -54,7 +66,7 @@ public class Emotion : MonoBehaviour
         while (_isBlinking && _isActivated)
         {
             SetOpenEyes(true);
-            yield return new WaitForSeconds(_blinkInterval);
+            yield return new WaitForSeconds(_blinkIntervalRange.RandomValue());
             SetOpenEyes(false);
             yield return new WaitForSeconds(0.1f);
         }
@@ -62,32 +74,43 @@ public class Emotion : MonoBehaviour
         SetOpenEyes(false);
     }
 
-    // 말하기 코루틴
     private IEnumerator TalkingRoutine()
     {
         Debug.Log("TalkingRoutine");
         _isTalkingRoutinePlaying = true;
-        int mouthIndex = 0;
+
+        // -1 (입을 닫은 상태)와 0부터 _mouthImages.Length - 1까지의 인덱스를 리스트로 생성
+        List<int> mouthIndices = new List<int> { -1 };  // 먼저 -1을 추가 (입을 닫은 상태)
+        for (int i = 0; i < _mouthImages.Length; i++)
+        {
+            mouthIndices.Add(i);  // 입 모양 인덱스를 추가
+        }
+
+        int currentIndex = 0;  // 리스트의 현재 인덱스
+
         while (_isTalking && _isActivated)
         {
-            SetMouthImage(-1);  // 입을 닫음
-            yield return new WaitForSeconds(_talkInterval * 0.5f);  // 잠시 입을 닫음
+            // 현재 인덱스에 맞는 입 모양 설정
+            SetMouthImage(mouthIndices[currentIndex], new Vector2(Random.Range(0.95f,1.05f), Random.Range(0.95f,1.05f)));
 
-            // 입 모양 전환
-            mouthIndex = (mouthIndex + 1) % _mouthImages.Length;
-            SetMouthImage(mouthIndex);  // 입 모양 이미지를 활성화
-            yield return new WaitForSeconds(_talkInterval);
+            // 다음 인덱스 계산 (리스트를 순환)
+            currentIndex = (currentIndex + 1) % mouthIndices.Count;
+
+            yield return new WaitForSeconds(_talkIntervalRange.RandomValue());
         }
+
         _isTalkingRoutinePlaying = false;
-        // 코루틴이 종료될 때 입을 닫은 상태로 원상복구
-        SetMouthImage(-1);
+        SetMouthImage(-1);  // 코루틴이 종료될 때 입을 닫은 상태로 원상복구
     }
 
+
+
     // 특정 인덱스의 입 모양 이미지를 활성화하는 함수 (-1이면 모두 비활성화)
-    private void SetMouthImage(int index)
+    private void SetMouthImage(int index, Vector2 scale = default)
     {
         for (int i = 0; i < _mouthImages.Length; i++)
         {
+            _mouthImages[i].transform.localScale = _mouthImgInitialScales[i] * scale;
             _mouthImages[i].gameObject.SetActive(i == index); // 인덱스가 일치하면 활성화, 아니면 비활성화
         }
     }

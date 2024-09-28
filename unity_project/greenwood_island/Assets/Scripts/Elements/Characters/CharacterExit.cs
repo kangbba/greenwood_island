@@ -23,7 +23,7 @@ public class CharacterExit : Element
             Debug.LogWarning($"No active character found with ID: {_characterID} to exit.");
             yield break;
         }
-        character.SetVisibility(false, _duration);
+        character.AllEmotionsFadeOut(_duration);
         yield return new WaitForSeconds(_duration); // 애니메이션이 완료될 때까지 대기
 
         // 애니메이션 완료 후 캐릭터 제거

@@ -7,13 +7,11 @@ using DG.Tweening;  // DOTween을 사용하기 위해 추가
 public class AllCharactersClear : Element
 {
     private float _duration;
-    private Ease _easeType;
 
 
-    public AllCharactersClear(float duration = 1f, Ease easeType = Ease.InQuad)
+    public AllCharactersClear(float duration = 1f)
     {
         this._duration = duration;
-        this._easeType = easeType;
     }
 
     public override IEnumerator ExecuteRoutine()

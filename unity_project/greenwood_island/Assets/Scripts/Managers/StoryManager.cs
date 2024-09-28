@@ -11,9 +11,9 @@ public static class StoryManager
     // StoryManager 초기화 메서드
     public static void Init()
     {
-             PlayStory("FirstJosephStory");
+      //       PlayStory("FirstJosephStory");
    //     PlayStory("OpeningStory");
-    //        PlayStory("FirstKateStory");
+            PlayStory(new FirstKateStory());
     }
 
     // 현재 스토리의 이름을 가져오는 메서드
@@ -23,27 +23,28 @@ public static class StoryManager
     }
 
     // 스토리를 실행하는 메서드
-    public static void PlayStory(string storyName)
+    public static void PlayStory(Story storyInstance)
     {
         _previousStory = _currentStory;
 
-        // 스토리 타입을 현재 어셈블리에서 찾음
-        Type storyType = FindStoryType(storyName);
-        if (storyType == null)
+        // 스토리 인스턴스가 유효한지 확인
+        if (storyInstance == null)
         {
-            Debug.LogError($"Story class '{storyName}' could not be found in the current assembly.");
+            Debug.LogError("Invalid or null story instance.");
             return;
         }
 
+        // 현재 스토리를 인스턴스로 설정
+        _currentStory = storyInstance;
+
         try
         {
-            // Reflection을 사용해 스토리 클래스 동적 인스턴스화 시도
-            _currentStory = (Story)Activator.CreateInstance(storyType);
+            // 스토리 시작 루틴 실행
             CoroutineUtils.StartCoroutine(StoryStartRoutine());
         }
         catch (Exception e)
         {
-            Debug.LogError($"Failed to instantiate story '{storyName}': {e.Message}");
+            Debug.LogError($"Failed to start story: {e.Message}");
         }
     }
 

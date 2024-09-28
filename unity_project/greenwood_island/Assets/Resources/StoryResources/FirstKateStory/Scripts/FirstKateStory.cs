@@ -20,7 +20,7 @@ public class FirstKateStory : Story
             new CameraMove2DClear(3f)
         ),
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("그린우드에 온 지 벌써 한 달이 지났다."),
@@ -34,6 +34,7 @@ public class FirstKateStory : Story
         new PlaceEnter("BakeryInside"),
         new ScreenOverlayFilmClear(),
         new CameraZoomClear(1f),
+        new SFXsClear(),
 
         new CharacterEnter(
             "Kate",
@@ -50,7 +51,7 @@ public class FirstKateStory : Story
         ),
 
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("케이트, 그녀는 이 마을에서 작은 베이커리를 운영하고 있다."),
@@ -82,7 +83,7 @@ public class FirstKateStory : Story
             }
         ),
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("매번 다른 날씨에 따라 조절해야 한다니, 생각보다 더 섬세한 일이었다."),
@@ -108,18 +109,18 @@ public class FirstKateStory : Story
 
         new ImaginationEnter(
             "Bread",
-            1f,
+            0.34f,
             Color.white
         ),
         new SFXsClear(),
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("그녀가 내미는 빵은 언제나 특별하다."),
                 new Line("화려하지 않고 소박하지만, 말로는 설명 할 수 없는, 뭔가 더 깊은 게 있다."),
+                new Line("한 입 베어 물 때마다 입안 가득 퍼지는 폭신한 식감이 마음을 편안하게 해주는 듯 하다."),
                 new Line("아마 케이트의 열정과 정성이 담겨 있어서 그런 거겠지."),
-                new Line("한 입 베어 물 때마다 입안 가득 퍼지는 폭신한 식감이, 이 섬에서의 일상이 점점 더 좋아진다."),
             }
         ),
 
@@ -141,7 +142,7 @@ public class FirstKateStory : Story
         ),
 
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("케이트와 나누는 이런 대화가 요즘 나에게는 가장 소중한 시간이다."),
@@ -154,18 +155,19 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("아, 맞다. 조셉 할아버지께 드릴 물건이 있는데, 요즘은 직접 오시기 힘들어 보이셔서 내가 가져다드리려고 해."),
-                new Line("며칠 전에 빵을 가져다드렸는데, 그때도 몸이 많이 안 좋아 보이시더라구."),
+                new Line("아, 맞다. 조셉 할아버지께 빵을 가져다 드리려고 해, 요즘은 직접 오시기 힘들어 보이셔서 말이야."),
+                new Line("며칠 전에도 빵을 가져다드렸어. 근데... 요새 몸이 많이 안 좋아 보이시더라구."),
             }
         ),
 
         // 라이언의 독백으로 조셉 할아버지에 대한 기억을 떠올리는 장면
         new Dialogue(
-            "",
+            "Mono",
             new List<Line>
             {
                 new Line("조셉 할아버지... 어렴풋하게 들은 기억이 있다."),
-                new Line("마을 사람들 사이에서 종종 이름이 오갔다. 해안가에 있는 카페 주인이라던가, 건강이 좋지 않다는 소리도 어딘가에서 들었던 것 같다."),
+                new Line("마을 사람들 사이에서 종종 이름이 오갔다. 해안가에 있는 카페 주인이라던가..."),
+                new Line("건강이 좋지 않다는 소리도 어딘가에서 들었던 것 같다."),
                 new Line("그가 이 마을에서 중요한 인물이라는 건 알겠지만, 정작 얼굴은 한 번도 본 적이 없다."),
             }
         ),
@@ -175,7 +177,8 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("해안가에서 카페 씨브리즈를 운영하시는 분이야. 건강이 안 좋으셔서 한 달 넘게 문을 닫으셨다가 최근에 다시 매장을 여셨어."),
+                new Line("해안가에서 카페 씨브리즈라는 카페를 운영하시는 분이야."),
+                new Line("건강이 안 좋으셔서 한 달 넘게 문을 닫으셨다가 최근에 다시 매장을 여셨어."),
                 new Line("마을 사람들이 다들 걱정할 정도로 열심히 사시는 분인데, 요즘은 어딘가 조금 달라졌다고 해야 할까...", "Concerned"),
                 new Line("내가 가는 김에 너도 같이 갈래? 너도 한 번쯤 만나뵈면 좋을 거야. 커피도 맛있고, 그분 이야기도 흥미로울 거야.", "Smile"),
             }
@@ -230,7 +233,7 @@ public class FirstKateStory : Story
             new Line("정말? 라이언이라면 그렇게 말해 줄 줄 알았다구!", "Smile"),
             new Line("그럼 이따 마을 입구에서 보자!", "Smile"),
         }),
-        new Dialogue("", new List<Line>
+        new Dialogue("Mono", new List<Line>
         {
             new Line("케이트는 이 마을에서 처음 나를 맞아준 사람이고, 지금까지 항상 내 편이 되어줬다. 그녀의 말이라면 믿어도 되겠지.", "Normal"),
             new Line("그 사람은 어떤 사람일까?", "Normal"),
@@ -267,7 +270,7 @@ public class FirstKateStory : Story
     protected override SequentialElement ExitElements => new (
 
         new ScreenOverlayFilm(Color.black),
-        new StoryTransition("FirstJosephStory")
+        new StoryTransition(new RoadToFirstJoseph())
     );
 
     protected override string StoryDesc => "";

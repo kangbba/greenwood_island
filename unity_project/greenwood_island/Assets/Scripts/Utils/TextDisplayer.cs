@@ -84,7 +84,6 @@ public class TextDisplayer : MonoBehaviour
         foreach (var container in _lineContainers)
         {
             yield return container.RevealNextText(revealSpeed, waitForInputCoroutine, onLineStarted, onLineComplete); // 연속적으로 텍스트를 표시
-            Debug.Log("텥스트 2");
         }
     }
 

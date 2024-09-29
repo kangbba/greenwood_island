@@ -253,18 +253,7 @@ public class FirstKateStory : Story
         new Dialogue("Kate", new List<Line>
         {
             new Line("준비는 다 됐어? 준비가 다 됐다면 말해줘", "Smile"),
-        }),
-        new UserActionEnter(
-            new UserActionBtnContent(
-                "케이트에게 말하기",
-                new SequentialElement(
-                    new Dialogue("Kate", new List<Line>
-                    {
-                        new Line("갈 준비가 됐구나? 얼른 가자!", "Normal")
-                    })
-                )
-            )
-        )
+        })
     );
 
     protected override SequentialElement ExitElements => new (

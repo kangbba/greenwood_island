@@ -13,8 +13,10 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private DialoguePlayer _dialoguePlayer;
     [SerializeField] private ChoiceUI _choiceUI;
     [SerializeField] private CutInUI _cutInUI;
-    [SerializeField] private UserActionUI _userActionUI;
     [SerializeField] private Transform _imaginationLayer;
+    [SerializeField] private Transform _characterLayerUI;
+
+    [SerializeField] private Letterbox _letterBox;
 
 
     public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
@@ -24,6 +26,7 @@ public class SystemCanvas : MonoBehaviour
     public ChoiceUI ChoiceUI { get => _choiceUI;  }
     public CutInUI CutInUI { get => _cutInUI; }
     public TextMeshProUGUI IntertitleText { get => _intertitleText; }
-    public UserActionUI UserActionUI {get => _userActionUI; }
     public Transform ImaginationLayer { get => _imaginationLayer; }
+    public Letterbox LetterBox { get => _letterBox; }
+    public Transform CharacterLayerUI { get => _characterLayerUI; }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using System;
+using System.Linq;
 
 public class ChoiceUI : MonoBehaviour
 {
@@ -39,9 +41,11 @@ public class ChoiceUI : MonoBehaviour
             choiceButton.FadeIn(0.5f);
 
             // 균등하게 배치하기 위해 위치 설정
-            float yPosition = Mathf.Lerp(_choicesContainer.GetComponent<RectTransform>().rect.height / 2 - ButtonHeight / 2,
-                                         -_choicesContainer.GetComponent<RectTransform>().rect.height / 2 + ButtonHeight / 2,
-                                         (float)i / (choices.Count - 1));
+            float targetHeight = 100 * choices.Count - 100;
+            float perone = (choices.Count == 1) ? 0 : (float)i / (choices.Count - 1);
+            float yPosition = Mathf.Lerp(-targetHeight,
+                                         targetHeight,
+                                         perone);
             choiceButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, yPosition);
 
             int index = i;

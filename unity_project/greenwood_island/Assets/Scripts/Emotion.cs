@@ -76,7 +76,6 @@ public class Emotion : MonoBehaviour
 
     private IEnumerator TalkingRoutine()
     {
-        Debug.Log("TalkingRoutine");
         _isTalkingRoutinePlaying = true;
 
         // -1 (입을 닫은 상태)와 0부터 _mouthImages.Length - 1까지의 인덱스를 리스트로 생성

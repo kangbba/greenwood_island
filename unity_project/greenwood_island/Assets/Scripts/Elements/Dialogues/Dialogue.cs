@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class Dialogue : Element
 {
     private string _characterID; // 캐릭터 이름
@@ -19,7 +18,6 @@ public class Dialogue : Element
         this._characterID = characterID;
         this._lines = lines;
     }
-
     public string CharacterID => _characterID;
     public List<Line> Lines => _lines;
 
@@ -55,8 +53,10 @@ public class Dialogue : Element
 
         //다이얼로그 텍스트
         dialoguePlayer.ClearDialogueText();
-        dialoguePlayer.ShowUp(true, .3f);
-        yield return new WaitForSeconds(.3f);
+        if(!dialoguePlayer.IsOn){
+            dialoguePlayer.ShowUp(true, .3f);
+            yield return new WaitForSeconds(.3f);
+        }
 
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
@@ -90,11 +90,10 @@ public class Dialogue : Element
             {
                 activeCharacter.CurrentEmotion.StartTalking(false);  // 텍스트 표시가 완료되면 말하기 중지
             }
-            dialoguePlayer.FadeOutDialogueText(.15f);
-            yield return new WaitForSeconds(.15f);
+            dialoguePlayer.FadeOutDialogueText(.1f);
+            yield return new WaitForSeconds(.1f);
         }
-        dialoguePlayer.SetCharacterTextClor(Color.clear, .15f);
-        yield return new WaitForSeconds(.15f);
-        dialoguePlayer.SetCharacterText("");
+        dialoguePlayer.SetCharacterTextClor(Color.clear, .1f);
+        yield return new WaitForSeconds(.1f);
     }
 }

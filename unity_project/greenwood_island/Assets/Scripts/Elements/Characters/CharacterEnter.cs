@@ -5,16 +5,16 @@ using DG.Tweening;  // DOTween을 사용하기 위해 추가
 public class CharacterEnter : Element
 {
     private string _characterID;
+    private string _initialEmotionID; // 초기 이모션 설정
     private float _screenPeroneX;
     private float _duration;
-    private string _initialEmotionID; // 초기 이모션 설정
     private int _emotionIndex;
 
-    public CharacterEnter(string characterID, float screenPeroneX, string initialEmotionID, int emotionIndex, float duration = 1f)
+    public CharacterEnter(string characterID, string initialEmotionID, float screenPeroneX, int emotionIndex, float duration = 1f)
     {
         this._characterID = characterID;
-        this._screenPeroneX = screenPeroneX;
         this._initialEmotionID = initialEmotionID; // 초기 이모션 설정
+        this._screenPeroneX = screenPeroneX;
         this._emotionIndex = emotionIndex; 
         this._duration = duration;
     }

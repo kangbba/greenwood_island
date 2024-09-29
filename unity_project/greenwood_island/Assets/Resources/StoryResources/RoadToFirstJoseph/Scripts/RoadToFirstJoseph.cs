@@ -23,8 +23,8 @@ public class RoadToFirstJoseph : Story
 
         new CharacterEnter(
             "Kate",
-            .5f,
             "Normal",
+            .5f,
             0
         ),
 

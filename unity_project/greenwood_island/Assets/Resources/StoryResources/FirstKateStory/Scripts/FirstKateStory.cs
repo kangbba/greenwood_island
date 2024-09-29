@@ -30,6 +30,7 @@ public class FirstKateStory : Story
                 new Line("그 열정은 언제 봐도 대단하다."),
             }
         ),
+        new DialoguePanelClear(),
         new ScreenOverlayFilm(Color.white),
         new PlaceEnter("BakeryInside"),
         new ScreenOverlayFilmClear(),
@@ -38,8 +39,8 @@ public class FirstKateStory : Story
 
         new CharacterEnter(
             "Kate",
-            .5f,
             "Normal",
+            .5f,
             0
         ),
         new Dialogue(
@@ -123,7 +124,7 @@ public class FirstKateStory : Story
                 new Line("아마 케이트의 열정과 정성이 담겨 있어서 그런 거겠지."),
             }
         ),
-
+        new DialoguePanelClear(),
         new ImaginationClear(),
         new Dialogue(
             "Ryan",
@@ -183,6 +184,7 @@ public class FirstKateStory : Story
                 new Line("내가 가는 김에 너도 같이 갈래? 너도 한 번쯤 만나뵈면 좋을 거야. 커피도 맛있고, 그분 이야기도 흥미로울 거야.", "Smile"),
             }
         ),
+        new DialoguePanelClear(),
 
         // 선택지를 통해 라이언의 반응을 유도
         new ChoiceSet(
@@ -238,22 +240,20 @@ public class FirstKateStory : Story
             new Line("케이트는 이 마을에서 처음 나를 맞아준 사람이고, 지금까지 항상 내 편이 되어줬다. 그녀의 말이라면 믿어도 되겠지.", "Normal"),
             new Line("그 사람은 어떤 사람일까?", "Normal"),
         }),
+        new DialoguePanelClear(),
         new SFXsClear(1f),
         new ScreenOverlayFilm(Color.white, 1f),
         new AllCharactersClear(0f),
-        new PlaceEnter("Town1"),
-        new CameraMove2D(new Vector2(16, 177), 0f),
-        new CameraZoomLocalPosZ(-508, 0f),
-        new ScreenOverlayFilmClear(),
+        new PlaceEnter("BakeryFront"),
+        new ParallelElement(
+            new CameraMove2D(new Vector2(16, 177), 0f),
+            new CameraZoomLocalPosZ(-508, 0f),
+            new ScreenOverlayFilmClear()
+        ),
 
         new CameraMove2DClear(1f),
         new CameraZoomClear(1f),
-
-        new CharacterEnter("Kate", .5f, "Smile", 0),
-        new Dialogue("Kate", new List<Line>
-        {
-            new Line("준비는 다 됐어? 준비가 다 됐다면 말해줘", "Smile"),
-        })
+        _userActionPhase
     );
 
     protected override SequentialElement ExitElements => new (
@@ -264,6 +264,30 @@ public class FirstKateStory : Story
 
     protected override string StoryDesc => "";
 
+    
+   private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(
+        new List<WorldCharacterEnter> 
+        { 
+            new WorldCharacterEnter("Kate", "Smile", Vector2.one * .09f, new Vector2(-130, -191), 1f) 
+        },
+        new Vector2(80, -450),
+        new Dictionary<UserActionType, SequentialElement>
+        {
+            {
+                UserActionType.Talking, 
+                new SequentialElement(
+                    new Dialogue(
+                        "Kate", 
+                        new List<Line> 
+                        {
+                            new Line("갈 준비 다 됐어?"),
+                            new Line("그럼, 가자!")
+                        }
+                    )
+                )
+            }
+        }
+    );
 
 
 }

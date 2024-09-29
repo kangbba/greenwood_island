@@ -95,7 +95,6 @@ public static class CharacterManager
         // 캐릭터를 인스턴스화
         GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.Instance.WorldCanvas.CharacterLayerWorld.transform);
         Character character = characterObject.GetComponent<Character>();
-
         // 캐릭터 등록
         _instantiatedCharacters.Add(characterID, character);
 

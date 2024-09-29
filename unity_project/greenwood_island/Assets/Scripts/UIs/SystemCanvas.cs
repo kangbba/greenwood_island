@@ -18,6 +18,8 @@ public class SystemCanvas : MonoBehaviour
 
     [SerializeField] private Letterbox _letterBox;
 
+    [SerializeField] private UserActionWindow _userActionWindow;
+
 
     public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
     public Transform FXLayer { get => _fxLayer; }
@@ -29,4 +31,5 @@ public class SystemCanvas : MonoBehaviour
     public Transform ImaginationLayer { get => _imaginationLayer; }
     public Letterbox LetterBox { get => _letterBox; }
     public Transform CharacterLayerUI { get => _characterLayerUI; }
+    public UserActionWindow UserActionWindow { get => _userActionWindow; }
 }

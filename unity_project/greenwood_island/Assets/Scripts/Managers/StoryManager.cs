@@ -63,10 +63,10 @@ public static class StoryManager
     // 스토리 시작, 업데이트, 종료 루틴을 관리하는 코루틴
     private static IEnumerator StoryStartRoutine()
     {
+        UIManager.Instance.SystemCanvas.LetterBox.gameObject.SetActive(true);
         UIManager.Instance.SystemCanvas.LetterBox.SetOn(false, 2f);
         yield return _currentStory.ClearRoutine(2f);
         UIManager.Instance.SystemCanvas.LetterBox.SetOn(true, 2f);
-        yield return new WaitForSeconds(2f);
 
         if (_currentStory != null)
         {

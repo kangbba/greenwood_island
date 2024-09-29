@@ -19,10 +19,14 @@ public class DialoguePlayer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _characterText;
     [SerializeField] private TextDisplayer _dialogueText;
     [SerializeField] private DialogueGuide _dialogueGuide;  // DialogueGuide 참조
+    
+    private bool _isOn = true;
     private EDialogueState _dialogueState = EDialogueState.NotStarted;
 
     public bool CanCompleteInstantly { get; set; } = true; // 즉시 완료 가능 여부를 설정하는 옵션
     public EDialogueState DialogueState => _dialogueState;
+
+    public bool IsOn { get => _isOn; }
 
     private void Start()
     {
@@ -112,7 +116,11 @@ public class DialoguePlayer : MonoBehaviour
 
     public void ShowUp(bool show, float duration)
     {
-        float offScreenY = -_panelRectTransform.rect.height;
+        if(_isOn == show){
+            return;
+        }
+        _isOn = show;
+        float offScreenY = -500;
         Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
         _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutCubic);
     }

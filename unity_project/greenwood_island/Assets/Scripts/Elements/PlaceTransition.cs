@@ -40,6 +40,9 @@ public class PlaceTransition : Element
             Debug.LogError("PlaceTransition :: 새로운 장소를 생성하지 못했습니다.");
             yield break;
         }
+        // 4. 이전 장소 파괴
+        PlaceManager.DestroyPreviousPlaces();
+        Debug.Log("PlaceTransition :: 이전 장소 파괴 완료");
         // 1. 장소 전환 전 카메라 연출 실행
         if (_initialCameraElements != null)
         {
@@ -47,9 +50,6 @@ public class PlaceTransition : Element
             yield return _initialCameraElements.ExecuteRoutine();
         }
 
-        // 4. 이전 장소 파괴
-        PlaceManager.DestroyPreviousPlaces();
-        Debug.Log("PlaceTransition :: 이전 장소 파괴 완료");
 
         // 5. 필름 제거 (ScreenOverlayFilmClear 효과)
         yield return new ScreenOverlayFilmClear(_clearDuration).ExecuteRoutine();

@@ -117,6 +117,10 @@ public class Emotion : MonoBehaviour
     // 눈 뜨기/감기
     private void SetOpenEyes(bool b)
     {
+        if(_openedEyesImg == null){
+            Debug.LogWarning("opened eyes img is null");
+            return;
+        }
         _openedEyesImg.gameObject.SetActive(b);  
     }
 

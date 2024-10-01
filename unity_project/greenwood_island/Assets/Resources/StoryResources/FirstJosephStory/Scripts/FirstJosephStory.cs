@@ -8,9 +8,7 @@ public class FirstJosephStory : Story
 
     protected override SequentialElement UpdateElements => new (
 
-        // 씨브리즈 카페 앞에 도착하는 장면
-        new PlaceEnter("CafeSeabreezeFront"), // 씨브리즈 카페 외부로 장소 전환
-        new ScreenOverlayFilmClear(),
+        new PlaceTransition(Color.white, 1f, "CafeSeabreezeFront",  null, 1f,  true),
         new CharacterEnter(
             "Kate",
             "Smile",
@@ -47,10 +45,15 @@ public class FirstJosephStory : Story
             }
         ),
 
+        new CharacterMove(
+            "Kate",
+            .33f,
+            .5f
+        ),
         new CharacterEnter(
             "Joseph",
             "Smile",
-            .5f,
+            .66f,
             0
         ),
 
@@ -91,30 +94,8 @@ public class FirstJosephStory : Story
             }
         ),
         new DialoguePanelClear(),
-
-        // 카페 안으로 들어가는 장면
-        new ScreenOverlayFilm(Color.black, 1f),
-        new PlaceEnter("CafeSeabreezeInside"),
-        new ScreenOverlayFilmClear(1f),
-
-        // 카페 안에서 대화 시작
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("카페 안은 조용하고 따뜻했다. 오래된 나무 향과 차 향기가 공기 속에 스며들어 있었다."),
-                new Line("나는 처음 이곳을 둘러보며 고즈넉한 분위기에 감탄했다.")
-            }
-        ),
-
-        // 케이트가 조셉에게 빵을 건네는 장면
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("할아버지, 이번에 새로 구운 빵이에요. 드셔보세요! 이번엔 진짜 더 정성껏 만들었거든요.")
-            }
-        ),
+        
+        new PlaceTransition(Color.black, 1f, "CafeSeabreezeInside", null, 1f, true),
 
         // 조셉이 빵을 받아들이며 입맛이 없다고 거절하는 장면
         new Dialogue(
@@ -238,8 +219,8 @@ public class FirstJosephStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("할아버지, 라이언은 도시에서 꽤 유명한 사진작가였어요."),
-                new Line("조금 눈치없는 성격이긴 하지만요... 라이언이 찍은 사진들을 보면 놀라실걸요?"),
+                new Line("할아버지, 라이언은 도시에서 꽤 유명한 사진작가예요."),
+                new Line("성격은 조금 고지식하긴 한데, 사진 하나는 끝내주거든요. 직접 보면 놀라실 거예요."),
             }
         ),
 
@@ -248,12 +229,46 @@ public class FirstJosephStory : Story
             new List<Line>
             {
                 new Line("허허, 낯설겠지. 하지만 이곳은 금방 자네를 품어줄 걸세."),
-                new Line("이 마을은 오래된 이야기들과 함께 살아가는 곳이지.")
+                new Line("이 마을은 오래된 이야기들과 함께 살아가는 곳이지."),
+                new Line("언제든지 이 카페에 들러도 괜찮네. 따뜻한 차 한 잔 정도는 항상 준비돼 있으니 말일세."),
+                new Line("섬이 처음이라면 이곳저곳 천천히 둘러보는 것도 좋겠지. 여유롭게 말일세.")
+            }
+        ),
+
+        // 케이트가 조셉에게 인사하는 장면
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("그럼 할아버지, 저희 이만 가볼게요. 다음에 또 빵 구워서 가져올게요!"),
+                new Line("몸 조심하시고, 너무 무리하지 마세요.")
             }
         )
     );
 
-    protected override SequentialElement ExitElements => new ();
+    protected override SequentialElement ExitElements => new (
+        new StoryTransition(new AfterFirstJoseph()));
 
     protected override string StoryDesc => "";
+
+
+//    private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(
+//         new Vector2(80, -450),
+//         new Dictionary<UserActionType, SequentialElement>
+//         {
+//             {
+//                 UserActionType.Talking, 
+//                 new SequentialElement(
+//                     new Dialogue(
+//                         "Kate", 
+//                         new List<Line> 
+//                         {
+//                             new Line("갈 준비 다 됐어?"),
+//                             new Line("그럼, 가자!")
+//                         }
+//                     )
+//                 )
+//             }
+//         }
+//     );
 }

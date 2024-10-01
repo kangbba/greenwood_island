@@ -98,7 +98,7 @@ public class OpeningStory : Story
             "노인",
             new Line("바다가… 다 기억해… 내가 본 것들… 물속에 잠겼어… 저 깊은 곳에…")
         ),
-        new ImaginationClear(),
+        new AllImaginationsClear(),
         new Dialogue(
             "라디오",
             new List<Line>
@@ -151,7 +151,7 @@ public class OpeningStory : Story
             }
         ),
         new CameraShake(3),
-        new ImaginationClear(),
+        new AllImaginationsClear(),
         new Dialogue(
             "Mono",
             new List<Line>
@@ -172,7 +172,7 @@ public class OpeningStory : Story
             }
         ),
         new ParallelElement(
-            new ImaginationClear(1f),
+            new AllImaginationsClear(1f),
             new ImaginationEnter("FarTown", 1f, Color.white, 1f)
         ),
         

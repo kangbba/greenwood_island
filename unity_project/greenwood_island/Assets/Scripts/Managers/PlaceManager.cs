@@ -4,7 +4,6 @@ using UnityEngine;
 public static class PlaceManager
 {
     private static Place _currentPlace; // 현재 활성화된 장소
-    private static Place _previousPlace; // 이전에 활성화된 장소
     private static List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
 
     // 현재 스토리 이름을 가져옴
@@ -44,8 +43,6 @@ public static class PlaceManager
 
         // 생성된 장소의 이미지 설정
         _currentPlace.SetImage(placeImage);
-
-        _previousPlace = _currentPlace; // 생성된 장소를 이전 장소로 설정
         _activePlaces.Add(_currentPlace); // 활성화된 장소 리스트에 추가
 
         return _currentPlace;
@@ -93,15 +90,23 @@ public static class PlaceManager
         return placeImage;
     }
 
-    // 이전 장소를 파괴하는 메서드
-    private static void DestroyPreviousPlace()
+    public static void DestroyPreviousPlaces()
     {
-        if (_previousPlace == null)
+        // 활성화된 장소가 2개 미만이면 경고 출력 후 반환
+        if (_activePlaces.Count < 2)
         {
-            Debug.LogWarning("PlaceManager :: Previous Place is null");
+            Debug.LogWarning("PlaceManager :: 파괴할 이전 장소가 없습니다.");
             return;
         }
-        _activePlaces.Remove(_previousPlace); // 리스트에서 제거
-        Object.Destroy(_previousPlace.gameObject);
+
+        // 마지막 장소를 제외한 모든 이전 장소 파괴
+        for (int i = _activePlaces.Count - 2; i >= 0; i--)  // 마지막 인덱스를 제외한 역순으로 루프
+        {
+            Place placeToDestroy = _activePlaces[i];
+            _activePlaces.RemoveAt(i);  // 리스트에서 제거
+            Object.Destroy(placeToDestroy.gameObject);  // 오브젝트 파괴
+            Debug.Log($"PlaceManager :: 장소 '{placeToDestroy.name}' 파괴 완료");
+        }
     }
+
 }

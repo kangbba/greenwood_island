@@ -23,6 +23,8 @@ public class ImaginationEnter : Element
         _easeType = easeType;
     }
 
+    public string ImaginationID { get => _imaginationID; }
+
     // 상상을 화면에 보여주는 코루틴
     public override IEnumerator ExecuteRoutine()
     {

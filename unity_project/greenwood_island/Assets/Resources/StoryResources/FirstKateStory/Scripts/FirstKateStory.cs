@@ -5,10 +5,17 @@ public class FirstKateStory : Story
 {
     // FirstKateStory 스토리의 스크립트 로직을 여기에 작성하세요.
     protected override SequentialElement StartElements => new (
-        new ScreenOverlayFilm(Color.black),
-        new PlaceEnter("BakeryFront"),
-        new CameraZoomByFactor(zoomFactor: 0.3f, duration: 0f),
-        new CameraMove2DByAngle(-80, 160f, duration: 0f),
+
+        new PlaceTransition(
+            Color.black, 
+            1f,
+            "BakeryFront", 
+            initialCameraElements : new ParallelElement(
+                new CameraZoomByFactor(zoomFactor: 0.3f, duration: 0f),
+                new CameraMove2DByAngle(-80, 160f, duration: 0f)
+                ), 
+            1f,
+            useCameraRestore : true),
         new SFXEnter("BirdChirp1", 1f, true, 1f),
         new SFXEnter("BirdChirpLong1", 1f, true, 3f)
     );
@@ -31,11 +38,9 @@ public class FirstKateStory : Story
             }
         ),
         new DialoguePanelClear(),
-        new ScreenOverlayFilm(Color.white),
-        new PlaceEnter("BakeryInside"),
-        new ScreenOverlayFilmClear(),
-        new CameraZoomClear(1f),
+
         new SFXsClear(),
+        new PlaceTransition(Color.black, 1f, "BakeryInside", null, 1f, true),
 
         new CharacterEnter(
             "Kate",
@@ -110,7 +115,7 @@ public class FirstKateStory : Story
 
         new ImaginationEnter(
             "Bread",
-            0.34f,
+            1f,
             Color.white
         ),
         new SFXsClear(),
@@ -125,7 +130,7 @@ public class FirstKateStory : Story
             }
         ),
         new DialoguePanelClear(),
-        new ImaginationClear(),
+        new AllImaginationsClear(),
         new Dialogue(
             "Ryan",
             new List<Line>
@@ -253,6 +258,7 @@ public class FirstKateStory : Story
 
         new CameraMove2DClear(1f),
         new CameraZoomClear(1f),
+        new CharacterEnter("Kate", "Smile", 0.5f) ,
         _userActionPhase
     );
 
@@ -266,10 +272,7 @@ public class FirstKateStory : Story
 
     
    private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(
-        new List<WorldCharacterEnter> 
-        { 
-            new WorldCharacterEnter("Kate", "Smile", Vector2.one * .09f, new Vector2(-130, -191), 1f) 
-        },
+        UserActionWindow.AnchorType.TopLeft,
         new Vector2(80, -450),
         new Dictionary<UserActionType, SequentialElement>
         {

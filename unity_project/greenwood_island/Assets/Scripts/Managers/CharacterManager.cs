@@ -65,45 +65,6 @@ public static class CharacterManager
         return character;
     }
     // 캐릭터 프리팹을 로드하여 인스턴스화하는 함수
-    public static Character CreateCharacterOnWorld(string characterID, Vector2 characterLocalScale, Vector2 characterLocalPos)
-    {
-        if (IsExist(characterID))
-        {
-            Debug.LogWarning($"Character with ID {characterID} is already instantiated.");
-            return _instantiatedCharacters[characterID];
-        }
-
-        // 캐릭터 프리팹 경로 설정 및 로드
-        string path = ResourcePathManager.GetResourcePath(characterID, StoryManager.GetCurrentStoryName(), ResourceType.Character, isShared: true); // 경로 가져오기
-        GameObject characterPrefab = Resources.Load<GameObject>(path);
-
-        // 프리팹을 찾지 못했을 경우
-        if (characterPrefab == null)
-        {
-            Debug.LogError($"Character prefab with ID '{characterID}' not found at path '{path}'.");
-            return null;
-        }
-
-        // 프리팹에 Character 스크립트가 부여되어 있는지 확인
-        Character characterComponent = characterPrefab.GetComponent<Character>();
-        if (characterComponent == null)
-        {
-            Debug.LogError($"The prefab '{characterID}' does not have a Character script attached.");
-            return null;
-        }
-
-        // 캐릭터를 인스턴스화
-        GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.Instance.WorldCanvas.CharacterLayerWorld.transform);
-        Character character = characterObject.GetComponent<Character>();
-        // 캐릭터 등록
-        _instantiatedCharacters.Add(characterID, character);
-
-        character.transform.localScale = characterLocalScale;
-        character.transform.localPosition = characterLocalPos;
-
-        return character;
-    }
-
     // 캐릭터 데이터 로드 함수
     public static CharacterData GetCharacterData(string characterID)
     {

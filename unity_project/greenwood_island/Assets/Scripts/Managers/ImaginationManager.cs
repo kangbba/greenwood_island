@@ -46,19 +46,20 @@ public static class ImaginationManager
             imaginationSprite = Resources.Load<Sprite>(resourcePath);
         }
 
-        if (imaginationSprite != null)
-        {
-            img.sprite = imaginationSprite;
-            img.color = new Color(img.color.r, img.color.g, img.color.b, 0f); // 초기 알파값을 0으로 설정
-        }
-        else
+        if (imaginationSprite == null)
         {
             Debug.LogError($"Failed to load sprite for Imagination ID: {imaginationID} from path '{resourcePath}'");
             Object.Destroy(imaginationObject); // 이미지 로드 실패 시 오브젝트 제거
             return null;
         }
+        
+        img.sprite = imaginationSprite;
         img.SetNativeSize();
+        Vector2 nativeImgSize = img.rectTransform.sizeDelta;
+        float heightRatio = 1080 / nativeImgSize.y;
 
+        img.rectTransform.sizeDelta = new Vector2(nativeImgSize.x * heightRatio, 1080);
+        img.color = new Color(img.color.r, img.color.g, img.color.b, 0f); // 초기 알파값을 0으로 설정
         // 딕셔너리에 등록
         _activeImaginations.Add(imaginationID, img);
 
@@ -79,6 +80,18 @@ public static class ImaginationManager
         }
     }
 
+    public static Image GetActiveImageByID(string imaginationID)
+    {
+        if (_activeImaginations.TryGetValue(imaginationID, out Image img))
+        {
+            return img;
+        }
+        else
+        {
+            Debug.LogWarning($"Active imagination with ID '{imaginationID}' not found.");
+            return null;
+        }
+    }
     // 상상 이미지를 페이드 아웃 후 제거하는 메서드
     public static void DestroyImagination(string imaginationID, float duration, Ease easeType)
     {

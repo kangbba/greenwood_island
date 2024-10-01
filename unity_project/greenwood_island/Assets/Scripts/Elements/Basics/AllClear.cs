@@ -26,8 +26,9 @@ public class AllClear : Element
             new CutInClear(_duration),
             new PlaceOverlayFilmClear(_duration),
             new ScreenOverlayFilmClear(_duration, Ease.OutQuad, true),
-            new ImaginationClear(_duration),
-            new DialoguePanelClear(_duration)
+            new AllImaginationsClear(_duration),
+            new DialoguePanelClear(_duration),
+            new LetterboxClear(_duration)
         );
 
         // ParallelElement의 실행을 시작하고 모든 작업이 완료될 때까지 기다린다.

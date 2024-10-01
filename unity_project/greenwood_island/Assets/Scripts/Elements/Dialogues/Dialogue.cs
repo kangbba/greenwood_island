@@ -74,13 +74,13 @@ public class Dialogue : Element
             // ShowLineRoutine에 콜백 추가
             yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeed, 
             () =>{
-                if (activeCharacter != null)
+                if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
                 {
                     activeCharacter.CurrentEmotion.StartTalking(true);  // 텍스트 표시가 완료되면 말하기 중지
                 }
             },
             () =>{
-                if (activeCharacter != null)
+                if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
                 {
                     activeCharacter.CurrentEmotion.StartTalking(false);  // 텍스트 표시가 완료되면 말하기 중지
                 }

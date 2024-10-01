@@ -110,7 +110,7 @@ public class RoadToFirstJoseph : Story
             }
         ),
 
-        new ImaginationClear(),
+        new AllImaginationsClear(),
 
         new AllCharactersClear(1f)
     );

@@ -13,7 +13,7 @@ public static class StoryManager
     {
       //       PlayStory("FirstJosephStory");
    //     PlayStory("OpeningStory");
-            PlayStory(new FirstKateStory());
+            PlayStory(new FirstJosephStory());
     }
 
     // 현재 스토리의 이름을 가져오는 메서드

@@ -52,13 +52,14 @@ public class PlaceTransition : Element
 
 
         // 5. 필름 제거 (ScreenOverlayFilmClear 효과)
-        yield return new ScreenOverlayFilmClear(_clearDuration).ExecuteRoutine();
+        new ScreenOverlayFilmClear(_clearDuration).Execute();
         // 6. 장소 전환 후 카메라 연출 실행
         if (_useCameraRestore)
         {
             new CameraZoomClear(_clearDuration).Execute();
             new CameraMove2DClear(_clearDuration).Execute();
         }
+        yield return new WaitForSeconds(_clearDuration);
 
 
         Debug.Log("PlaceTransition :: 장소 전환 완료");

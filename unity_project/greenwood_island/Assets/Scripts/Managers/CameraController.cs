@@ -74,9 +74,9 @@ public static class CameraController
         _depthTween = DepthLayer.DOLocalMoveZ(targetZ, duration).SetEase(easeType);
     }
 
-    public static void ZoomByFactor(float zoomFactor, float duration, Ease easeType = Ease.OutQuad)
+    public static void ZoomByFactor(float zoomPerone, float duration, Ease easeType = Ease.OutQuad)
     {
-        float targetZ = Mathf.Lerp(_zoomRange.x, _zoomRange.y, Mathf.Clamp01(zoomFactor));
+        float targetZ = Mathf.Lerp(_zoomRange.x, _zoomRange.y, Mathf.Clamp01(zoomPerone));
         _depthTween?.Kill();
         _depthTween = DepthLayer.DOLocalMoveZ(targetZ, duration).SetEase(easeType);
     }

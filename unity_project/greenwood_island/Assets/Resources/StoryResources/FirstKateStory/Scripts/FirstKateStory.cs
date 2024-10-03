@@ -265,7 +265,7 @@ public class FirstKateStory : Story
     protected override SequentialElement ExitElements => new (
 
         new ScreenOverlayFilm(Color.black),
-        new StoryTransition(new RoadToFirstJoseph())
+        new StoryTransition(new FirstRyanRoom())
     );
 
     protected override string StoryDesc => "";

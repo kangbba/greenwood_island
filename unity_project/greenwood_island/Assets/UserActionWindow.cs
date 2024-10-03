@@ -21,8 +21,8 @@ public enum UserActionType
 {
     Talking,       // 대화하기
     Giving,        // 물건 주기
-    TakingPicture  // 사진 찍기
-    // 필요한 행동을 계속 추가 가능
+    TakingPicture,  // 사진 찍기,
+    Sleeping
 }
 
 public class UserActionWindow : MonoBehaviour
@@ -74,6 +74,7 @@ public class UserActionWindow : MonoBehaviour
     {
         // 1. AnchorType에 따라 앵커 설정
         Vector2 anchor = GetAnchoredPosition(anchorType);
+        _windowRectTransform.pivot = anchor;
         _windowRectTransform.anchorMin = anchor;
         _windowRectTransform.anchorMax = anchor;
 
@@ -93,7 +94,7 @@ public class UserActionWindow : MonoBehaviour
 
             GameObject btnObject = Instantiate(_userActionWindowBtnPrefab, _btnsParent);  // 버튼 프리팹 인스턴스화
             UserActionWindowBtn btn = btnObject.GetComponent<UserActionWindowBtn>();
-
+         //   btn.RectTr.pivot = anchor;
             // 행동 타입에 맞는 설정 가져오기
             UserActionButtonSettings settings = GetActionSettings(actionType);
 

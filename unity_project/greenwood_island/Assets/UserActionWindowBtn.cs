@@ -18,12 +18,16 @@ public class UserActionWindowBtn : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField] private CanvasGroup _graphicGroup;  // 버튼의 CanvasGroup (배경 대신)
     [SerializeField] private TextMeshProUGUI _actionText;  // 버튼에 표시될 텍스트
     [SerializeField] private Image _icon;  // 아이콘 이미지
+    [SerializeField] private RectTransform _rectTr;  // 아이콘 이미지
 
     private BtnStatus _btnStatus;  // 버튼 상태
     private bool _isActionCompleted = false;  // 액션 완료 여부
     private IEnumerator _actionCoroutine;  // 전달받은 코루틴 저장
 
     public bool IsActionCompleted => _isActionCompleted;  // 버튼의 완료 여부 확인
+
+    public RectTransform RectTr { get => _rectTr; }
+
 
     // Init 메서드: 버튼 세팅(UserActionButtonSettings)과 IEnumerator를 받아 버튼을 초기화
     public void Init(UserActionButtonSettings buttonSettings, IEnumerator actionCoroutine)

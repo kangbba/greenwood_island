@@ -325,6 +325,8 @@ MonoBehaviour:
     actionIcon: {fileID: 21300000, guid: b52130bb79a23344aa8c335cecb91eb0, type: 3}
   - actionType: 2
     actionIcon: {fileID: 21300000, guid: a551bf3edbe49704a99e4114483bcdbb, type: 3}
+  - actionType: 3
+    actionIcon: {fileID: 21300000, guid: b52130bb79a23344aa8c335cecb91eb0, type: 3}
   _windowRectTransform: {fileID: 8667345669605079252}
   _btnsParent: {fileID: 2256635161129963691}
   _canvasGroup: {fileID: 7573320344503219757}

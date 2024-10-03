@@ -29,6 +29,14 @@ public class UserActionPhaseEnter : Element
             Debug.LogError("UserActionWindow is not assigned.");
             yield break;
         }
+        if(_userActions == null){
+            Debug.LogError("_userActions is not assigned.");
+            yield break;
+        }
+        if(_userActions.Values == null){
+            Debug.LogError("_userActions.Values is not assigned.");
+            yield break;
+        }
 
         // UserActionWindow 활성화 및 Init 호출
         userActionWindow.gameObject.SetActive(true);

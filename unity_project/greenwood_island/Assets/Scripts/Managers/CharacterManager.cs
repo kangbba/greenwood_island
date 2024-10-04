@@ -34,7 +34,7 @@ public static class CharacterManager
         }
 
         // 캐릭터 프리팹 경로 설정 및 로드
-        string path = ResourcePathManager.GetResourcePath(characterID, StoryManager.GetCurrentStoryName(), ResourceType.Character, isShared: true); // 경로 가져오기
+        string path = ResourcePathManager.GetResourcePath(characterID, StoryManager.CurrentStoryName, ResourceType.Character, isShared: true); // 경로 가져오기
         GameObject characterPrefab = Resources.Load<GameObject>(path);
 
         // 프리팹을 찾지 못했을 경우
@@ -53,7 +53,7 @@ public static class CharacterManager
         }
 
         // 캐릭터를 인스턴스화
-        GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.Instance.SystemCanvas.CharacterLayerUI.transform);
+        GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.SystemCanvas.CharacterLayerUI.transform);
         Character character = characterObject.GetComponent<Character>();
 
         // 캐릭터 등록

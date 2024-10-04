@@ -14,7 +14,7 @@ public class PlaceOverlayFilm : Element
     private float _duration;
     private Ease _easeType;
 
-    Image PlaceOverlayFilmImg => UIManager.Instance.WorldCanvas.PlaceOverlayFilm;
+    Image PlaceOverlayFilmImg => UIManager.WorldCanvas.PlaceOverlayFilm;
 
     public PlaceOverlayFilm(Color targetColor, float duration = 1f, Ease easeType = Ease.OutQuad)
     {

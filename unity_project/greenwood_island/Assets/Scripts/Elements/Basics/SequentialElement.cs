@@ -22,14 +22,26 @@ public class SequentialElement : Element
         _elements = elements ?? new List<Element>();
     }
 
-    public override IEnumerator ExecuteRoutine()
+    // 콜백을 받아서 각 Element의 실행을 알리는 메서드
+    public IEnumerator ExecuteRoutine(System.Action<Element, int, int> onElementStartCallback)
     {
-        foreach (var element in _elements)
+        for (int i = 0; i < _elements.Count; i++)
         {
+            Element element = _elements[i];
             if (element != null)
             {
-                yield return element.ExecuteRoutine(); // 각 Element를 순차적으로 실행
+                // Element 실행 직전에 콜백 호출 (Element, 인덱스, 총 개수 전달)
+                onElementStartCallback?.Invoke(element, i, _elements.Count);
+
+                // 각 Element 실행
+                yield return element.ExecuteRoutine();
             }
         }
+    }
+
+    // 기존의 ExecuteRoutine을 유지, 콜백 없이 동작
+    public override IEnumerator ExecuteRoutine()
+    {
+        yield return ExecuteRoutine(null); // 기본적으로 콜백 없이 실행
     }
 }

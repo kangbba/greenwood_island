@@ -16,7 +16,7 @@ public class LetterboxClear : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 1. 레터박스 초기화 및 활성화
-        Letterbox letterbox = UIManager.Instance.SystemCanvas.LetterBox;
+        Letterbox letterbox = UIManager.SystemCanvas.LetterBox;
         letterbox.gameObject.SetActive(true);
         letterbox.SetOn(false, _duration);  // _duration을 전달
 

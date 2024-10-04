@@ -17,7 +17,7 @@ public class ChoiceSet : Element
     public override IEnumerator ExecuteRoutine()
     {
         yield return new DialoguePanelClear().ExecuteRoutine();
-        ChoiceUI choiceUI = UIManager.Instance.SystemCanvas.ChoiceUI;
+        ChoiceUI choiceUI = UIManager.SystemCanvas.ChoiceUI;
         if(choiceUI == null){
             Debug.LogWarning("ChoiceSet :: choice ui prefab is null");
             yield break;

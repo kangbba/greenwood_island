@@ -39,7 +39,7 @@ public class Intertitle : Element
     public override IEnumerator ExecuteRoutine()
     {
         // SystemCanvas 안에 바인딩된 Intertitle TextMeshProUGUI를 가져옴
-        _intertitleText = UIManager.Instance.SystemCanvas.IntertitleText;
+        _intertitleText = UIManager.SystemCanvas.IntertitleText;
 
         // 텍스트가 비어있을 경우 경고 로그를 발생시키고 종료
         if (string.IsNullOrEmpty(_text))

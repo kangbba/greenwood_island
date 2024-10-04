@@ -111,7 +111,7 @@ public class OpeningStory : Story
         new ParallelElement(
             new SFXEnter("Thunder2", 0.4f, false, 0f),
             new CameraShake(4f),
-            new ScreenOverlayFilm(Color.black, 0.5f)// 눈을 질끈 감을 때 어두워지는 연출
+            new ImaginationEnter("Black", 1.5f, Color.black, 0.5f)// 눈을 질끈 감을 때 어두워지는 연출
         ),
         new Dialogue(
             "Mono",
@@ -125,6 +125,7 @@ public class OpeningStory : Story
                 new Line("이대로 끝나는 걸까? 모든 것이 한순간에 무너질 것만 같다. 나는 그저 이 순간이 빨리 끝나기를 바랄 뿐이다."),
             }
         ),
+        new AllImaginationsClear(),
         new ScreenOverlayFilmClear(2f),
 
         new ImaginationEnter(
@@ -146,8 +147,8 @@ public class OpeningStory : Story
             "노인",
             new List<Line>
             {
-                new Line("파도는... 모든 걸 기억하지. 이곳에 묻힌 모든 것들을...", "Calm"),
-                new Line("나는 그저 바다가 되돌려줄 날만 기다리고 있을 뿐이지.", "Whisper"),
+                new Line("파도는... 모든 걸 기억하지. 이곳에 묻힌 모든 것들을..."),
+                new Line("나는 그저 바다가 되돌려줄 날만 기다리고 있을 뿐이지."),
             }
         ),
         new CameraShake(3),
@@ -161,7 +162,7 @@ public class OpeningStory : Story
             }
         ),
 
-        new ImaginationEnter("ShipSide", 1f, Color.white, 1f),
+        new ImaginationEnter("ShipSide", 3f, Color.black.ModifiedAlpha(.8f), 1f),
 
         new Dialogue(
             "Mono",

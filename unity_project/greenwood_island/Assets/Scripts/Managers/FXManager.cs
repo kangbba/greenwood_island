@@ -5,7 +5,7 @@ using UnityEngine;
 public static class FXManager
 {
     // 람다식으로 현재 실행 중인 스토리 이름을 자동으로 가져옴
-    private static string CurrentStoryName => StoryManager.GetCurrentStoryName();
+    private static string CurrentStoryName => StoryManager.CurrentStoryName;
 
     private static Dictionary<string, List<GameObject>> _activeFXs = new Dictionary<string, List<GameObject>>(); // 활성화된 FX들
 
@@ -22,7 +22,7 @@ public static class FXManager
         }
 
         // 로드된 프리팹을 인스턴스화하여 위치 설정
-        GameObject fxInstance = Object.Instantiate(fxPrefab, UIManager.Instance.SystemCanvas.FXLayer);
+        GameObject fxInstance = Object.Instantiate(fxPrefab, UIManager.SystemCanvas.FXLayer);
         fxInstance.transform.localPosition = localPos;
 
         // 활성화된 FX 리스트에 추가

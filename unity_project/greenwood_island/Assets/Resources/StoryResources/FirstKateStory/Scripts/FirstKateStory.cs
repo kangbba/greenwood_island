@@ -44,7 +44,7 @@ public class FirstKateStory : Story
 
         new CharacterEnter(
             "Kate",
-            "Normal",
+            EmotionType.Happy,
             .5f,
             0
         ),
@@ -78,7 +78,7 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("맞아, 오늘은 날씨가 좀 따뜻해서 발효 시간을 조절했어. 온도가 높으면 반죽이 더 빨리 부풀거든. 그때마다 다르게 해야 해.", "Smile", 0),
+                new Line("맞아, 오늘은 날씨가 좀 따뜻해서 발효 시간을 조절했어. 온도가 높으면 반죽이 더 빨리 부풀거든. 그때마다 다르게 해야 해.", 0),
             }
         ),
         new Dialogue(
@@ -109,7 +109,7 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("당연하지. 오늘은 빵 속이 더 폭신폭신하고 부드럽게 만들어보려고 조금 더 시간을 들였어. 먹으면 네가 바로 알 거야.", "Normal"),
+                new Line("당연하지. 오늘은 빵 속이 더 폭신폭신하고 부드럽게 만들어보려고 조금 더 시간을 들였어. 먹으면 네가 바로 알 거야."),
             }
         ),
 
@@ -185,8 +185,8 @@ public class FirstKateStory : Story
             {
                 new Line("해안가에서 카페 씨브리즈라는 카페를 운영하시는 분이야."),
                 new Line("건강이 안 좋으셔서 한 달 넘게 문을 닫으셨다가 최근에 다시 매장을 여셨어."),
-                new Line("마을 사람들이 다들 걱정할 정도로 열심히 사시는 분인데, 요즘은 어딘가 조금 달라졌다고 해야 할까...", "Concerned"),
-                new Line("내가 가는 김에 너도 같이 갈래? 너도 한 번쯤 만나뵈면 좋을 거야. 커피도 맛있고, 그분 이야기도 흥미로울 거야.", "Smile"),
+                new Line("마을 사람들이 다들 걱정할 정도로 열심히 사시는 분인데, 요즘은 어딘가 조금 달라졌다고 해야 할까..."),
+                new Line("내가 가는 김에 너도 같이 갈래? 너도 한 번쯤 만나뵈면 좋을 거야. 커피도 맛있고, 그분 이야기도 흥미로울 거야."),
             }
         ),
         new DialoguePanelClear(),
@@ -201,17 +201,17 @@ public class FirstKateStory : Story
                     new SequentialElement(
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("귀찮은데… 다음에 가면 안 될까?", "Normal"),
+                            new Line("귀찮은데… 다음에 가면 안 될까?"),
                         }),
                         new Dialogue("Kate", new List<Line>
                         {
-                            new Line("사실 할아버지가 요즘 사람을 잘 안 만나려 하셔서, 나 혼자 가면 괜히 더 불편해하실 것 같아.", "Concerned"),
-                            new Line("네가 같이 가면 이야기도 나누시고, 기분도 조금 나아지실 거야. 건강도 안 좋으신데 요즘 너무 외로워 보이셔.", "Concerned"),
-                            new Line("라이언, 나랑 같이 가주면 안 될까? 네가 가면 할아버지도 좀 웃으실 것 같아.", "Smile"),
+                            new Line("사실 할아버지가 요즘 사람을 잘 안 만나려 하셔서, 나 혼자 가면 괜히 더 불편해하실 것 같아."),
+                            new Line("네가 같이 가면 이야기도 나누시고, 기분도 조금 나아지실 거야. 건강도 안 좋으신데 요즘 너무 외로워 보이셔."),
+                            new Line("라이언, 나랑 같이 가주면 안 될까? 네가 가면 할아버지도 좀 웃으실 것 같아."),
                         }),
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("그래... 알았어. 그러면 같이 가지.", "Normal"),
+                            new Line("그래... 알았어. 그러면 같이 가지."),
                         })
                     )
                 ),
@@ -220,16 +220,16 @@ public class FirstKateStory : Story
                     new SequentialElement(
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("좋아, 어디 한번 같이 가보자.", "Normal"),
+                            new Line("좋아, 어디 한번 같이 가보자."),
                         }),
                         new Dialogue("Kate", new List<Line>
                         {
-                            new Line("정말 고마워, 라이언! 할아버지가 요즘 예전 같지 않으셔서 걱정이 많았어.", "Relieved"),
-                            new Line("네가 같이 가면 할아버지께도 큰 힘이 될 거야. 가서 커피 한 잔 하면서 이런저런 얘기도 나눠보자.", "Smile"),
+                            new Line("정말 고마워, 라이언! 할아버지가 요즘 예전 같지 않으셔서 걱정이 많았어."),
+                            new Line("네가 같이 가면 할아버지께도 큰 힘이 될 거야. 가서 커피 한 잔 하면서 이런저런 얘기도 나눠보자."),
                         }),
                         new Dialogue("Ryan", new List<Line>
                         {
-                            new Line("조셉 할아버지가 어떤 분인지 직접 만나보면 더 잘 알겠지.", "Normal"),
+                            new Line("조셉 할아버지가 어떤 분인지 직접 만나보면 더 잘 알겠지."),
                         })
                     )
                 )
@@ -237,13 +237,13 @@ public class FirstKateStory : Story
         ),
         new Dialogue("Kate", new List<Line>
         {
-            new Line("정말? 라이언이라면 그렇게 말해 줄 줄 알았다구!", "Smile"),
-            new Line("그럼 이따 마을 입구에서 보자!", "Smile"),
+            new Line("정말? 라이언이라면 그렇게 말해 줄 줄 알았다구!"),
+            new Line("그럼 이따 마을 입구에서 보자!"),
         }),
         new Dialogue("Mono", new List<Line>
         {
-            new Line("케이트는 이 마을에서 처음 나를 맞아준 사람이고, 지금까지 항상 내 편이 되어줬다. 그녀의 말이라면 믿어도 되겠지.", "Normal"),
-            new Line("그 사람은 어떤 사람일까?", "Normal"),
+            new Line("케이트는 이 마을에서 처음 나를 맞아준 사람이고, 지금까지 항상 내 편이 되어줬다. 그녀의 말이라면 믿어도 되겠지."),
+            new Line("그 사람은 어떤 사람일까?"),
         }),
         new DialoguePanelClear(),
         new SFXsClear(1f),
@@ -258,7 +258,7 @@ public class FirstKateStory : Story
 
         new CameraMove2DClear(1f),
         new CameraZoomClear(1f),
-        new CharacterEnter("Kate", "Smile", 0.5f) ,
+        new CharacterEnter("Kate", EmotionType.Happy, 0.5f) ,
         _userActionPhase
     );
 

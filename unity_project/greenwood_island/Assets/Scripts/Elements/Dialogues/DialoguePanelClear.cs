@@ -13,7 +13,7 @@ public class DialoguePanelClear : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        DialoguePlayer dialoguePlayer = UIManager.Instance.SystemCanvas.DialoguePlayer;
+        DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;
 
         if (dialoguePlayer == null)
         {

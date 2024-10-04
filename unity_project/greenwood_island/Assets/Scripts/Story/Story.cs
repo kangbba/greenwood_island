@@ -29,11 +29,18 @@ public abstract class Story
         yield return StartElements.ExecuteRoutine();
     }
 
-    // Update 단계의 Elements를 실행하는 메서드
+    // Update 단계의 Elements를 실행하는 메서드, 콜백 추가
+    public IEnumerator UpdateRoutine(System.Action<Element, int, int> onElementStartCallback)
+    {
+        yield return UpdateElements.ExecuteRoutine(onElementStartCallback);
+    }
+
+    // 기존 UpdateRoutine을 유지, 콜백 없이도 실행 가능
     public IEnumerator UpdateRoutine()
     {
-        yield return UpdateElements.ExecuteRoutine();
+        yield return UpdateRoutine(null); // 콜백 없이 실행
     }
+
 
     // Exit 단계의 Elements를 실행하는 메서드 (필요할 경우)
     public IEnumerator ExitRoutine()

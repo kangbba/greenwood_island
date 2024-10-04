@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1093593374676556963}
   - component: {fileID: 4679146932676477584}
   - component: {fileID: 8109460112451840439}
-  - component: {fileID: 8584031999050825053}
   - component: {fileID: 2920264767304006317}
+  - component: {fileID: 794241668242500472}
   m_Layer: 5
   m_Name: Lisa
   m_TagString: Untagged
@@ -78,18 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &8584031999050825053
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882805499953900167}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &2920264767304006317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,11 +90,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a9cbe51ad56b4ebdaa4758451eaac84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _standardImg: {fileID: 0}
+  _rectTr: {fileID: 1093593374676556963}
+  _rectMask: {fileID: 794241668242500472}
   _emotionKeyPairs:
   - key: Normal
     emotions:
     - {fileID: 1857959413762483820}
+--- !u!114 &794241668242500472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882805499953900167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &2880959009678094621
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,6 +356,7 @@ MonoBehaviour:
   _openedEyesImg: {fileID: 7906233163484341980}
   _mouthImages:
   - {fileID: 8950383562089991716}
+  _rectTr: {fileID: 4520405572442729492}
 --- !u!225 &380121641366504600
 CanvasGroup:
   m_ObjectHideFlags: 0

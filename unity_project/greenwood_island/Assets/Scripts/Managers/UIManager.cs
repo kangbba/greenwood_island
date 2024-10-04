@@ -1,46 +1,115 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    // Singleton instance
-    private static UIManager _instance;
+    // Static fields for WorldCanvas, SystemCanvas, and prefabs
+    private static WorldCanvas _worldCanvas;
+    private static SystemCanvas _systemCanvas;
+    private static PopupCanvas _popupCanvas;
+    private static SaveLoadWindow _saveLoadWindowPrefab;
+    private static GameSlot _gameSlotPrefab;
+    private static YesNoPopup _yesNoPopupPrefab;
 
-    // Public property to access the singleton instance
-    public static UIManager Instance
+    // Public getters for accessing the canvas elements
+    public static WorldCanvas WorldCanvas
     {
         get
         {
-            if (_instance == null)
+            if (_worldCanvas == null)
             {
-                // Find an existing instance in the scene or create a new one
-                _instance = FindObjectOfType<UIManager>();
+                // 씬에서 WorldCanvas를 찾고 캐싱
+                _worldCanvas = FindObjectOfType<WorldCanvas>();
+                if (_worldCanvas == null)
+                {
+                    Debug.LogError("WorldCanvas is missing in the scene! Make sure to add a WorldCanvas to the scene.");
+                }
             }
-            return _instance;
+            return _worldCanvas;
         }
     }
 
-
-    // Awake method to ensure only one instance exists
-    private void Awake()
+    public static SystemCanvas SystemCanvas
     {
-        if (_instance == null)
+        get
         {
-            _instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this instance when loading new scenes
-        }
-        else if (_instance != this)
-        {
-            Destroy(gameObject); // Destroy this instance if it's a duplicate
+            if (_systemCanvas == null)
+            {
+                // 씬에서 SystemCanvas를 찾고 캐싱
+                _systemCanvas = FindObjectOfType<SystemCanvas>();
+                if (_systemCanvas == null)
+                {
+                    Debug.LogError("SystemCanvas is missing in the scene! Make sure to add a SystemCanvas to the scene.");
+                }
+            }
+            return _systemCanvas;
         }
     }
 
-    // Serialized fields for UI elements
-    [SerializeField] private WorldCanvas _worldCanvas;
-    [SerializeField] private SystemCanvas _systemCanvas;
-    public WorldCanvas WorldCanvas { get => _worldCanvas; }
-    public SystemCanvas SystemCanvas { get => _systemCanvas; }
+    public static PopupCanvas PopupCanvas
+    {
+        get
+        {
+            if (_popupCanvas == null)
+            {
+                // 씬에서 SystemCanvas를 찾고 캐싱
+                _popupCanvas = FindObjectOfType<PopupCanvas>();
+                if (_popupCanvas == null)
+                {
+                    Debug.LogError("SystemCanvas is missing in the scene! Make sure to add a SystemCanvas to the scene.");
+                }
+            }
+            return _popupCanvas;
+        }
+    }
 
-    // Additional methods for UIManager can be added here...
+    public static SaveLoadWindow SaveLoadWindowPrefab
+    {
+        get
+        {
+            if (_saveLoadWindowPrefab == null)
+            {
+                // Resources에서 SaveLoadWindowPrefab을 로드하고 캐싱
+                _saveLoadWindowPrefab = Resources.Load<SaveLoadWindow>("UIs/SaveLoadWindowUI/SaveLoadWindowPrefab");
+                if (_saveLoadWindowPrefab == null)
+                {
+                    Debug.LogError("SaveLoadWindowPrefab is missing in the Resources folder!");
+                }
+            }
+            return _saveLoadWindowPrefab;
+        }
+    }
+
+    public static GameSlot GameSlotPrefab
+    {
+        get
+        {
+            if (_gameSlotPrefab == null)
+            {
+                // Resources에서 GameSlotPrefab을 로드하고 캐싱
+                _gameSlotPrefab = Resources.Load<GameSlot>("UIs/SaveLoadWindowUI/GameSlotPrefab");
+                if (_gameSlotPrefab == null)
+                {
+                    Debug.LogError("GameSlotPrefab is missing in the Resources folder!");
+                }
+            }
+            return _gameSlotPrefab;
+        }
+    }
+
+    public static YesNoPopup YesNoPopupPrefab
+    {
+        get
+        {
+            if (_yesNoPopupPrefab == null)
+            {
+                // Resources에서 YesNoPopupPrefab을 로드하고 캐싱
+                _yesNoPopupPrefab = Resources.Load<YesNoPopup>("UIs/SaveLoadWindowUI/YesNoPopupPrefab");
+                if (_yesNoPopupPrefab == null)
+                {
+                    Debug.LogError("YesNoPopupPrefab is missing in the Resources folder!");
+                }
+            }
+            return _yesNoPopupPrefab;
+        }
+    }
 }

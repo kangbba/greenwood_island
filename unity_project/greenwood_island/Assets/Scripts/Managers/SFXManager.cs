@@ -6,7 +6,7 @@ using DG.Tweening;
 public static class SFXManager
 {
     // 람다식으로 현재 실행 중인 스토리 이름을 자동으로 가져옴
-    private static string CurrentStoryName => StoryManager.GetCurrentStoryName();
+    private static string CurrentStoryName => StoryManager.CurrentStoryName;
 
     private static Dictionary<string, List<AudioSource>> _activeSFXs = new Dictionary<string, List<AudioSource>>(); // 활성화된 SFX들
     private static Dictionary<AudioSource, Coroutine> _activeLoops = new Dictionary<AudioSource, Coroutine>(); // 활성화된 루프 코루틴들
@@ -30,7 +30,7 @@ public static class SFXManager
 
         // 새로운 GameObject를 생성하여 AudioSource 추가
         GameObject audioObject = new GameObject($"SFX_{sfxID}");
-        audioObject.transform.parent = UIManager.Instance.SystemCanvas.SFXLayer;
+        audioObject.transform.parent = UIManager.SystemCanvas.SFXLayer;
         audioObject.transform.localPosition = Vector2.zero;
 
         // AudioSource 컴포넌트를 추가하고 설정
@@ -68,7 +68,7 @@ public static class SFXManager
 
         // 새로운 GameObject를 생성하여 AudioSource 추가
         GameObject audioObject = new GameObject($"SFX_{sfxID}");
-        audioObject.transform.parent = UIManager.Instance.SystemCanvas.SFXLayer;
+        audioObject.transform.parent = UIManager.SystemCanvas.SFXLayer;
         audioObject.transform.localPosition = Vector2.zero;
 
         // AudioSource 컴포넌트를 추가하고 설정

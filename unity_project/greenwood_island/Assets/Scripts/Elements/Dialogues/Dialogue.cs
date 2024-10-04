@@ -23,7 +23,7 @@ public class Dialogue : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        DialoguePlayer dialoguePlayer = UIManager.Instance.SystemCanvas.DialoguePlayer;
+        DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;
 
         if (dialoguePlayer == null)
         {
@@ -62,11 +62,11 @@ public class Dialogue : Element
         for (int i = 0; i < _lines.Count; i++)
         {
             Line line = _lines[i];
-            string emotionID = line.EmotionID;
+            EmotionType emotionType = line.EmotionType;
             int emotionIndex = line.EmotionIndex;
            
             if(activeCharacter != null){
-                activeCharacter.ChangeEmotion(line.EmotionID, line.EmotionIndex);
+                activeCharacter.ChangeEmotion(line.EmotionType, line.EmotionIndex);
             }
 
             dialoguePlayer.ClearDialogueText();

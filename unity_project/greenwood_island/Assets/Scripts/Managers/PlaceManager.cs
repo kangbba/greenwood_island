@@ -7,7 +7,7 @@ public static class PlaceManager
     private static List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
 
     // 현재 스토리 이름을 가져옴
-    private static string CurrentStoryName => StoryManager.GetCurrentStoryName();
+    private static string CurrentStoryName => StoryManager.CurrentStoryName;
 
     // 현재 활성화된 장소 반환
     public static Place CurrentPlace => _currentPlace;
@@ -33,7 +33,7 @@ public static class PlaceManager
         }
 
         // 새로운 장소를 인스턴스화
-        _currentPlace = Object.Instantiate(placePrefab, UIManager.Instance.WorldCanvas.PlaceLayer);
+        _currentPlace = Object.Instantiate(placePrefab, UIManager.WorldCanvas.PlaceLayer);
 
         if (_currentPlace == null)
         {

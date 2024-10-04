@@ -21,7 +21,7 @@ public class CutInEnter : Element
     public override IEnumerator ExecuteRoutine()
     {
         // UIManager를 통해 CutInUI를 가져옴
-        _cutInUI = UIManager.Instance.SystemCanvas.CutInUI;
+        _cutInUI = UIManager.SystemCanvas.CutInUI;
         _cutInUI.gameObject.SetActive(true);
 
         // CutInUI 초기화

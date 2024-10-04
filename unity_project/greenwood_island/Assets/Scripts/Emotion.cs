@@ -9,6 +9,8 @@ public class Emotion : MonoBehaviour
     [SerializeField] private CanvasGroup _canvasGroup;  // 감정 페이드 처리를 위한 CanvasGroup
     [SerializeField] private Image _openedEyesImg;      // 눈을 뜰 때 사용할 오버레이 이미지
     [SerializeField] private Image[] _mouthImages;      // 말할 때 입 모양 이미지 배열
+    [SerializeField] private RectTransform _rectTr;      
+
 
     private Vector2[] _mouthImgInitialScales;
     private Vector2 _blinkIntervalRange = new Vector2(2f, 5f); // 눈 깜박임 간격
@@ -21,7 +23,10 @@ public class Emotion : MonoBehaviour
     private bool _isBlinkRoutinePlaying = false;
     private bool _isTalkingRoutinePlaying = false;
 
+    public RectTransform RectTr { get => _rectTr;  }
+
     private void Start(){
+        
         _mouthImgInitialScales = new Vector2[_mouthImages.Length];
 
         for (int i = 0; i < _mouthImages.Length; i++)
@@ -131,8 +136,7 @@ public class Emotion : MonoBehaviour
         if (b)
         {
             StartBlink(true);  // 눈 깜박임 시작
-            // 활성화될 때 페이드 인
-            _canvasGroup.DOFade(1f, duration).SetEase(Ease.OutQuad).OnStart(() =>
+            _canvasGroup.DOFade(1f, duration).SetEase(Ease.Linear).OnStart(() =>
             {
             });
         }
@@ -140,10 +144,10 @@ public class Emotion : MonoBehaviour
         {
             StartBlink(false);  // 눈 깜박임 중지
             StartTalking(false);  // 말하기 중지
-            // 비활성화될 때 페이드 아웃
             _canvasGroup.DOFade(0f, duration).SetEase(Ease.Linear).OnComplete(() =>
             {
             });
         }
     }
+
 }

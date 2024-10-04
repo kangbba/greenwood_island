@@ -8,7 +8,7 @@ using DG.Tweening;
 /// </summary>
 public static class ImaginationManager
 {
-    private static string CurrentStoryName => StoryManager.GetCurrentStoryName();
+    private static string CurrentStoryName => StoryManager.CurrentStoryName;
     // 활성화된 상상 이미지를 관리하는 딕셔너리
     private static Dictionary<string, Image> _activeImaginations = new Dictionary<string, Image>();
 
@@ -25,7 +25,7 @@ public static class ImaginationManager
             return _activeImaginations[imaginationID];
         }
 
-        Transform parent = UIManager.Instance.SystemCanvas.ImaginationLayer.transform;
+        Transform parent = UIManager.SystemCanvas.ImaginationLayer.transform;
         // 새로운 GameObject 생성
         GameObject imaginationObject = new GameObject(imaginationID);
         imaginationObject.transform.SetParent(parent, false);

@@ -20,6 +20,8 @@ public class SystemCanvas : MonoBehaviour
 
     [SerializeField] private UserActionWindow _userActionWindow;
 
+    [SerializeField] private QuickSaveBtn _quickSaveBtn;
+
 
     public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
     public Transform FXLayer { get => _fxLayer; }
@@ -32,4 +34,6 @@ public class SystemCanvas : MonoBehaviour
     public Letterbox LetterBox { get => _letterBox; }
     public Transform CharacterLayerUI { get => _characterLayerUI; }
     public UserActionWindow UserActionWindow { get => _userActionWindow; }
+    public QuickSaveBtn QuickSaveBtn { get => _quickSaveBtn; }
 }
+

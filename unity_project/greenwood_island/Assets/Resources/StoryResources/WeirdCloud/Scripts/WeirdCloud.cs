@@ -23,7 +23,7 @@ public class WeirdCloud : Story
 
         new CharacterEnter(
             "Kate",
-            "Normal",
+            EmotionType.Happy,
             .5f,
             0
         ),
@@ -42,7 +42,7 @@ public class WeirdCloud : Story
             new List<Line>
             {
                 new Line("그래, 이쪽은 좀 한적하긴 하지. 대부분 사람들이 마을 중심가 쪽에 모이니까."),
-                new Line("하지만 난 가끔 여기 걸어. 바닷바람 맞으면서 생각도 정리되고, 조용해서 좋거든.", "Smile")
+                new Line("하지만 난 가끔 여기 걸어. 바닷바람 맞으면서 생각도 정리되고, 조용해서 좋거든.")
             }
         ),
 
@@ -122,7 +122,7 @@ public class WeirdCloud : Story
             new List<Line>
             {
                 new Line("솔직히? 가끔은 떠나고 싶을 때도 있어."),
-                new Line("근데 뭐! 결국 돌아올 곳은 여긴 걸. 어릴 때부터 보고 자란 곳이니까, 괜찮을 거야! 어때, 그렇게 나쁘진 않지?", "Smile")
+                new Line("근데 뭐! 결국 돌아올 곳은 여긴 걸. 어릴 때부터 보고 자란 곳이니까, 괜찮을 거야! 어때, 그렇게 나쁘진 않지?")
             }
         ),
 
@@ -195,6 +195,7 @@ public class WeirdCloud : Story
                 new Line("그냥 경이롭지? 이 섬의 매력이 그런 거야. 자연스럽고 신비로운 풍경이 가득해.")
             }
         ),
+
 
         new Dialogue(
             "Mono",

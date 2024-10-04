@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public enum EDialogueState
 {
@@ -16,6 +17,8 @@ public class DialoguePlayer : MonoBehaviour
 {
     [SerializeField] private bool _showDebug;
     [SerializeField] private RectTransform _panelRectTransform;
+    [SerializeField] private Image _lineTextBackground;
+    [SerializeField] private Image _characterTextBackground;
     [SerializeField] private TextMeshProUGUI _characterText;
     [SerializeField] private TextDisplayer _dialogueText;
     [SerializeField] private DialogueGuide _dialogueGuide;  // DialogueGuide 참조
@@ -45,6 +48,14 @@ public class DialoguePlayer : MonoBehaviour
 
         SetCharacterText("");
     }
+    public void ShowCharacterTextBackground(bool show, float duration)
+    {
+        // _lineTextBackground의 alpha 값으로 페이드 타겟 설정
+        float targetAlpha = show ? _lineTextBackground.color.a : 0f;
+
+        // _characterTextBackground의 페이드 처리
+        _characterTextBackground.DOFade(targetAlpha, duration);
+    }
 
    // CanvasGroup을 페이드 아웃하는 메서드
     public void FadeInDialogueText(float duration)
@@ -73,6 +84,8 @@ public class DialoguePlayer : MonoBehaviour
     public void SetCharacterText(string s)
     {
         _characterText.SetText(s);
+        bool showCharacterTextBackground = !string.IsNullOrEmpty(s);
+        ShowCharacterTextBackground(showCharacterTextBackground, .1f);
     }
 
     public void CompleteCurSentence()

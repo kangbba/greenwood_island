@@ -26,7 +26,7 @@ public class ChoiceSetWithCorrectAnswer : Element
     {
         Debug.Log("ChoiceSetWithCorrectAnswer :: 시작");
 
-        ChoiceUI choiceUI = UIManager.Instance.SystemCanvas.ChoiceUI;
+        ChoiceUI choiceUI = UIManager.SystemCanvas.ChoiceUI;
         if(choiceUI == null){
             Debug.LogWarning("ChoiceSet :: choice ui prefab is null");
             yield break;

@@ -23,7 +23,7 @@ public class UserActionPhaseEnter : Element
         yield return new DialoguePanelClear().ExecuteRoutine();
         yield return new LetterboxClear().ExecuteRoutine();
 
-        var userActionWindow = UIManager.Instance.SystemCanvas.UserActionWindow;
+        var userActionWindow = UIManager.SystemCanvas.UserActionWindow;
         if (userActionWindow == null)
         {
             Debug.LogError("UserActionWindow is not assigned.");

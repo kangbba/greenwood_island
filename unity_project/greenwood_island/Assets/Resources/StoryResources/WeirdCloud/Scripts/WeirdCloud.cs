@@ -253,7 +253,6 @@ public class WeirdCloud : Story
         new StoryTransition(new FirstJosephStory())
     );
 
-    protected override string StoryDesc => "";
 
 
 

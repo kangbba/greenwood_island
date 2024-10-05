@@ -115,12 +115,17 @@ public class StoryEditor : EditorWindow
             StoryCreationWindow.ShowWindow(this);
         }
     }
+
     public void RenameStoryFolder(string oldFolderName, string newFolderName)
     {
-        string oldFolderPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), oldFolderName);
-        string newFolderPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), newFolderName);
+        string basePath = ResourcePathManager.GetStoryResourcesBasePath();
+
+        // 폴더 경로 설정
+        string oldFolderPath = Path.Combine(basePath, oldFolderName);
+        string newFolderPath = Path.Combine(basePath, newFolderName);
 
         // 폴더 이름 변경
+        Debug.Log("[***** 폴더 이름 변경중 *****]");
         if (Directory.Exists(oldFolderPath) && !Directory.Exists(newFolderPath))
         {
             Directory.Move(oldFolderPath, newFolderPath);
@@ -133,32 +138,58 @@ public class StoryEditor : EditorWindow
         }
 
         // .cs 파일 이름 변경 및 클래스 이름 변경
-        string oldScriptPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), newFolderName, "Scripts", $"{oldFolderName}.cs");
-        string newScriptPath = Path.Combine(ResourcePathManager.GetStoryResourcesBasePath(), newFolderName, "Scripts", $"{newFolderName}.cs");
+        Debug.Log("[***** 스크립트 파일 이름 변경중 *****]");
+        string oldScriptPath = Path.Combine(newFolderPath, "Scripts", $"{oldFolderName}.cs");
+        string newScriptPath = Path.Combine(newFolderPath, "Scripts", $"{newFolderName}.cs");
 
         if (File.Exists(oldScriptPath) && !File.Exists(newScriptPath))
         {
             // 파일 이름 변경
             File.Move(oldScriptPath, newScriptPath);
 
+            Debug.Log($"{oldFolderName}.cs 스크립트 파일 이름이 {newFolderName}.cs로 변경되었습니다.");
+
             // 파일 내용에서 클래스 이름 변경
+            Debug.Log("[***** 클래스 이름 변경중 *****]");
             string scriptContent = File.ReadAllText(newScriptPath);
             scriptContent = scriptContent.Replace($"class {oldFolderName}", $"class {newFolderName}");
             File.WriteAllText(newScriptPath, scriptContent);
 
-            Debug.Log($"{oldFolderName}.cs 스크립트가 {newFolderName}.cs로 변경되었고, 클래스 이름이 {newFolderName}으로 변경되었습니다.");
+            Debug.Log($"{oldFolderName}.cs 파일의 클래스 이름이 {newFolderName}으로 변경되었습니다.");
         }
         else
         {
             Debug.LogError($"{newFolderName}.cs 스크립트가 이미 존재하거나 변경할 수 없습니다.");
         }
 
+        // StoryData 스크립터블 오브젝트 파일 경로 설정
+        Debug.Log("[***** StoryData 파일 이름 변경중 *****]");
+        string oldStoryDataPath = Path.Combine(newFolderPath, $"{oldFolderName}_StoryData.asset");
+        string newStoryDataPath = Path.Combine(newFolderPath, $"{newFolderName}_StoryData.asset");
+
+        if (File.Exists(oldStoryDataPath) && !File.Exists(newStoryDataPath))
+        {
+            // StoryData 파일 이름 변경
+            File.Move(oldStoryDataPath, newStoryDataPath);
+
+            Debug.Log($"{oldFolderName}_StoryData.asset 파일이 {newFolderName}_StoryData.asset으로 변경되었습니다.");
+        }
+        else
+        {
+            Debug.LogError($"{newFolderName}_StoryData.asset 파일이 이미 존재하거나 변경할 수 없습니다.");
+        }
+
         // 변경 후 AssetDatabase 갱신
+        Debug.Log("[***** AssetDatabase 갱신중 *****]");
         AssetDatabase.Refresh();
 
         // 스토리 폴더 다시 로드
+        Debug.Log("[***** 스토리 폴더 로드중 *****]");
         LoadStoryFolders();
+
+        Debug.Log("작업 완료!");
     }
+
 
 
     private void LoadFolderContents()
@@ -206,12 +237,45 @@ public class StoryEditor : EditorWindow
 
         // 스토리 스크립트 생성
         CreateStoryScript(storyName);
+        // StoryData ScriptableObject 생성
+        CreateStoryDataAsset(storyName);
 
         AssetDatabase.Refresh();
         Debug.Log($"새로운 스토리 '{storyName}' 생성이 완료되었습니다.");
         LoadStoryFolders();
     }
 
+    // StoryData ScriptableObject를 생성하는 메서드
+    private void CreateStoryDataAsset(string storyID)
+    {
+        // StoryData를 저장할 경로
+        string resourcePath = ResourcePathManager.GetResourcePath(storyID, storyID, ResourceType.StoryData, false);
+        string assetFolder = Path.GetDirectoryName(Path.Combine("Assets/Resources", resourcePath));
+        string assetPath = Path.Combine(assetFolder, $"{storyID}.asset");
+
+        // 해당 폴더가 없으면 생성
+        if (!Directory.Exists(assetFolder))
+        {
+            Directory.CreateDirectory(assetFolder);
+        }
+
+        // StoryData가 이미 존재하지 않으면 생성
+        if (!File.Exists(assetPath))
+        {
+            // 새로운 StoryData ScriptableObject 생성
+            StoryData newStoryData = ScriptableObject.CreateInstance<StoryData>();
+
+            // ScriptableObject를 애셋으로 저장
+            AssetDatabase.CreateAsset(newStoryData, assetPath);
+            AssetDatabase.SaveAssets();
+
+            Debug.Log($"{storyID}.asset 파일이 생성되었습니다.");
+        }
+        else
+        {
+            Debug.LogWarning($"{storyID}.asset 파일이 이미 존재합니다.");
+        }
+    }
     // 스토리 스크립트를 생성하고 추상 클래스 구현을 수행하는 메서드
     private void CreateStoryScript(string storyName)
     {
@@ -237,8 +301,6 @@ public class {storyName} : Story
     protected override SequentialElement UpdateElements => new ();
 
     protected override SequentialElement ExitElements => new ();
-
-    protected override string StoryDesc => "";
 }}
 ";
             File.WriteAllText(scriptFilePath, scriptContent);

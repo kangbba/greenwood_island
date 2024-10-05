@@ -178,5 +178,4 @@ public class FirstRyanRoom : Story
 
     protected override SequentialElement ExitElements => new ();
 
-    protected override string StoryDesc => "";
 }

@@ -268,7 +268,6 @@ public class FirstKateStory : Story
         new StoryTransition(new FirstRyanRoom())
     );
 
-    protected override string StoryDesc => "";
 
     
    private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(

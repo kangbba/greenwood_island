@@ -9,6 +9,7 @@ public enum ResourceType
     Story,
     Character,
     Imagination,
+    StoryData,
 }
 
 public static class ResourcePathManager
@@ -63,6 +64,10 @@ public static class ResourcePathManager
 
             case ResourceType.Imagination:
                 resourcePath = $"{basicFolderPath}/Imaginations/{resourceID}";
+                break;
+
+            case ResourceType.StoryData:
+                resourcePath = $"{basicFolderPath}/StoryData/{resourceID}";
                 break;
                 
             default:

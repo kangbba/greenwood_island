@@ -248,5 +248,4 @@ public class FirstJosephStory : Story
     protected override SequentialElement ExitElements => new (
         new StoryTransition(new FirstRyanRoom()));
 
-    protected override string StoryDesc => "";
 }

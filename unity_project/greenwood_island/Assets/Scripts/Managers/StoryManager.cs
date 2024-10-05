@@ -20,6 +20,23 @@ public static class StoryManager
 
     public static int CurrentElementIndex { get => _currentElementIndex;  }
 
+    public static StoryData GetStoryData(string storyID)
+    {
+        // ResourcePathManager에서 StoryData의 경로를 가져옴
+        string resourcePath = ResourcePathManager.GetResourcePath(storyID, storyID, ResourceType.StoryData, false);
+
+        // 해당 경로에서 StoryData를 로드
+        StoryData storyData = Resources.Load<StoryData>(resourcePath);
+
+        // StoryData가 존재하지 않을 경우 경고 메시지 출력
+        if (storyData == null)
+        {
+            Debug.LogWarning($"StoryData not found for storyID: {storyID}");
+        }
+
+        return storyData;
+    }
+
 
     // 스토리를 실행하는 메서드
     public static void PlayStory(Story storyInstance)

@@ -8,7 +8,10 @@ public class SaveLoadWindow : MonoBehaviour
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Transform _savedGamesListParent;  // 저장된 게임 목록이 표시될 부모 객체
     [SerializeField] private Button _closeButton;              // Close 버튼
-    private float verticalSpacing = 450;     // 슬롯 간의 세로 간격
+    [SerializeField] private ScrollRect _scrollView;              // Close 버튼
+    [SerializeField] private Material _blurMat;              // Close 버튼
+    [SerializeField] private Image _background; 
+    private const float verticalSpacing = 250;     // 슬롯 간의 세로 간격
 
     private List<GameSlot> _gameSlots = new List<GameSlot>();
     private bool _isSaveMode; // 세이브 모드인지 로드 모드인지 구분
@@ -20,7 +23,9 @@ public class SaveLoadWindow : MonoBehaviour
     private void Awake()
     {
 
-        _canvasGroup.alpha = 0;  // 시작 시 투명
+        _canvasGroup.alpha = 0;  // 알파값을 0으로 설정해 시작
+        Material inst_blurMat = Instantiate(_blurMat);
+        _background.material = inst_blurMat;
 
         // Close 버튼 바인딩 및 이벤트 연결
         _closeButton.onClick.AddListener(CloseWindow);
@@ -37,11 +42,36 @@ public class SaveLoadWindow : MonoBehaviour
 
         // 페이드 인 애니메이션
         _isActivated = false;  // 페이드 인이 완료되기 전까지는 조작을 막음
-        _canvasGroup.DOFade(1, 0.5f).OnComplete(() =>
-        {
-            _isActivated = true;  // 페이드 인 완료 후 조작 가능
-        });
+             // DoTween을 이용해 블러 값을 0에서 targetBlurValue까지 변화
+       
+
+       Fade(true, 1f, () => _isActivated = true);
     }
+    private void Fade(bool show, float duration, System.Action onComplete = null)
+    {
+        // show가 true면 targetBlurValue는 1f, false면 0f
+        float targetBlurValue = show ? 1f : 0f;
+        float targetAlphaValue = show ? 1f : 0f;
+
+        // 블러 값을 애니메이션
+        DOTween.To(() => _background.material.GetFloat("_Size"), x => _background.material.SetFloat("_Size", x), targetBlurValue, duration)
+            .SetEase(Ease.InOutQuad);
+
+        // CanvasGroup의 알파값을 애니메이션
+        _canvasGroup.DOFade(targetAlphaValue, duration)
+            .SetEase(Ease.InOutQuad)
+            .OnComplete(() =>
+            {
+                _isActivated = show;  // 페이드 인이면 활성화, 페이드 아웃이면 비활성화
+
+                Debug.Log("Fade 애니메이션 완료. 활성화 여부: " + _isActivated);
+
+                // onComplete 콜백 함수가 있다면 실행
+                onComplete?.Invoke();
+            });
+    }
+
+
 
     // 저장된 게임 목록을 시각화하는 메서드 (private)
     private void RecreateSlots()
@@ -53,6 +83,7 @@ public class SaveLoadWindow : MonoBehaviour
         }
         _gameSlots.Clear();
 
+        _scrollView.content.sizeDelta = _scrollView.content.sizeDelta.ModifiedY(GameDataManager.MaxSlotCount * verticalSpacing);
         // 슬롯 개수만큼 무조건 인스턴스화하고 Init
         for (int i = 0; i < GameDataManager.MaxSlotCount; i++)
         {
@@ -73,26 +104,36 @@ public class SaveLoadWindow : MonoBehaviour
             if (_isSaveMode)
             {
                 // 세이브 모드일 때, 저장할 데이터를 사용하여 Init
-                gameSlot.Init(slotNumber, saveData, () => OnGameSlotSaveClicked(slotNumber, _newSaveDataForSaveMode));
+                gameSlot.Init(slotNumber, saveData, () => OnGameSlotSaveClicked(slotNumber, _newSaveDataForSaveMode), () => OnGameSlotDeleteBtnClicked(slotNumber));
             }
             else
             {
                 // 로드 모드일 때, 슬롯 번호로 게임을 로드
-                gameSlot.Init(slotNumber, saveData, () => OnGameSlotLoadClicked(slotNumber));
+                gameSlot.Init(slotNumber, saveData, () => OnGameSlotLoadClicked(slotNumber), () => OnGameSlotDeleteBtnClicked(slotNumber));
             }
 
             _gameSlots.Add(gameSlot);
         }
+        
     }
 
     // 슬롯 클릭 시 실행할 로직 (로드 모드)
     private void OnGameSlotLoadClicked(int slotNumber)
     {
         Debug.Log("여기 작동1");
+
         if (!_isActivated) return;
 
-        GameDataManager.LoadGameData(slotNumber);
+        // 저장된 데이터를 불러올 것인지 물어보는 팝업 띄우기
+        ShowYesNoPopup("저장된 데이터를 불러오시겠습니까?", "예", "아니오", () =>
+        {
+            // 사용자가 "예"를 선택한 경우에만 데이터 불러오기
+            Debug.Log($"슬롯 {slotNumber}의 데이터를 불러옵니다.");
+            GameDataManager.LoadGameData(slotNumber);
+        });
     }
+
+    
 
     // 슬롯 클릭 시 실행할 로직 (세이브 모드)
     private void OnGameSlotSaveClicked(int slotNumber, GameSaveData newSaveData)
@@ -124,6 +165,22 @@ public class SaveLoadWindow : MonoBehaviour
             });
         }
     }
+    public void OnGameSlotDeleteBtnClicked(int slotNumber)
+    {
+        Debug.Log("여기 작동1");
+
+        if (!_isActivated) return;
+
+        // 정말 삭제할 것인지 물어보는 확인 팝업 띄우기
+        ShowYesNoPopup("정말 이 데이터를 삭제하시겠습니까?", "예", "아니오", () =>
+        {
+            // 사용자가 "예"를 선택한 경우에만 삭제 수행
+            Debug.Log($"슬롯 {slotNumber}을(를) 삭제합니다.");
+            GameDataManager.DeleteSaveDataFile(slotNumber);
+            RecreateSlots();
+        });
+    }
+
 
 
     // 예/아니오 팝업 호출 메서드
@@ -136,10 +193,6 @@ public class SaveLoadWindow : MonoBehaviour
     // 불러오기 창 닫기
     public void CloseWindow()
     {
-        _isActivated = false;  // 페이드 아웃 시작 시 조작 차단
-        _canvasGroup.DOFade(0, 0.5f).OnComplete(() =>
-        {
-            gameObject.SetActive(false);  // 페이드 아웃 후 비활성화
-        });
+       Fade(false, .5f, () => Destroy(gameObject));
     }
 }

@@ -5,7 +5,6 @@ using DG.Tweening;
 
 public class OpeningStory : Story
 {
-    protected override string StoryDesc => "그린우드 섬으로 향하는 항해 중, 배 안의 불안한 분위기와 신비한 인물들이 점차 밝혀지는 이야기.";
 
     // 시작 부분의 요소들
     protected override SequentialElement StartElements => new

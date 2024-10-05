@@ -15,7 +15,6 @@ public abstract class Story
 
     // 스토리 ID는 자동으로 클래스의 이름을 사용
     public virtual string StoryId => GetType().Name; // 클래스의 이름을 ID로 사용
-    protected abstract string StoryDesc { get; }
 
     // Start 단계의 Elements를 실행하는 메서드
     public IEnumerator ClearRoutine(float duration)

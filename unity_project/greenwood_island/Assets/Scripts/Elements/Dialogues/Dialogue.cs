@@ -47,7 +47,7 @@ public class Dialogue : Element
         dialoguePlayer.ClearCharacterText();
         string characterStr = characterData != null ? characterData.CharacterName_Ko : "";
         Color characterStrColor = characterData != null ? characterData.CharacterColor : Color.clear;
-        dialoguePlayer.SetCharacterText(characterStr);
+        dialoguePlayer.SetCharacterText(characterStr, Color.Lerp(characterStrColor, Color.black, .85f));
         dialoguePlayer.SetCharacterTextClor(Color.clear, 0f);
         dialoguePlayer.SetCharacterTextClor(characterStrColor, .3f);
 

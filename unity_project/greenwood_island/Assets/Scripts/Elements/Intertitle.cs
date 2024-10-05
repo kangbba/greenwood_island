@@ -25,16 +25,6 @@ public class Intertitle : Element
         _fontSize = fontSize;
     }
 
-    // 생성자 오버로드: 하나의 duration을 받아서 3등분하는 방식, 텍스트 크기 포함
-    public Intertitle(string text, float totalDuration, float fontSize = 55f, Ease ease = Ease.Linear)
-    {
-        _text = text;
-        _enterDuration = totalDuration / 3f;
-        _stayDuration = totalDuration / 3f;
-        _exitDuration = totalDuration / 3f;
-        _ease = ease;
-        _fontSize = fontSize;
-    }
 
     public override IEnumerator ExecuteRoutine()
     {

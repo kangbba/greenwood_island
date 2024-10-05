@@ -6,6 +6,7 @@ public class FirstKateStory : Story
     // FirstKateStory 스토리의 스크립트 로직을 여기에 작성하세요.
     protected override SequentialElement StartElements => new (
 
+        new Intertitle("한달 후", 1f, 3f, 1f, 60),
         new PlaceTransition(
             Color.black, 
             1f,

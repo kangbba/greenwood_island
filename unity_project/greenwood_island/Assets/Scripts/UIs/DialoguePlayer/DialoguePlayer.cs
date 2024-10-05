@@ -46,15 +46,15 @@ public class DialoguePlayer : MonoBehaviour
     }
     public void ClearCharacterText(){
 
-        SetCharacterText("");
+        SetCharacterText("", Color.black);
     }
-    public void ShowCharacterTextBackground(bool show, float duration)
+    public void ShowCharacterTextBackground(bool show, float duration, Color c)
     {
         // _lineTextBackground의 alpha 값으로 페이드 타겟 설정
         float targetAlpha = show ? _lineTextBackground.color.a : 0f;
 
         // _characterTextBackground의 페이드 처리
-        _characterTextBackground.DOFade(targetAlpha, duration);
+        _characterTextBackground.DOColor(c.ModifiedAlpha(targetAlpha), duration);
     }
 
    // CanvasGroup을 페이드 아웃하는 메서드
@@ -81,11 +81,11 @@ public class DialoguePlayer : MonoBehaviour
         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
     }
 
-    public void SetCharacterText(string s)
+    public void SetCharacterText(string s, Color c)
     {
         _characterText.SetText(s);
         bool showCharacterTextBackground = !string.IsNullOrEmpty(s);
-        ShowCharacterTextBackground(showCharacterTextBackground, .1f);
+        ShowCharacterTextBackground(showCharacterTextBackground, .1f, c);
     }
 
     public void CompleteCurSentence()

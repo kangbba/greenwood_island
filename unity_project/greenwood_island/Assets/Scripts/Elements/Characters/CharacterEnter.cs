@@ -25,7 +25,7 @@ public class CharacterEnter : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 생성 및 위치 설정
-        Character character = CharacterManager.CreateCharacter(_characterID, _screenPeroneX);
+        Character character = CharacterManager.Instance.CreateCharacter(_characterID, _screenPeroneX);
         if (character == null)
         {
             Debug.LogWarning($"Failed to instantiate character with ID: {_characterID}");

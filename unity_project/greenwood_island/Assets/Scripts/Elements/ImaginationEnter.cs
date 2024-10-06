@@ -31,10 +31,10 @@ public class ImaginationEnter : Element
         Debug.Log($"ImaginationEnter :: 상상의 장면 '{_imaginationID}'을 인스턴스화 시도합니다.");
 
         // ImaginationManager를 통해 상상 이미지 생성
-        ImaginationManager.CreateImagination(_imaginationID, _scaleFactor);
+        ImaginationManager.Instance.CreateImagination(_imaginationID, _scaleFactor);
 
         // ImaginationManager를 통해 페이드 인 애니메이션 적용
-        ImaginationManager.FadeColor(_imaginationID, _targetColor, _duration, _easeType);
+        ImaginationManager.Instance.FadeColor(_imaginationID, _targetColor, _duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

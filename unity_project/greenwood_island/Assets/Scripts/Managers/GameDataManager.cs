@@ -69,7 +69,7 @@ public static class GameDataManager
 
 
     // 특정 슬롯 번호에서 JSON 데이터를 읽어 GameSaveData로 변환
-    public static GameSaveData GetGameSaveDataFromSlotNumber(int slotNumber)
+    public static GameSaveData GetGameSaveData(int slotNumber)
     {
         string path = GetSaveFilePath(slotNumber);
         if (File.Exists(path))
@@ -88,7 +88,6 @@ public static class GameDataManager
         }
         else
         {
-            Debug.LogWarning($"슬롯 {slotNumber}에 저장된 데이터가 없습니다.");
             return null;  // 파일이 존재하지 않으면 null 반환
         }
     }
@@ -141,7 +140,7 @@ public static class GameDataManager
 
     public static void LoadGameData(int slotIndex)
     {
-        GameSaveData gameSaveDataInSlot = GetGameSaveDataFromSlotNumber(slotIndex);
+        GameSaveData gameSaveDataInSlot = GetGameSaveData(slotIndex);
         if(gameSaveDataInSlot == null){
             Debug.LogWarning($"해당 슬롯에 저장된 세이브데이터가 없음에도 로드 시도되었습니다");
             return;
@@ -154,19 +153,6 @@ public static class GameDataManager
         // SceneManager.sceneLoaded += OnSceneLoaded;
         // 게임 플레이 씬으로 전환
         SceneManager.LoadScene("InGame");
-
-        // // 씬 로드 완료 후 호출할 메서드
-        // void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        // {
-        //     if (scene.name == "InGame")
-        //     {
-        //         // 스토리 시작
-        //         StoryManager.PlayStory(new WeirdCloud());
-
-        //         // 이벤트 해제
-        //         SceneManager.sceneLoaded -= OnSceneLoaded;
-        //     }
-        // }
     }
 
 }

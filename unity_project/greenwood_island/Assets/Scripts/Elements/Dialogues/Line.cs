@@ -1,6 +1,5 @@
 using System;
 
-[System.Serializable]
 public class Line
 {
     private EmotionType _emotionType;   // EmotionType enum 사용

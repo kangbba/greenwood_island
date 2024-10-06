@@ -69,7 +69,7 @@ public static class StoryEditorFileHandler
 
         foreach (ResourceType resourceType in (ResourceType[])Enum.GetValues(typeof(ResourceType)))
         {
-            string path = ResourcePathManager.GetResourcePath("*", selectedFolder, resourceType, false);
+            string path = ResourcePathManager.GetStoryResourcePath("*", selectedFolder, resourceType);
             string resourcesPath = path.Replace("Assets/Resources/", "");
             string fullPath = Path.Combine(Application.dataPath, "Resources", resourcesPath);
 
@@ -110,7 +110,7 @@ public static class StoryEditorFileHandler
                 DragAndDrop.AcceptDrag();
                 foreach (var path in DragAndDrop.paths)
                 {
-                    string targetPath = ResourcePathManager.GetResourcePath(Path.GetFileName(path), selectedFolder, GetTargetResourceType(folderContents), false);
+                    string targetPath = ResourcePathManager.GetStoryResourcePath(Path.GetFileName(path), selectedFolder, GetTargetResourceType(folderContents));
                     string fullTargetPath = Path.Combine(Application.dataPath, "Resources", targetPath);
 
                     if (!Directory.Exists(Path.GetDirectoryName(fullTargetPath)))

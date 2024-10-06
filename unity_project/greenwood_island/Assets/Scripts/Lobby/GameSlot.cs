@@ -8,6 +8,8 @@ public class GameSlot : MonoBehaviour
     [SerializeField] private Image _previewImg;   // 저장 이름을 표시할 이미지
     [SerializeField] private Sprite _storyDefaultThumbnail;  // 기본 썸네일 이미지
     [SerializeField] private Sprite _vacantStorySprite;  // 빈 슬롯 이미지
+    
+    [SerializeField] private TextMeshProUGUI _slotIndexText;   // 슬롯 인덱스를 표시할 텍스트    
     [SerializeField] private TextMeshProUGUI _storyNameText;    // 스토리 ID를 표시할 텍스트
     [SerializeField] private TextMeshProUGUI _saveTimeText;   // 저장 시간을 표시할 텍스트
     [SerializeField] private TextMeshProUGUI _saveMemoText;   // 저장 메모를 표시할 텍스트
@@ -36,11 +38,12 @@ public class GameSlot : MonoBehaviour
     // UI를 갱신하는 메서드
     public void Refresh()
     {
+        _slotIndexText.SetText($"FILE {_slotNumber + 1}");
         if (_saveData == null)
         {
             // saveData가 null일 경우, 빈 슬롯으로 표시
             _previewImg.sprite = _vacantStorySprite;
-            _storyNameText.text = "빈 슬롯";  // 스토리 없음
+            _storyNameText.text = "NO DATA";  // 스토리 없음
             _saveTimeText.text = "";
             _saveMemoText.text = "";
             _filePathText.text = GameDataManager.GetSaveFilePath(_slotNumber);  // 파일 경로는 표시
@@ -49,7 +52,7 @@ public class GameSlot : MonoBehaviour
         else
         {
             // saveData가 있을 경우, 저장된 데이터 표시
-            StoryData storyData = StoryManager.GetStoryData(_saveData.storyID);
+            StoryData storyData = ResourcePathManager.GetStoryData(_saveData.storyID);
             _previewImg.sprite = storyData != null ? storyData.StoryThumbnail : _storyDefaultThumbnail;
             _storyNameText.text = _saveData.storyID;  // 나중에 ko로 변경
             _saveTimeText.text = _saveData.saveTimeString;

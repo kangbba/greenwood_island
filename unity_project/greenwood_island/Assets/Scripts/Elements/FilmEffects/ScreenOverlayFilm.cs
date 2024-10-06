@@ -29,7 +29,7 @@ public class ScreenOverlayFilm : Element
         // ScreenOverlayFilm이 null인 경우 예외 처리 및 얼리 리턴
         if (ScreenOverlayFilmImg == null)
         {
-            Debug.LogError("ScreenOverlayFilm is not assigned or found.");
+            Debug.LogWarning("ScreenOverlayFilm is not assigned or found.");
             yield break;
         }
 

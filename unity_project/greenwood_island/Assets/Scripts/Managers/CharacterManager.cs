@@ -3,29 +3,15 @@ using UnityEngine;
 using System.Linq;
 using DG.Tweening;
 
-public static class CharacterManager
+public class CharacterManager : SingletonManager<CharacterManager>
 {
-    private static Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>(); // 인스턴스화된 캐릭터
-    private static Dictionary<string, CharacterData> _characterDataCache = new Dictionary<string, CharacterData>(); // 캐릭터 데이터 캐시
+    private Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>(); // 인스턴스화된 캐릭터
+    private Dictionary<string, CharacterData> _characterDataCache = new Dictionary<string, CharacterData>(); // 캐릭터 데이터 캐시
 
-    public static Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
-
-    private static GameObject _characterHost;
-    private static MonoBehaviour _characterHandler;
-
-    // Coroutine을 실행할 임시 오브젝트와 컴포넌트 초기화
-    static CharacterManager()
-    {
-        _characterHost = new GameObject("CoroutineUtilsHost");
-        _characterHandler = _characterHost.AddComponent<CharacterHandler>();
-        Object.DontDestroyOnLoad(_characterHost);
-    }
-
-    // MonoBehaviour를 상속한 임시 핸들러 클래스
-    private class CharacterHandler : MonoBehaviour { }
+    public Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
 
     // 캐릭터 프리팹을 로드하여 인스턴스화하는 함수
-    public static Character CreateCharacter(string characterID, float screenPeroneX)
+    public Character CreateCharacter(string characterID, float screenPeroneX)
     {
         if (IsExist(characterID))
         {
@@ -34,7 +20,7 @@ public static class CharacterManager
         }
 
         // 캐릭터 프리팹 경로 설정 및 로드
-        string path = ResourcePathManager.GetResourcePath(characterID, StoryManager.CurrentStoryName, ResourceType.Character, isShared: true); // 경로 가져오기
+        string path = ResourcePathManager.GetSharedResourcePath(characterID, ResourceType.Character); // 경로 가져오기
         GameObject characterPrefab = Resources.Load<GameObject>(path);
 
         // 프리팹을 찾지 못했을 경우
@@ -66,7 +52,7 @@ public static class CharacterManager
     }
     // 캐릭터 프리팹을 로드하여 인스턴스화하는 함수
     // 캐릭터 데이터 로드 함수
-    public static CharacterData GetCharacterData(string characterID)
+    public CharacterData GetCharacterData(string characterID)
     {
         if (_characterDataCache.TryGetValue(characterID, out CharacterData characterData))
         {
@@ -88,7 +74,7 @@ public static class CharacterManager
     }
 
     // 인스턴스화된 캐릭터를 가져오는 함수
-    public static Character GetActiveCharacter(string characterID)
+    public Character GetActiveCharacter(string characterID)
     {
         if (IsExist(characterID))
         {
@@ -102,13 +88,13 @@ public static class CharacterManager
     }
 
     // 캐릭터 존재 확인 함수
-    public static bool IsExist(string characterID)
+    public bool IsExist(string characterID)
     {
         return _instantiatedCharacters.ContainsKey(characterID);
     }
 
     // 캐릭터 위치 이동 함수
-    public static void MoveCharacter(string characterID, float targetScreenPercentageX, float duration, Ease easeType)
+    public void MoveCharacter(string characterID, float targetScreenPercentageX, float duration, Ease easeType)
     {
         Character character = GetActiveCharacter(characterID);
         if (character == null)
@@ -132,7 +118,7 @@ public static class CharacterManager
     }
 
     // 캐릭터 파괴 함수
-    public static void DestroyCharacter(string characterID)
+    public void DestroyCharacter(string characterID)
     {
         if (_instantiatedCharacters.TryGetValue(characterID, out Character character))
         {
@@ -146,7 +132,7 @@ public static class CharacterManager
     }
 
     // 모든 캐릭터 파괴 함수
-    public static void DestroyAllCharacters()
+    public void DestroyAllCharacters()
     {
         foreach (var character in _instantiatedCharacters.Values)
         {
@@ -155,7 +141,7 @@ public static class CharacterManager
         _instantiatedCharacters.Clear();
     }
 
-    public static List<string> GetAllActiveCharacterIDs()
+    public List<string> GetAllActiveCharacterIDs()
     {
         return _instantiatedCharacters.Keys.ToList();
     }

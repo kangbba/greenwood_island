@@ -3,43 +3,25 @@ using System.Collections;
 using System.Reflection;
 using UnityEngine;
 
-public static class StoryManager
+public class StoryManager : SingletonManager<StoryManager>
 {
-    private static Story _currentStory; // 현재 실행 중인 스토리
-    private static Story _previousStory; // 이전에 실행된 스토리
+    private Story _currentStory; // 현재 실행 중인 스토리
+    private Story _previousStory; // 이전에 실행된 스토리
 
-    private static int _currentElementIndex;
+    private int _currentElementIndex;
 
     // 현재 스토리의 이름을 가져오는 메서드
-    public static string CurrentStoryName
+    public string CurrentStoryName
     {
         get{
             return _currentStory != null ? _currentStory.GetType().Name : string.Empty;
         }
     }
 
-    public static int CurrentElementIndex { get => _currentElementIndex;  }
-
-    public static StoryData GetStoryData(string storyID)
-    {
-        // ResourcePathManager에서 StoryData의 경로를 가져옴
-        string resourcePath = ResourcePathManager.GetResourcePath(storyID, storyID, ResourceType.StoryData, false);
-
-        // 해당 경로에서 StoryData를 로드
-        StoryData storyData = Resources.Load<StoryData>(resourcePath);
-
-        // StoryData가 존재하지 않을 경우 경고 메시지 출력
-        if (storyData == null)
-        {
-            Debug.LogWarning($"StoryData not found for storyID: {storyID}");
-        }
-
-        return storyData;
-    }
-
+    public int CurrentElementIndex { get => _currentElementIndex;  }
 
     // 스토리를 실행하는 메서드
-    public static void PlayStory(Story storyInstance)
+    public void PlayStory(Story storyInstance)
     {
         _previousStory = _currentStory;
 
@@ -65,7 +47,7 @@ public static class StoryManager
         }
     }
     // string storyID로 스토리 실행하는 메서드
-    public static void PlayStory(string storyID)
+    public void PlayStory(string storyID)
     {
         Type storyType = Type.GetType(storyID);
 
@@ -85,7 +67,7 @@ public static class StoryManager
 
     // 스토리 시작, 업데이트, 종료 루틴을 관리하는 코루틴
     // 스토리 시작, 업데이트, 종료 루틴을 관리하는 코루틴
-    private static IEnumerator StoryStartRoutine()
+    private IEnumerator StoryStartRoutine()
     {
         UIManager.SystemCanvas.LetterBox.gameObject.SetActive(true);
         UIManager.SystemCanvas.LetterBox.SetOn(false, 2f);

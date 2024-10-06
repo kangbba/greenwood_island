@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening; // DOTween을 사용하여 페이드 아웃 효과 적용
 
-[System.Serializable]
 public class SFXsClear : Element
 {
     private float _fadeDuration;
@@ -15,7 +14,7 @@ public class SFXsClear : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        SFXManager.FadeOutAndDestroyAllSFX(_fadeDuration);
+        SFXManager.Instance.FadeOutAndDestroyAllSFX(_fadeDuration);
         // 모든 페이드 아웃이 완료될 때까지 기다림
         yield return new WaitForSeconds(_fadeDuration);
     }

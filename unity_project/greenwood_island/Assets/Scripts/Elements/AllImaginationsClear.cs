@@ -22,7 +22,7 @@ public class AllImaginationsClear : Element
     {
         Debug.Log("ImaginationClear :: 상상의 장면을 제거합니다.");
 
-        ImaginationManager.DestroyAllImaginations(_duration, _easeType);
+        ImaginationManager.Instance.DestroyAllImaginations(_duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

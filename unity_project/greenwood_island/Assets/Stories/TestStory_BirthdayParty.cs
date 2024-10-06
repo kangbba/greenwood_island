@@ -10,7 +10,7 @@
     
 //     public Sprite Kate_CryingHappy {
 //         get{
-//              return CharacterManager.GetCharacterData(ECharacterID.Kate).characterPrefab.EmotionPlansData.EmotionPlans.Find(plan => plan.EmotionID == EEmotionID.CryingHappy).EmotionSprites[0];
+//              return CharacterManager.Instance.GetCharacterData(ECharacterID.Kate).characterPrefab.EmotionPlansData.EmotionPlans.Find(plan => plan.EmotionID == EEmotionID.CryingHappy).EmotionSprites[0];
 //         }
 //     }
 //     // 시작 부분의 요소들

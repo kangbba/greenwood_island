@@ -37,8 +37,8 @@ public class Dialogue : Element
         // 캐릭터 텍스트, 이미지
         var firstLine = _lines[0];
 
-        Character activeCharacter = CharacterManager.GetActiveCharacter(_characterID);
-        CharacterData characterData =  CharacterManager.GetCharacterData(_characterID);
+        Character activeCharacter = CharacterManager.Instance.GetActiveCharacter(_characterID);
+        CharacterData characterData =  CharacterManager.Instance.GetCharacterData(_characterID);
         if(characterData != null){
             Debug.Log(characterData.CharacterID);
         }

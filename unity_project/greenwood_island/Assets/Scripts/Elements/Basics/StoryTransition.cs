@@ -16,7 +16,7 @@ public class StoryTransition : Element
         // StoryManager를 통해 스토리 실행
         if (_storyInstance != null)
         {
-            StoryManager.PlayStory(_storyInstance);
+            StoryManager.Instance.PlayStory(_storyInstance);
         }
         else
         {

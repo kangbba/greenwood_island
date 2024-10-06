@@ -1,115 +1,96 @@
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public static class UIManager
 {
     // Static fields for WorldCanvas, SystemCanvas, and prefabs
+    private const string pathPrefix = "UIs";
+    private const string suffix = "Prefab";
     private static WorldCanvas _worldCanvas;
     private static SystemCanvas _systemCanvas;
     private static PopupCanvas _popupCanvas;
+
+
     private static SaveLoadWindow _saveLoadWindowPrefab;
     private static GameSlot _gameSlotPrefab;
     private static YesNoPopup _yesNoPopupPrefab;
+    private static OkPopup _okPopupPrefab;
 
-    // Public getters for accessing the canvas elements
-    public static WorldCanvas WorldCanvas
+    static UIManager()
     {
-        get
-        {
-            if (_worldCanvas == null)
-            {
-                // 씬에서 WorldCanvas를 찾고 캐싱
-                _worldCanvas = FindObjectOfType<WorldCanvas>();
-                if (_worldCanvas == null)
-                {
-                    Debug.LogError("WorldCanvas is missing in the scene! Make sure to add a WorldCanvas to the scene.");
-                }
-            }
-            return _worldCanvas;
-        }
+        // Prefab들을 Resources/UIs 경로에서 로드
+        _saveLoadWindowPrefab = LoadPrefab<SaveLoadWindow>("SaveLoadWindow");
+        _gameSlotPrefab = LoadPrefab<GameSlot>("GameSlot");
+        _yesNoPopupPrefab = LoadPrefab<YesNoPopup>("YesNoPopup");
+        _okPopupPrefab = LoadPrefab<OkPopup>("OkPopup");
     }
 
-    public static SystemCanvas SystemCanvas
+    // Init 메서드: Resources/UIs 경로에서 프리팹들을 로드하고 캔버스들을 하이어라키에 인스턴스화
+    public static void Init()
     {
-        get
-        {
-            if (_systemCanvas == null)
-            {
-                // 씬에서 SystemCanvas를 찾고 캐싱
-                _systemCanvas = FindObjectOfType<SystemCanvas>();
-                if (_systemCanvas == null)
-                {
-                    Debug.LogError("SystemCanvas is missing in the scene! Make sure to add a SystemCanvas to the scene.");
-                }
-            }
-            return _systemCanvas;
+        // 캔버스를 하이어라키에 인스턴스화
+        if(_worldCanvas != null){
+            GameObject.Destroy(_worldCanvas.gameObject);
         }
+        _worldCanvas = InstantiateCanvas<WorldCanvas>("Canvas/WorldCanvas");
+        
+        if(_systemCanvas != null){
+            GameObject.Destroy(_systemCanvas.gameObject);
+        }
+        _systemCanvas = InstantiateCanvas<SystemCanvas>("Canvas/SystemCanvas");
+
+        if(_popupCanvas != null){
+            GameObject.Destroy(_popupCanvas.gameObject);
+        }
+        _popupCanvas = InstantiateCanvas<PopupCanvas>("Canvas/PopupCanvas");
+
+
+        Debug.Log("UIManager initialized with prefabs and instantiated canvases.");
     }
 
-    public static PopupCanvas PopupCanvas
+    // Generic method to load prefabs from Resources/UIs/{prefabName}
+    private static T LoadPrefab<T>(string prefabName) where T : Object
     {
-        get
+        string path = $"{pathPrefix}/{prefabName}Prefab";
+        T prefab = Resources.Load<T>(path);
+        if (prefab == null)
         {
-            if (_popupCanvas == null)
-            {
-                // 씬에서 SystemCanvas를 찾고 캐싱
-                _popupCanvas = FindObjectOfType<PopupCanvas>();
-                if (_popupCanvas == null)
-                {
-                    Debug.LogError("SystemCanvas is missing in the scene! Make sure to add a SystemCanvas to the scene.");
-                }
-            }
-            return _popupCanvas;
+            Debug.LogError($"{prefabName} is missing in the Resources/UIs folder!");
         }
+        return prefab;
     }
 
-    public static SaveLoadWindow SaveLoadWindowPrefab
+    // Generic method to instantiate canvas prefabs in the hierarchy
+    private static T InstantiateCanvas<T>(string prefabName) where T : Object
     {
-        get
+        T prefab = LoadPrefab<T>(prefabName);
+        if (prefab != null)
         {
-            if (_saveLoadWindowPrefab == null)
-            {
-                // Resources에서 SaveLoadWindowPrefab을 로드하고 캐싱
-                _saveLoadWindowPrefab = Resources.Load<SaveLoadWindow>("UIs/SaveLoadWindowUI/SaveLoadWindowPrefab");
-                if (_saveLoadWindowPrefab == null)
-                {
-                    Debug.LogError("SaveLoadWindowPrefab is missing in the Resources folder!");
-                }
-            }
-            return _saveLoadWindowPrefab;
+            T instance = Object.Instantiate(prefab);  // 인스턴스화하여 하이어라키에 추가
+            return instance;
         }
+        return null;
     }
 
-    public static GameSlot GameSlotPrefab
+    // Public getters for accessing the prefabs and canvas elements
+    public static WorldCanvas WorldCanvas => _worldCanvas;
+    public static SystemCanvas SystemCanvas => _systemCanvas;
+    public static PopupCanvas PopupCanvas => _popupCanvas;
+    public static SaveLoadWindow SaveLoadWindowPrefab => _saveLoadWindowPrefab;
+    public static GameSlot GameSlotPrefab => _gameSlotPrefab;
+    public static YesNoPopup YesNoPopupPrefab => _yesNoPopupPrefab;
+    public static OkPopup OkPopupPrefab => _okPopupPrefab;
+
+    // 예/아니오 팝업 호출 메서드
+    public static void ShowYesNoPopup(Transform spawnTr, string message, string yesText, string noText, System.Action onYesAction)
     {
-        get
-        {
-            if (_gameSlotPrefab == null)
-            {
-                // Resources에서 GameSlotPrefab을 로드하고 캐싱
-                _gameSlotPrefab = Resources.Load<GameSlot>("UIs/SaveLoadWindowUI/GameSlotPrefab");
-                if (_gameSlotPrefab == null)
-                {
-                    Debug.LogError("GameSlotPrefab is missing in the Resources folder!");
-                }
-            }
-            return _gameSlotPrefab;
-        }
+        YesNoPopup popupInstance = Object.Instantiate(YesNoPopupPrefab, spawnTr);
+        popupInstance.Init(message, yesText, noText, onYesAction);
     }
 
-    public static YesNoPopup YesNoPopupPrefab
+    // 확인 팝업 호출 메서드
+    public static void ShowOkPopup(Transform spawnTr, string message, string okText, System.Action onOkAction)
     {
-        get
-        {
-            if (_yesNoPopupPrefab == null)
-            {
-                // Resources에서 YesNoPopupPrefab을 로드하고 캐싱
-                _yesNoPopupPrefab = Resources.Load<YesNoPopup>("UIs/SaveLoadWindowUI/YesNoPopupPrefab");
-                if (_yesNoPopupPrefab == null)
-                {
-                    Debug.LogError("YesNoPopupPrefab is missing in the Resources folder!");
-                }
-            }
-            return _yesNoPopupPrefab;
-        }
+        OkPopup popupInstance = Object.Instantiate(OkPopupPrefab, spawnTr);
+        popupInstance.Init(message, okText, onOkAction);
     }
 }

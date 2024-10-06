@@ -25,19 +25,47 @@ public static class ResourcePathManager
     }
 
     /// <summary>
-    /// 리소스 타입과 스토리 이름을 바탕으로 적합한 경로를 반환합니다.
+    /// 리소스 타입과 스토리 ID를 바탕으로 적합한 경로를 반환합니다.
     /// </summary>
     /// <param name="resourceID">리소스 ID (파일명)</param>
-    /// <param name="storyName">스토리 이름</param>
+    /// <param name="storyID">스토리 ID (폴더 이름)</param>
     /// <param name="resourceType">리소스 타입 (FX, SFX, Place 등)</param>
     /// <param name="isShared">공유 자원을 검색할지 여부</param>
     /// <returns>적합한 경로 문자열</returns>
-    public static string GetResourcePath(string resourceID, string storyName, ResourceType resourceType, bool isShared = false)
+    /// 
+
+    public static StoryData GetStoryData(string storyID)
+    {
+        // ResourcePathManager에서 StoryData의 경로를 가져옴
+        string resourcePath = GetCurrentStoryResourcePath(storyID, ResourceType.StoryData);
+
+        // 해당 경로에서 StoryData를 로드
+        StoryData storyData = Resources.Load<StoryData>(resourcePath);
+
+        // StoryData가 존재하지 않을 경우 경고 메시지 출력
+        if (storyData == null)
+        {
+            Debug.LogWarning($"StoryData not found for storyID: {storyID}");
+        }
+
+        return storyData;
+    }
+
+    public static string GetSharedResourcePath(string resourceID, ResourceType resourceType){
+        return GetResourcePath(resourceID, "", resourceType, true);
+    }
+    public static string GetCurrentStoryResourcePath(string resourceID, ResourceType resourceType){
+        return GetResourcePath(resourceID, StoryManager.Instance.CurrentStoryName, resourceType, false);
+    }
+    public static string GetStoryResourcePath(string resourceID, string storyID, ResourceType resourceType){
+        return GetResourcePath(resourceID, storyID, resourceType, false);
+    }
+    private static string GetResourcePath(string resourceID, string storyID, ResourceType resourceType, bool isShared = false)
     {
         string resourcePath = string.Empty;
 
         // 기본 폴더 경로 설정
-        string basicFolderPath = isShared ? SHARED_RESOURCE_PATH : $"{STORY_RESOURCE_BASE_PATH}/{storyName}";
+        string basicFolderPath = isShared ? SHARED_RESOURCE_PATH : $"{STORY_RESOURCE_BASE_PATH}/{storyID}";
 
         // 리소스 타입별로 특정한 폴더 구조를 반영
         switch (resourceType)
@@ -76,5 +104,23 @@ public static class ResourcePathManager
         }
 
         return resourcePath;
+    }
+
+     // 스토리 ID 리스트를 반환하는 메서드 (폴더 이름을 기반으로)
+    public static string[] GetAvailableStoryIDs()
+    {
+        string storyPath = Path.Combine(ASSETS_PATH, STORY_RESOURCE_BASE_PATH);
+        if (Directory.Exists(storyPath))
+        {
+            // 폴더 경로에서 폴더 이름만 반환
+            string[] directories = Directory.GetDirectories(storyPath);
+            for (int i = 0; i < directories.Length; i++)
+            {
+                directories[i] = Path.GetFileName(directories[i]); // 경로에서 폴더 이름만 추출
+            }
+            return directories;
+        }
+
+        return new string[0];
     }
 }

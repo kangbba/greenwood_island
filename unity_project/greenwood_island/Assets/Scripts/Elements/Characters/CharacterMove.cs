@@ -21,7 +21,7 @@ public class CharacterMove : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 기존 캐릭터 가져오기
-        Character character = CharacterManager.GetActiveCharacter(_characterID);
+        Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);
 
         if (character == null)
         {
@@ -30,7 +30,7 @@ public class CharacterMove : Element
         }
 
         // 캐릭터 이동
-        CharacterManager.MoveCharacter(_characterID, _targetScreenPeroneX, _duration, _easeType);
+        CharacterManager.Instance.MoveCharacter(_characterID, _targetScreenPeroneX, _duration, _easeType);
         yield return new WaitForSeconds(_duration);
     }
 }

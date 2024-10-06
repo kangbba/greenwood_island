@@ -226,7 +226,7 @@ public class StoryEditor : EditorWindow
 
         foreach (ResourceType resourceType in (ResourceType[])Enum.GetValues(typeof(ResourceType)))
         {
-            string folderPath = ResourcePathManager.GetResourcePath("", storyName, resourceType, false);
+            string folderPath = ResourcePathManager.GetStoryResourcePath("", storyName, resourceType);
             string fullFolderPath = Path.GetDirectoryName(Path.Combine(Application.dataPath, "Resources", folderPath));
 
             if (!Directory.Exists(fullFolderPath))
@@ -249,7 +249,7 @@ public class StoryEditor : EditorWindow
     private void CreateStoryDataAsset(string storyID)
     {
         // StoryData를 저장할 경로
-        string resourcePath = ResourcePathManager.GetResourcePath(storyID, storyID, ResourceType.StoryData, false);
+        string resourcePath = ResourcePathManager.GetStoryResourcePath(storyID, storyID, ResourceType.StoryData);
         string assetFolder = Path.GetDirectoryName(Path.Combine("Assets/Resources", resourcePath));
         string assetPath = Path.Combine(assetFolder, $"{storyID}.asset");
 

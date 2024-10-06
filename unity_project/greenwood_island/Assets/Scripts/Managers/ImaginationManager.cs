@@ -6,17 +6,16 @@ using DG.Tweening;
 /// <summary>
 /// ImaginationManager는 활성화된 상상의 이미지를 관리하는 싱글톤 클래스입니다.
 /// </summary>
-public static class ImaginationManager
+public class ImaginationManager : SingletonManager<ImaginationManager>
 {
-    private static string CurrentStoryName => StoryManager.CurrentStoryName;
     // 활성화된 상상 이미지를 관리하는 딕셔너리
-    private static Dictionary<string, Image> _activeImaginations = new Dictionary<string, Image>();
+    private Dictionary<string, Image> _activeImaginations = new Dictionary<string, Image>();
 
     // 활성화된 상상 이미지들을 반환
-    public static Dictionary<string, Image> ActiveImaginations => _activeImaginations;
+    public Dictionary<string, Image> ActiveImaginations => _activeImaginations;
 
     // 상상 이미지를 생성하여 등록하는 메서드
-    public static Image CreateImagination(string imaginationID, float scaleFactor)
+    public Image CreateImagination(string imaginationID, float scaleFactor)
     {
         // 이미 해당 ID가 등록되어 있다면 바로 반환
         if (_activeImaginations.ContainsKey(imaginationID))
@@ -36,13 +35,13 @@ public static class ImaginationManager
         img.transform.localScale = Vector2.one * scaleFactor;
 
         // Imagination에 해당하는 Sprite 로드
-        string resourcePath = ResourcePathManager.GetResourcePath(imaginationID, CurrentStoryName, ResourceType.Imagination, false);
+        string resourcePath = ResourcePathManager.GetCurrentStoryResourcePath(imaginationID, ResourceType.Imagination);
         Sprite imaginationSprite = Resources.Load<Sprite>(resourcePath);
 
         // 스토리 리소스에서 로드 실패 시 공유 리소스에서 재시도
         if (imaginationSprite == null)
         {
-            resourcePath = ResourcePathManager.GetResourcePath(imaginationID, CurrentStoryName, ResourceType.Imagination, true);
+            resourcePath = ResourcePathManager.GetSharedResourcePath(imaginationID, ResourceType.Imagination);
             imaginationSprite = Resources.Load<Sprite>(resourcePath);
         }
 
@@ -67,7 +66,7 @@ public static class ImaginationManager
     }
 
     // 상상 이미지를 imaginationID로 찾아 페이드 인하는 메서드
-    public static void FadeColor(string imaginationID, Color targetColor, float duration, Ease easeType)
+    public void FadeColor(string imaginationID, Color targetColor, float duration, Ease easeType)
     {
         // imaginationID에 해당하는 이미지 찾기
         if (_activeImaginations.TryGetValue(imaginationID, out Image img))
@@ -80,7 +79,7 @@ public static class ImaginationManager
         }
     }
 
-    public static Image GetActiveImageByID(string imaginationID)
+    public Image GetActiveImageByID(string imaginationID)
     {
         if (_activeImaginations.TryGetValue(imaginationID, out Image img))
         {
@@ -93,7 +92,7 @@ public static class ImaginationManager
         }
     }
     // 상상 이미지를 페이드 아웃 후 제거하는 메서드
-    public static void DestroyImagination(string imaginationID, float duration, Ease easeType)
+    public void DestroyImagination(string imaginationID, float duration, Ease easeType)
     {
         // imaginationID에 해당하는 이미지 찾기
         if (_activeImaginations.TryGetValue(imaginationID, out Image img))
@@ -112,7 +111,7 @@ public static class ImaginationManager
     }
 
     // 모든 상상 이미지를 페이드 아웃 후 제거하는 메서드
-    public static void DestroyAllImaginations(float duration, Ease easeType)
+    public void DestroyAllImaginations(float duration, Ease easeType)
     {
         foreach (var imaginationID in new List<string>(_activeImaginations.Keys))
         {

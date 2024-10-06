@@ -1,31 +1,30 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public static class PlaceManager
+public class PlaceManager : SingletonManager<PlaceManager>
 {
-    private static Place _currentPlace; // 현재 활성화된 장소
-    private static List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
+    private Place _currentPlace; // 현재 활성화된 장소
+    private List<Place> _activePlaces = new List<Place>(); // 활성화된 장소 리스트
 
-    // 현재 스토리 이름을 가져옴
-    private static string CurrentStoryName => StoryManager.CurrentStoryName;
 
     // 현재 활성화된 장소 반환
-    public static Place CurrentPlace => _currentPlace;
+    public Place CurrentPlace => _currentPlace;
 
     // 새로운 장소를 생성하는 메서드
-    public static Place CreatePlace(string imageID)
+    public Place CreatePlace(string imageID)
     {
         // 현재 스토리 이름을 사용하여 이미지 로드 시도
-        Sprite placeImage = LoadPlaceImage(imageID, CurrentStoryName);
+        Sprite placeImage = LoadPlaceImage(imageID);
 
         if (placeImage == null)
         {
-            Debug.LogError($"Failed to load place image with ID '{imageID}' from story '{CurrentStoryName}' or shared resources.");
+            Debug.LogError($"Failed to load place image with ID '{imageID}' from story or shared resources.");
             return null;
         }
 
         // PlacePrefab 로드
-        Place placePrefab = Resources.Load<Place>("PlacePrefab");
+        Place placePrefab = UIManager.WorldCanvas.PlacePrefab;
         if (placePrefab == null)
         {
             Debug.LogError("Failed to load PlacePrefab from Resources/PlacePrefab. Ensure the prefab exists and has a Place component attached.");
@@ -49,7 +48,7 @@ public static class PlaceManager
     }
 
     // 특정 placeID에 해당하는 활성화된 Place 반환
-    public static Place GetActivePlace(string placeID)
+    public Place GetActivePlace(string placeID)
     {
         foreach (var place in _activePlaces)
         {
@@ -64,10 +63,10 @@ public static class PlaceManager
     }
 
     // 장소 이미지를 로드하는 메서드 (스토리 자원 우선, 실패 시 공유 자원 로드)
-    private static Sprite LoadPlaceImage(string placeID, string storyName)
+    private Sprite LoadPlaceImage(string placeID)
     {
         // 스토리 경로에서 이미지 로드 시도
-        string storyPlacePath = ResourcePathManager.GetResourcePath(placeID, storyName, ResourceType.Place, false);
+        string storyPlacePath = ResourcePathManager.GetCurrentStoryResourcePath(placeID, ResourceType.Place);
         Sprite placeImage = Resources.Load<Sprite>(storyPlacePath);
 
         // 스토리 경로에서 로드 성공 시 로그 출력
@@ -78,7 +77,7 @@ public static class PlaceManager
         }
 
         // 스토리 경로에서 로드 실패 시, 공유 경로에서 로드 시도
-        string sharedPlacePath = ResourcePathManager.GetResourcePath(placeID, storyName, ResourceType.Place, true);
+        string sharedPlacePath = ResourcePathManager.GetSharedResourcePath(placeID, ResourceType.Place);
         placeImage = Resources.Load<Sprite>(sharedPlacePath);
 
         // 공유 경로에서 로드 성공 시 로그 출력
@@ -90,7 +89,7 @@ public static class PlaceManager
         return placeImage;
     }
 
-    public static void DestroyPreviousPlaces()
+    public void DestroyPreviousPlaces()
     {
         // 활성화된 장소가 2개 미만이면 경고 출력 후 반환
         if (_activePlaces.Count < 2)
@@ -99,14 +98,17 @@ public static class PlaceManager
             return;
         }
 
-        // 마지막 장소를 제외한 모든 이전 장소 파괴
-        for (int i = _activePlaces.Count - 2; i >= 0; i--)  // 마지막 인덱스를 제외한 역순으로 루프
+        // 마지막 장소를 제외한 이전 장소들을 담을 리스트 생성
+        List<Place> placesToDestroy = new List<Place>(_activePlaces.Take(_activePlaces.Count - 1));
+
+        // 남겨두지 않을 장소들을 순회하여 파괴
+        foreach (Place placeToDestroy in placesToDestroy)
         {
-            Place placeToDestroy = _activePlaces[i];
-            _activePlaces.RemoveAt(i);  // 리스트에서 제거
+            _activePlaces.Remove(placeToDestroy);  // 리스트에서 제거
             Object.Destroy(placeToDestroy.gameObject);  // 오브젝트 파괴
             Debug.Log($"PlaceManager :: 장소 '{placeToDestroy.name}' 파괴 완료");
         }
     }
+
 
 }

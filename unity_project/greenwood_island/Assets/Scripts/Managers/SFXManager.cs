@@ -3,28 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public static class SFXManager
+public class SFXManager : SingletonManager<SFXManager>
 {
     // 람다식으로 현재 실행 중인 스토리 이름을 자동으로 가져옴
-    private static string CurrentStoryName => StoryManager.CurrentStoryName;
 
-    private static Dictionary<string, List<AudioSource>> _activeSFXs = new Dictionary<string, List<AudioSource>>(); // 활성화된 SFX들
-    private static Dictionary<AudioSource, Coroutine> _activeLoops = new Dictionary<AudioSource, Coroutine>(); // 활성화된 루프 코루틴들
+    private Dictionary<string, List<AudioSource>> _activeSFXs = new Dictionary<string, List<AudioSource>>(); // 활성화된 SFX들
+    private Dictionary<AudioSource, Coroutine> _activeLoops = new Dictionary<AudioSource, Coroutine>(); // 활성화된 루프 코루틴들
 
     // 특정 SFX ID의 오디오 클립 단일 재생 코루틴 메서드
-    public static void PlaySFXOnce(string sfxID, float volume)
+    public void PlaySFXOnce(string sfxID, float volume)
     {
         CoroutineUtils.StartCoroutine(PlaySFXOnceCoroutine(sfxID, volume));
     }
 
     // 특정 SFX ID의 오디오 클립 단일 재생 코루틴 메서드
-    private static IEnumerator PlaySFXOnceCoroutine(string sfxID, float volume)
+    private IEnumerator PlaySFXOnceCoroutine(string sfxID, float volume)
     {
-        AudioClip sfxClip = LoadSFXClip(sfxID, CurrentStoryName);
-
+        AudioClip sfxClip = LoadSFXClip(sfxID);
         if (sfxClip == null)
         {
-            Debug.LogError($"SFX Clip '{sfxID}' could not be loaded from story '{CurrentStoryName}' or shared resources.");
+            Debug.LogError($"SFX Clip '{sfxID}' could not be loaded from storyme or shared resources.");
             yield break;
         }
 
@@ -52,17 +50,17 @@ public static class SFXManager
 
         // 재생이 끝난 후 AudioSource를 제거
         _activeSFXs[sfxID].Remove(audioSource);
-        Object.Destroy(audioObject); // AudioSource가 포함된 GameObject를 파괴
+        Destroy(audioObject); // AudioSource가 포함된 GameObject를 파괴
     }
 
     // 특정 시간 간격으로 SFX 반복 재생하는 메서드
-    public static AudioSource PlaySFXLoop(string sfxID, float volume, float term)
+    public AudioSource PlaySFXLoop(string sfxID, float volume, float term)
     {
-        AudioClip sfxClip = LoadSFXClip(sfxID, CurrentStoryName);
+        AudioClip sfxClip = LoadSFXClip(sfxID);
 
         if (sfxClip == null)
         {
-            Debug.LogError($"SFX Clip '{sfxID}' could not be loaded from story '{CurrentStoryName}' or shared resources.");
+            Debug.LogError($"SFX Clip '{sfxID}' could not be loaded from storyme or shared resources.");
             return null;
         }
 
@@ -99,7 +97,7 @@ public static class SFXManager
     }
 
     // 특정 시간 간격으로 반복 재생하는 코루틴
-    private static IEnumerator LoopWithTerm(AudioSource audioSource, float term)
+    private IEnumerator LoopWithTerm(AudioSource audioSource, float term)
     {
         int playCount = 0; // 재생 횟수를 카운트하는 변수
 
@@ -122,7 +120,7 @@ public static class SFXManager
 
 
     // 특정 SFX ID에 대한 활성화된 SFX 리스트 반환
-    public static List<AudioSource> GetActiveSFXs(string sfxID)
+    public List<AudioSource> GetActiveSFXs(string sfxID)
     {
         if (_activeSFXs.TryGetValue(sfxID, out List<AudioSource> activeSFXList))
         {
@@ -132,7 +130,7 @@ public static class SFXManager
     }
 
     // 특정 AudioSource를 페이드 아웃하고 제거하는 메서드
-    public static void FadeOutAndDestroy(AudioSource audioSource, float fadeDuration)
+    public void FadeOutAndDestroy(AudioSource audioSource, float fadeDuration)
     {
         if (audioSource == null) return;
 
@@ -144,7 +142,7 @@ public static class SFXManager
     }
 
     // 모든 SFX를 페이드 아웃하고 제거하는 메서드
-    public static void FadeOutAndDestroyAllSFX(float duration)
+    public void FadeOutAndDestroyAllSFX(float duration)
     {
         foreach (var sfxList in _activeSFXs.Values)
         {
@@ -160,7 +158,7 @@ public static class SFXManager
     }
 
     // 특정 AudioSource에 대한 SFX 제거
-    public static void RemoveSFX(AudioSource audioSource)
+    public void RemoveSFX(AudioSource audioSource)
     {
         foreach (var sfxList in _activeSFXs.Values)
         {
@@ -180,9 +178,9 @@ public static class SFXManager
     }
 
     // 스토리 이름과 SFX ID를 사용하여 오디오 클립을 로드하는 메서드
-    private static AudioClip LoadSFXClip(string sfxID, string storyName)
+    private AudioClip LoadSFXClip(string sfxID)
     {
-        string storySFXPath = ResourcePathManager.GetResourcePath(sfxID, storyName, ResourceType.SFX, false);
+        string storySFXPath = ResourcePathManager.GetCurrentStoryResourcePath(sfxID, ResourceType.SFX);
         AudioClip sfxClip = Resources.Load<AudioClip>(storySFXPath);
 
         if (sfxClip != null)
@@ -191,7 +189,7 @@ public static class SFXManager
             return sfxClip;
         }
 
-        string sharedSFXPath = ResourcePathManager.GetResourcePath(sfxID, storyName, ResourceType.SFX, true);
+        string sharedSFXPath = ResourcePathManager.GetSharedResourcePath(sfxID, ResourceType.SFX);
         sfxClip = Resources.Load<AudioClip>(sharedSFXPath);
 
         if (sfxClip != null)

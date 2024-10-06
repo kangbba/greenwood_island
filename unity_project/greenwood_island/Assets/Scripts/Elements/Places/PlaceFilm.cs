@@ -8,7 +8,6 @@ using DG.Tweening;
 /// 장소의 색상 자체를 변화시킨다는 점이 특징입니다.
 /// 원래 색상으로 복원하는 기능은 포함되지 않으며, 외부에서 수동으로 처리할 수 있습니다.
 /// </summary>
-[System.Serializable]
 public class PlaceFilm : Element
 {
     private Color _effectColor;
@@ -26,7 +25,7 @@ public class PlaceFilm : Element
     {
 
         // PlaceManager에서 현재 활성화된 장소를 가져옴
-        Place currentPlace = PlaceManager.CurrentPlace;
+        Place currentPlace = PlaceManager.Instance.CurrentPlace;
         if (currentPlace == null)
         {
             Debug.LogWarning("PlaceFilm :: 현재 활성화된 장소를 찾지 못했습니다.");

@@ -27,7 +27,7 @@ public class GameSaveData
     public GameSaveData DeepClone()
     {
         // 딕셔너리의 키와 값을 새로 복사
-        var copiedTrustLevels = new Dictionary<string, int>(this.trustLevels);
+        Dictionary<string, int> copiedTrustLevels = new Dictionary<string, int>(this.trustLevels);
 
         // 새롭게 GameSaveData 객체를 생성하여 반환 (딕셔너리와 값이 독립적)
         return new GameSaveData(this.storyID, copiedTrustLevels, this.saveMemo, DateTime.Parse(this.saveTimeString));

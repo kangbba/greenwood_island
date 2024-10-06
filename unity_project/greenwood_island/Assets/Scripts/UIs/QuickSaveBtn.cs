@@ -24,7 +24,7 @@ public class QuickSaveBtn : MonoBehaviour
                     SaveLoadWindow saveLoadWindowInstance = Instantiate(_saveLoadWindowPrefab, UIManager.PopupCanvas.transform);
 
                     // 세이브 모드로 초기화하여 세이브할 데이터를 넘겨줌
-                    GameSaveData tempSaveData = new GameSaveData(StoryManager.CurrentStoryName, new Dictionary<string, int>(), "퀵 세이브");
+                    GameSaveData tempSaveData = new GameSaveData(StoryManager.Instance.CurrentStoryName, new Dictionary<string, int>(), "퀵 세이브");
                     saveLoadWindowInstance.Init(true, tempSaveData); // 세이브 모드로 init
                 }
                 else
@@ -36,8 +36,8 @@ public class QuickSaveBtn : MonoBehaviour
             {
                 GameSaveData newGameSaveData = GameDataManager.CurrentGameSaveData.DeepClone();
                 // 스토리 이름과 elementIndex를 사용하여 GameSaveData를 업데이트
-                newGameSaveData.storyID = StoryManager.CurrentStoryName;
-                newGameSaveData.elementIndex = StoryManager.CurrentElementIndex;
+                newGameSaveData.storyID = StoryManager.Instance.CurrentStoryName;
+                newGameSaveData.elementIndex = StoryManager.Instance.CurrentElementIndex;
 
                 // 현재 슬롯 인덱스를 사용하여 게임 데이터를 저장
                 GameDataManager.SaveGameData(newGameSaveData, GameDataManager.CurrentSlotIndex);

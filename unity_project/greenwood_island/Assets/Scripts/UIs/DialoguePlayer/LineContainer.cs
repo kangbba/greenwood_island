@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class LineContainer
 {
     public GameObject gameObject;
+    private List<RectMask2D> _rectMasks = new List<RectMask2D>(); // 여러 개의 텍스트를 관리하는 리스트
     private List<TextMeshProUGUI> textMeshes = new List<TextMeshProUGUI>(); // 여러 개의 텍스트를 관리하는 리스트
     private List<bool> isPunctuationList = new List<bool>(); // 각 TextMeshProUGUI가 구두점에 의해 나뉘어진 것인지 여부
     private int currentTextIndex = 0; // 현재 보여줄 텍스트 인덱스
@@ -36,7 +37,8 @@ public class LineContainer
     private void ProcessTextChunks(List<string> splitTexts, TextMeshProUGUI mainText, RectTransform containerRectTransform, TMP_LineInfo lineInfo, int index)
     {
         float currentXPosition = 0; // 텍스트를 가로로 배치하기 위한 X 위치
-
+        _rectMasks.Clear();
+        textMeshes.Clear();
         foreach (var text in splitTexts)
         {
             // RectMask2D를 가지는 부모 객체 생성
@@ -81,6 +83,7 @@ public class LineContainer
             currentXPosition += textMesh.preferredWidth;
 
             // 리스트에 텍스트 추가
+            _rectMasks.Add(rectMask);
             textMeshes.Add(textMesh);
         }
 
@@ -147,7 +150,7 @@ public class LineContainer
         {
             onLineStarted?.Invoke();  // 라인 시작 콜백 호출
 
-            yield return RevealOneText(textMeshes[currentTextIndex], speed);
+            yield return RevealOneText(_rectMasks[currentTextIndex], textMeshes[currentTextIndex], speed);
 
             bool isTextEnd = isPunctuationList[currentTextIndex];
             if (isTextEnd)
@@ -164,9 +167,8 @@ public class LineContainer
 
 
     // 개별 텍스트를 드러나게 하는 코루틴
-    private IEnumerator RevealOneText(TextMeshProUGUI textMesh, float speed)
+    private IEnumerator RevealOneText(RectMask2D rectMask, TextMeshProUGUI textMesh, float speed)
     {
-        RectMask2D rectMask = textMesh.transform.parent.GetComponent<RectMask2D>();
         float initialPadding = rectMask.padding.z; // 초기 패딩 값 (텍스트의 너비)
         if (speed <= 0) // revealSpeed가 0일 때 즉시 드러나도록 설정
         {
@@ -179,7 +181,7 @@ public class LineContainer
 
         while (elapsedTime < timeToReveal && !_isCompleted)
         {
-            elapsedTime += Time.unscaledDeltaTime; // 시간 흐름에 영향을 받지 않는 DeltaTime 사용
+            elapsedTime += Time.deltaTime; // 시간 흐름에 영향을 받지 않는 DeltaTime 사용
             float progress = Mathf.Clamp01(elapsedTime / timeToReveal);
             rectMask.padding = new Vector4(0, 0, initialPadding * (1 - progress), 0);
             yield return null;
@@ -188,4 +190,5 @@ public class LineContainer
         // 최종적으로 완전히 드러난 상태로 설정
         rectMask.padding = new Vector4(0, 0, 0, 0);
     }
+
 }

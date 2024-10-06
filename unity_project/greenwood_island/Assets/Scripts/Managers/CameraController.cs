@@ -3,6 +3,7 @@ using DG.Tweening;
 
 public static class CameraController
 {
+    public static Transform CameraParent {get; private set;}
     public static Transform DepthLayer { get; private set; } 
     public static Transform PlaneLayer { get; private set; } 
     public static Transform ShakeLayer { get; private set; } 
@@ -15,50 +16,35 @@ public static class CameraController
     private static Tween _depthTween; 
     private static Tween _shakeTween; 
 
-    private static bool _isInitialized = false; 
-    private static GameObject _cameraHost; 
-    private static MonoBehaviour _cameraHandler; 
-
-    static CameraController()
-    {
-        _cameraHost = new GameObject("CameraControllerHost");
-        _cameraHandler = _cameraHost.AddComponent<CameraHandler>(); 
-        Init();
-        Object.DontDestroyOnLoad(_cameraHost); 
-    }
-
     public static void Init()
     {
-        if (_isInitialized)
-            return;
-
         if (Camera.main == null)
         {
             GameObject cameraObject = new GameObject("MainCamera");
             cameraObject.AddComponent<Camera>();
             Camera.main.tag = "MainCamera";
-            Object.DontDestroyOnLoad(cameraObject);
-        }
-        else
-        {
-            Object.DontDestroyOnLoad(Camera.main.gameObject);
         }
 
+        if(CameraParent != null){
+            GameObject.Destroy(CameraParent.gameObject);
+        }
+        
+        CameraParent = new GameObject("CameraParent").transform;
         PlaneLayer = new GameObject("CameraPlaneLayer").transform;
         DepthLayer = new GameObject("CameraDepthLayer").transform;
         ShakeLayer = new GameObject("CameraShakeLayer").transform;
 
+        PlaneLayer.parent = CameraParent;
         DepthLayer.parent = PlaneLayer;
         ShakeLayer.parent = DepthLayer;
-
         Camera.main.transform.parent = ShakeLayer;
-        Camera.main.transform.localPosition = Vector3.zero;
 
+        CameraParent.localPosition = Vector3.zero;
         PlaneLayer.localPosition = Vector3.zero;
         DepthLayer.localPosition = new Vector3(0, 0, ZoomMinZ);
         ShakeLayer.localPosition = Vector3.zero;
+        Camera.main.transform.localPosition = Vector3.zero;
 
-        _isInitialized = true;
     }
 
     public static void MovePlane(Vector2 targetLocalPos, float duration, Ease easeType = Ease.OutQuad)
@@ -97,6 +83,4 @@ public static class CameraController
         _shakeTween?.Kill();
         _shakeTween = ShakeLayer.DOShakePosition(duration, strength, vibrato, randomness);
     }
-
-    private class CameraHandler : MonoBehaviour { }
 }

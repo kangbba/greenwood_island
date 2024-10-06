@@ -17,7 +17,7 @@ public class CharacterExit : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 가져오기
-        Character character = CharacterManager.GetActiveCharacter(_characterID);
+        Character character = CharacterManager.Instance.GetActiveCharacter(_characterID);
         if (character == null)
         {
             Debug.LogWarning($"No active character found with ID: {_characterID} to exit.");
@@ -27,6 +27,6 @@ public class CharacterExit : Element
         yield return new WaitForSeconds(_duration); // 애니메이션이 완료될 때까지 대기
 
         // 애니메이션 완료 후 캐릭터 제거
-        CharacterManager.DestroyCharacter(_characterID);
+        CharacterManager.Instance.DestroyCharacter(_characterID);
     }
 }

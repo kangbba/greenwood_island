@@ -17,7 +17,7 @@ public class AllCharactersClear : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 각 캐릭터에 대해 CharacterExit을 생성하여 실행
-        var activeCharacterIDs = CharacterManager.GetAllActiveCharacterIDs();
+        var activeCharacterIDs = CharacterManager.Instance.GetAllActiveCharacterIDs();
         foreach (var characterID in activeCharacterIDs)
         {
             new CharacterExit(characterID, _duration).Execute();

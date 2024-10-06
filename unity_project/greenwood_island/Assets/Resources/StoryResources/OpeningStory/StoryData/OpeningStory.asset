@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _storyDesc: 
   _storyName_ko: 
-  _storyThumbnail: {fileID: 21300000, guid: 3abd4ec614dd64ba3aa98c29b915c455, type: 3}
+  _storyThumbnail: {fileID: 21300000, guid: 00fe3a66415034d7f9be1dc1404471a6, type: 3}

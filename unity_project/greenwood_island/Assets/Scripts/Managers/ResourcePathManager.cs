@@ -37,7 +37,7 @@ public static class ResourcePathManager
     public static StoryData GetStoryData(string storyID)
     {
         // ResourcePathManager에서 StoryData의 경로를 가져옴
-        string resourcePath = GetCurrentStoryResourcePath(storyID, ResourceType.StoryData);
+        string resourcePath = GetStoryResourcePath(storyID, storyID, ResourceType.StoryData);
 
         // 해당 경로에서 StoryData를 로드
         StoryData storyData = Resources.Load<StoryData>(resourcePath);

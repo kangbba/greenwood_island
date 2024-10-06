@@ -25,7 +25,7 @@ public class Emotion : MonoBehaviour
 
     public RectTransform RectTr { get => _rectTr;  }
 
-    private void Start(){
+    private void Awake(){
         
         _mouthImgInitialScales = new Vector2[_mouthImages.Length];
 
@@ -53,15 +53,25 @@ public class Emotion : MonoBehaviour
     }
 
     // 눈 깜박임 시작/중지 함수
-    public void StartBlink(bool b)
+    public void StartBlink()
     {
-        _isBlinking = b;
+        _isBlinking = true;
+    }
+    public void StopBlink(){
+        _isBlinking = false;
+        SetOpenEyes(false);
     }
 
     // 말하기 시작/중지 함수
-    public void StartTalking(bool b)
+    public void StartTalking()
     {
-        _isTalking = b;
+        Debug.Log("start talking");
+        _isTalking = true;
+    }
+
+    public void StopTalking(){
+        _isTalking = false;
+        SetMouthImage(-1);  // 코루틴이 종료될 때 입을 닫은 상태로 원상복구
     }
 
     // 눈 깜박임 코루틴
@@ -75,7 +85,9 @@ public class Emotion : MonoBehaviour
             SetOpenEyes(false);
             yield return new WaitForSeconds(0.1f);
         }
+
         _isBlinkRoutinePlaying = false;
+        _isBlinking = false;
         SetOpenEyes(false);
     }
 
@@ -94,6 +106,7 @@ public class Emotion : MonoBehaviour
 
         while (_isTalking && _isActivated)
         {
+            Debug.Log($"작동 {currentIndex}");
             // 현재 인덱스에 맞는 입 모양 설정
             SetMouthImage(mouthIndices[currentIndex], new Vector2(Random.Range(0.95f,1.05f), Random.Range(0.95f,1.05f)));
 
@@ -104,6 +117,7 @@ public class Emotion : MonoBehaviour
         }
 
         _isTalkingRoutinePlaying = false;
+        _isTalking = false;
         SetMouthImage(-1);  // 코루틴이 종료될 때 입을 닫은 상태로 원상복구
     }
 
@@ -132,18 +146,18 @@ public class Emotion : MonoBehaviour
     // 감정 활성화/비활성화 함수
     public void Activate(bool b, float duration)
     {
+
         _isActivated = b;
+        StartBlink();  // 눈 깜박임 시작
         if (b)
         {
-            StartBlink(true);  // 눈 깜박임 시작
             _canvasGroup.DOFade(1f, duration).SetEase(Ease.Linear).OnStart(() =>
             {
             });
         }
         else
         {
-            StartBlink(false);  // 눈 깜박임 중지
-            StartTalking(false);  // 말하기 중지
+            StopTalking();  // 말하기 중지
             _canvasGroup.DOFade(0f, duration).SetEase(Ease.Linear).OnComplete(() =>
             {
             });

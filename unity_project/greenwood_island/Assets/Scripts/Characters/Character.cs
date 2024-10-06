@@ -66,10 +66,11 @@ public class Character : MonoBehaviour
 
     public Emotion CurrentEmotion { get => _currentEmotion; }
 
-    private void Awake()
+    public void Init()
     {
         _rectMask = gameObject.AddComponent<RectMask2D>();
         AllEmotionsFadeOut(0f);
+        Show(EmotionType.Happy, AnchorType.Bottom, false, 0f, Ease.Linear);
     }
 
     // 모든 감정 비활성화
@@ -121,8 +122,7 @@ public class Character : MonoBehaviour
         return null;
     }
 
-    // RectMask2D 마스크 조절 함수 (EmotionType과 AnchorType을 인풋으로 받도록 수정)
-    public void SetRectMask(EmotionType emotionType, AnchorType anchorType, bool isShow, float duration, Ease easeType)
+    public void Show(EmotionType emotionType, AnchorType anchorType, bool isShow, float duration, Ease easeType)
     {
         // 현재 감정을 emotionType을 기반으로 찾기
         var emotion = FindEmotion(emotionType);
@@ -166,12 +166,12 @@ public class Character : MonoBehaviour
     }
 
     // 딜레이를 추가하여 RectMask 설정 (EmotionType과 AnchorType을 인풋으로 받도록 수정)
-    public void SetRectMaskWithDelay(EmotionType emotionType, AnchorType anchorType, bool isShow, float duration, Ease easeType, float delay = 0f)
+    public void ShowDelay(EmotionType emotionType, AnchorType anchorType, bool isShow, float duration, Ease easeType, float delay = 0f)
     {
         // 딜레이 후에 SetRectMask 실행
         DOVirtual.DelayedCall(delay, () =>
         {
-            SetRectMask(emotionType, anchorType, isShow, duration, easeType);
+            ShowDelay(emotionType, anchorType, isShow, duration, easeType);
         });
     }
 }

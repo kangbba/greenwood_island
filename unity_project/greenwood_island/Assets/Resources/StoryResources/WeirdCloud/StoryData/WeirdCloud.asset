@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: WeirdCloud
   m_EditorClassIdentifier: 
   _storyDesc: 
-  _storyThumbnail: {fileID: 0}
+  _storyName_ko: 
+  _storyThumbnail: {fileID: 21300000, guid: 3abd4ec614dd64ba3aa98c29b915c455, type: 3}

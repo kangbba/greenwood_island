@@ -25,20 +25,13 @@ public class CharacterEnter : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 생성 및 위치 설정
-        Character character = CharacterManager.Instance.CreateCharacter(_characterID, _screenPeroneX);
+        Character character = CharacterManager.Instance.CreateCharacter(_characterID, _initialEmotionType, _duration, _screenPeroneX);
         if (character == null)
         {
             Debug.LogWarning($"Failed to instantiate character with ID: {_characterID}");
             yield break;
         }
-
         // 애니메이션 완료까지 대기
         yield return new WaitForSeconds(_duration);
-
-        // 감정을 enum 기반으로 변경
-        character.ChangeEmotion(_initialEmotionType, _emotionIndex);
-
-        // RectMask 설정도 enum 기반으로 변경
-        character.SetRectMask(_initialEmotionType, _anchorType, true, _duration, Ease.Linear);
     }
 }

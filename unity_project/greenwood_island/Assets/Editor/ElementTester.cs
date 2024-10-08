@@ -235,6 +235,10 @@ public class ElementTester : EditorWindow
         {
             return EditorGUILayout.TextField(param.Name, currentValue != null ? (string)currentValue : string.Empty);
         }
+        if (param.ParameterType == typeof(bool)) // bool 타입 처리 추가
+        {
+            return EditorGUILayout.Toggle(param.Name, currentValue != null ? (bool)currentValue : false);
+        }
         if (param.ParameterType == typeof(Color))
         {
             return EditorGUILayout.ColorField(param.Name, currentValue != null ? (Color)currentValue : Color.white);

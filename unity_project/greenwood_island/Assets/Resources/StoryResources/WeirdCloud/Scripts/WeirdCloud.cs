@@ -173,8 +173,8 @@ public class WeirdCloud : Story
         ),
         new ImaginationEnter(
             "WeirdCloud",
-            1.5f,
-            Color.white
+            Vector2.one * 1.5f,
+            Vector2.one
         ),
         new Dialogue(
             "Ryan",
@@ -240,9 +240,6 @@ public class WeirdCloud : Story
                 new Line("카페 씨브리즈… 마침내 그곳에 도착하게 됐다.")
             }
         ),
-
-        new AllImaginationsClear(),
-
         new AllCharactersClear(1f)
     );
 

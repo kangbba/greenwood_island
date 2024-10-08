@@ -79,6 +79,8 @@ public class OpeningStory : Story
 
         new ImaginationEnter(
             "FerryOldMan",
+            Vector2.one,
+            Vector2.one,
             1f,
             ColorUtils.CustomColor("516FB7")
         ),
@@ -97,7 +99,7 @@ public class OpeningStory : Story
             "노인",
             new Line("바다가… 다 기억해… 내가 본 것들… 물속에 잠겼어… 저 깊은 곳에…")
         ),
-        new AllImaginationsClear(),
+        new ImaginationClear(1f),
         new Dialogue(
             "라디오",
             new List<Line>
@@ -110,7 +112,7 @@ public class OpeningStory : Story
         new ParallelElement(
             new SFXEnter("Thunder2", 0.4f, false, 0f),
             new CameraShake(4f),
-            new ImaginationEnter("Black", 1.5f, Color.black, 0.5f)// 눈을 질끈 감을 때 어두워지는 연출
+            new ImaginationEnter("Black", Vector2.one * 1.5f, Vector2.zero)// 눈을 질끈 감을 때 어두워지는 연출
         ),
         new Dialogue(
             "Mono",
@@ -124,11 +126,13 @@ public class OpeningStory : Story
                 new Line("이대로 끝나는 걸까? 모든 것이 한순간에 무너질 것만 같다. 나는 그저 이 순간이 빨리 끝나기를 바랄 뿐이다."),
             }
         ),
-        new AllImaginationsClear(),
+        new ImaginationClear(1f),
         new ScreenOverlayFilmClear(2f),
 
         new ImaginationEnter(
             "FerryOldMan",
+            Vector2.one,
+            Vector2.zero,
             1f,
             ColorUtils.CustomColor("516FB7")
         ),
@@ -151,7 +155,7 @@ public class OpeningStory : Story
             }
         ),
         new CameraShake(3),
-        new AllImaginationsClear(),
+        new ImaginationClear(1f),
         new Dialogue(
             "Mono",
             new List<Line>
@@ -160,8 +164,9 @@ public class OpeningStory : Story
                 new Line("몸이 떨린다. 이대로 가라앉는 게 아닐까, 그런 생각이 머리를 스친다."),
             }
         ),
+        new ImaginationClear(1f),
 
-        new ImaginationEnter("ShipSide", 3f, Color.black.ModifiedAlpha(.8f), 1f),
+        new ImaginationEnter("ShipSide", Vector2.one * 3f, Vector2.zero, 1f, Color.black.ModifiedAlpha(.8f)),
 
         new Dialogue(
             "Mono",
@@ -172,8 +177,8 @@ public class OpeningStory : Story
             }
         ),
         new ParallelElement(
-            new AllImaginationsClear(1f),
-            new ImaginationEnter("FarTown", 1f, Color.white, 1f)
+            new ImaginationClear(1f),
+            new ImaginationEnter("FarTown", Vector2.one, Vector2.zero, 1f)
         ),
         
         // 그린우드 섬이 드러나는 장면

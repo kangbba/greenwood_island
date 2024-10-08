@@ -116,8 +116,8 @@ public class FirstKateStory : Story
 
         new ImaginationEnter(
             "Bread",
-            1f,
-            Color.white
+            Vector2.one,
+            Vector2.zero
         ),
         new SFXsClear(),
         new Dialogue(
@@ -131,7 +131,7 @@ public class FirstKateStory : Story
             }
         ),
         new DialoguePanelClear(),
-        new AllImaginationsClear(),
+        new ImaginationClear(1f),
         new Dialogue(
             "Ryan",
             new List<Line>

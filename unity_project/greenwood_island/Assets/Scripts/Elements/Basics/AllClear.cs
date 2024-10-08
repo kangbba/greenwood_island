@@ -26,7 +26,7 @@ public class AllClear : Element
             new CutInClear(_duration),
             new PlaceOverlayFilmClear(_duration),
             new ScreenOverlayFilmClear(_duration, Ease.OutQuad, true),
-            new AllImaginationsClear(_duration),
+            new ImaginationClear(_duration),
             new DialoguePanelClear(_duration),
             new LetterboxClear(_duration)
         );

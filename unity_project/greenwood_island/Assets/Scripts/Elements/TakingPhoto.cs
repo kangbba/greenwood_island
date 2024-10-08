@@ -4,16 +4,14 @@ using UnityEngine.UI;
 
 public class TakingPhoto : Element
 {
-    private string _imaginationID;
-    public TakingPhoto(string imaginationID)
+    public TakingPhoto()
     {
-        _imaginationID = imaginationID;
     }
 
     public override IEnumerator ExecuteRoutine()
     {
         // PhotoManager 초기화
-        PhotoManager.Instance.Init(ImaginationManager.Instance.GetActiveImageByID(_imaginationID));
+      //  PhotoManager.Instance.Init(ImaginationManager.Instance.CurrentImagination);
 
         Debug.Log("사진 촬영 모드에 들어갑니다.");
 

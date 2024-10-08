@@ -1,30 +1,29 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-/// <summary>
-/// ImaginationManager는 활성화된 상상의 이미지를 관리하는 싱글톤 클래스입니다.
-/// </summary>
 public class ImaginationManager : SingletonManager<ImaginationManager>
 {
-    // 활성화된 상상 이미지를 관리하는 딕셔너리
-    private Dictionary<string, Image> _activeImaginations = new Dictionary<string, Image>();
+    private Material _invertColorMaterial;
 
-    // 활성화된 상상 이미지들을 반환
-    public Dictionary<string, Image> ActiveImaginations => _activeImaginations;
+    private string _currentImaginationID; // 현재 활성화된 상상 이미지 ID
+    private Image _currentImaginationImage; // 현재 활성화된 상상 이미지 객체
+
+    public string CurrentImaginationID { get => _currentImaginationID; }
+    public Image CurrentImaginationImage { get => _currentImaginationImage; }
 
     // 상상 이미지를 생성하여 등록하는 메서드
-    public Image CreateImagination(string imaginationID, float scaleFactor)
+    public Image CreateImagination(string imaginationID)
     {
-        // 이미 해당 ID가 등록되어 있다면 바로 반환
-        if (_activeImaginations.ContainsKey(imaginationID))
+        // 현재 활성화된 상상이 있으면 제거
+        if (!string.IsNullOrEmpty(_currentImaginationID))
         {
-            Debug.LogWarning($"Imagination with ID '{imaginationID}' already exists.");
-            return _activeImaginations[imaginationID];
+            Debug.Log($"Destroying existing imagination with ID: {_currentImaginationID}");
+            DestroyImagination(_currentImaginationID, 0.5f, Ease.OutQuad);
         }
 
         Transform parent = UIManager.SystemCanvas.ImaginationLayer.transform;
+
         // 새로운 GameObject 생성
         GameObject imaginationObject = new GameObject(imaginationID);
         imaginationObject.transform.SetParent(parent, false);
@@ -32,7 +31,7 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
         // Image 컴포넌트 추가 및 초기화
         Image img = imaginationObject.AddComponent<Image>();
         img.rectTransform.anchoredPosition = Vector2.zero;
-        img.transform.localScale = Vector2.one * scaleFactor;
+        img.transform.localScale = Vector2.one;
 
         // Imagination에 해당하는 Sprite 로드
         string resourcePath = ResourcePathManager.GetCurrentStoryResourcePath(imaginationID, ResourceType.Imagination);
@@ -51,71 +50,144 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
             Object.Destroy(imaginationObject); // 이미지 로드 실패 시 오브젝트 제거
             return null;
         }
-        
+
+        // 이미지 초기화
         img.sprite = imaginationSprite;
         img.SetNativeSize();
         Vector2 nativeImgSize = img.rectTransform.sizeDelta;
         float heightRatio = 1080 / nativeImgSize.y;
-
         img.rectTransform.sizeDelta = new Vector2(nativeImgSize.x * heightRatio, 1080);
         img.color = new Color(img.color.r, img.color.g, img.color.b, 0f); // 초기 알파값을 0으로 설정
-        // 딕셔너리에 등록
-        _activeImaginations.Add(imaginationID, img);
+
+        // 현재 상상 이미지 업데이트
+        _currentImaginationID = imaginationID;
+        _currentImaginationImage = img;
 
         return img;
     }
 
     // 상상 이미지를 imaginationID로 찾아 페이드 인하는 메서드
-    public void FadeColor(string imaginationID, Color targetColor, float duration, Ease easeType)
+    public void FadeColor(Color targetColor, float duration, Ease easeType)
     {
-        // imaginationID에 해당하는 이미지 찾기
-        if (_activeImaginations.TryGetValue(imaginationID, out Image img))
+        // 현재 상상 이미지에 대해 페이드 인
+        if (_currentImaginationImage != null)
         {
-            img.DOColor(targetColor, duration).SetEase(easeType);
+            _currentImaginationImage.DOColor(targetColor, duration).SetEase(easeType);
         }
         else
         {
-            Debug.LogWarning($"Imagination with ID '{imaginationID}' not found in active imaginations.");
+            Debug.LogWarning("No active imagination to fade color.");
         }
     }
 
-    public Image GetActiveImageByID(string imaginationID)
+    // 상상 이미지를 페이드 아웃 후 제거하는 메서드
+    public void Move(Vector2 anchoredPos, float duration, Ease ease)
     {
-        if (_activeImaginations.TryGetValue(imaginationID, out Image img))
+        // 현재 상상 이미지가 없으면 경고
+        if (_currentImaginationImage == null)
         {
-            return img;
+            Debug.LogWarning("No active imagination found for movement.");
+            return;
+        }
+
+        // anchoredPosition으로 이동하는 애니메이션 실행
+        RectTransform rectTransform = _currentImaginationImage.rectTransform;
+        rectTransform.DOAnchorPos(anchoredPos, duration).SetEase(ease);
+    }
+
+    // 상상 이미지를 특정 크기로 조정하는 메서드
+    public void Scale(Vector3 targetScale, float duration, Ease ease)
+    {
+        // 현재 상상 이미지가 없으면 경고
+        if (_currentImaginationImage == null)
+        {
+            Debug.LogWarning("No active imagination found for scaling.");
+            return;
+        }
+
+        // localScale을 변경하는 애니메이션 실행
+        _currentImaginationImage.transform.DOScale(targetScale, duration).SetEase(ease);
+    }
+
+    // 색상 반전 효과를 적용하는 함수
+    public void InvertColorEffect(bool isInverted)
+    {
+        // 현재 상상 이미지가 없으면 경고
+        if (_currentImaginationImage == null)
+        {
+            Debug.LogWarning("No active imagination found for color inversion.");
+            return;
+        }
+
+        // _invertColorMaterial이 로드되지 않았으면 그때 로드 (Lazy Loading)
+        if (_invertColorMaterial == null)
+        {
+            _invertColorMaterial = Resources.Load<Material>("Shaders/InvertColorMat");
+            if (_invertColorMaterial == null)
+            {
+                Debug.LogError("InvertColorMat not found in Resources/Shaders.");
+                return;
+            }
+            else
+            {
+                Debug.Log("_invertColorMaterial successfully loaded.");
+            }
+        }
+
+        // isInverted가 true일 경우 반전 효과 적용
+        if (isInverted)
+        {
+            Debug.Log("Applying inverted color effect.");
+
+            // 새로운 Material 인스턴스화
+            Material instantiatedMaterial = new Material(_invertColorMaterial);
+            _currentImaginationImage.material = instantiatedMaterial;
+
+            // _InvertEffect 프로퍼티가 있는지 확인
+            if (_currentImaginationImage.material.HasProperty("_InvertEffect"))
+            {
+                Debug.Log("_InvertEffect property found. Setting it to 1 (inverted).");
+                _currentImaginationImage.material.SetFloat("_InvertEffect", 1);
+            }
+            else
+            {
+                Debug.LogError("_InvertEffect property not found in the material.");
+            }
         }
         else
         {
-            Debug.LogWarning($"Active imagination with ID '{imaginationID}' not found.");
-            return null;
+            Debug.Log("Removing inverted color effect.");
+
+            // _InvertEffect 프로퍼티가 있는지 확인
+            if (_currentImaginationImage.material.HasProperty("_InvertEffect"))
+            {
+                Debug.Log("_InvertEffect property found. Setting it to 0 (normal).");
+                _currentImaginationImage.material.SetFloat("_InvertEffect", 0);
+            }
+            else
+            {
+                Debug.LogError("_InvertEffect property not found in the material.");
+            }
         }
     }
+
+
     // 상상 이미지를 페이드 아웃 후 제거하는 메서드
     public void DestroyImagination(string imaginationID, float duration, Ease easeType)
     {
-        // imaginationID에 해당하는 이미지 찾기
-        if (_activeImaginations.TryGetValue(imaginationID, out Image img))
+        if (_currentImaginationImage != null && _currentImaginationID == imaginationID)
         {
-            // 페이드 아웃 애니메이션 후 제거
-            img.DOColor(new Color(img.color.r, img.color.g, img.color.b, 0f), duration).SetEase(easeType).OnComplete(() =>
+            _currentImaginationImage.DOColor(new Color(_currentImaginationImage.color.r, _currentImaginationImage.color.g, _currentImaginationImage.color.b, 0f), duration).SetEase(easeType).OnComplete(() =>
             {
-                _activeImaginations.Remove(imaginationID);
-                Object.Destroy(img.gameObject);
+                Object.Destroy(_currentImaginationImage.gameObject);
+                _currentImaginationID = null;
+                _currentImaginationImage = null;
+                Debug.Log($"Imagination with ID '{imaginationID}' destroyed.");
             });
         }
         else
         {
             Debug.LogWarning($"Imagination with ID '{imaginationID}' not found for destruction.");
-        }
-    }
-
-    // 모든 상상 이미지를 페이드 아웃 후 제거하는 메서드
-    public void DestroyAllImaginations(float duration, Ease easeType)
-    {
-        foreach (var imaginationID in new List<string>(_activeImaginations.Keys))
-        {
-            DestroyImagination(imaginationID, duration, easeType);
         }
     }
 }

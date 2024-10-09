@@ -10,6 +10,8 @@ public class SequentialElement : Element
 {
     private List<Element> _elements; // 실행할 Element 리스트
 
+    private int ElementsCount => _elements.Count;
+
     // 생성자: Element 리스트를 params로 받아 설정합니다.
     public SequentialElement(params Element[] elements)
     {

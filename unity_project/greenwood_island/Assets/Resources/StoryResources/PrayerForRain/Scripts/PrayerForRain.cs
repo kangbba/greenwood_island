@@ -11,7 +11,7 @@ public class PrayerForRain : Story
     // 시작 부분의 요소들
     protected override SequentialElement StartElements => new
     (
-        new ImaginationEnter("Pray_3", Vector2.one * 2f, Vector2.up * 425, 0f),
+        new ImaginationEnter("Pray", Vector2.one * 2f, Vector2.up * 425, 0f),
         new SFXEnter("BackgroundAmbient", .5f, true, 0f),
 
         new ParallelElement(

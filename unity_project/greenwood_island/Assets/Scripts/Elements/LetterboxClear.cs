@@ -12,6 +12,12 @@ public class LetterboxClear : Element
     {
         _duration = duration;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
 
     public override IEnumerator ExecuteRoutine()
     {
@@ -22,4 +28,5 @@ public class LetterboxClear : Element
 
         yield return new WaitForSeconds(_duration);  // _duration 동안 대기
     }
+
 }

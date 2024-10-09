@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class SaveLoadWindow : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _canvasGroup;
+    
+    [SerializeField] private GameSlot _gameSlotPrefab;
     [SerializeField] private Transform _savedGamesListParent;  // 저장된 게임 목록이 표시될 부모 객체
     [SerializeField] private Button _closeButton;              // Close 버튼
     [SerializeField] private ScrollRect _scrollView;
@@ -16,7 +18,7 @@ public class SaveLoadWindow : MonoBehaviour
     private List<GameSlot> _gameSlots = new List<GameSlot>();
     private bool _isSaveMode;                                 // 세이브 모드인지 로드 모드인지 구분
     private bool _isActivated = false;                        // 페이드 인 완료 시 true, 페이드 아웃 중이거나 비활성화 시 false
-    private GameSaveData _newSaveDataForSaveMode;             // 세이브 모드일 때 저장할 데이터
+    private StorySavedData _newSaveDataForSaveMode;             // 세이브 모드일 때 저장할 데이터
 
     private void Awake()
     {
@@ -27,7 +29,7 @@ public class SaveLoadWindow : MonoBehaviour
     }
 
     // Init 메서드로 세이브 모드/로드 모드 구분 및 창 활성화, 세이브 모드일 경우 외부에서 저장할 데이터 전달
-    public void Init(bool isSaveMode, GameSaveData newSaveDataForSaveMode = null)
+    public void Init(bool isSaveMode, StorySavedData newSaveDataForSaveMode)
     {
         _isSaveMode = isSaveMode;
         _newSaveDataForSaveMode = newSaveDataForSaveMode;  // 세이브 모드일 때 저장할 데이터
@@ -74,8 +76,7 @@ public class SaveLoadWindow : MonoBehaviour
         for (int i = 0; i < GameDataManager.MaxSlotCount; i++)
         {
             // 프리팹을 생성하고 부모에 추가
-            GameSlot gameSlotPrefab = UIManager.GameSlotPrefab;
-            GameSlot gameSlot = Instantiate(gameSlotPrefab, _savedGamesListParent);
+            GameSlot gameSlot = Instantiate(_gameSlotPrefab, _savedGamesListParent);
             gameSlot.gameObject.SetActive(true);
 
             // 게임 슬롯의 위치를 세로로 일정 간격 두고 배치
@@ -84,7 +85,7 @@ public class SaveLoadWindow : MonoBehaviour
             slotTransform.anchoredPosition = new Vector2(slotTransform.anchoredPosition.x, -topSpacing + -slotNumber * verticalSpacing);
 
             // 슬롯 번호에 데이터가 있는지 확인하고 Init
-            GameSaveData saveData = GameDataManager.GetGameSaveData(slotNumber);
+            StorySavedData saveData = GameDataManager.GetStorySavedData(slotNumber);
 
             // 로드 모드와 세이브 모드에 따른 콜백 설정
             if (_isSaveMode)
@@ -102,7 +103,7 @@ public class SaveLoadWindow : MonoBehaviour
         foreach (GameSlot slot in _gameSlots)
         {
             int slotNumber = _gameSlots.IndexOf(slot);
-            GameSaveData saveData = GameDataManager.GetGameSaveData(slotNumber);
+            StorySavedData saveData = GameDataManager.GetStorySavedData(slotNumber);
 
             if (saveData != null)
             {
@@ -125,17 +126,18 @@ public class SaveLoadWindow : MonoBehaviour
         if (!_isActivated) return;
 
         // 저장된 데이터를 불러올 것인지 물어보는 팝업 띄우기
-        GameSaveData gameSaveData = GameDataManager.GetGameSaveData(slotNumber);
+        StorySavedData storySavedData = GameDataManager.GetStorySavedData(slotNumber);
 
-        if(gameSaveData != null){
-            UIManager.ShowYesNoPopup(transform, "저장된 데이터를 불러오시겠습니까?", "예", "아니오", () =>
+        if(storySavedData != null){
+            UIManager.PopupCanvas.ShowYesNoPopup("저장된 데이터를 불러오시겠습니까?", "예", "아니오", () =>
             {
                 Debug.Log($"슬롯 {slotNumber}의 데이터를 불러옵니다.");
-                GameDataManager.LoadGameData(slotNumber);
+                UIManager.PopupCanvas.Clear();
+                GameDataManager.LoadGameDataThenPlay(slotNumber);
             });
         }
         else{
-            UIManager.ShowOkPopup(transform, "해당 슬롯에 저장된 데이터가 없습니다.", "확인", () =>
+            UIManager.PopupCanvas.ShowOkPopup("해당 슬롯에 저장된 데이터가 없습니다.", "확인", () =>
             {
                 Debug.Log("데이터가 없습니다.");
             });
@@ -143,25 +145,29 @@ public class SaveLoadWindow : MonoBehaviour
     }
 
     // 슬롯 클릭 시 실행할 로직 (세이브 모드)
-    private void OnGameSlotSaveClicked(int slotNumber, GameSaveData newSaveData)
+    private void OnGameSlotSaveClicked(int slotNumber, StorySavedData newSaveData)
     {
         if (!_isActivated) return;
 
-        GameSaveData existingSave = GameDataManager.GetGameSaveData(slotNumber);
+        StorySavedData existingSave = GameDataManager.GetStorySavedData(slotNumber);
         if (existingSave == null)
         {
-            UIManager.ShowYesNoPopup(transform, "이 슬롯에 저장하시겠습니까?", "예", "아니오", () =>
+            UIManager.PopupCanvas.ShowYesNoPopup("이 슬롯에 저장하시겠습니까?", "예", "아니오", () =>
             {
                 GameDataManager.SaveGameData(newSaveData, slotNumber);
                 RecreateSlots();
+
+                UIManager.PopupCanvas.ShowOkPopup("저장 완료!", "확인", CloseWindow);
             });
         }
         else
         {
-            UIManager.ShowYesNoPopup(transform, "이미 데이터가 있습니다. 덮어쓰시겠습니까?", "예", "아니오", () =>
+            UIManager.PopupCanvas.ShowYesNoPopup("이미 데이터가 있습니다. 덮어쓰시겠습니까?", "예", "아니오", () =>
             {
                 GameDataManager.SaveGameData(newSaveData, slotNumber);
                 RecreateSlots();
+                
+                UIManager.PopupCanvas.ShowOkPopup("저장 완료!", "확인", CloseWindow);
             });
         }
     }
@@ -170,7 +176,7 @@ public class SaveLoadWindow : MonoBehaviour
     {
         if (!_isActivated) return;
 
-        UIManager.ShowYesNoPopup(transform, "정말 이 데이터를 삭제하시겠습니까?", "예", "아니오", () =>
+        UIManager.PopupCanvas.ShowYesNoPopup("정말 이 데이터를 삭제하시겠습니까?", "예", "아니오", () =>
         {
             GameDataManager.DeleteSaveDataFile(slotNumber);
             RecreateSlots();

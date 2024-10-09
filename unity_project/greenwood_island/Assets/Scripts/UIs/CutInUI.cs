@@ -24,7 +24,6 @@ public class CutInUI : MonoBehaviour
     /// <param name="highlightOffset">강조할 이미지의 오프셋</param>
     public void Init(Sprite highlightSprite, float scaleFactor, Vector2 highlightOffset)
     {
-
         // 강조할 이미지 설정 및 위치 조정
         _highlightImage.sprite = highlightSprite;
         _highlightImage.SetNativeSize();
@@ -34,26 +33,30 @@ public class CutInUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Cut-in UI 등장 및 퇴장 애니메이션
+    /// Cut-in UI 등장 애니메이션 (FadeIn)
     /// </summary>
-    /// <param name="show">true면 등장, false면 퇴장</param>
     /// <param name="duration">애니메이션 지속 시간</param>
-    public void Show(bool show, float duration)
+    public void FadeIn(float duration)
     {
-        if (show)
-        {
-            // Cut-in 등장 애니메이션
-            transform.localScale = new Vector3(1, 0, 1); // X 스케일은 1로 유지, Y 스케일은 0에서 시작
-            _canvasGroup.alpha = 1f; // CanvasGroup의 알파 값을 1로 설정
-            Sequence showSequence = DOTween.Sequence();
+        // Cut-in 등장 애니메이션
+        transform.localScale = new Vector3(1, 0, 1); // X 스케일은 1로 유지, Y 스케일은 0에서 시작
+        _canvasGroup.alpha = 1f; // CanvasGroup의 알파 값을 1로 설정
+        Sequence fadeInSequence = DOTween.Sequence();
 
-            showSequence.Append(transform.DOScaleY(1.2f, duration * 0.6f).SetEase(Ease.OutBack)) // Y 스케일이 1.2까지 급격히 늘어남
-                        .Append(transform.DOScaleY(1f, duration * 0.4f).SetEase(Ease.InOutSine)); // Y 스케일이 1로 조정됨
-        }
-        else
+        fadeInSequence.Append(transform.DOScaleY(1.2f, duration * 0.6f).SetEase(Ease.OutBack)) // Y 스케일이 1.2까지 급격히 늘어남
+                      .Append(transform.DOScaleY(1f, duration * 0.4f).SetEase(Ease.InOutSine)); // Y 스케일이 1로 조정됨
+    }
+
+    /// <summary>
+    /// Cut-in UI 퇴장 및 파괴 애니메이션 (FadeOut 후 파괴)
+    /// </summary>
+    /// <param name="duration">애니메이션 지속 시간</param>
+    public void FadeOutAndDestroy(float duration)
+    {
+        // CanvasGroup을 사용하여 부드럽게 페이드 아웃한 후 오브젝트를 파괴
+        _canvasGroup.DOFade(0f, duration).SetEase(Ease.InOutQuad).OnComplete(() =>
         {
-            // Cut-in 퇴장 애니메이션
-            _canvasGroup.DOFade(0f, duration).SetEase(Ease.InOutQuad); // CanvasGroup의 알파 값을 0으로 줄임
-        }
+            Destroy(gameObject); // 페이드 아웃이 완료되면 오브젝트를 파괴
+        });
     }
 }

@@ -19,6 +19,12 @@ public class ImaginationColor : Element
         _easeType = easeType;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
     // 상상의 색상을 변경하는 코루틴
     public override IEnumerator ExecuteRoutine()
     {

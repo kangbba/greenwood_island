@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     private bool _showAllMenus = true; // 모든 메뉴 표시 여부
     private Vector2 _scrollPosition; // 스크롤 뷰의 위치
 
+    private bool _isTest = true;
+    private string _initialStoryID;
+
     
     void Start()
     {
@@ -21,7 +24,7 @@ public class GameManager : MonoBehaviour
         CharacterManager.Initialize();
         ImaginationManager.Initialize();
         PhotoManager.Initialize();
-        UIManager.Init();
+        UIManager.Initialize();
         CameraController.Init();
 
         StartCoroutine(DelayStart());
@@ -41,10 +44,25 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        if (GameDataManager.CurrentGameSaveData != null)
+        StorySavedData savedData = GameDataManager.CurrentStorySavedData;
+        if(savedData != null)
         {
+            Debug.Log("이어 하기 발동");
             // 기존 저장된 데이터가 있으면 해당 storyID로 PlayStory 실행
-            StoryManager.Instance.PlayStory(GameDataManager.CurrentGameSaveData.storyID);
+            StoryManager.Instance.PlayStory(savedData.storyID, savedData.recentPlayedElementIndex);
+        }
+        else{
+            if(_isTest){
+                while(string.IsNullOrEmpty(_initialStoryID)){
+                    yield return null;
+                }
+                StoryManager.Instance.PlayStory(_initialStoryID, 0);
+            }
+            else 
+            {
+                Debug.Log("처음하기 발동");
+                StoryManager.Instance.PlayStory(new OpeningStory(), 0);
+            }
         }
     }
 
@@ -104,7 +122,7 @@ public class GameManager : MonoBehaviour
                     if (GUI.Button(new Rect(0, i * 70, buttonWidth * 3, 60), _availableStoryIDs[i], GUI.skin.button))
                     {
                         // 선택한 스토리로 스토리 시작
-                        StoryManager.Instance.PlayStory(_availableStoryIDs[i]);
+                        _initialStoryID = _availableStoryIDs[i];
                     }
                 }
 

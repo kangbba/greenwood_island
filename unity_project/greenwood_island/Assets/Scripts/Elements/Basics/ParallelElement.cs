@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class ParallelElement : Element
 {
     private List<Element> _elements;
@@ -11,6 +10,15 @@ public class ParallelElement : Element
     public ParallelElement(params Element[] elements)
     {
         _elements = new List<Element>(elements);
+    }
+
+    public override void ExecuteInstantly()
+    {
+        // 초기 완료 여부 리스트를 false로 초기화
+        for (int i = 0; i < _elements.Count; i++)
+        {
+            _elements[i].ExecuteInstantly();
+        }
     }
 
     public override IEnumerator ExecuteRoutine()

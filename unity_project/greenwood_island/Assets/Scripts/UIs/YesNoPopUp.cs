@@ -7,6 +7,7 @@ public class YesNoPopup : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _popupText;         // 팝업에 표시될 메시지
     [SerializeField] private Button _yesButton;       // "예" 버튼
     [SerializeField] private Button _noButton;        // "아니오" 버튼
+
     // 팝업을 초기화하는 메서드
     public void Init(string message, string yesText, string noText, System.Action onYesAction, System.Action onNoAction = null)
     {

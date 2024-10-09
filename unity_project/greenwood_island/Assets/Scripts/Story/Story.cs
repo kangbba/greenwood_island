@@ -1,49 +1,24 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Story
 {
-    /// <summary>
-    /// Start, Update, Exit 단계에서 실행될 Elements를 상속받은 클래스에서 구현하도록 합니다.
-    /// SequentialElement를 사용하여 각 단계의 Elements를 순차적으로 실행합니다.
-    /// </summary>
-
-    // 각 단계의 Elements를 SequentialElement로 정의
-    protected abstract SequentialElement StartElements { get; }
-    protected abstract SequentialElement UpdateElements { get; }
-    protected abstract SequentialElement ExitElements { get; }
+    public abstract List<Element> UpdateElements { get; }
 
     // 스토리 ID는 자동으로 클래스의 이름을 사용
     public virtual string StoryId => GetType().Name; // 클래스의 이름을 ID로 사용
 
-    // Start 단계의 Elements를 실행하는 메서드
-    public IEnumerator ClearRoutine(float duration)
+    
+    // _nextStory는 protected 필드로 선언하여 상속받은 클래스에서 수정 가능
+    protected Story _nextStory;
+
+    // 외부에서 접근할 수 있는 NextStory 프로퍼티 (get은 public, set은 protected)
+    public Story NextStory
     {
-        Element element = new AllClear(duration);
-        yield return element.ExecuteRoutine();
+        get => _nextStory;
+        protected set => _nextStory = value;
     }
 
-    public IEnumerator StartRoutine()
-    {
-        yield return StartElements.ExecuteRoutine();
-    }
-
-    // Update 단계의 Elements를 실행하는 메서드, 콜백 추가
-    public IEnumerator UpdateRoutine(System.Action<Element, int, int> onElementStartCallback)
-    {
-        yield return UpdateElements.ExecuteRoutine(onElementStartCallback);
-    }
-
-    // 기존 UpdateRoutine을 유지, 콜백 없이도 실행 가능
-    public IEnumerator UpdateRoutine()
-    {
-        yield return UpdateRoutine(null); // 콜백 없이 실행
-    }
-
-
-    // Exit 단계의 Elements를 실행하는 메서드 (필요할 경우)
-    public IEnumerator ExitRoutine()
-    {
-        yield return ExitElements.ExecuteRoutine();
-    }
 }

@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class FirstKateStory : Story
 {
-    // FirstKateStory 스토리의 스크립트 로직을 여기에 작성하세요.
-    protected override SequentialElement StartElements => new (
+    public override List<Element> UpdateElements => new List<Element> {
 
         new Intertitle("한달 후", 1f, 3f, 1f, 60),
         new PlaceTransition(
@@ -18,10 +17,7 @@ public class FirstKateStory : Story
             1f,
             useCameraRestore : true),
         new SFXEnter("BirdChirp1", 1f, true, 1f),
-        new SFXEnter("BirdChirpLong1", 1f, true, 3f)
-    );
-
-    protected override SequentialElement UpdateElements => new (
+        new SFXEnter("BirdChirpLong1", 1f, true, 3f),
         new ParallelElement(
             new ScreenOverlayFilmClear(),
             new CameraZoomClear(1f),
@@ -191,11 +187,12 @@ public class FirstKateStory : Story
             }
         ),
         new DialoguePanelClear(),
-
         // 선택지를 통해 라이언의 반응을 유도
         new ChoiceSet(
-            "어떻게 반응할까?",
-            new List<ChoiceContent>
+            storySavedData : GameDataManager.CurrentStorySavedData,
+            choiceSetID : "KateSuggestGoToJoseph",
+            question : "어떻게 한다 ...",
+            choices : new List<ChoiceContent>
             {
                 new ChoiceContent(
                     "귀찮은데… 다음에 가면 안 될까?",
@@ -261,19 +258,11 @@ public class FirstKateStory : Story
         new CameraZoomClear(1f),
         new CharacterEnter("Kate", EmotionType.Happy, 0.5f) ,
         _userActionPhase
-    );
-
-    protected override SequentialElement ExitElements => new (
-
-        new ScreenOverlayFilm(Color.black),
-        new StoryTransition(new FirstRyanRoom())
-    );
-
-
+   };
     
    private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(
-        UserActionWindow.AnchorType.TopLeft,
-        new Vector2(80, -450),
+        GameDataManager.CurrentStorySavedData,
+        "useraction1",
         new Dictionary<UserActionType, SequentialElement>
         {
             {
@@ -289,8 +278,9 @@ public class FirstKateStory : Story
                     )
                 )
             }
-        }
+        },
+        UserActionWindow.AnchorType.TopLeft,
+        new Vector2(80, -450)
     );
-
 
 }

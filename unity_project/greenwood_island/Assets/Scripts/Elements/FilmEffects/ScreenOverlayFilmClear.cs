@@ -13,6 +13,12 @@ public class ScreenOverlayFilmClear : Element
     private Ease _easeType;
 
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
     public ScreenOverlayFilmClear(float duration = 1f, Ease easeType = Ease.OutQuad, bool isBlackClear = false)
     {
         _isBlackClear = isBlackClear;

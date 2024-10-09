@@ -8,24 +8,34 @@ public static class UIManager
     private static WorldCanvas _worldCanvas;
     private static SystemCanvas _systemCanvas;
     private static PopupCanvas _popupCanvas;
+    private static GameObject _cursorCanvas;
 
 
-    private static SaveLoadWindow _saveLoadWindowPrefab;
-    private static GameSlot _gameSlotPrefab;
-    private static YesNoPopup _yesNoPopupPrefab;
-    private static OkPopup _okPopupPrefab;
 
     static UIManager()
     {
-        // Prefab들을 Resources/UIs 경로에서 로드
-        _saveLoadWindowPrefab = LoadPrefab<SaveLoadWindow>("SaveLoadWindow");
-        _gameSlotPrefab = LoadPrefab<GameSlot>("GameSlot");
-        _yesNoPopupPrefab = LoadPrefab<YesNoPopup>("YesNoPopup");
-        _okPopupPrefab = LoadPrefab<OkPopup>("OkPopup");
+        Debug.Log("UIMANAGER CALLED");
+
+        if (_popupCanvas != null)
+        {
+            GameObject.Destroy(_popupCanvas.gameObject);
+        }
+        _popupCanvas = InstantiateCanvas<PopupCanvas>("Canvas/PopupCanvas");
+
+        // PopupCanvas가 씬 전환 시 파괴되지 않도록 설정
+        GameObject.DontDestroyOnLoad(_popupCanvas.gameObject);
+
+
+        if (_cursorCanvas != null)
+        {
+            GameObject.Destroy(_cursorCanvas);
+        }
+        _cursorCanvas = InstantiateCanvas<GameObject>("Canvas/CursorCanvas");
+        GameObject.DontDestroyOnLoad(_cursorCanvas.gameObject);
     }
 
     // Init 메서드: Resources/UIs 경로에서 프리팹들을 로드하고 캔버스들을 하이어라키에 인스턴스화
-    public static void Init()
+    public static void Initialize()
     {
         // 캔버스를 하이어라키에 인스턴스화
         if(_worldCanvas != null){
@@ -37,12 +47,6 @@ public static class UIManager
             GameObject.Destroy(_systemCanvas.gameObject);
         }
         _systemCanvas = InstantiateCanvas<SystemCanvas>("Canvas/SystemCanvas");
-
-        if(_popupCanvas != null){
-            GameObject.Destroy(_popupCanvas.gameObject);
-        }
-        _popupCanvas = InstantiateCanvas<PopupCanvas>("Canvas/PopupCanvas");
-
 
         Debug.Log("UIManager initialized with prefabs and instantiated canvases.");
     }
@@ -75,22 +79,5 @@ public static class UIManager
     public static WorldCanvas WorldCanvas => _worldCanvas;
     public static SystemCanvas SystemCanvas => _systemCanvas;
     public static PopupCanvas PopupCanvas => _popupCanvas;
-    public static SaveLoadWindow SaveLoadWindowPrefab => _saveLoadWindowPrefab;
-    public static GameSlot GameSlotPrefab => _gameSlotPrefab;
-    public static YesNoPopup YesNoPopupPrefab => _yesNoPopupPrefab;
-    public static OkPopup OkPopupPrefab => _okPopupPrefab;
 
-    // 예/아니오 팝업 호출 메서드
-    public static void ShowYesNoPopup(Transform spawnTr, string message, string yesText, string noText, System.Action onYesAction)
-    {
-        YesNoPopup popupInstance = Object.Instantiate(YesNoPopupPrefab, spawnTr);
-        popupInstance.Init(message, yesText, noText, onYesAction);
-    }
-
-    // 확인 팝업 호출 메서드
-    public static void ShowOkPopup(Transform spawnTr, string message, string okText, System.Action onOkAction)
-    {
-        OkPopup popupInstance = Object.Instantiate(OkPopupPrefab, spawnTr);
-        popupInstance.Init(message, okText, onOkAction);
-    }
 }

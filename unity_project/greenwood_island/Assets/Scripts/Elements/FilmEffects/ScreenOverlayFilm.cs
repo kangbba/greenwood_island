@@ -23,6 +23,12 @@ public class ScreenOverlayFilm : Element
         _duration = duration;
         _easeType = easeType;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
 
     public override IEnumerator ExecuteRoutine()
     {

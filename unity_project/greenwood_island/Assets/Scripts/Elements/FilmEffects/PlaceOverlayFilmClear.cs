@@ -18,9 +18,16 @@ public class PlaceOverlayFilmClear : Element
         _easeType = easeType;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
     public override IEnumerator ExecuteRoutine()
     {
         new PlaceOverlayFilm(Color.clear, _duration, _easeType).Execute();
         yield return _duration;
     }
+
 }

@@ -3,10 +3,7 @@ using UnityEngine;
 
 public class FirstJosephStory : Story
 {
-    // FirstJosephStory 스토리의 스크립트 로직을 여기에 작성하세요.
-    protected override SequentialElement StartElements => new ();
-
-    protected override SequentialElement UpdateElements => new (
+    public override List<Element> UpdateElements => new List<Element> {
 
         new PlaceTransition(Color.white, 1f, "CafeSeabreezeFront",  null, 1f,  true),
         new CharacterEnter(
@@ -243,9 +240,6 @@ public class FirstJosephStory : Story
                 new Line("몸 조심하시고, 너무 무리하지 마세요.")
             }
         )
-    );
-
-    protected override SequentialElement ExitElements => new (
-        new StoryTransition(new FirstRyanRoom()));
+    };
 
 }

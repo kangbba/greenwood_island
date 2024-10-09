@@ -27,6 +27,22 @@ public class PlaceTransition : Element
         _useCameraRestore = useCameraRestore;
     }
 
+    public override void ExecuteInstantly()
+    {
+        Place newPlace = PlaceManager.Instance.CreatePlace(_newPlaceID);
+
+        PlaceManager.Instance.DestroyPreviousPlaces();
+        if(_initialCameraElements != null){
+            _initialCameraElements.ExecuteInstantly();
+        }
+
+        if (_useCameraRestore)
+        {
+            new CameraZoomClear(0).ExecuteInstantly();
+            new CameraMove2DClear(0).ExecuteInstantly();
+        }
+    }
+
 
     public override IEnumerator ExecuteRoutine()
     {

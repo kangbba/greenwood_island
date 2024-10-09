@@ -2,7 +2,6 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-[System.Serializable]
 public class CameraMove2DByAngle : Element
 {
     private float _degree; // 이동할 방향의 각도 (0도: 오른쪽, 90도: 위, 180도: 왼쪽, 270도: 아래)
@@ -18,6 +17,21 @@ public class CameraMove2DByAngle : Element
         _easeType = easeType;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
+    public override IEnumerator ExecuteRoutine()
+    {
+        Vector2 targetLocalPos = CalculateTargetLocalPosition();
+        CameraController.MovePlane(targetLocalPos, _duration, _easeType);
+
+        // 이동 시간만큼 대기
+        yield return new WaitForSeconds(_duration);
+    }
+
     // 각도에 따른 TargetLocalPosition 계산
     private Vector2 CalculateTargetLocalPosition()
     {
@@ -28,17 +42,5 @@ public class CameraMove2DByAngle : Element
         // 현재 PlaneLayer의 localPosition에 direction * radius를 더하여 목표 위치 계산
         Vector2 currentLocalPos = new Vector2(CameraController.PlaneLayer.localPosition.x, CameraController.PlaneLayer.localPosition.y);
         return currentLocalPos + direction * _radius;
-    }
-
-    public override IEnumerator ExecuteRoutine()
-    {
-        // TargetLocalPosition을 계산하여 카메라를 이동
-        Vector2 targetLocalPos = CalculateTargetLocalPosition();
-
-        // CameraMovePlane을 이용하여 카메라를 이동시키고, 이후 추가 연출 가능
-        CameraController.MovePlane(targetLocalPos, _duration, _easeType);
-
-        // 이동 시간만큼 대기
-        yield return new WaitForSeconds(_duration);
     }
 }

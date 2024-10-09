@@ -2,7 +2,6 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-[System.Serializable]
 public class CameraZoomByFactor : Element
 {
     private float _zoomFactor;  // 줌 비율 (0: 최대 줌, 1: 최소 줌)
@@ -14,6 +13,12 @@ public class CameraZoomByFactor : Element
         _zoomFactor = Mathf.Clamp01(zoomFactor);  // 줌 비율을 0 ~ 1 사이로 제한
         _duration = duration;
         _easeType = easeType;
+    }
+
+    public override void ExecuteInstantly()
+    {
+        _duration = 0f;
+        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

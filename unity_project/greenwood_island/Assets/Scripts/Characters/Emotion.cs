@@ -106,7 +106,6 @@ public class Emotion : MonoBehaviour
 
         while (_isTalking && _isActivated)
         {
-            Debug.Log($"작동 {currentIndex}");
             // 현재 인덱스에 맞는 입 모양 설정
             SetMouthImage(mouthIndices[currentIndex], new Vector2(Random.Range(0.95f,1.05f), Random.Range(0.95f,1.05f)));
 

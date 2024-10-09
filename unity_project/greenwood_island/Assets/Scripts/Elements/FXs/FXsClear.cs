@@ -11,6 +11,12 @@ public class FXsClear : Element
         _duration = duration;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
     public override IEnumerator ExecuteRoutine()
     {
         // FXManager를 통해 모든 활성화된 FX를 페이드 아웃 후 제거

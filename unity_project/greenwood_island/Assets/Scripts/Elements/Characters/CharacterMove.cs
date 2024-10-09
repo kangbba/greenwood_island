@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
-
-[System.Serializable]
 public class CharacterMove : Element
 {
     private string _characterID; // 캐릭터 ID를 문자열로 받음
@@ -16,6 +14,12 @@ public class CharacterMove : Element
         this._targetScreenPeroneX = targetScreenPeroneX;
         this._duration = duration;
         this._easeType = easeType;
+    }
+
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

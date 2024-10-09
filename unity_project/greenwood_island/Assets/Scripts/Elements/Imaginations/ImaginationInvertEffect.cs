@@ -9,13 +9,18 @@ public class ImaginationInvertEffect : Element
     public ImaginationInvertEffect(bool isInverted)
     {
         _isInverted = isInverted;
-
-        // 현재 상상 이미지가 없을 경우 경고
-        if (string.IsNullOrEmpty(ImaginationManager.Instance.CurrentImaginationID))
-        {
-            Debug.LogError("CurrentImagination is not set in ImaginationManager.");
-        }
     }
+    public override void ExecuteInstantly()
+    {
+        string currentImaginationID = ImaginationManager.Instance.CurrentImaginationID;
+        if (string.IsNullOrEmpty(currentImaginationID))
+        {
+            Debug.LogError("No active imagination to apply invert effect.");
+            return;
+        }
+        Execute();
+    }
+    
 
     // ExecuteRoutine: 반전 효과 실행 (Coroutine)
     public override IEnumerator ExecuteRoutine()
@@ -33,9 +38,6 @@ public class ImaginationInvertEffect : Element
 
         // ImaginationManager에서 색상 반전 효과를 호출
         ImaginationManager.Instance.InvertColorEffect(_isInverted);
-
-        // 효과 지속 시간만큼 기다림
-        yield return null;
 
         // 효과가 완료된 후 실행할 작업이 있으면 추가 가능
         Debug.Log($"ImaginationInvertEffect :: {currentImaginationID} 반전 효과 완료");

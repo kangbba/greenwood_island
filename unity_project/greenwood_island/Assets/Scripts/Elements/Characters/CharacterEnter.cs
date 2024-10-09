@@ -22,6 +22,12 @@ public class CharacterEnter : Element
         this._anchorType = anchorType;  // 앵커 타입 설정
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
         // 캐릭터 생성 및 위치 설정

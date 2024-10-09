@@ -11,29 +11,50 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private Transform _fxLayer;
     [SerializeField] private Transform _sfxLayer;
     [SerializeField] private DialoguePlayer _dialoguePlayer;
-    [SerializeField] private ChoiceUI _choiceUI;
-    [SerializeField] private CutInUI _cutInUI;
+
+/// 상호작용 UI
+    [SerializeField] private Transform _userActionWindowLayer;
+    [SerializeField] private Transform _choiceUILayer;
+    [SerializeField] private Transform _cutInLayer;
+    [SerializeField] private UserActionWindow _userActionWindowPrefab;
+    [SerializeField] private ChoiceUI _choiceUIPrefab;
+    [SerializeField] private CutInUI _cutInUIPrefab;
+
+
     [SerializeField] private Transform _imaginationLayer;
     [SerializeField] private Transform _characterLayerUI;
 
     [SerializeField] private Letterbox _letterBox;
 
-    [SerializeField] private UserActionWindow _userActionWindow;
-
-    [SerializeField] private QuickSaveBtn _quickSaveBtn;
+    [SerializeField] private SaveBtn _saveBtn;
 
 
     public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
     public Transform FXLayer { get => _fxLayer; }
     public Transform SFXLayer { get => _sfxLayer; }
     public DialoguePlayer DialoguePlayer { get => _dialoguePlayer; }
-    public ChoiceUI ChoiceUI { get => _choiceUI;  }
-    public CutInUI CutInUI { get => _cutInUI; }
     public TextMeshProUGUI IntertitleText { get => _intertitleText; }
     public Transform ImaginationLayer { get => _imaginationLayer; }
     public Letterbox LetterBox { get => _letterBox; }
     public Transform CharacterLayerUI { get => _characterLayerUI; }
-    public UserActionWindow UserActionWindow { get => _userActionWindow; }
-    public QuickSaveBtn QuickSaveBtn { get => _quickSaveBtn; }
+    public SaveBtn SaveBtn { get => _saveBtn; }
+
+    // UserActionWindow 인스턴스화 메소드
+    public UserActionWindow InstantiateUserActionWindow()
+    {
+        return Instantiate(_userActionWindowPrefab, _userActionWindowLayer);
+    }
+
+    // ChoiceUI 인스턴스화 메소드
+    public ChoiceUI InstantiateChoiceUI()
+    {
+        return Instantiate(_choiceUIPrefab, _choiceUILayer);
+    }
+
+    // CutInUI 인스턴스화 메소드
+    public CutInUI InstantiateCutInUI()
+    {
+        return Instantiate(_cutInUIPrefab, _cutInLayer);
+    }
 }
 

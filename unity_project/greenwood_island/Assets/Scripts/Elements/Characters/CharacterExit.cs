@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;  // DOTween을 사용하기 위해 추가
 
-[System.Serializable]
 public class CharacterExit : Element
 {
     private string _characterID;
@@ -12,6 +11,12 @@ public class CharacterExit : Element
     {
         this._characterID = characterID;
         this._duration = duration;
+    }
+
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

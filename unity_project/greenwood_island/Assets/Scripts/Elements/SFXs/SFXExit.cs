@@ -14,6 +14,12 @@ public class SFXExit : Element
         _fadeDuration = fadeDuration;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _fadeDuration = 0;
+        Execute();
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
         // 활성화된 SFX 오디오 소스를 가져옴

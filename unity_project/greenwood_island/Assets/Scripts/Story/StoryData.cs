@@ -4,7 +4,7 @@ using UnityEngine;
 public class StoryData : ScriptableObject
 {
     // Inspector에서 접근 가능하지만, 외부 코드에서는 수정할 수 없도록 캡슐화
-    [SerializeField] private string _storyName_ko;
+    [SerializeField] private string _storyName_KO;
     [SerializeField] private string _storyDesc;
 
     [SerializeField] private Sprite _storyThumbnail;
@@ -20,5 +20,5 @@ public class StoryData : ScriptableObject
         get { return _storyThumbnail; }  // 읽기 전용, 외부에서는 수정 불가
     }
 
-    public string StoryName_ko { get => _storyName_ko;  }
+    public string StoryName_KO { get => _storyName_KO; }
 }

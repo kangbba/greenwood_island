@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-[System.Serializable]
 public class FXExit : Element
 {
     private string _fxID; // FX의 ID
@@ -14,6 +13,12 @@ public class FXExit : Element
         _fxID = fxID;
         _duration = duration;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
 
     public override IEnumerator ExecuteRoutine()
     {

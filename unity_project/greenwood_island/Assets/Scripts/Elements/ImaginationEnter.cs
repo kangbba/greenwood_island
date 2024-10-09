@@ -24,6 +24,12 @@ public class ImaginationEnter : Element
         _duration = duration;
         _easeType = easeType;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
 
     public string ImaginationID { get => _imaginationID; }
 

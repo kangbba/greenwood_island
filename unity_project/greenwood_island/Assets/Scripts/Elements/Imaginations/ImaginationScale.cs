@@ -18,6 +18,11 @@ public class ImaginationScale : Element
         _duration = duration;
         _easeType = easeType;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
 
     // 상상을 크기 조정하는 코루틴
     public override IEnumerator ExecuteRoutine()

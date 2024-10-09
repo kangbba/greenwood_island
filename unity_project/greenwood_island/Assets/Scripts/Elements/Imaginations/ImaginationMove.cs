@@ -18,6 +18,12 @@ public class ImaginationMove : Element
         _duration = duration;
         _easeType = easeType;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
 
     // 상상을 이동시키는 코루틴
     public override IEnumerator ExecuteRoutine()

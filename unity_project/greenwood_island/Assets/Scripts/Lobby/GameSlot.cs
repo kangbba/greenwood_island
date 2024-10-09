@@ -13,17 +13,18 @@ public class GameSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _storyNameText;    // 스토리 ID를 표시할 텍스트
     [SerializeField] private TextMeshProUGUI _saveTimeText;   // 저장 시간을 표시할 텍스트
     [SerializeField] private TextMeshProUGUI _saveMemoText;   // 저장 메모를 표시할 텍스트
+    [SerializeField] private TextMeshProUGUI _progressText;   // 파일 경로를 표시할 텍스트
     [SerializeField] private TextMeshProUGUI _filePathText;   // 파일 경로를 표시할 텍스트
     [SerializeField] private Button _slotBtn;             
     [SerializeField] private Button _deleteButton;            // 삭제 버튼
 
     private int _slotNumber;
-    private GameSaveData _saveData;
+    private StorySavedData _saveData;
     private Action _onClickAction;
     private Action _onDeleteAction;
 
     // 저장된 게임 데이터를 UI에 초기화하는 메서드
-    public void Init(int slotNumber, GameSaveData saveData, Action onClickAction, Action onDeleteAction)
+    public void Init(int slotNumber, StorySavedData saveData, Action onClickAction, Action onDeleteAction)
     {
         // 전달받은 데이터를 멤버 변수에 저장
         _slotNumber = slotNumber;
@@ -46,6 +47,7 @@ public class GameSlot : MonoBehaviour
             _storyNameText.text = "NO DATA";  // 스토리 없음
             _saveTimeText.text = "";
             _saveMemoText.text = "";
+            _progressText.text = "";
             _filePathText.text = GameDataManager.GetSaveFilePath(_slotNumber);  // 파일 경로는 표시
             _deleteButton.gameObject.SetActive(false);
         }
@@ -54,8 +56,10 @@ public class GameSlot : MonoBehaviour
             // saveData가 있을 경우, 저장된 데이터 표시
             StoryData storyData = ResourcePathManager.GetStoryData(_saveData.storyID);
             _previewImg.sprite = storyData != null ? storyData.StoryThumbnail : _storyDefaultThumbnail;
-            _storyNameText.text = _saveData.storyID;  // 나중에 ko로 변경
+            _storyNameText.text = storyData.StoryName_KO;  // 나중에 ko로 변경
             _saveTimeText.text = _saveData.saveTimeString;
+            float progressPerone = (float)_saveData.recentPlayedElementIndex / _saveData.elementTotalCount;
+            _progressText.text = $"{(int)(progressPerone*100)}% COMPLETED ";
             _saveMemoText.text = _saveData.saveMemo;
             _filePathText.text = GameDataManager.GetSaveFilePath(_slotNumber);
             _deleteButton.gameObject.SetActive(true);

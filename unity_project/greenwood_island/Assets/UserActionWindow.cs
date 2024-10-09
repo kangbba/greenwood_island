@@ -59,14 +59,13 @@ public class UserActionWindow : MonoBehaviour
 
         _canvasGroup.DOFade(1f, duration);  // DOTween을 사용하여 부드럽게 나타남
     }
-
-    // FadeOut 메서드: DOTween을 사용하여 투명도를 부드럽게 0으로 변경 (사라짐)
-    public void FadeOut(float duration)
+    public void FadeOutAndDestroy(float duration)
     {
-        _canvasGroup.interactable = false;
-        _canvasGroup.blocksRaycasts = false;
-
-        _canvasGroup.DOFade(0f, duration);  // DOTween을 사용하여 부드럽게 사라짐
+        // CanvasGroup을 사용하여 부드럽게 페이드 아웃한 후 오브젝트를 파괴
+        _canvasGroup.DOFade(0, duration).OnComplete(() =>
+        {
+            Destroy(gameObject); // 페이드 아웃이 완료되면 오브젝트를 파괴
+        });
     }
 
     // Init 메서드: AnchorType과 SequentialElement 사전(Dictionary)을 받아 초기화

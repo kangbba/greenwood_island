@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 
 public static class GameDataManager
 {
-    private static GameSaveData _currentGameSaveData = null;
+    private static StorySavedData _currentStorySavedData = null;
     private static int _currentSlotIndex = -1;
-    private const string FilePrefix = "gameSaveData_slot";  // 파일 이름 접두사
+    private const string FilePrefix = "storySavedData_slot";  // 파일 이름 접두사
     private const string FileExtension = ".json";           // 파일 확장자
     public const int MaxSlotCount = 5;  // 최대 저장 슬롯 개수
 
-    public static GameSaveData CurrentGameSaveData { get => _currentGameSaveData; }
+    public static StorySavedData CurrentStorySavedData { get => _currentStorySavedData; }
     public static int CurrentSlotIndex { get => _currentSlotIndex; }
 
     // 슬롯 번호에 따른 파일 경로를 반환
@@ -28,7 +28,7 @@ public static class GameDataManager
     }
 
     // 게임 데이터를 특정 슬롯에 저장하고 성공 여부 반환
-    public static bool SaveGameData(GameSaveData gameSaveData, int slotNumber)
+    public static bool SaveGameData(StorySavedData storySavedData, int slotNumber)
     {
         // 유효한 슬롯 번호와 게임 데이터가 아닌 경우 실패 처리
         if (!IsValidSlot(slotNumber))
@@ -37,7 +37,7 @@ public static class GameDataManager
             return false;
         }
 
-        if (gameSaveData == null)
+        if (storySavedData == null)
         {
             Debug.LogError("저장할 게임 데이터가 null입니다.");
             return false;
@@ -48,7 +48,7 @@ public static class GameDataManager
         Debug.Log($"슬롯 {slotNumber}에 저장할 파일 경로: {path}");
 
         // 게임 데이터를 JSON 형식으로 직렬화
-        string jsonData = JsonUtility.ToJson(gameSaveData, true);
+        string jsonData = JsonUtility.ToJson(storySavedData, true);
         Debug.Log($"저장할 데이터 (슬롯 {slotNumber}): {jsonData.Substring(0, Mathf.Min(jsonData.Length, 100))}... (100자 미리보기)");
 
         // 파일 쓰기 시도
@@ -68,16 +68,19 @@ public static class GameDataManager
     }
 
 
-    // 특정 슬롯 번호에서 JSON 데이터를 읽어 GameSaveData로 변환
-    public static GameSaveData GetGameSaveData(int slotNumber)
+    // 특정 슬롯 번호에서 JSON 데이터를 읽어 StorySavedData로 변환
+    public static StorySavedData GetStorySavedData(int slotNumber)
     {
+        if(slotNumber == -1){
+            return null;
+        }
         string path = GetSaveFilePath(slotNumber);
         if (File.Exists(path))
         {
             string jsonData = File.ReadAllText(path);
             try
             {
-                GameSaveData loadedData = JsonUtility.FromJson<GameSaveData>(jsonData);
+                StorySavedData loadedData = JsonUtility.FromJson<StorySavedData>(jsonData);
                 return loadedData;  // 데이터를 반환
             }
             catch (System.Exception e)
@@ -138,21 +141,26 @@ public static class GameDataManager
         return File.Exists(GetSaveFilePath(slotNumber));
     }
 
-    public static void LoadGameData(int slotIndex)
+    public static void LoadGameDataThenPlay(int slotIndex)
     {
-        GameSaveData gameSaveDataInSlot = GetGameSaveData(slotIndex);
-        if(gameSaveDataInSlot == null){
-            Debug.LogWarning($"해당 슬롯에 저장된 세이브데이터가 없음에도 로드 시도되었습니다");
-            return;
+        StorySavedData storySavedDataInSlot = GetStorySavedData(slotIndex);
+        
+        if(storySavedDataInSlot != null){
+            _currentStorySavedData = storySavedDataInSlot;
+            _currentSlotIndex = slotIndex;
+            Debug.Log($"{_currentStorySavedData.storyID} 스토리가 로드됩니다");
         }
-        _currentSlotIndex = slotIndex;
-        _currentGameSaveData = gameSaveDataInSlot;
+        else{
+            _currentStorySavedData = null;
+            _currentSlotIndex = 0;
+            Debug.Log("새로 시작하기 입니다");
+        }
 
-        Debug.Log($"{_currentGameSaveData.storyID} 스토리가 로드됩니다");
-        // // 씬 로드 완료 시 실행할 이벤트 등록
+        // // 씬 로드 완료 시 실행할 이벤트 등록LoadGameData
         // SceneManager.sceneLoaded += OnSceneLoaded;
         // 게임 플레이 씬으로 전환
         SceneManager.LoadScene("InGame");
     }
+
 
 }

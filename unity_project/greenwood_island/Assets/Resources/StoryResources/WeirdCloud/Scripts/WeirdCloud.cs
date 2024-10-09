@@ -3,16 +3,13 @@ using UnityEngine;
 
 public class WeirdCloud : Story
 {
-    // FirstKateStory 스토리의 스크립트 로직을 여기에 작성하세요.
-    protected override SequentialElement StartElements => new (
+
+    public override List<Element> UpdateElements => new List<Element> {
         new ScreenOverlayFilm(Color.black),
         new PlaceEnter("SeasideWalkway"),
         new CameraZoomByFactor(zoomFactor: 0.3f, duration: 0f),
         new CameraMove2DByAngle(-80, 160f, duration: 0f),
-        new SFXEnter("Waves", 1, true, 2)
-    );
-
-    protected override SequentialElement UpdateElements => new (
+        new SFXEnter("Waves", 1, true, 2),
         new ParallelElement(
             new ScreenOverlayFilmClear(),
             new CameraZoomClear(1f),
@@ -241,16 +238,5 @@ public class WeirdCloud : Story
             }
         ),
         new AllCharactersClear(1f)
-    );
-
-
-    protected override SequentialElement ExitElements => new (
-
-        new ScreenOverlayFilm(Color.black),
-        new StoryTransition(new FirstJosephStory())
-    );
-
-
-
-
+    };
 }

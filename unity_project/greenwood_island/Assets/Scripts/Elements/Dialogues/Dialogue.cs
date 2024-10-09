@@ -21,6 +21,18 @@ public class Dialogue : Element
     public string CharacterID => _characterID;
     public List<Line> Lines => _lines;
 
+    public override void ExecuteInstantly()
+    {
+        DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;
+
+        if (dialoguePlayer == null)
+        {
+            return;
+        }
+        dialoguePlayer.SetCharacterTextClor(Color.clear, 0f);
+        dialoguePlayer.gameObject.SetActive(false);
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
         DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;
@@ -85,7 +97,7 @@ public class Dialogue : Element
                     activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
                 }
             });
-            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0) && !UIManager.PopupCanvas.IsPoppedUp);
             if (activeCharacter != null)
             {
                 activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
@@ -94,6 +106,7 @@ public class Dialogue : Element
             yield return new WaitForSeconds(.1f);
         }
         dialoguePlayer.SetCharacterTextClor(Color.clear, .1f);
+        dialoguePlayer.ShowUp(false, .1f);
         yield return new WaitForSeconds(.1f);
     }
 }

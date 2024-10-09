@@ -12,6 +12,12 @@ public class LetterboxEnter : Element
         _duration = duration;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
         // 1. 레터박스 초기화 및 활성화

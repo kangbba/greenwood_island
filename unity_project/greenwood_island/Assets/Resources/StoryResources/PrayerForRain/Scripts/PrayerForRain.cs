@@ -8,9 +8,12 @@ public class PrayerForRain : Story
     private Color _imgColorLevel1 = ColorUtils.CustomColor("C57272");
     private Color _imgColorLevel2 = ColorUtils.CustomColor("BF7272");
     private Color _imgColorLevel3 = ColorUtils.CustomColor("B74C4C");
+    
+
     // 시작 부분의 요소들
-    protected override SequentialElement StartElements => new
-    (
+    // 스토리의 메인 업데이트 부분
+    public override List<Element> UpdateElements => new List<Element>(){
+
         new ImaginationEnter("Pray", Vector2.one * 2f, Vector2.up * 425, 0f),
         new SFXEnter("BackgroundAmbient", .5f, true, 0f),
 
@@ -19,12 +22,7 @@ public class PrayerForRain : Story
             new ImaginationMove(Vector2.up * 71f, 3f),
             new ImaginationScale(Vector2.one * 1.35f, 6f),
             new ScreenOverlayFilmClear(1f)
-        )
-    );
-
-    // 스토리의 메인 업데이트 부분
-    protected override SequentialElement UpdateElements => new
-    (
+        ),
         new ParallelElement(
             new ImaginationColor(_imgColorLevel1, 5f),
             new Dialogue(
@@ -139,11 +137,6 @@ public class PrayerForRain : Story
                 new Line("이건... 이게 우연일 리가 없다. 저들이... 정말 자연을 통제하고 있다는 것인가? 그럼 그들이 말하는 섬의 전통이... 사실인 것인가?")
             }
         )
-    );
+    };
 
-    // 종료 부분의 요소들
-    protected override SequentialElement ExitElements => new
-    (
-        new ScreenOverlayFilm(Color.black, 1f)
-    );
 }

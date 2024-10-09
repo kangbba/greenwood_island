@@ -23,6 +23,12 @@ public class PlaceOverlayFilm : Element
         _easeType = easeType;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
         if (PlaceOverlayFilmImg == null)

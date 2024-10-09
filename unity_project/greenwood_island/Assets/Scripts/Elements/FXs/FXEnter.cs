@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[System.Serializable]
 public class FXEnter : Element
 {
     private string _fxID; // FX의 ID
@@ -15,6 +14,12 @@ public class FXEnter : Element
         _localPosition = localPosition == default ? Vector3.zero : localPosition; // 기본값을 Vector3.zero로 설정
         _duration = duration;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+    
 
     public override IEnumerator ExecuteRoutine()
     {

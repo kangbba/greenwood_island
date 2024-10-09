@@ -7,7 +7,6 @@ public class SFXEnter : Element
     private float _volume;
     private bool _isLoop;
     private float _loopTerm;
-    private bool _waitForEnd;
 
     // 생성자: SFX ID, 볼륨, 반복 여부, 반복 간격을 설정
     public SFXEnter(string sfxID, float volume = 1f, bool isLoop = true, float loopTerm = 0f)
@@ -16,6 +15,10 @@ public class SFXEnter : Element
         _volume = Mathf.Clamp(volume, 0f, 1f); // 볼륨을 0에서 1 사이로 제한
         _isLoop = isLoop;
         _loopTerm = loopTerm;
+    }
+    public override void ExecuteInstantly()
+    {
+        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

@@ -17,6 +17,11 @@ public class PlaceEnter : Element
 
     public string PlaceID { get => _placeID; }
 
+    public override void ExecuteInstantly()
+    {
+        Execute();
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
         Debug.Log("PlaceEnter :: 새로운 장소 인스턴스화 시도 했음");
@@ -30,8 +35,5 @@ public class PlaceEnter : Element
             Debug.LogError("PlaceEnter :: 새로운 장소를 생성하지 못했습니다.");
             yield break;
         }
-
-        // 장소 전환 후 효과 실행
-        yield return null;
     }
 }

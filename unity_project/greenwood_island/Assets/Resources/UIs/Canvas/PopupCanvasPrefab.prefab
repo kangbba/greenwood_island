@@ -114,3 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f3ca52c9bf5a4c72a411c260e108621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _yesNoPopupPrefab: {fileID: 5918514192577359859, guid: 0e1a5f0083daf4f9b8a4f6692dd49fc4, type: 3}
+  _okPopupPrefab: {fileID: 6392766308637447387, guid: 9861ecac4e9684e51bd9a2993ed45776, type: 3}
+  _saveLoadWindowPrefab: {fileID: 1665046052735665036, guid: 3e5026b524842482eb49385c4f22f871, type: 3}
+  popupParent: {fileID: 6135295355746667951}

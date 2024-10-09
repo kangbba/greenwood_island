@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;  // DOTween을 사용하기 위해 추가
 
-[System.Serializable]
 public class AllCharactersClear : Element
 {
     private float _duration;
@@ -12,6 +11,12 @@ public class AllCharactersClear : Element
     public AllCharactersClear(float duration = 1f)
     {
         this._duration = duration;
+    }
+
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

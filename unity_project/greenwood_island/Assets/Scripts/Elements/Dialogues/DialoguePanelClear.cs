@@ -11,6 +11,12 @@ public class DialoguePanelClear : Element
         _duration = duration;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
         DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;

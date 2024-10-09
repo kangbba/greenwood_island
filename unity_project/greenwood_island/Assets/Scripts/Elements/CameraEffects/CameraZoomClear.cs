@@ -2,10 +2,6 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-/// <summary>
-/// CameraZoomClear 클래스는 카메라의 줌 레벨을 기본 상태(가장 멀리)로 복원하는 Element입니다.
-/// </summary>
-[System.Serializable]
 public class CameraZoomClear : Element
 {
     private float _duration;
@@ -15,6 +11,12 @@ public class CameraZoomClear : Element
     {
         _duration = duration;
         _easeType = easeType;
+    }
+
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

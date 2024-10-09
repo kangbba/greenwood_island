@@ -6,20 +6,15 @@ using DG.Tweening;
 public class OpeningStory : Story
 {
 
-    // 시작 부분의 요소들
-    protected override SequentialElement StartElements => new
-    (
+    // 스토리의 메인 업데이트 부분
+    public override List<Element> UpdateElements => new List<Element> {
+    
         new ScreenOverlayFilm(Color.black),
         new PlaceEnter("Storm"),
         new CameraZoomByFactor(zoomFactor: 0.2f, duration: 0f),
         new CameraMove2DByAngle(-290, 160f, duration: 0f),
         new PlaceFilm(ColorUtils.CustomColor("86D8FF"), .3f),
-        new Intertitle("이 이야기는 허구이며,\n실제 인물, 장소, 사건과는 무관합니다.", 1, 3, 1)
-    );
-
-    // 스토리의 메인 업데이트 부분
-    protected override SequentialElement UpdateElements => new
-    (
+        new Intertitle("이 이야기는 허구이며,\n실제 인물, 장소, 사건과는 무관합니다.", 1, 3, 1),
         new SequentialElement(
             new SFXEnter("Thunder1", 0.25f, false, 0f)
         ),
@@ -192,12 +187,6 @@ public class OpeningStory : Story
                 new Line("이곳이… 그린우드인가."),
             }
         )
-    );
+    };
 
-    // 종료 부분의 요소들
-    protected override SequentialElement ExitElements => new
-    (
-        new ScreenOverlayFilm(Color.black, 1f),
-        new StoryTransition(new FirstKateStory())
-    );
 }

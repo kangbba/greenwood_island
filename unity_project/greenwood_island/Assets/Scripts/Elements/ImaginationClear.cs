@@ -16,6 +16,12 @@ public class ImaginationClear : Element
         _duration = duration;
         _easeType = easeType;
     }
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
 
     // 상상의 장면을 제거하는 코루틴
     public override IEnumerator ExecuteRoutine()

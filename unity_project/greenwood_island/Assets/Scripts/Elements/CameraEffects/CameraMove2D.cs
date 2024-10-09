@@ -2,7 +2,6 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-[System.Serializable]
 public class CameraMove2D : Element
 {
     private Vector2 _targetLocalPos;
@@ -16,10 +15,15 @@ public class CameraMove2D : Element
         _easeType = easeType;
     }
 
+    public override void ExecuteInstantly()
+    {
+        _duration = 0;
+        Execute();
+    }
+
     public override IEnumerator ExecuteRoutine()
     {
-        // CameraController의 MovePlane 메서드를 사용하여 평면 이동을 실행
-        CameraController.MovePlane(_targetLocalPos, _duration, _easeType);
-        yield return new WaitForSeconds(_duration);
+         CameraController.MovePlane(_targetLocalPos, _duration, _easeType);
+         yield return new WaitForSeconds(_duration);
     }
 }

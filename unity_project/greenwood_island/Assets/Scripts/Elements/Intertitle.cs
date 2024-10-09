@@ -24,6 +24,10 @@ public class Intertitle : Element
         _ease = ease;
         _fontSize = fontSize;
     }
+    public override void ExecuteInstantly()
+    {
+    }
+
 
 
     public override IEnumerator ExecuteRoutine()

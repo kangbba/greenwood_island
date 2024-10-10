@@ -122,7 +122,7 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
         // _invertColorMaterial이 로드되지 않았으면 그때 로드 (Lazy Loading)
         if (_invertColorMaterial == null)
         {
-            _invertColorMaterial = Resources.Load<Material>("Shaders/InvertColorMat");
+            _invertColorMaterial = Resources.Load<Material>("ImaginationManager/InvertColorMat");
             if (_invertColorMaterial == null)
             {
                 Debug.LogError("InvertColorMat not found in Resources/Shaders.");

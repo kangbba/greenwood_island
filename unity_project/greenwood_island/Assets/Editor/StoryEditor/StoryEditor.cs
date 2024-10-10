@@ -295,12 +295,10 @@ using System.Collections.Generic;
 
 public class {storyName} : Story
 {{
-    // {storyName} 스토리의 스크립트 로직을 여기에 작성하세요.
-    protected override SequentialElement StartElements => new ();
 
-    protected override SequentialElement UpdateElements => new ();
-
-    protected override SequentialElement ExitElements => new ();
+    public override List<Element> UpdateElements => new List<Element>()
+    {{
+    }};
 }}
 ";
             File.WriteAllText(scriptFilePath, scriptContent);

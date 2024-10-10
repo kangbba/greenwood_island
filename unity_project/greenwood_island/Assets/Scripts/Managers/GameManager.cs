@@ -23,11 +23,10 @@ public class GameManager : MonoBehaviour
         PlaceManager.Initialize();
         CharacterManager.Initialize();
         ImaginationManager.Initialize();
-        PhotoManager.Initialize();
         UIManager.Initialize();
         CameraController.Init();
 
-        StartCoroutine(DelayStart());
+        StartCoroutine(DelayStart(GameDataManager.CurrentStorySavedData));
 
         // GUI 스타일을 설정 (폰트 크기 등)
         _guiStyle = new GUIStyle();
@@ -39,26 +38,29 @@ public class GameManager : MonoBehaviour
         _availableStoryIDs = ResourcePathManager.GetAvailableStoryIDs();
     }
 
-    // 스토리 시작을 지연시키는 코루틴
-    private IEnumerator DelayStart()
+   
+    // 명시적으로 StorySavedData를 전달받아 스토리를 시작하는 코루틴
+    public IEnumerator DelayStart(StorySavedData savedData)
     {
         yield return new WaitForEndOfFrame();
 
-        StorySavedData savedData = GameDataManager.CurrentStorySavedData;
-        if(savedData != null)
+        if (savedData != null)
         {
             Debug.Log("이어 하기 발동");
-            // 기존 저장된 데이터가 있으면 해당 storyID로 PlayStory 실행
-            StoryManager.Instance.PlayStory(savedData.storyID, savedData.recentPlayedElementIndex);
+            // 전달된 StorySavedData로 스토리 실행
+            StoryManager.Instance.PlayStory(savedData.StoryID, savedData.RecentPlayedElementIndex);
         }
-        else{
-            if(_isTest){
-                while(string.IsNullOrEmpty(_initialStoryID)){
+        else
+        {
+            if (_isTest)
+            {
+                while (string.IsNullOrEmpty(_initialStoryID))
+                {
                     yield return null;
                 }
                 StoryManager.Instance.PlayStory(_initialStoryID, 0);
             }
-            else 
+            else
             {
                 Debug.Log("처음하기 발동");
                 StoryManager.Instance.PlayStory(new OpeningStory(), 0);

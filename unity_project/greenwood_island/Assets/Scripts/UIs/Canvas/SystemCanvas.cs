@@ -1,0 +1,88 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SystemCanvas : MonoBehaviour
+{
+    [SerializeField] private Image _screenOverlayFilm;
+    [SerializeField] private TextMeshProUGUI _intertitleText;
+    [SerializeField] private Transform _fxLayer;
+    [SerializeField] private Transform _sfxLayer;
+    [SerializeField] private DialoguePlayer _dialoguePlayer;
+
+/// 상호작용 UI
+    [SerializeField] private Transform _userActionWindowLayer;
+    [SerializeField] private Transform _choiceUILayer;
+    [SerializeField] private Transform _cutInLayer;
+    [SerializeField] private UserActionWindow _userActionWindowPrefab;
+    [SerializeField] private ChoiceUI _choiceUIPrefab;
+    [SerializeField] private CutInUI _cutInUIPrefab;
+    [SerializeField] private Button _placeTransitionBtnPrefab;
+
+
+    [SerializeField] private Transform _imaginationLayer;
+    [SerializeField] private Transform _characterLayerUI;
+
+    [SerializeField] private Letterbox _letterBox;
+
+    [SerializeField] private Button _saveBtn;
+
+    [SerializeField] private Button _inventoryBtn;
+
+
+    public Image ScreenOverlayFilm { get => _screenOverlayFilm; }  
+    public Transform FXLayer { get => _fxLayer; }
+    public Transform SFXLayer { get => _sfxLayer; }
+    public DialoguePlayer DialoguePlayer { get => _dialoguePlayer; }
+    public TextMeshProUGUI IntertitleText { get => _intertitleText; }
+    public Transform ImaginationLayer { get => _imaginationLayer; }
+    public Letterbox LetterBox { get => _letterBox; }
+    public Transform CharacterLayerUI { get => _characterLayerUI; }
+    public Button SaveBtn { get => _saveBtn; }
+    public Button InventoryBtn { get => _inventoryBtn; }
+    public Button PlaceTransitionBtnPrefab { get => _placeTransitionBtnPrefab; }
+
+    private void Start(){
+        _saveBtn.onClick.RemoveAllListeners();
+        _saveBtn.onClick.AddListener(() =>
+        {
+            StorySavedData tempSaveData = new StorySavedData(
+                StoryManager.Instance.CurrentStoryName, 
+                "퀵 세이브", 
+                StoryManager.Instance.CurrentElementIndex, 
+                StoryManager.Instance.CurrentStory.UpdateElements.Count
+            );
+
+            UIManager.PopupCanvas.ShowSaveWindow(tempSaveData);
+        });
+
+        _inventoryBtn.onClick.RemoveAllListeners();
+        _inventoryBtn.onClick.AddListener(() =>
+        {
+            // 인벤토리 버튼을 눌렀을 때 동작 추가 (여기에 인벤토리 관련 로직을 넣을 수 있음)
+            UIManager.PopupCanvas.OpenInventorySubmitMode("OldMap");
+        });
+    }
+
+
+    // UserActionWindow 인스턴스화 메소드
+    public UserActionWindow InstantiateUserActionWindow()
+    {
+        return Instantiate(_userActionWindowPrefab, _userActionWindowLayer);
+    }
+
+    // ChoiceUI 인스턴스화 메소드
+    public ChoiceUI InstantiateChoiceUI()
+    {
+        return Instantiate(_choiceUIPrefab, _choiceUILayer);
+    }
+
+    // CutInUI 인스턴스화 메소드
+    public CutInUI InstantiateCutInUI()
+    {
+        return Instantiate(_cutInUIPrefab, _cutInLayer);
+    }
+}
+

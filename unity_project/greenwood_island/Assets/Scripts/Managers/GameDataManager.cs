@@ -148,7 +148,7 @@ public static class GameDataManager
         if(storySavedDataInSlot != null){
             _currentStorySavedData = storySavedDataInSlot;
             _currentSlotIndex = slotIndex;
-            Debug.Log($"{_currentStorySavedData.storyID} 스토리가 로드됩니다");
+            Debug.Log($"{_currentStorySavedData.StoryID} 스토리가 로드됩니다");
         }
         else{
             _currentStorySavedData = null;

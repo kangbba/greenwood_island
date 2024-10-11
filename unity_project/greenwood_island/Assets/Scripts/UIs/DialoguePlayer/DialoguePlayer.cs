@@ -135,6 +135,6 @@ public class DialoguePlayer : MonoBehaviour
         _isOn = show;
         float offScreenY = -500;
         Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
-        _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutCubic);
+        _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutQuad);
     }
 }

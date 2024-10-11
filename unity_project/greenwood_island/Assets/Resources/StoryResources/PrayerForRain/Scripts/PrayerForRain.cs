@@ -14,7 +14,7 @@ public class PrayerForRain : Story
     // 스토리의 메인 업데이트 부분
     public override List<Element> UpdateElements => new List<Element>(){
 
-        new ImaginationEnter("Pray", Vector2.one * 2f, Vector2.up * 425, 0f),
+        new ImaginationEnter("Pray"),
         new SFXEnter("BackgroundAmbient", .5f, true, 0f),
 
         new ParallelElement(
@@ -110,9 +110,8 @@ public class PrayerForRain : Story
         ),
         new ParallelElement(
             new SFXEnter("Drum2", .5f, true, 3f),
-            new CameraShake(3f, 30f, 20, 180),
             new ImaginationInvertEffect(true),
-            new ImaginationScale(Vector2.one * 1, .1f)
+            new ImaginationShake()
         ),
         new SFXEnter("Rain2", 1f, true, 0f),
         new Dialogue(

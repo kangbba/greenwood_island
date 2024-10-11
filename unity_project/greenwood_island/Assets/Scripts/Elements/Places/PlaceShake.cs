@@ -1,16 +1,18 @@
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
-public class CameraShake : Element
+/// <summary>
+/// PlaceShake 클래스는 장소 레이어를 흔드는 Element입니다.
+/// </summary>
+public class PlaceShake : Element
 {
     private float _duration;
     private float _strength;
     private int _vibrato;
     private float _randomness;
 
-
-    // TimeElement의 생성자에서 duration을 받아 처리
-    public CameraShake(float duration = 1f, float strength = 10f, int vibrato = 10, float randomness = 90f) 
+    public PlaceShake(float duration = 1f, float strength = 40f, int vibrato = 10, float randomness = 5) 
     {
         _duration = duration;
         _strength = strength;
@@ -26,7 +28,8 @@ public class CameraShake : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        CameraController.Shake(_duration, _strength, _vibrato, _randomness);
-        yield return new WaitForSeconds(_duration);
+        Transform placeLayer = UIManager.SystemCanvas.PlaceLayer;
+
+        yield return placeLayer.DOShakePosition(_duration, _strength, _vibrato, _randomness).WaitForCompletion();
     }
 }

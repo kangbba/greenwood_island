@@ -39,7 +39,7 @@ public class CharacterManager : SingletonManager<CharacterManager>
         }
 
         // 캐릭터를 인스턴스화
-        GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.SystemCanvas.CharacterLayerUI.transform);
+        GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.SystemCanvas.CharacterLayer);
         Character character = characterObject.GetComponent<Character>();
         character.Init();
         character.ChangeEmotion(initialEmotionType, duration);

@@ -40,6 +40,7 @@ public class GameSlot : MonoBehaviour
     public void Refresh()
     {
         _slotIndexText.SetText($"FILE {_slotNumber + 1}");
+        
         if (_saveData == null)
         {
             // saveData가 null일 경우, 빈 슬롯으로 표시
@@ -53,16 +54,41 @@ public class GameSlot : MonoBehaviour
         }
         else
         {
-            // saveData가 있을 경우, 저장된 데이터 표시
-            StoryData storyData = ResourcePathManager.GetStoryData(_saveData.StoryID);
-            _previewImg.sprite = storyData != null ? storyData.StoryThumbnail : _storyDefaultThumbnail;
-            _storyNameText.text = storyData.StoryName_KO;  // 나중에 ko로 변경
-            _saveTimeText.text = _saveData.SaveTimeString;
-            float progressPerone = (float)_saveData.RecentPlayedElementIndex / _saveData.ElementTotalCount;
-            _progressText.text = $"{(int)(progressPerone*100)}% COMPLETED ";
-            _saveMemoText.text = _saveData.SaveMemo;
-            _filePathText.text = GameDataManager.GetSaveFilePath(_slotNumber);
-            _deleteButton.gameObject.SetActive(true);
+            try
+            {
+                // saveData가 있을 경우, 저장된 데이터 표시
+                StoryData storyData = ResourcePathManager.GetStoryData(_saveData.StoryID);
+                if (storyData == null)
+                {
+                    Debug.LogWarning($"Story data not found for StoryID: {_saveData.StoryID}");
+                    _previewImg.sprite = _storyDefaultThumbnail; // 기본 썸네일로 설정
+                    _storyNameText.text = "Story Not Found";
+                }
+                else
+                {
+                    _previewImg.sprite = storyData.StoryThumbnail;
+                    _storyNameText.text = storyData.StoryName_KO;  // 나중에 ko로 변경
+                }
+
+                _saveTimeText.text = _saveData.SaveTimeString;
+                float progressPerone = (float)_saveData.RecentPlayedElementIndex / _saveData.ElementTotalCount;
+                _progressText.text = $"{(int)(progressPerone * 100)}% COMPLETED ";
+                _saveMemoText.text = _saveData.SaveMemo;
+                _filePathText.text = GameDataManager.GetSaveFilePath(_slotNumber);
+                _deleteButton.gameObject.SetActive(true);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"Error while refreshing UI: {ex.Message}");
+                // 예외 발생 시 기본 값으로 설정
+                _previewImg.sprite = _storyDefaultThumbnail;
+                _storyNameText.text = "Error Loading Story";
+                _saveTimeText.text = "";
+                _saveMemoText.text = "";
+                _progressText.text = "";
+                _filePathText.text = GameDataManager.GetSaveFilePath(_slotNumber);
+                _deleteButton.gameObject.SetActive(false);
+            }
         }
 
         // 로드 버튼 클릭 시 실행할 액션을 설정
@@ -73,4 +99,5 @@ public class GameSlot : MonoBehaviour
         _deleteButton.onClick.RemoveAllListeners();  // 기존 리스너 제거
         _deleteButton.onClick.AddListener(() => _onDeleteAction());
     }
+
 }

@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
         CharacterManager.Initialize();
         ImaginationManager.Initialize();
         UIManager.Initialize();
-        CameraController.Init();
 
         StartCoroutine(DelayStart(GameDataManager.CurrentStorySavedData));
 

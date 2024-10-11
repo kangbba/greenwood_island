@@ -5,48 +5,36 @@ using DG.Tweening;
 
 public class OpeningStory : Story
 {
-
     // 스토리의 메인 업데이트 부분
-    public override List<Element> UpdateElements => new List<Element> {
-    
-        new ScreenOverlayFilm(Color.black),
-        new PlaceEnter("Storm"),
-        new CameraZoomByFactor(zoomFactor: 0.2f, duration: 0f),
-        new CameraMove2DByAngle(-290, 160f, duration: 0f),
-        new PlaceFilm(ColorUtils.CustomColor("86D8FF"), .3f),
+    public override List<Element> UpdateElements => new List<Element>
+    {
+        new PlaceEnter("Storm", targetColor : ColorUtils.CustomColor("86D8FF"), duration: 0f), // 장소 색상, 크기 및 위치를 즉시 설정
+        new ImaginationEnter("Black", 0f),
         new Intertitle("이 이야기는 허구이며,\n실제 인물, 장소, 사건과는 무관합니다.", 1, 3, 1),
-        new SequentialElement(
-            new SFXEnter("Thunder1", 0.25f, false, 0f)
-        ),
+        new ImaginationClear(1f),
+
+
         new ParallelElement(
-            new CameraShake(),
-            new ScreenOverlayFilmClear(),
-            new CameraZoomClear(1f),
-            new CameraMove2DClear(4f)
-        ),
-        new SequentialElement(
-            new SFXEnter("Thunder2", 0.15f, false, 0f)
-        ),
-        new ParallelElement(
-            new CameraShake(),
             new SequentialElement(
-                new PlaceOverlayFilm(Color.white.ModifiedAlpha(0.76f), .05f, Ease.OutElastic),
-                new PlaceOverlayFilmClear(.1f)
+                new SFXEnter("Thunder1", 0.25f, false, 0f)
             ),
-            new SequentialElement(
-                new PlaceFilmClear(.15f, Ease.OutElastic),
-                new PlaceFilm(ColorUtils.CustomColor("86D8FF"), .2f)
-            )
+            new PlaceOverlayFilm(Color.black.ModifiedAlpha(0.76f), 1f),
+            new PlaceOverlayFilmClear(.1f)
+        ),
+        new Delay(3f),
+        new ParallelElement(
+            new SFXEnter("Thunder2", 0.15f, false, 0f),
+            new PlaceColor(Color.white, .15f, Ease.OutElastic), // 장소 색상 조정
+            new PlaceShake()
         ),
         new SFXEnter("Wind1", 0.15f, true, 0f),
         new SFXEnter("Thunder1", 0.15f, true, 5f),
-        new CameraZoomClear(),
-        new CameraMove2DClear(),
-        new ScreenOverlayFilm(Color.white, .5f),
-        new PlaceEnter("FerryInside"),
-        new CameraZoomByFactor(.5f, 0f),
-        new ScreenOverlayFilmClear(),
-        new CameraMove2D(Vector2.right * 300, 3f),
+        
+        new PlaceRestore(Vector2.one, Vector2.zero, Color.white, 0.3f, Ease.OutQuad), // 복구 작업
+
+        new PlaceEnter("FerryInside", localScale : Vector2.one * 1.2f), // 장소를 가운데에 배치
+        new PlaceScale(Vector2.one * 1.5f, 3f, Ease.OutQuad), // 크기 조정
+        new PlaceMove(Vector2.right * 300, 3f, Ease.OutQuad),
 
         // 라디오의 불길한 소리
         new Dialogue(
@@ -56,7 +44,7 @@ public class OpeningStory : Story
                 new Line("…치지직, 북위 48도… 동경… 관찰 중… 주시…"),
             }
         ),
-        new CameraShake(),
+        new PlaceShake(), 
 
         // 라이언의 독백
         new Dialogue(
@@ -70,14 +58,11 @@ public class OpeningStory : Story
                 new Line("몇 명의 승객들이 고개를 떨군 채 침묵하고 있다. 내가 기댈 만한 사람이라고는 없어 보인다."),
             }
         ),
-        new CameraShake(),
+        new PlaceShake(), 
 
         new ImaginationEnter(
             "FerryOldMan",
-            Vector2.one,
-            Vector2.one,
-            1f,
-            ColorUtils.CustomColor("516FB7")
+            color : ColorUtils.CustomColor("516FB7")
         ),
         new Dialogue(
             "Mono",
@@ -102,12 +87,11 @@ public class OpeningStory : Story
                 new Line("경로… 접근 중… 보고… 대기…"),
             }
         ),
-        new CameraShake(),
-        new CameraShake(3),
+        new PlaceShake(), 
         new ParallelElement(
             new SFXEnter("Thunder2", 0.4f, false, 0f),
-            new CameraShake(4f),
-            new ImaginationEnter("Black", Vector2.one * 1.5f, Vector2.zero)// 눈을 질끈 감을 때 어두워지는 연출
+            new PlaceShake(), 
+            new ImaginationEnter("Black", localScale: Vector2.one * 1.5f) // 눈을 질끈 감을 때 어두워지는 연출
         ),
         new Dialogue(
             "Mono",
@@ -126,10 +110,7 @@ public class OpeningStory : Story
 
         new ImaginationEnter(
             "FerryOldMan",
-            Vector2.one,
-            Vector2.zero,
-            1f,
-            ColorUtils.CustomColor("516FB7")
+            color: ColorUtils.CustomColor("516FB7")
         ),
         // 노인의 재등장과 불길한 대사
         new Dialogue(
@@ -149,7 +130,7 @@ public class OpeningStory : Story
                 new Line("나는 그저 바다가 되돌려줄 날만 기다리고 있을 뿐이지."),
             }
         ),
-        new CameraShake(3),
+        new PlaceShake(), 
         new ImaginationClear(1f),
         new Dialogue(
             "Mono",
@@ -161,7 +142,7 @@ public class OpeningStory : Story
         ),
         new ImaginationClear(1f),
 
-        new ImaginationEnter("ShipSide", Vector2.one * 3f, Vector2.zero, 1f, Color.black.ModifiedAlpha(.8f)),
+        new ImaginationEnter("ShipSide", color : Color.black.ModifiedAlpha(.8f)),
 
         new Dialogue(
             "Mono",
@@ -173,9 +154,9 @@ public class OpeningStory : Story
         ),
         new ParallelElement(
             new ImaginationClear(1f),
-            new ImaginationEnter("FarTown", Vector2.one, Vector2.zero, 1f)
+            new ImaginationEnter("FarTown")
         ),
-        
+
         // 그린우드 섬이 드러나는 장면
         new Dialogue(
             "Mono",
@@ -188,5 +169,4 @@ public class OpeningStory : Story
             }
         )
     };
-
 }

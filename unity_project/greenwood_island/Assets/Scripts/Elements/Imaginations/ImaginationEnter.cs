@@ -11,25 +11,25 @@ public class ImaginationEnter : Element
     private Vector2 _localScale;
     private Vector2 _anchoredPos;
     private float _duration;       // 페이드 인 지속 시간
-    private Color _targetColor;    // 페이드 인 목표 색상
+    private Color _color;    // 페이드 인 목표 색상
     private Ease _easeType;        // 페이드 인 애니메이션 이징 타입
 
     // 생성자: 상상 ID, 스케일 팩터, 색상, 지속 시간, 이징 타입을 받아서 초기화
-    public ImaginationEnter(string imaginationID, Vector2 localScale, Vector2 anchoredPos, float duration = 1f, Color targetColor = default, Ease easeType = Ease.InElastic)
+    public ImaginationEnter(string imaginationID, float duration = 1f, Vector2 localScale = default, Vector2 anchoredPos = default, Color color = default, Ease easeType = Ease.OutQuad)
     {
         _imaginationID = imaginationID;
-        _localScale = localScale;
-        _anchoredPos = anchoredPos;
-        _targetColor = targetColor == default ? Color.white : targetColor;
         _duration = duration;
+        _localScale = localScale == default ? Vector2.one : localScale;
+        _anchoredPos = anchoredPos == default ? Vector2.zero : anchoredPos;
+        _color = color == default ? Color.white : color;
         _easeType = easeType;
     }
+
     public override void ExecuteInstantly()
     {
         _duration = 0;
         Execute();
     }
-
 
     public string ImaginationID { get => _imaginationID; }
 
@@ -41,8 +41,10 @@ public class ImaginationEnter : Element
         // ImaginationManager를 통해 상상 이미지 생성
         ImaginationManager.Instance.CreateImagination(_imaginationID);
 
-        // ImaginationManager를 통해 페이드 인 애니메이션 적용
-        ImaginationManager.Instance.FadeColor(_targetColor, _duration, _easeType);
+        // ImaginationColor를 이용해 페이드 인 애니메이션 적용
+        new ImaginationColor(_color, _duration, _easeType).Execute();
+
+        // 이미지의 위치와 크기 조정
         new ImaginationMove(_anchoredPos, _duration, _easeType).Execute();
         new ImaginationScale(_localScale, _duration, _easeType).Execute();
 

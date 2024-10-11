@@ -105,8 +105,8 @@ public class Dialogue : Element
             yield return new WaitForSeconds(1f);
         }
         else{
-            dialoguePlayer.SetCharacterTextClor(Color.clear, .1f);
-            yield return new WaitForSeconds(.1f);
+            dialoguePlayer.SetCharacterTextClor(Color.clear, .2f);
+            yield return new WaitForSeconds(.2f);
         }
     }
 }

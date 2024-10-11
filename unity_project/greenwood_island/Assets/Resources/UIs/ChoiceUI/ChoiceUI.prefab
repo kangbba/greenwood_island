@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1309624673805078309
 RectTransform:
   m_ObjectHideFlags: 0
@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _choicesContainer: {fileID: 4277456298256503548}
   _choicePrefab: {fileID: 6027139767458097407, guid: e608c5ebcc8024131bdd7da65ec80972, type: 3}
+  _canvasGroup: {fileID: 0}
 --- !u!222 &1038272926898637378
 CanvasRenderer:
   m_ObjectHideFlags: 0

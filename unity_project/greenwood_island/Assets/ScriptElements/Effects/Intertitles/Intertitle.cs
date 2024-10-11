@@ -15,7 +15,7 @@ public class Intertitle : Element
     private TextMeshProUGUI _intertitleText; // SystemCanvas의 Intertitle Text로 바인딩될 예정
 
     // 생성자: 텍스트, 페이드 인/아웃, 머무르는 시간, 이징 타입, 텍스트 크기를 받음
-    public Intertitle(string text, float enterDuration, float stayDuration, float exitDuration, float fontSize = 55f,  Ease ease = Ease.Linear)
+    public Intertitle(string text, float enterDuration = 1, float stayDuration = 2, float exitDuration = 1, float fontSize = 60,  Ease ease = Ease.Linear)
     {
         _text = text;
         _enterDuration = enterDuration;

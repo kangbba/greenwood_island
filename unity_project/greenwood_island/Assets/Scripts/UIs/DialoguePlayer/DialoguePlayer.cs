@@ -22,6 +22,9 @@ public class DialoguePlayer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _characterText;
     [SerializeField] private TextDisplayer _dialogueText;
     [SerializeField] private DialogueGuide _dialogueGuide;  // DialogueGuide 참조
+
+    [SerializeField] private CanvasGroup _canvasGroup;
+
     
     private bool _isOn = true;
     private EDialogueState _dialogueState = EDialogueState.NotStarted;
@@ -136,5 +139,9 @@ public class DialoguePlayer : MonoBehaviour
         float offScreenY = -500;
         Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
         _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutQuad);
+    }
+    public void ShowAlpha(bool show, float duration)
+    {
+        _canvasGroup.DOFade(show ? 1f : 0f, duration).SetEase(Ease.OutQuad);
     }
 }

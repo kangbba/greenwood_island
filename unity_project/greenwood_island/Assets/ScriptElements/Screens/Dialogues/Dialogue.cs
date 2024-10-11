@@ -6,14 +6,15 @@ public class Dialogue : Element
 {
     private string _characterID; // 캐릭터 이름
     private List<Line> _lines;
+    private bool _down;
 
-    public Dialogue(string characterID, Line line)
+    public Dialogue(string characterID, Line line, bool down = false)
     {
         this._characterID = characterID;
         this._lines = new List<Line> { line };
     }
 
-    public Dialogue(string characterID, List<Line> lines)
+    public Dialogue(string characterID, List<Line> lines, bool down = false)
     {
         this._characterID = characterID;
         this._lines = lines;
@@ -30,7 +31,6 @@ public class Dialogue : Element
             return;
         }
         dialoguePlayer.SetCharacterTextClor(Color.clear, 0f);
-        dialoguePlayer.gameObject.SetActive(false);
     }
 
     public override IEnumerator ExecuteRoutine()
@@ -42,9 +42,6 @@ public class Dialogue : Element
             Debug.LogWarning("Dialogue :: dialoguePlayer is null");
             yield break;
         }
-
-        //클리어
-        dialoguePlayer.gameObject.SetActive(true);
 
         // 캐릭터 텍스트, 이미지
         var firstLine = _lines[0];
@@ -61,28 +58,28 @@ public class Dialogue : Element
         Color characterStrColor = characterData != null ? characterData.CharacterColor : Color.clear;
         dialoguePlayer.SetCharacterText(characterStr, Color.Lerp(characterStrColor, Color.black, .85f));
         dialoguePlayer.SetCharacterTextClor(Color.clear, 0f);
-        dialoguePlayer.SetCharacterTextClor(characterStrColor, .3f);
 
         //다이얼로그 텍스트
         dialoguePlayer.ClearDialogueText();
         if(!dialoguePlayer.IsOn){
-            dialoguePlayer.ShowUp(true, .3f);
-            yield return new WaitForSeconds(.3f);
+            dialoguePlayer.ShowUp(true, .5f);
+            yield return new WaitForSeconds(.5f);
         }
-
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
         {
+            dialoguePlayer.ShowAlpha(true, .1f);
+            dialoguePlayer.SetCharacterTextClor(characterStrColor, .1f);
+            dialoguePlayer.ClearDialogueText();
+            yield return new WaitForSeconds(.1f);
             Line line = _lines[i];
             EmotionType emotionType = line.EmotionType;
             int emotionIndex = line.EmotionIndex;
-           
+            
             if(activeCharacter != null){
                 activeCharacter.ChangeEmotion(line.EmotionType, line.EmotionIndex);
             }
 
-            dialoguePlayer.ClearDialogueText();
-            dialoguePlayer.FadeInDialogueText(0f);
             // ShowLineRoutine에 콜백 추가
             yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeed, 
             () =>{
@@ -102,11 +99,14 @@ public class Dialogue : Element
             {
                 activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
             }
-            dialoguePlayer.FadeOutDialogueText(.1f);
+        }
+        if(_down){
+            new DialoguePanelClear(1f).Execute();
+            yield return new WaitForSeconds(1f);
+        }
+        else{
+            dialoguePlayer.SetCharacterTextClor(Color.clear, .1f);
             yield return new WaitForSeconds(.1f);
         }
-        dialoguePlayer.SetCharacterTextClor(Color.clear, .1f);
-        dialoguePlayer.ShowUp(false, .1f);
-        yield return new WaitForSeconds(.1f);
     }
 }

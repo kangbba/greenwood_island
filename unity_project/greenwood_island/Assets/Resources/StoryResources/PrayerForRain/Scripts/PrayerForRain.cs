@@ -110,8 +110,7 @@ public class PrayerForRain : Story
         ),
         new ParallelElement(
             new SFXEnter("Drum2", .5f, true, 3f),
-            new ImaginationInvertEffect(true),
-            new ImaginationShake()
+            new ImaginationInvertEffect(true)
         ),
         new SFXEnter("Rain2", 1f, true, 0f),
         new Dialogue(
@@ -135,7 +134,8 @@ public class PrayerForRain : Story
                 new Line("주민들은 빗속에서 몸을 웅크린 채, 안도감 속에서 엎드린다. 그들의 표정에는 구원이 섞여 있지만, 여전히 두려움이 남아 있다."),
                 new Line("이건... 이게 우연일 리가 없다. 저들이... 정말 자연을 통제하고 있다는 것인가? 그럼 그들이 말하는 섬의 전통이... 사실인 것인가?")
             }
-        )
+        ),
+        new ImaginationInvertEffect(false)
     };
 
 }

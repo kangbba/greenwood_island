@@ -12,12 +12,14 @@ public class Dialogue : Element
     {
         this._characterID = characterID;
         this._lines = new List<Line> { line };
+        _down = down;
     }
 
     public Dialogue(string characterID, List<Line> lines, bool down = false)
     {
         this._characterID = characterID;
         this._lines = lines;
+        _down = down;
     }
     public string CharacterID => _characterID;
     public List<Line> Lines => _lines;
@@ -101,6 +103,7 @@ public class Dialogue : Element
             }
         }
         if(_down){
+            Debug.Log("다이얼로그 내림");
             new DialoguePanelClear(1f).Execute();
             yield return new WaitForSeconds(1f);
         }

@@ -172,11 +172,11 @@ public class WeirdCloud : Story
 
         new ParallelElement(
             new ImaginationMove(
-                Vector2.down * 200,
+                Vector2.down * 100,
                 10f
             ),
             new ImaginationScale(
-                Vector2.one * 1.2f,
+                Vector2.one * 1.3f,
                 2f
             ),
             new Dialogue(

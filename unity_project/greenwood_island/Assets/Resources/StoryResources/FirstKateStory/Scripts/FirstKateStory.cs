@@ -24,7 +24,7 @@ public class FirstKateStory : Story
                 new Line("케이트는 오늘도 빵집 앞에서 바쁘게 진열대를 정리하고 있다."),
                 new Line("그 열정은 언제 봐도 대단하다."),
             },
-            down : true
+            afterPanelDown : true
         ),
         new DialoguePanelClear(),
 
@@ -105,7 +105,7 @@ public class FirstKateStory : Story
             {
                 new Line("당연하지. 오늘은 빵 속이 더 폭신폭신하고 부드럽게 만들어보려고 조금 더 시간을 들였어. 먹으면 네가 바로 알 거야."),
             },
-            down : true
+            afterPanelDown : true
         ),
         new ImaginationEnter(
             "Bread"
@@ -120,7 +120,7 @@ public class FirstKateStory : Story
                 new Line("한 입 베어 물 때마다 입안 가득 퍼지는 폭신한 식감이 마음을 편안하게 해주는 듯 하다."),
                 new Line("아마 케이트의 열정과 정성이 담겨 있어서 그런 거겠지."),
             },
-            down : true
+            afterPanelDown : true
         ),
         new DialoguePanelClear(),
         new ImaginationClear(1f),

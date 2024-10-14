@@ -42,20 +42,22 @@ public class ChoiceSet : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 질문 출력
-        yield return CoroutineUtils.StartCoroutine(new Dialogue("Mono", new Line(_question), true).ExecuteRoutine());
+        yield return CoroutineUtils.StartCoroutine(new Dialogue("Mono", new Line(_question, playSpeed: 2400), true).ExecuteRoutine());
 
         ChoiceUI choiceUI = UIManager.SystemCanvas.InstantiateChoiceUI();
         choiceUI.Init(_choiceContents);
 
         // 선택지 UI를 표시하고 플레이어의 선택을 기다림
         yield return choiceUI.WaitUntilUserChoice();
-
+        
         int selectedChoiceIndex = choiceUI.SelectedChoiceIndex;
         // 선택된 인덱스를 로그로 출력
         Debug.Log($"선택된 인덱스: {selectedChoiceIndex}");
 
-        yield return new WaitForSeconds(1f);
-        
+        yield return new WaitForSeconds(.5f);
+
+
+
         // 유효한 선택인지 확인하고, 선택한 결과에 따른 동작 실행
         if (selectedChoiceIndex >= 0 && selectedChoiceIndex < _choiceContents.Count)
         {

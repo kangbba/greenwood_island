@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6257765176731498781}
   - component: {fileID: 1038272926898637378}
   - component: {fileID: 5889654714660957785}
+  - component: {fileID: 6225228453534352402}
   m_Layer: 5
   m_Name: ChoiceUI
   m_TagString: Untagged
@@ -34,10 +35,10 @@ RectTransform:
   - {fileID: 4277456298256503548}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 200}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6257765176731498781
 MonoBehaviour:
@@ -53,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _choicesContainer: {fileID: 4277456298256503548}
   _choicePrefab: {fileID: 6027139767458097407, guid: e608c5ebcc8024131bdd7da65ec80972, type: 3}
-  _canvasGroup: {fileID: 0}
+  _canvasGroup: {fileID: 6225228453534352402}
 --- !u!222 &1038272926898637378
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -92,6 +93,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6225228453534352402
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760088124396180591}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1492845623152081960
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,10 +137,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1309624673805078309}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.7144, y: 31.5}
-  m_SizeDelta: {x: 837.6257, y: 642}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 771.7875, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3922988178565653164
 CanvasRenderer:

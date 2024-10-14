@@ -6,20 +6,20 @@ public class Dialogue : Element
 {
     private string _characterID; // 캐릭터 이름
     private List<Line> _lines;
-    private bool _down;
+    private bool _afterPanelDown;
 
-    public Dialogue(string characterID, Line line, bool down = false)
+    public Dialogue(string characterID, Line line, bool afterPanelDown = false)
     {
         this._characterID = characterID;
         this._lines = new List<Line> { line };
-        _down = down;
+        _afterPanelDown = afterPanelDown;
     }
 
-    public Dialogue(string characterID, List<Line> lines, bool down = false)
+    public Dialogue(string characterID, List<Line> lines, bool afterPanelDown = false)
     {
         this._characterID = characterID;
         this._lines = lines;
-        _down = down;
+        _afterPanelDown = afterPanelDown;
     }
     public string CharacterID => _characterID;
     public List<Line> Lines => _lines;
@@ -101,7 +101,7 @@ public class Dialogue : Element
                 activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
             }
         }
-        if(_down){
+        if(_afterPanelDown){
             Debug.Log("다이얼로그 내림");
             new DialoguePanelClear(1f).Execute();
             yield return new WaitForSeconds(1f);

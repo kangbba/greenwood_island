@@ -65,8 +65,9 @@ public static class ItemManager
     }
 
     // 해당 itemID가 StorySavedData의 OwnItems에 존재하는지 확인하는 메서드
-    public static bool HasItem(string itemID, StorySavedData storyData)
+    public static bool HasItem(string itemID, StorySavedData storyData = null)
     {
+        storyData ??= GameDataManager.CurrentStorySavedData;
         return storyData.OwnItems.TryGetValue(itemID, out bool isOwned) && isOwned;
     }
 

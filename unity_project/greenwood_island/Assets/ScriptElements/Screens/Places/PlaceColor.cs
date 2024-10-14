@@ -40,7 +40,7 @@ public class PlaceColor : Element
         Debug.Log($"PlaceColor :: 장소의 색상을 {_targetColor}로 변경 시도합니다.");
 
         // ImageController를 통해 색상 변경 애니메이션 적용
-        ImageController.FadeColor(currentPlaceImage, _targetColor, _duration, _easeType);
+        currentPlaceImage.FadeImage(_targetColor, _duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

@@ -29,14 +29,13 @@ public class ScreenOverlayFilmClear : Element
     {
         Image _overlayFilm = UIManager.SystemCanvas.ScreenOverlayFilm;
 
-        if (_overlayFilm != null)
+        if (_overlayFilm == null)
         {
+            yield break;
             // 오버레이 필름 색상을 투명하게 페이드 아웃
-            yield return ImageController.FadeColor(_overlayFilm, _isBlackClear ? Color.black : Color.clear, _duration, _easeType).WaitForCompletion();
         }
-        else
-        {
-            Debug.LogWarning("No overlay film image found in ScreenOverlayFilmLayer.");
-        }
+        Color targetColor =  _isBlackClear ? Color.black : Color.clear;
+        _overlayFilm.FadeImage(targetColor, _duration, _easeType);
+        yield return new WaitForSeconds(_duration);
     }
 }

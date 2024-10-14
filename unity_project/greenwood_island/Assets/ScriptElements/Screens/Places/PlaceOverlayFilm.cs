@@ -31,7 +31,7 @@ public class PlaceOverlayFilm : Element
         Image _overlayFilm = UIManager.SystemCanvas.PlaceOverlayFilm;
 
         // ImageController를 통해 색상 변경 애니메이션 적용
-        ImageController.FadeColor(_overlayFilm, _targetColor, _duration, _easeType);
+        _overlayFilm.FadeImage(_targetColor, _duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

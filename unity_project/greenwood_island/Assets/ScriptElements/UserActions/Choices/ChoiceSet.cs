@@ -5,16 +5,12 @@ using UnityEngine;
 
 public class ChoiceSet : Element
 {
-    private StorySavedData _storySavedData; // 저장된 데이터 참조
-    private string _choiceSetID; // ChoiceSet의 고유 ID
     private string _question; // 질문 내용
     private List<ChoiceContent> _choiceContents; // 선택지 목록
 
     // 생성자에서 StorySavedData와 ChoiceSetID를 할당
-    public ChoiceSet(StorySavedData storySavedData, string choiceSetID, string question, List<ChoiceContent> choices)
+    public ChoiceSet(string question, List<ChoiceContent> choices)
     {
-        _storySavedData = storySavedData; // StorySavedData 할당
-        _choiceSetID = choiceSetID; // ChoiceSet ID 할당
         _question = question;
         _choiceContents = choices ?? new List<ChoiceContent>(); // null 방지를 위해 리스트 초기화
     }
@@ -46,7 +42,7 @@ public class ChoiceSet : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 질문 출력
-        new Dialogue("Mono", new Line(_question)).Execute();
+        yield return CoroutineUtils.StartCoroutine(new Dialogue("Mono", new Line(_question), true).ExecuteRoutine());
 
         ChoiceUI choiceUI = UIManager.SystemCanvas.InstantiateChoiceUI();
         choiceUI.Init(_choiceContents);
@@ -58,13 +54,11 @@ public class ChoiceSet : Element
         // 선택된 인덱스를 로그로 출력
         Debug.Log($"선택된 인덱스: {selectedChoiceIndex}");
 
+        yield return new WaitForSeconds(1f);
         
         // 유효한 선택인지 확인하고, 선택한 결과에 따른 동작 실행
         if (selectedChoiceIndex >= 0 && selectedChoiceIndex < _choiceContents.Count)
         {
-            // 선택 결과를 StorySavedData에 저장
-     //       _storySavedData.savedChoiceResult[_choiceSetID] = selectedChoiceIndex;
-
             // 선택한 SequentialElement 실행
             yield return CoroutineUtils.StartCoroutine(_choiceContents[selectedChoiceIndex].SequentialElement.ExecuteRoutine());
         }
@@ -75,7 +69,6 @@ public class ChoiceSet : Element
         }
 
         choiceUI.FadeOutAndDestroy(1f);
-        new DialoguePanelClear(1f).Execute();
         yield return new WaitForSeconds(1f);
     }
 }

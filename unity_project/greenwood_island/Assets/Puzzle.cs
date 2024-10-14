@@ -1,157 +1,218 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class Puzzle : MonoBehaviour
 {
-    [SerializeField] private string _puzzleID;
-    [SerializeField] private string _itemIDForExit;
-    [SerializeField] private Button _backButton;  // 미리 바인딩된 Back 버튼
-    [SerializeField] private PuzzlePlace _initialPuzzlePlace;  // 초기 PuzzlePlace
+    [SerializeField] private PuzzlePlaceData _initialPlaceData;
+    private List<PuzzlePlaceData> _allPlaceDatas;
 
-    public abstract Dictionary<string, SequentialElement> BtnEvents { get; }
+    private PuzzlePlaceData _currentPlaceData;
+    private PuzzlePlaceData _previousPlaceData;
+
+    private bool _isCleared;
+
+    [SerializeField] private Button _enterSearchModeBtn; // 검색 모드로 전환하는 버튼
+    [SerializeField] private Button _exitSearchModeBtn;  // 이동 모드로 전환하는 버튼
+    // [SerializeField] private Button _enterWaitingModeBtn;  // 대기 모드로 전환하는 버튼
+    [SerializeField] private Button _movePreviousPlaceBtn;  // 대기 모드로 전환하는 버튼
+
+    //
+    [SerializeField] private Button _moveButtonPrefab;  // 동적 버튼 생성에 사용할 프리팹
+    [SerializeField] private Button _eventButtonPrefab;  // 동적 버튼 생성에 사용할 프리팹
+
+    private List<Button> _moveBtns = new List<Button>();  // 현재 활성화된 이동 버튼들
+    private List<Button> _eventBtns = new List<Button>();  // 현재 활성화된 검색 버튼들
+
+    public abstract Dictionary<string, SequentialElement> SearchEvents { get; }
     public abstract Dictionary<string, SequentialElement> EnterEvents { get; }
     public abstract Dictionary<string, SequentialElement> ExitEvents { get; }
+    public bool IsCleared { get => _isCleared; }
+    private bool _isMoving = false;  // 중복 실행 방지 플래그
 
-    private List<PuzzlePlace> _puzzlePlaces;  // 모든 PuzzlePlace 목록
-    private PuzzlePlace _currentPlace;  // 현재 활성화된 PuzzlePlace
-    private PuzzlePlace _previousPlace;  // 이전 PuzzlePlace
-
-    private bool _isTransitioning;  // 중복 이동 방지 플래그
-
-    private void Start()
+    private void Awake()
     {
-        InitializePuzzlePlaces();
-        InitializeBackButton();
-        MoveToPlace(_initialPuzzlePlace);  // 초기 장소로 이동
+        _allPlaceDatas = GetComponentsInChildren<PuzzlePlaceData>().ToList();
+        _exitSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Move, 0f)); 
+        _enterSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Search, 0f)); 
+       // _enterWaitingModeBtn.onClick.AddListener(() => SetMode(PuzzleMode.Waiting));  
+        _movePreviousPlaceBtn.onClick.AddListener(() => MovePreviousPlace()); 
     }
+    public void Init(){
 
-    // 모든 PuzzlePlace 초기화
-    private void InitializePuzzlePlaces()
+        MovePlaceAndRefreshUI(_initialPlaceData);
+    }
+    public void SetModeUI(PuzzleMode puzzleMode, float duration)
     {
-        _puzzlePlaces = new List<PuzzlePlace>(GetComponentsInChildren<PuzzlePlace>(true));
-
-        foreach (var place in _puzzlePlaces)
+        switch (puzzleMode)
         {
-            EnsureActive(place.gameObject);  // 비활성화된 장소 강제 활성화
-            place.Initialize(this);  // 부모 Puzzle 전달하여 초기화
+            case PuzzleMode.Waiting:
+                Debug.Log("대기 모드입니다.");
+                UIManager.CursorCanvas.UiCursor.SetCursorMode(UICursor.CursorMode.Normal);
+                ShowAndActiveButton(_exitSearchModeBtn, false, duration);
+                ShowAndActiveButton(_enterSearchModeBtn, false, duration);
+                ShowAndActiveButton(_movePreviousPlaceBtn, false, duration);
+                ShowMoveBtns(false, duration);
+                ShowEventBtns(false, duration);
+                break;
+            case PuzzleMode.Move:
+                Debug.Log("이동 모드입니다.");
+                UIManager.CursorCanvas.UiCursor.SetCursorMode(UICursor.CursorMode.Normal);
+                ShowAndActiveButton(_exitSearchModeBtn, false, duration);
+                ShowAndActiveButton(_enterSearchModeBtn, true, duration);
+                ShowAndActiveButton(_movePreviousPlaceBtn, _currentPlaceData != _initialPlaceData, duration);
+                ShowMoveBtns(true, duration);
+                ShowEventBtns(false, duration);
+                break;
+
+            case PuzzleMode.Search:
+                Debug.Log("검색 모드입니다.");
+                UIManager.CursorCanvas.UiCursor.SetCursorMode(UICursor.CursorMode.Magnifier);
+                ShowAndActiveButton(_exitSearchModeBtn, true, duration);
+                ShowAndActiveButton(_enterSearchModeBtn, false, duration);
+                ShowAndActiveButton(_movePreviousPlaceBtn, false, duration);
+                ShowMoveBtns(false, duration);
+                ShowEventBtns(true, duration);
+                break;
+
+            default:
+                Debug.LogError("알 수 없는 PuzzleMode입니다.");
+                break;
         }
     }
-
-    // Back 버튼 초기화
-    private void InitializeBackButton()
+    public void MovePlaceAndRefreshUI(PuzzlePlaceData placeData)
     {
-        ShowBackButton(false, 0f);
-        _backButton.onClick.AddListener(() => MoveToPreviousPlace());  // 부모 장소로 이동
+        if (_isMoving) return;  // 이미 실행 중이면 무시
+        StartCoroutine(MovePlaceAndRefreshUIRoutine(placeData));  // 코루틴 실행
     }
-
-    // GameObject가 비활성화된 경우 강제로 활성화
-    private void EnsureActive(GameObject obj)
-    {
-        if (!obj.activeSelf)
-        {
-            obj.SetActive(true);
-            Debug.LogWarning($"{obj.name}이(가) 비활성화되어 강제로 활성화되었습니다.");
-        }
-    }
-
-    // 외부에서 호출하는 PuzzlePlace 간 이동 처리
-    public void MoveToPlace(PuzzlePlace newPlace)
-    {
-        if (_isTransitioning)
-        {
-            Debug.LogWarning("이미 장소 이동 중입니다.");
-            return;  // 중복 이동 방지
-        }
-
-        if (newPlace == null)
-        {
-            Debug.LogError("이동할 PuzzlePlace가 설정되지 않았습니다.");
+    private void MovePreviousPlace(){
+        if(_previousPlaceData == null){
+            Debug.LogWarning("previous place data is null");
             return;
         }
-
-        _isTransitioning = true;  // 이동 시작
-
-        _previousPlace = _currentPlace;
-        _currentPlace = newPlace;
-        
-        StartCoroutine(MoveToPlaceRoutine(newPlace));
+        MovePlaceAndRefreshUI(_previousPlaceData);
     }
 
+    // 코루틴 함수: 대기 시간 포함
+    private IEnumerator MovePlaceAndRefreshUIRoutine(PuzzlePlaceData placeData)
+    {
+        if (placeData == null)
+        {
+            Debug.LogError("place data is null");
+            yield break;
+        }
+
+        _isMoving = true;  // 실행 중으로 설정
+
+        _previousPlaceData = _currentPlaceData;
+        _currentPlaceData = placeData;
+
+        // 장소 전환 애니메이션 실행
+        new PlaceTransitionWithSwipe(placeData.PlaceID, 1f, ImageUtils.SwipeMode.OnlyFade).Execute();
+
+        FadeOutAndDestroyAllButtons();  // 버튼 제거 시작
+
+        yield return null;
+        // 새 장소에 맞는 버튼 생성
+        CreateMoveBtns(placeData.MovePlans);
+        CreateEventBtns(placeData.EventPlans);
+
+        SetModeUI(PuzzleMode.Move, 0f);  // UI 갱신
+        yield return new WaitForSeconds(1f);  // 1초 대기
+
+        _isMoving = false;  // 실행 완료 후 해제
+    }
     
-    // 내부적으로만 사용하는 코루틴: 장소 이동 처리
-    private IEnumerator MoveToPlaceRoutine(PuzzlePlace newPlace)
+
+
+    private void SearchPoint(string eventID){
+
+        StartCoroutine(SearchPointRoutine(eventID));
+    }
+
+    private IEnumerator SearchPointRoutine(string eventID){
+
+        SetModeUI(PuzzleMode.Waiting, 0f);
+        yield return StartCoroutine(SearchEvents[eventID].ExecuteRoutine());
+        SetModeUI(PuzzleMode.Move, 0f);
+    }
+
+    private void ShowAndActiveButton(Button button, bool b, float duration) // 딜레이 옵션 추가
     {
-        Debug.Log($"[Puzzle] '{_previousPlace?.name ?? "없음"}'에서 '{_currentPlace.name}'로 이동합니다.");
+        button.interactable = false;  // 버튼 초기 상태를 비활성화
 
-        // 이전 장소 숨기기
-        ShowBackButton(false, 1f);
-        if (_previousPlace != null)
+        if (b)
         {
-            if (ExitEvents.TryGetValue(_previousPlace.EventID, out var exitEvent))
-            {
-                yield return StartCoroutine(exitEvent.ExecuteRoutine());
-            }
-            else
-            {
-                Debug.Log($"[Puzzle] '{_previousPlace.name}'에 대한 Exit 이벤트가 없습니다.");
-            }
-            _previousPlace.Show(false, 1f);
-        }
-        _currentPlace.Show(true, 1f);
-        yield return new WaitForSeconds(1f);  // 애니메이션 대기
-        ShowBackButton(true, 1f);
-
-        if (EnterEvents.TryGetValue(_currentPlace.EventID, out var enterEvent))
-        {
-            yield return StartCoroutine(enterEvent.ExecuteRoutine());
+            button.image.ScaleImage(Vector2.one, duration, Ease.OutQuad)  // 딜레이 후 애니메이션 시작
+                .OnComplete(() => { button.interactable = true; });  // 완료 후 버튼 활성화
         }
         else
         {
-            Debug.Log($"[Puzzle] '{_currentPlace.name}'에 대한 Enter 이벤트가 없습니다.");
+            button.image.ScaleImage(Vector2.zero, duration, Ease.OutQuad)  // 딜레이 후 애니메이션 시작
+                .OnComplete(() => { });  // 완료 후 추가 작업 없음
         }
-
-        Debug.Log($"[Puzzle] 새 장소 '{_currentPlace.name}' 활성화 완료.");
-        _isTransitioning = false;  // 이동 종료
     }
 
+    private void CreateMoveBtns(List<PuzzlePlaceData.MovePlan> plans){
+        _moveBtns.Clear();
+        foreach(var plan in plans){
 
-    // Back 버튼을 Fade In/Out 처리
-    public void ShowBackButton(bool isVisible, float duration)
+            var newButton = Instantiate(_moveButtonPrefab, plan.btnTr);
+            newButton.transform.localPosition = Vector2.zero;
+            newButton.onClick.AddListener(() => MovePlaceAndRefreshUI(plan.placeDataToMove));
+            ShowAndActiveButton(newButton, false, 0f);
+            _moveBtns.Add(newButton);
+        }
+    }
+
+    private void CreateEventBtns(List<PuzzlePlaceData.EventPlan> plans){
+        _eventBtns.Clear();
+        foreach(var plan in plans){
+
+            var newButton = Instantiate(_moveButtonPrefab, plan.btnTr);
+            newButton.transform.localPosition = Vector2.zero;
+            newButton.onClick.AddListener(() => SearchPoint(plan.eventID));
+            ShowAndActiveButton(newButton, false, 0f);
+            _eventBtns.Add(newButton);
+        }
+    }
+
+    private void FadeOutAndDestroyAllButtons(){
+     
+        foreach (var btn in _moveBtns)
+        {
+            Destroy(btn.gameObject);  // 이동 버튼 파괴
+        }
+        _moveBtns.Clear();  // 리스트 초기화
+
+        foreach (var btn in _eventBtns)
+        {
+            Destroy(btn.gameObject);  // 검색 버튼 파괴
+        }
+        _eventBtns.Clear();  // 리스트 초기화
+    }
+
+   private void ShowMoveBtns(bool b, float totalDuration)
     {
-        if (isVisible)
+        int count = _moveBtns.Count;
+        for (int i = 0; i < count; i++)
         {
-            _backButton.image.DOFade(1f, duration).OnComplete(() =>
-            {
-                SetBackButtonInteractable(true);
-            });
-        }
-        else
-        {
-            SetBackButtonInteractable(false);
-            _backButton.image.DOFade(0f, duration);
+            ShowAndActiveButton(_moveBtns[i], b, totalDuration);
         }
     }
 
-    // Back 버튼의 상호작용 설정
-    private void SetBackButtonInteractable(bool interactable)
+    private void ShowEventBtns(bool b, float totalDuration)
     {
-        _backButton.interactable = interactable;
+        int count = _eventBtns.Count;
+        for (int i = 0; i < count; i++)
+        {
+            ShowAndActiveButton(_eventBtns[i], b, totalDuration);
+        }
     }
 
-    // 부모 PuzzlePlace로 이동 (외부에서 직접 호출 가능)
-    private void MoveToPreviousPlace()
-    {
-        if (_currentPlace.ParentPlace != null)
-        {
-            MoveToPlace(_currentPlace.ParentPlace);  // 부모 장소로 이동
-        }
-        else
-        {
-            Debug.LogWarning("더 이상 상위 PuzzlePlace가 없습니다.");
-        }
-    }
+
 }

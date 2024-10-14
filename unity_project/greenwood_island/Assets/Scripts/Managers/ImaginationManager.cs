@@ -5,10 +5,11 @@ using DG.Tweening;
 public class ImaginationManager : SingletonManager<ImaginationManager>
 {
     private Image _currentImaginationImage;
+    private Image _previousImaginationImage;
     private Material _invertColorMaterial;
-    private Tween _fadeTween;
 
     public Image CurrentImaginationImage { get => _currentImaginationImage; }
+    public Image PreviousImaginationImage { get => _previousImaginationImage; }
 
     // 상상 이미지를 생성하는 메서드
     public Image CreateImagination(string imaginationID)
@@ -30,7 +31,8 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
         }
 
         // 스프라이트를 이용해 이미지 생성
-        _currentImaginationImage = ImageController.CreateImage(imaginationSprite, UIManager.SystemCanvas.ImaginationLayer.transform);
+        _previousImaginationImage = _currentImaginationImage;
+        _currentImaginationImage = ImageUtils.CreateImage(imaginationSprite, UIManager.SystemCanvas.ImaginationLayer.transform);
 
         return _currentImaginationImage;
     }
@@ -81,18 +83,6 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
                 _currentImaginationImage.material.SetFloat("_InvertEffect", 0); // 반전 효과 제거
                 _currentImaginationImage.material = null; // 머티리얼 비우기
             }
-        }
-    }
-
-
-
-    // 상상 이미지를 파괴하는 메서드
-    public void DestroyImagination(float duration, Ease easeType)
-    {
-        _fadeTween?.Kill();  // _fadeTween 취소
-        if (_currentImaginationImage != null)
-        {
-            _fadeTween = ImageController.DestroyImage(_currentImaginationImage, duration, easeType);
         }
     }
 }

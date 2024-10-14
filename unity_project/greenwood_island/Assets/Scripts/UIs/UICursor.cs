@@ -1,24 +1,51 @@
 using UnityEngine;
-using DG.Tweening;
 
 public class UICursor : MonoBehaviour
 {
-    [SerializeField] private RectTransform _parentObject; // 상위 부모 RectTransform
-    [SerializeField] private RectTransform _graphic; // 클릭 시 효과를 줄 그래픽
-    [SerializeField] private float _clickEffectDuration = 0.3f; // 클릭 시 발생할 도트윈 효과 지속 시간
-    [SerializeField] private Vector3 _clickEffectScale = new Vector3(1.2f, 1.2f, 1.2f); // 클릭 시 스케일
-
-    private void Update()
+    // 커서 모드를 정의하는 열거형
+    public enum CursorMode
     {
-        // 마우스 포인터 위치를 가져와 상위 부모의 위치를 바로 설정
-        Vector3 mousePosition = Input.mousePosition;
-        _parentObject.position = mousePosition; // 마우스 위치로 상위 부모의 위치를 이동
+        None,       // 커서 숨김
+        Normal,     // 일반 커서 모드
+        Magnifier   // 돋보기 커서 모드
     }
 
-    private void OnMouseDown()
+    [SerializeField] private Transform _normalCursor; // 일반 커서
+    [SerializeField] private Transform _magnifierCursor; // 돋보기 커서
+
+    private CursorMode _currentMode = CursorMode.None; // 현재 커서 모드
+
+    private void Start()
     {
-        // 클릭 시 그래픽에 도트윈 효과 적용
-        _graphic.DOKill(); // 기존 트윈 중지
-        _graphic.DOScale(_clickEffectScale, _clickEffectDuration).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+        SetCursorMode(CursorMode.Normal);
+    }
+
+    private void FixedUpdate()
+    {
+        // 마우스 포인터 위치를 가져와 상위 부모 위치 이동
+        Vector3 mousePosition = Input.mousePosition;
+        transform.position = mousePosition;
+
+        // 커서 모드에 따라 커서의 표시 상태를 업데이트
+        UpdateCursorVisibility();
+    }
+
+    /// <summary>
+    /// 커서 모드를 설정합니다.
+    /// </summary>
+    /// <param name="mode">설정할 커서 모드</param>
+    public void SetCursorMode(CursorMode mode)
+    {
+        _currentMode = mode; // 현재 모드 설정
+        UpdateCursorVisibility(); // 커서 상태 업데이트
+    }
+
+    /// <summary>
+    /// 현재 커서 모드에 따라 커서를 활성화 또는 비활성화합니다.
+    /// </summary>
+    private void UpdateCursorVisibility()
+    {
+        _normalCursor.gameObject.SetActive(_currentMode == CursorMode.Normal);
+        _magnifierCursor.gameObject.SetActive(_currentMode == CursorMode.Magnifier);
     }
 }

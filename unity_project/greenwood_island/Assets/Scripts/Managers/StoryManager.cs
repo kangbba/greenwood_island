@@ -22,7 +22,6 @@ public class StoryManager : SingletonManager<StoryManager>
     }   
 
 
-
     // 스토리를 실행하는 메서드 (elementIndex를 받아 스토리를 특정 인덱스에서 시작)
     public void PlayStory(Story storyInstance, int elementIndexToPlay)
     {

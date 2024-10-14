@@ -40,7 +40,7 @@ public class PlaceMove : Element
         Debug.Log($"PlaceMove :: 장소의 이미지를 이동 시도합니다.");
 
         // ImageController를 통해 이동 애니메이션 적용
-        ImageController.MoveImage(currentPlaceImage, _anchoredPos, _duration, _easeType);
+        currentPlaceImage.MoveImage(_anchoredPos, _duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

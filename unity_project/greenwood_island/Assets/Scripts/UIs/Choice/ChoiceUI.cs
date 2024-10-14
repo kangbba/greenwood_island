@@ -97,12 +97,14 @@ public class ChoiceUI : MonoBehaviour
         // 선택한 프리팹 외의 다른 선택지 제거
         foreach (ChoiceButton btn in _choiceBtns)
         {
+            btn.Button.interactable = false;
             if (btn != selectedChoiceBtn)
             {
                 btn.FadeOut(0.5f, 0f, () => Destroy(btn.gameObject));
             }
         }
 
+        selectedChoiceBtn.Button.interactable = false;
         // 선택한 프리팹은 1초 동안 유지 후 제거
         selectedChoiceBtn.FadeOut(0.5f, 1f, () => Destroy(selectedChoiceBtn.gameObject));
     }

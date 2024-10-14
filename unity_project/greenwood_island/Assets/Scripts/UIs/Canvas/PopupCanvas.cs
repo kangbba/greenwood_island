@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using System.Collections;
 
 public class PopupCanvas : MonoBehaviour
 {
@@ -21,14 +23,26 @@ public class PopupCanvas : MonoBehaviour
         itemInventory.Init(ItemManager.GetAllItems(), ItemInventoryWindow.InventoryMode.SubmitMode, (submittedItem) => CompareWithItemID(submittedItem, targetItemID));
     }
 
-    public void OpenInventoryViewMode()
+    public IEnumerator OpenInventoryViewModeCoroutine(Action onClose = null)
     {
-        // 인벤토리 창을 확인 모드(ViewMode)로 열기
+        // 인벤토리 창 생성 및 초기화
         ItemInventoryWindow itemInventory = Instantiate(_itemInventoryWindowPrefab, popupParent);
-
-        // 확인 모드에서는 콜백이 필요 없으므로 null 전달
         itemInventory.Init(ItemManager.GetAllItems(), ItemInventoryWindow.InventoryMode.ViewMode, null);
+
+        // 창이 닫힐 때까지 대기
+        yield return new WaitUntil(() => itemInventory == null);
+
+        Debug.Log("인벤토리 창이 닫혔습니다.");
+
+        // 창이 닫힌 후 추가 동작 실행 (콜백)
+        onClose?.Invoke();
     }
+    // 기존 OpenInventoryViewMode와의 호환성을 위한 메서드 (코루틴 호출)
+    public void OpenInventoryViewMode(Action onClose = null)
+    {
+        StartCoroutine(OpenInventoryViewModeCoroutine(onClose));
+    }
+
 
     // 제출된 아이템을 검증하는 콜백 함수
     void CompareWithItemID(ItemData submittedItem, string targetItemID)

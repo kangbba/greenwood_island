@@ -4,10 +4,11 @@ using DG.Tweening;
 
 public class PlaceManager : SingletonManager<PlaceManager>
 {
+    private Image _preivousPlaceImage;
     private Image _currentPlaceImage;
-    private Tween _fadeTween;
 
     public Image CurrentPlaceImage { get => _currentPlaceImage; }
+    public Image PreivousPlaceImage { get => _preivousPlaceImage; }
 
     // 장소 이미지를 생성하는 메서드
     public Image CreatePlace(string placeID)
@@ -28,18 +29,9 @@ public class PlaceManager : SingletonManager<PlaceManager>
         }
 
         // 스프라이트를 이용해 이미지 생성
-        _currentPlaceImage = ImageController.CreateImage(placeSprite, UIManager.SystemCanvas.PlaceLayer.transform);
+        _preivousPlaceImage = _currentPlaceImage;
+        _currentPlaceImage = ImageUtils.CreateImage(placeSprite, UIManager.SystemCanvas.PlaceLayer.transform);
 
         return _currentPlaceImage;
-    }
-
-    // 장소 이미지를 페이드 아웃 후 파괴하는 메서드
-    public void FadeOutAndDestroyPlace(float duration, Ease easeType)
-    {
-        _fadeTween?.Kill();  // _fadeTween 취소
-        if (_currentPlaceImage != null)
-        {
-            _fadeTween = ImageController.DestroyImage(_currentPlaceImage, duration, easeType);
-        }
     }
 }

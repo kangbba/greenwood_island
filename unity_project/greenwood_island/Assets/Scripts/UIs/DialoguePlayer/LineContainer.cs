@@ -179,7 +179,7 @@ public class LineContainer
         float timeToReveal = initialPadding / speed; // 텍스트가 완전히 드러나는 데 걸리는 총 시간
         float elapsedTime = 0f;
 
-        while (elapsedTime < timeToReveal && !_isCompleted)
+        while (elapsedTime < timeToReveal && !_isCompleted && rectMask != null)
         {
             elapsedTime += Time.deltaTime; // 시간 흐름에 영향을 받지 않는 DeltaTime 사용
             float progress = Mathf.Clamp01(elapsedTime / timeToReveal);
@@ -188,7 +188,9 @@ public class LineContainer
         }
 
         // 최종적으로 완전히 드러난 상태로 설정
-        rectMask.padding = new Vector4(0, 0, 0, 0);
+        if(rectMask != null){
+            rectMask.padding = new Vector4(0, 0, 0, 0);
+        }
     }
 
 }

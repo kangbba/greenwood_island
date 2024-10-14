@@ -72,7 +72,6 @@ public class Dialogue : Element
         {
             dialoguePlayer.ShowAlpha(true, .1f);
             dialoguePlayer.SetCharacterTextClor(characterStrColor, .1f);
-            dialoguePlayer.ClearDialogueText();
             yield return new WaitForSeconds(.1f);
             Line line = _lines[i];
             EmotionType emotionType = line.EmotionType;

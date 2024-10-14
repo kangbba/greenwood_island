@@ -40,7 +40,7 @@ public class ImaginationColor : Element
         Debug.Log($"ImaginationColor :: 상상의 이미지 색상을 변경 시도합니다.");
 
         // ImageController를 통해 색상 변경 애니메이션 적용
-        ImageController.FadeColor(currentImaginationImage, _targetColor, _duration, _easeType);
+        currentImaginationImage.FadeImage(_targetColor, _duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

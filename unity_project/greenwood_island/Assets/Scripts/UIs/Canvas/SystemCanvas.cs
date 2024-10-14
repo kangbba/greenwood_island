@@ -12,6 +12,7 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private Transform _imaginationLayer;
     [SerializeField] private TextMeshProUGUI _intertitleText;
     [SerializeField] private Transform _fxLayer;
+    [SerializeField] private Transform _puzzleUILayer;
     [SerializeField] private DialoguePlayer _dialoguePlayer;
     [SerializeField] private Transform _cutInLayer;
     [SerializeField] private Transform _userActionWindowLayer;
@@ -39,6 +40,7 @@ public class SystemCanvas : MonoBehaviour
     public Transform ImaginationLayer { get => _imaginationLayer; }
     public TextMeshProUGUI IntertitleText { get => _intertitleText; }
     public Transform FXLayer { get => _fxLayer;  }
+    public Transform PuzzleUILayer { get => _puzzleUILayer; }
     public DialoguePlayer DialoguePlayer { get => _dialoguePlayer; }
     public Transform CutInLayer { get => _cutInLayer; }
     public Transform UserActionWindowLayer { get => _userActionWindowLayer; }

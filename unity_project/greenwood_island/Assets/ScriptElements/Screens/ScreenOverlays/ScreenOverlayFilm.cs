@@ -30,6 +30,8 @@ public class ScreenOverlayFilm : Element
         // PlaceOverlayFilmLayer의 자식에서 이미지 찾기
         Image _overlayFilm = UIManager.SystemCanvas.ScreenOverlayFilm;
         // ImageController를 통해 오버레이 이미지의 색상 전환 애니메이션 적용
-        yield return ImageController.FadeColor(_overlayFilm, _overlayColor, _duration, _easeType).WaitForCompletion();
+
+        _overlayFilm.FadeImage(_overlayColor, _duration, _easeType);
+        yield return new WaitForSeconds(_duration);
     }
 }

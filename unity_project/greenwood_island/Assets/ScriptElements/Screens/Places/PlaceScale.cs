@@ -40,7 +40,7 @@ public class PlaceScale : Element
         Debug.Log($"PlaceScale :: 장소 이미지를 {_targetScale}로 크기 조정 시도합니다.");
 
         // ImageController를 통해 크기 조정 애니메이션 적용
-        ImageController.ScaleImage(currentPlaceImage, _targetScale, _duration, _easeType);
+        currentPlaceImage.ScaleImage(_targetScale, _duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

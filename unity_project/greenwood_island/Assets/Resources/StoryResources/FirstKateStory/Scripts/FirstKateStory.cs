@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static ImageUtils;
 
 public class FirstKateStory : Story
 {
@@ -184,8 +185,6 @@ public class FirstKateStory : Story
         new DialoguePanelClear(),
         // 선택지를 통해 라이언의 반응을 유도
         new ChoiceSet(
-            storySavedData : GameDataManager.CurrentStorySavedData,
-            choiceSetID : "KateSuggestGoToJoseph",
             question : "어떻게 한다 ...",
             choices : new List<ChoiceContent>
             {

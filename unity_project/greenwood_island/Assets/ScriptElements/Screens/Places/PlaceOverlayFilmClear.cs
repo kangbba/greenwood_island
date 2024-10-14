@@ -29,17 +29,11 @@ public class PlaceOverlayFilmClear : Element
         Image overlayFilm = UIManager.SystemCanvas.PlaceOverlayFilm;
 
 
-        if (overlayFilm != null)
+        if (overlayFilm == null)
         {
-            // 투명하게 페이드 아웃한 후 오버레이 필름 제거
-            yield return ImageController.FadeColor(overlayFilm, Color.clear, _duration, _easeType).WaitForCompletion();
-
-            // 애니메이션이 끝난 후 이미지 파괴
-            Object.Destroy(overlayFilm.gameObject);
+            yield break;
         }
-        else
-        {
-            Debug.LogWarning("No overlay film image found in PlaceOverlayFilmLayer.");
-        }
+        overlayFilm.FadeOutAndDestroyImage(_duration, _easeType);
+        yield return new WaitForSeconds(_duration);
     }
 }

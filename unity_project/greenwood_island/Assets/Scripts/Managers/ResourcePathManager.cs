@@ -10,6 +10,7 @@ public enum ResourceType
     Character,
     Imagination,
     StoryData,
+    Puzzle,
 }
 
 public static class ResourcePathManager
@@ -97,6 +98,11 @@ public static class ResourcePathManager
             case ResourceType.StoryData:
                 resourcePath = $"{basicFolderPath}/StoryData/{resourceID}";
                 break;
+
+            case ResourceType.Puzzle:
+                resourcePath = $"{basicFolderPath}/Puzzles/{resourceID}";
+                break;
+                
                 
             default:
                 Debug.LogWarning($"Unknown resource type: {resourceType}");

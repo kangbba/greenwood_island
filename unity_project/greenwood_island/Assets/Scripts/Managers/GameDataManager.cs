@@ -141,26 +141,42 @@ public static class GameDataManager
         return File.Exists(GetSaveFilePath(slotNumber));
     }
 
-    public static void LoadGameDataThenPlay(int slotIndex)
+    // 새로 시작하기 기능: 새로운 StorySavedData 생성
+    public static void StartNewGame(string storyID)
     {
-        StorySavedData storySavedDataInSlot = GetStorySavedData(slotIndex);
-        
-        if(storySavedDataInSlot != null){
-            _currentStorySavedData = storySavedDataInSlot;
-            _currentSlotIndex = slotIndex;
-            Debug.Log($"{_currentStorySavedData.StoryID} 스토리가 로드됩니다");
-        }
-        else{
-            _currentStorySavedData = null;
-            _currentSlotIndex = 0;
-            Debug.Log("새로 시작하기 입니다");
-        }
+        _currentStorySavedData = new StorySavedData(
+            storyID: storyID,
+            saveMemo: "새로 시작",
+            recentPlayedElementIndex: 0,
+            elementTotalCount: 0
+        );
 
-        // // 씬 로드 완료 시 실행할 이벤트 등록LoadGameData
-        // SceneManager.sceneLoaded += OnSceneLoaded;
+        _currentSlotIndex = -1;  // 새로 시작은 슬롯이 없으므로 -1로 설정
+        Debug.Log($"새로운 게임 시작 - StoryID: {storyID}");
+
         // 게임 플레이 씬으로 전환
         SceneManager.LoadScene("InGame");
     }
+    
+    // 특정 슬롯의 데이터를 로드하고 게임 시작
+    public static void LoadGameDataThenPlay(int slotIndex)
+    {
+        StorySavedData storySavedDataInSlot = GetStorySavedData(slotIndex);
 
+        if (storySavedDataInSlot != null)
+        {
+            _currentStorySavedData = storySavedDataInSlot;
+            _currentSlotIndex = slotIndex;
+            Debug.Log($"{_currentStorySavedData.StoryID} 스토리가 로드됩니다.");
+        }
+        else
+        {
+            _currentStorySavedData = null;
+            _currentSlotIndex = 0;
+            Debug.Log("새로 시작하기입니다.");
+        }
+
+        SceneManager.LoadScene("InGame");
+    }
 
 }

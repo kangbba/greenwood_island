@@ -39,7 +39,7 @@ public class ImaginationClear : Element
         Debug.Log($"ImaginationClear :: 상상의 장면을 제거합니다.");
 
         // ImageController를 통해 상상 이미지 제거
-        ImageController.DestroyImage(currentImaginationImage, _duration, _easeType);
+        currentImaginationImage.FadeOutAndDestroyImage(_duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

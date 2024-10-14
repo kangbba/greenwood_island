@@ -224,7 +224,7 @@ public class WeirdCloud : Story
         new PlaceTransitionWithSwipe(
             "CafeSeabreezeFront",
             1f,
-            SwipeMode.SwipeLeft
+            ImageUtils.SwipeMode.SwipeLeft
         ),
         new Dialogue(
             "Mono",

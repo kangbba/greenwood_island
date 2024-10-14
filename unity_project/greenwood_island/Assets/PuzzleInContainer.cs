@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
-public class PuzzleContainer : Puzzle
+public class PuzzleInContainer : Puzzle
 {
     // 버튼 이벤트 사전 (버튼 **ID**로 SequentialElement 참조)
-    public override Dictionary<string, SequentialElement> BtnEvents { get; } = new()
+    public override Dictionary<string, SequentialElement> SearchEvents { get; } = new()
     {
         { "1", 
             new SequentialElement(
@@ -27,6 +27,29 @@ public class PuzzleContainer : Puzzle
                         new Line("긴 막대 같은 것이 필요해 보인다.")
                     },
                     down: true
+                )
+            )
+        },
+        { "3", 
+            new SequentialElement(
+                new ChoiceSet(
+                    "우거진 수풀 사이에서 낡은 나무 상자를 발견했습니다.",
+                    new List<ChoiceContent>(){
+                        new ChoiceContent("줍는다.", new SequentialElement(
+                            new ItemGain(
+                                "OldWoodBox"
+                            ),
+                            new Dialogue(
+                                "Mono",
+                                new List<Line>
+                                {
+                                    new Line("뭔가 수상해보여. 어떻게 열 수 있지 않을까?")
+                                },
+                                down: true
+                            )
+                        )),
+                        new ChoiceContent("그대로 둔다.", new SequentialElement()),
+                    }
                 )
             )
         }

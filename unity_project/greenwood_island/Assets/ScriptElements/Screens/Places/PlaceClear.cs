@@ -39,7 +39,7 @@ public class PlaceClear : Element
         Debug.Log($"PlaceClear :: 장소의 장면을 제거합니다.");
 
         // ImageController를 통해 장소 이미지 제거
-        ImageController.DestroyImage(currentPlaceImage, _duration, _easeType);
+        currentPlaceImage.FadeOutAndDestroyImage(_duration, _easeType);
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);

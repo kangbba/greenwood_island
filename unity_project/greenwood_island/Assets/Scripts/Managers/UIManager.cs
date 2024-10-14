@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public static class UIManager
@@ -8,8 +9,7 @@ public static class UIManager
     private static WorldCanvas _worldCanvas;
     private static SystemCanvas _systemCanvas;
     private static PopupCanvas _popupCanvas;
-    private static GameObject _cursorCanvas;
-
+    private static CursorCanvas _cursorCanvas;
 
 
     static UIManager()
@@ -30,7 +30,7 @@ public static class UIManager
         {
             GameObject.Destroy(_cursorCanvas);
         }
-        _cursorCanvas = InstantiateCanvas<GameObject>("Canvas/CursorCanvas");
+        _cursorCanvas = InstantiateCanvas<CursorCanvas>("Canvas/CursorCanvas");
         GameObject.DontDestroyOnLoad(_cursorCanvas.gameObject);
     }
 
@@ -80,4 +80,5 @@ public static class UIManager
     public static SystemCanvas SystemCanvas => _systemCanvas;
     public static PopupCanvas PopupCanvas => _popupCanvas;
 
+    public static CursorCanvas CursorCanvas { get => _cursorCanvas; }
 }

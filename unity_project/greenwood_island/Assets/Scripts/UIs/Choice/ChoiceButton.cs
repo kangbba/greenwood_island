@@ -9,7 +9,6 @@ public class ChoiceButton : DesignedIconButton
     [SerializeField] private CanvasGroup _canvasGroup;
 
     public TextMeshProUGUI ChoiceText => _choiceText;
-    public Button Button => _button;
     public CanvasGroup CanvasGroup => _canvasGroup;
 
 

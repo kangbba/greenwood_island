@@ -88,8 +88,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29bfc163cdb4496c871c3b14198c62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePlans: []
-  _eventPlans: []
+  _eventTriggerZones: []
+  _enterEventID: 
+  _unlockConditions: []
+  _successEventID: 
+  _failureEventID: 
 --- !u!1 &838418464533412587
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,8 +102,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6158215523491426813}
+  - component: {fileID: 8746858676021203240}
   m_Layer: 5
-  m_Name: ->Mountain3
+  m_Name: (->) Mountain3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,6 +129,23 @@ RectTransform:
   m_AnchoredPosition: {x: 770, y: -94}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8746858676021203240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838418464533412587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a57928bb1e6405faed52eff652caba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions: []
+  _failureEventID: 
+  _reward:
+    Type: 1
+    Parameter: Mountain3
 --- !u!1 &1598919665385981930
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,7 +177,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3885338598962804825}
   - {fileID: 6042834700244853121}
   - {fileID: 5170539205791436189}
   - {fileID: 6069384764513409216}
@@ -218,16 +238,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29bfc163cdb4496c871c3b14198c62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePlans:
-  - _isLocked: 1
-    _knobTr: {fileID: 6042834700244853121}
-    _placeDataToMove: {fileID: 7912474928360187029}
-  - _isLocked: 0
-    _knobTr: {fileID: 5170539205791436189}
-    _placeDataToMove: {fileID: 2848436411393818329}
-  _eventPlans:
-  - _knobTr: {fileID: 3885338598962804825}
-    _eventID: SearchEvent_ContainerFront_UseKey
+  _eventTriggerZones:
+  - {fileID: 1629232071850249263}
+  - {fileID: 6715495222274903785}
+  _enterEventID: 
+  _unlockConditions:
+  - Type: 0
+    Parameter: 
+  _successEventID: 
+  _failureEventID: 
 --- !u!1 &1852138938797171828
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,11 +337,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29bfc163cdb4496c871c3b14198c62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePlans:
-  - _isLocked: 0
-    _knobTr: {fileID: 6158215523491426813}
-    _placeDataToMove: {fileID: 8702342662006310160}
-  _eventPlans: []
+  _eventTriggerZones:
+  - {fileID: 8746858676021203240}
+  _enterEventID: 
+  _unlockConditions: []
+  _successEventID: 
+  _failureEventID: 
 --- !u!1 &2788753997770786011
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,8 +352,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6042834700244853121}
+  - component: {fileID: 1629232071850249263}
   m_Layer: 5
-  m_Name: ->ContainerInside
+  m_Name: (->) ContainerInside
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -358,41 +379,25 @@ RectTransform:
   m_AnchoredPosition: {x: 279, y: 131}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &3395730962953998080
-GameObject:
+--- !u!114 &1629232071850249263
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3885338598962804825}
-  m_Layer: 5
-  m_Name: -()ContainerInside
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &3885338598962804825
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3395730962953998080}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1391897054245762583}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 279, y: 131}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_GameObject: {fileID: 2788753997770786011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a57928bb1e6405faed52eff652caba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions:
+  - Type: 0
+    Parameter: ContainerKey
+  _failureEventID: 
+  _reward:
+    Type: 1
+    Parameter: ContainerInside
 --- !u!1 &3792291615876737661
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,11 +488,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29bfc163cdb4496c871c3b14198c62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePlans:
-  - _isLocked: 0
-    _knobTr: {fileID: 6480200373133788114}
-    _placeDataToMove: {fileID: 5922191211832749334}
-  _eventPlans: []
+  _eventTriggerZones:
+  - {fileID: 4805311763500080717}
+  _enterEventID: Enter_Mountain1
+  _unlockConditions: []
+  _successEventID: 
+  _failureEventID: 
 --- !u!1 &4426042309251250126
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,8 +503,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6480200373133788114}
+  - component: {fileID: 4805311763500080717}
   m_Layer: 5
-  m_Name: ->Mountain2
+  m_Name: (->) Mountain2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -523,6 +530,23 @@ RectTransform:
   m_AnchoredPosition: {x: 404, y: 77}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4805311763500080717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4426042309251250126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a57928bb1e6405faed52eff652caba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions: []
+  _failureEventID: 
+  _reward:
+    Type: 1
+    Parameter: Mountain2
 --- !u!1 &5052236394957418363
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,8 +631,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7703202565455648316}
+  - component: {fileID: 6500189531230245083}
   m_Layer: 5
-  m_Name: ->ContainerFront
+  m_Name: (->) ContainerFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -633,6 +658,23 @@ RectTransform:
   m_AnchoredPosition: {x: 208, y: 57}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6500189531230245083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5196524973210488664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a57928bb1e6405faed52eff652caba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions: []
+  _failureEventID: 
+  _reward:
+    Type: 1
+    Parameter: ContainerFront
 --- !u!1 &6285414638713328202
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,11 +765,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29bfc163cdb4496c871c3b14198c62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePlans:
-  - _isLocked: 0
-    _knobTr: {fileID: 7703202565455648316}
-    _placeDataToMove: {fileID: 5767170718053266739}
-  _eventPlans: []
+  _eventTriggerZones:
+  - {fileID: 6500189531230245083}
+  _enterEventID: 
+  _unlockConditions: []
+  _successEventID: 
+  _failureEventID: 
 --- !u!1 &6539778379852188410
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,8 +780,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5170539205791436189}
+  - component: {fileID: 6715495222274903785}
   m_Layer: 5
-  m_Name: ->ContainerBehind
+  m_Name: (->) ContainerBehind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -763,6 +807,23 @@ RectTransform:
   m_AnchoredPosition: {x: 802, y: -126}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6715495222274903785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6539778379852188410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a57928bb1e6405faed52eff652caba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions: []
+  _failureEventID: 
+  _reward:
+    Type: 1
+    Parameter: ContainerBehind
 --- !u!1 &6926731262042277759
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,8 +990,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29bfc163cdb4496c871c3b14198c62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePlans: []
-  _eventPlans: []
+  _eventTriggerZones: []
+  _enterEventID: 
+  _unlockConditions: []
+  _successEventID: 
+  _failureEventID: 
 --- !u!1 &8566262255224367899
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,7 +1006,7 @@ GameObject:
   - component: {fileID: 8618455909160958512}
   - component: {fileID: 6677417973293529145}
   - component: {fileID: 755918217323975384}
-  - component: {fileID: 2113398319220168433}
+  - component: {fileID: 8705179775658866570}
   m_Layer: 5
   m_Name: PuzzleInContainer
   m_TagString: Untagged
@@ -1010,7 +1074,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2113398319220168433
+--- !u!114 &8705179775658866570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1022,14 +1086,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be24433e3c26744d68f6c138896fb4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialPlaceData: {fileID: 6913285879284375385}
+  _initialPlace: {fileID: 6913285879284375385}
   _enterSearchModeBtn: {fileID: 2800663256429282353}
   _exitSearchModeBtn: {fileID: 7044335790142859888}
-  _movePreviousPlaceBtn: {fileID: 5986211055970702657}
-  _clearMarkPrefab: {fileID: 1651467251426347508, guid: a5706567d50b544e8a83bfd4d0cbc9c4, type: 3}
+  _moveParentPlaceBtn: {fileID: 5986211055970702657}
   _btnParent: {fileID: 4289628620311871497}
-  _moveButtonPrefab: {fileID: 7730237129727517955, guid: 08074da86094a4218838563ad37c2a82, type: 3}
-  _eventButtonPrefab: {fileID: 7730237129727517955, guid: f4a9107bbbc1144e7a54eead15e2c92b, type: 3}
+  moveIcon: {fileID: 21300000, guid: 2750da8e4b41f294090c5d2a83c0992f, type: 3}
+  transparentIcon: {fileID: 0}
+  discoveredIcon: {fileID: -1544809838, guid: 132358e9bf26b60458b731bf001e31db, type: 3}
+  checkedIcon: {fileID: 21300000, guid: eec1e2ce573a2614cbf0ced6d609e47b, type: 3}
+  moveLockedIcon: {fileID: 1822879496, guid: 132358e9bf26b60458b731bf001e31db, type: 3}
+  _designedBtnPrefab: {fileID: 8969877322054019005, guid: 08074da86094a4218838563ad37c2a82, type: 3}
 --- !u!1001 &758244807720603507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1253,7 +1320,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 663a79f194b91454aa36d58ffb23feb0, type: 3}
     - target: {fileID: 7500540755477394503, guid: f97c2f32773e44caeb882b57f4203dc1, type: 3}
       propertyPath: m_Name
-      value: EnterModeButton_PreviousPlace
+      value: EnterModeButton_ParentPlace
       objectReference: {fileID: 0}
     - target: {fileID: 7500540755477394503, guid: f97c2f32773e44caeb882b57f4203dc1, type: 3}
       propertyPath: m_IsActive

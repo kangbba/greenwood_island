@@ -5,19 +5,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public enum PuzzleMode
-{
-    Waiting = 0,  // 대기 중
-    Move = 1,     // 이동 모드
-    Search = 2    // 검색 모드
-}
 
 public class PuzzleManager : SingletonManager<PuzzleManager>
 {
     private Puzzle _puzzlePrefabToSpawnTest;  // 생성할 Puzzle 프리팹
     private Puzzle _currentPuzzle;  // 현재 활성화된 Puzzle 인스턴스
-
     public Puzzle CurrentPuzzle { get => _currentPuzzle; }
+
+    // DesignedIconBtn 타입의 버튼 프리팹
+    private DesignedIconButton _moveBtn;
+    private DesignedIconButton _transparentBtn;
+    private DesignedIconButton _discoveredBtn;
+    private DesignedIconButton _checkedBtn;
+    private DesignedIconButton _moveLockedBtn;
+    public DesignedIconButton MoveBtn { get => _moveBtn; }
+    public DesignedIconButton TransparentBtn { get => _transparentBtn; }
+    public DesignedIconButton DiscoveredBtn { get => _discoveredBtn; }
+    public DesignedIconButton CheckedBtn { get => _checkedBtn; }
+    public DesignedIconButton MoveLockedBtn { get => _moveLockedBtn; }
+
+    private const string ResourcesFolderPath = "PuzzleManager"; // Resources 폴더 경로
 
     public void Init(string puzzleID)
     {
@@ -37,15 +44,38 @@ public class PuzzleManager : SingletonManager<PuzzleManager>
         _currentPuzzle.transform.localScale = Vector3.one;
         _currentPuzzle.Init();
 
+        LoadButtonPrefabs();  // 버튼 프리팹 로드
         Debug.Log("Puzzle 프리팹이 인스턴스화되었습니다.");
+    }   
+    // ResourcePathManager를 이용해 버튼 프리팹을 로드하는 메서드
+    private void LoadButtonPrefabs()
+    {
+        _moveBtn = LoadButtonPrefab("EventZoneBtnPrefab_Move");
+        _transparentBtn = LoadButtonPrefab("EventZoneBtnPrefab_Transparent");
+        _discoveredBtn = LoadButtonPrefab("EventZoneBtnPrefab_Discovered");
+        _checkedBtn = LoadButtonPrefab("EventZoneBtnPrefab_Checked");
+        _moveLockedBtn = LoadButtonPrefab("EventZoneBtnPrefab_MoveLocked");
+
+        Debug.Log("모든 버튼 프리팹이 로드되었습니다.");
     }
+    // 버튼 프리팹을 리소스에서 로드하는 헬퍼 메서드
+    private DesignedIconButton LoadButtonPrefab(string prefabName)
+    {
+        var buttonPrefab = Resources.Load<DesignedIconButton>($"{ResourcesFolderPath}/{prefabName}");
+        if (buttonPrefab == null)
+        {
+            Debug.LogError($"{prefabName} 프리팹을 찾을 수 없습니다!");
+        }
+        return buttonPrefab;
+    }
+
     // 퍼즐이 완료될 때까지 대기하는 코루틴
     public IEnumerator WaitUntilPuzzleCleared()
     {
         // PlaceManager.Instance.CurrentPuzzle.IsCleared가 true가 될 때까지 대기
-        while (!_currentPuzzle.IsCleared)
-        {
-            yield return null;  // 한 프레임 대기 후 다시 검사
+        while(!_currentPuzzle.IsCleared){
+            yield return null;
         }
+        Destroy(_currentPuzzle.gameObject);
     }
 }

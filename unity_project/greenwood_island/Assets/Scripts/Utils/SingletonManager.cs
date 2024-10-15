@@ -5,7 +5,6 @@ public class SingletonManager<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Instance { get; private set; }
 
-    // 초기화 메서드
     public static void Initialize()
     {
         if (Instance == null)

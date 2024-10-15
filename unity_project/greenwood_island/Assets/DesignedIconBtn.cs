@@ -15,6 +15,7 @@ public class DesignedIconButton : DesignedBtn
     [SerializeField] private float pressedScale = 0.95f; // 눌렀을 때 스케일
     [SerializeField] private float animationDuration = 0.1f; // 애니메이션 지속 시간
 
+
     private bool _isOn = true;  // 버튼 상태 (켜짐/꺼짐)
     private bool _isAnimating = false;  // 애니메이션 중복 방지 플래그
 
@@ -22,6 +23,14 @@ public class DesignedIconButton : DesignedBtn
     {
         base.Awake();  // 부모 클래스의 Awake 호출
         ResetGraphicParent();  // 초기 상태로 설정
+    }
+    // 아이콘 이미지 설정 메서드
+    public void SetIconSprite(Sprite newIcon)
+    {
+        if (_iconImg != null)
+        {
+            _iconImg.sprite = newIcon;
+        }
     }
 
     // 마우스가 버튼 위에 올라갈 때 실행

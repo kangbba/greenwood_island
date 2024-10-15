@@ -14,6 +14,12 @@ public class DesignedBtn : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     protected Button _button;
 
+    public Button Button { get => _button; }
+
+    public void SetActiveWithScale(bool active, float duration){
+        _button.SetActiveWithScale(active, duration);
+    }
+
     protected virtual void Awake()
     {
         _button = GetComponent<Button>();

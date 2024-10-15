@@ -26,6 +26,6 @@ public class PuzzlePlaceTransition : Element
         }
 
         Debug.Log($"PuzzlePlaceTransition 실행: {_targetPlaceID}로 이동합니다.");
-        yield return puzzle.MovePlaceAndRefreshUIRoutine(_targetPlaceID);  // Puzzle의 코루틴 호출
+        yield return puzzle.MovePuzzlePlaceRoutine(_targetPlaceID);  // Puzzle의 코루틴 호출
     }
 }

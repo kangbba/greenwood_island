@@ -67,7 +67,6 @@ public class SystemCanvas : MonoBehaviour
         _inventoryBtn.onClick.AddListener(() =>
         {
             // 인벤토리 버튼을 눌렀을 때 동작 추가 (여기에 인벤토리 관련 로직을 넣을 수 있음)
-            UIManager.PopupCanvas.OpenInventorySubmitMode("OldMap");
         });
     }
 

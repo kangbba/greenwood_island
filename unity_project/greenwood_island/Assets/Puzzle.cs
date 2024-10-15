@@ -1,10 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using System;
 
 public abstract class Puzzle : MonoBehaviour
 {
@@ -12,25 +12,23 @@ public abstract class Puzzle : MonoBehaviour
     private List<PuzzlePlaceData> _allPlaceDatas;
 
     private PuzzlePlaceData _currentPlaceData;
-
     private bool _isCleared;
 
-    [SerializeField] private Button _enterSearchModeBtn; // 검색 모드로 전환하는 버튼
-    [SerializeField] private Button _exitSearchModeBtn;  // 이동 모드로 전환하는 버튼
-    // [SerializeField] private Button _enterWaitingModeBtn;  // 대기 모드로 전환하는 버튼
-    [SerializeField] private Button _movePreviousPlaceBtn;  // 대기 모드로 전환하는 버튼
+    [SerializeField] private Button _enterSearchModeBtn;
+    [SerializeField] private Button _exitSearchModeBtn;
+    [SerializeField] private Button _movePreviousPlaceBtn;
     [SerializeField] private Image _clearMarkPrefab;
     [SerializeField] private Transform _btnParent;
 
-    //
-    [SerializeField] private Button _moveButtonPrefab;  // 동적 버튼 생성에 사용할 프리팹
-    [SerializeField] private Button _eventButtonPrefab;  // 동적 버튼 생성에 사용할 프리팹
+    [SerializeField] private Button _moveButtonPrefab;
+    [SerializeField] private Button _eventButtonPrefab;
 
-    private List<Button> _moveBtns = new List<Button>();  // 현재 활성화된 이동 버튼들
-    private List<Button> _eventBtns = new List<Button>();  // 현재 활성화된 검색 버튼들
+    private List<Button> _moveBtns = new List<Button>();
+    private List<Button> _eventBtns = new List<Button>();
 
-    public bool IsCleared { get => _isCleared; }
-    private bool _isMoving = false;  // 중복 실행 방지 플래그
+    public bool IsCleared => _isCleared;
+    private bool _isMoving = false;
+
     private HashSet<string> _clearedSearchEventIDs = new HashSet<string>();
     private HashSet<string> _clearedEnterEventPlaceIDs = new HashSet<string>();
 
@@ -39,24 +37,21 @@ public abstract class Puzzle : MonoBehaviour
     public abstract Dictionary<string, SequentialElement> SearchEvents { get; }
     public abstract Dictionary<string, Func<bool>> SearchEventClearConditions { get; }
 
-
-
     private void Awake()
     {
         _allPlaceDatas = GetComponentsInChildren<PuzzlePlaceData>().ToList();
-        _exitSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Move, 0f)); 
-        _enterSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Search, 0f)); 
-       // _enterWaitingModeBtn.onClick.AddListener(() => SetMode(PuzzleMode.Waiting));  
-        _movePreviousPlaceBtn.onClick.AddListener(() => MovePreviousPlace()); 
-
-    
+        _exitSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Move, 0f));
+        _enterSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Search, 0f));
+        _movePreviousPlaceBtn.onClick.AddListener(MovePreviousPlace);
     }
-    public void Init(){
 
-        MovePlaceAndRefreshUI(_initialPlaceData);
+    public void Init()
+    {
+        MovePlaceAndRefreshUI(_initialPlaceData.PlaceID);
         _clearedSearchEventIDs.Clear();
         _clearedEnterEventPlaceIDs.Clear();
     }
+
     public void SetModeUI(PuzzleMode puzzleMode, float duration)
     {
         switch (puzzleMode)
@@ -70,12 +65,13 @@ public abstract class Puzzle : MonoBehaviour
                 ShowMoveBtns(false, duration);
                 ShowEventBtns(false, duration);
                 break;
+
             case PuzzleMode.Move:
                 Debug.Log("이동 모드입니다.");
                 UIManager.CursorCanvas.UiCursor.SetCursorMode(UICursor.CursorMode.Normal);
                 ShowAndActiveButton(_exitSearchModeBtn, false, duration);
                 ShowAndActiveButton(_enterSearchModeBtn, true, duration);
-                ShowAndActiveButton(_movePreviousPlaceBtn, _currentPlaceData.ParentPlaceData != null, duration);
+                ShowAndActiveButton(_movePreviousPlaceBtn, _currentPlaceData?.ParentPlaceData != null, duration);
                 ShowMoveBtns(true, duration);
                 ShowEventBtns(false, duration);
                 break;
@@ -95,133 +91,106 @@ public abstract class Puzzle : MonoBehaviour
                 break;
         }
     }
-    public void MovePlaceAndRefreshUI(PuzzlePlaceData placeData)
+
+    public void MovePlaceAndRefreshUI(string placeID)
     {
-        if (_isMoving) return;  // 이미 실행 중이면 무시
-        StartCoroutine(MovePlaceAndRefreshUIRoutine(placeData));  // 코루틴 실행
+        StartCoroutine(MovePlaceAndRefreshUIRoutine(placeID));
     }
-    private void MovePreviousPlace(){
-        if(_currentPlaceData.ParentPlaceData == null){
+
+    private void MovePreviousPlace()
+    {
+        if (_currentPlaceData?.ParentPlaceData == null)
+        {
             Debug.LogWarning("ParentPlaceData is null");
             return;
         }
-        MovePlaceAndRefreshUI(_currentPlaceData.ParentPlaceData);
+        MovePlaceAndRefreshUI(_currentPlaceData.ParentPlaceData.PlaceID);
     }
-
-    // 코루틴 함수: 대기 시간 포함
-    private IEnumerator MovePlaceAndRefreshUIRoutine(PuzzlePlaceData placeData)
+    //이동 핵심 루틴
+    public IEnumerator MovePlaceAndRefreshUIRoutine(string placeID)
     {
-        if (placeData == null)
-        {
-            Debug.LogError("MovePlaceAndRefreshUIRoutine: placeData is null");
+
+        if (_isMoving){
+            Debug.LogWarning("이미 이동중에 호출되었습니다.");
             yield break;
         }
+        var placeData = GetPlaceData(placeID);
+        if (placeData == null)
+        {
+            Debug.LogError($"PlaceData not found for placeID: {placeID}");
+            yield break;
+        }
+        Debug.Log($"Moving to place: {placeID}");
 
-        Debug.Log($"Moving to place: {placeData.PlaceID}");
-
-        _isMoving = true;  // 실행 중 설정
+        _isMoving = true;
         _currentPlaceData = placeData;
 
-        // 버튼 제거 및 장소 전환 애니메이션 시작
-        Debug.Log("Starting fade-out animation and removing buttons.");
         FadeOutAndDestroyAllButtons();
-        new PlaceTransitionWithSwipe(placeData.PlaceID, 1f, ImageUtils.SwipeMode.OnlyFade).Execute();
+        new PlaceTransitionWithSwipe(placeID, 1f, ImageUtils.SwipeMode.OnlyFade).Execute();
         yield return new WaitForSeconds(1f);
 
-        // 진입 이벤트 처리
-        string placeID = placeData.PlaceID;
-        if (EnterEvents.TryGetValue(placeID, out var enterEvent))
+        if (EnterEvents.TryGetValue(placeID, out var enterEvent) &&
+            !_clearedEnterEventPlaceIDs.Contains(placeID))
         {
-            if (!_clearedEnterEventPlaceIDs.Contains(placeID))
-            {
-                Debug.Log($"Executing EnterEvent for place: {placeID}");
-                _clearedEnterEventPlaceIDs.Add(placeID);
-                SetModeUI(PuzzleMode.Waiting, 0f);
-
-                // Enter 이벤트 코루틴 실행
-                yield return StartCoroutine(enterEvent.ExecuteRoutine());
-            }
-            else
-            {
-                Debug.Log($"EnterEvent for place {placeID} already cleared. Skipping.");
-            }
-        }
-        else
-        {
-            Debug.Log($"No EnterEvent found for place: {placeID}");
+            _clearedEnterEventPlaceIDs.Add(placeID);
+            SetModeUI(PuzzleMode.Waiting, 0f);
+            yield return StartCoroutine(enterEvent.ExecuteRoutine());
         }
 
-        // 새 장소에 맞는 버튼 생성
-        Debug.Log($"Creating buttons for new place: {placeID}");
         CreateMoveBtns(placeData.MovePlans);
         CreateEventBtns(placeData.EventPlans);
-
-        // UI 모드 갱신
         SetModeUI(PuzzleMode.Move, 0f);
-        Debug.Log("UI updated to Move mode.");
-
-        _isMoving = false;  // 이동 완료
-        Debug.Log($"Finished moving to place: {placeID}. Movement unlocked.");
+        _isMoving = false;
     }
 
-
-    public void RecreateAllBtns(PuzzlePlaceData puzzlePlaceData){
-
-        FadeOutAndDestroyAllButtons();  // 버튼 제거 시작
-        CreateMoveBtns(puzzlePlaceData.MovePlans);
-        CreateEventBtns(puzzlePlaceData.EventPlans);
+    public PuzzlePlaceData GetPlaceData(string placeID)
+    {
+        return _allPlaceDatas.FirstOrDefault(data => data.PlaceID == placeID);
     }
-    
 
     private void SearchPoint(string eventID)
     {
-        if (_clearedSearchEventIDs.Contains(eventID))
-        {
-            Debug.Log($"퀘스트 {eventID}는 이미 완료되었습니다.");
-            return; // 이미 완료된 경우 실행하지 않음
-        }
-
+        if (_clearedSearchEventIDs.Contains(eventID)) return;
         StartCoroutine(SearchPointRoutine(eventID));
     }
 
-
-    private IEnumerator SearchPointRoutine(string eventID){
-
+    private IEnumerator SearchPointRoutine(string eventID)
+    {
         SetModeUI(PuzzleMode.Waiting, 0f);
         yield return StartCoroutine(SearchEvents[eventID].ExecuteRoutine());
-        // 퀘스트 완료로 상태 업데이트
+
         if (SearchEventClearConditions[eventID]())
         {
             _clearedSearchEventIDs.Add(eventID);
         }
+
         RecreateAllBtns(_currentPlaceData);
         SetModeUI(PuzzleMode.Move, 0f);
     }
 
-    private void ShowAndActiveButton(Button button, bool b, float duration) // 딜레이 옵션 추가
+    public void RecreateAllBtns(PuzzlePlaceData puzzlePlaceData)
     {
-        button.interactable = false;  // 버튼 초기 상태를 비활성화
-
-        if (b)
-        {
-            button.image.ScaleImage(Vector2.one, duration, Ease.OutQuad)  // 딜레이 후 애니메이션 시작
-                .OnComplete(() => { button.interactable = true; });  // 완료 후 버튼 활성화
-        }
-        else
-        {
-            button.image.ScaleImage(Vector2.zero, duration, Ease.OutQuad)  // 딜레이 후 애니메이션 시작
-                .OnComplete(() => { });  // 완료 후 추가 작업 없음
-        }
+        FadeOutAndDestroyAllButtons();
+        CreateMoveBtns(puzzlePlaceData.MovePlans);
+        CreateEventBtns(puzzlePlaceData.EventPlans);
     }
 
-    private void CreateMoveBtns(List<PuzzlePlaceData.MovePlan> plans){
-        _moveBtns.Clear();
-        foreach(var plan in plans){
+    private void ShowAndActiveButton(Button button, bool active, float duration)
+    {
+        button.interactable = false;
+        button.image.ScaleImage(active ? Vector2.one : Vector2.zero, duration, Ease.OutQuad)
+            .OnComplete(() => button.interactable = active);
+    }
 
+    private void CreateMoveBtns(List<PuzzlePlaceData.MovePlan> plans)
+    {
+        _moveBtns.Clear();
+        foreach (var plan in plans)
+        {
             var newButton = Instantiate(_moveButtonPrefab, _btnParent);
             newButton.transform.localPosition = plan.KnobTr.localPosition;
-            newButton.onClick.AddListener(() => MovePlaceAndRefreshUI(plan.PlaceDataToMove));
-            ShowAndActiveButton(newButton, false, 0f);
+            newButton.onClick.AddListener(() => MovePlaceAndRefreshUI(plan.PlaceDataToMove.PlaceID));
+            ShowAndActiveButton(newButton, true, 0f);
             _moveBtns.Add(newButton);
         }
     }
@@ -248,30 +217,26 @@ public abstract class Puzzle : MonoBehaviour
         }
     }
 
-    private void FadeOutAndDestroyAllButtons(){
-     
+    private void FadeOutAndDestroyAllButtons()
+    {
         _btnParent.DestroyAllChildren();
-        _moveBtns.Clear();  // 리스트 초기화
-        _eventBtns.Clear();  // 리스트 초기화
+        _moveBtns.Clear();
+        _eventBtns.Clear();
     }
 
-   private void ShowMoveBtns(bool b, float totalDuration)
+    private void ShowMoveBtns(bool active, float duration)
     {
-        int count = _moveBtns.Count;
-        for (int i = 0; i < count; i++)
+        foreach (var button in _moveBtns)
         {
-            ShowAndActiveButton(_moveBtns[i], b, totalDuration);
+            ShowAndActiveButton(button, active, duration);
         }
     }
 
-    private void ShowEventBtns(bool b, float totalDuration)
+    private void ShowEventBtns(bool active, float duration)
     {
-        int count = _eventBtns.Count;
-        for (int i = 0; i < count; i++)
+        foreach (var button in _eventBtns)
         {
-            ShowAndActiveButton(_eventBtns[i], b, totalDuration);
+            ShowAndActiveButton(button, active, duration);
         }
     }
-
-
 }

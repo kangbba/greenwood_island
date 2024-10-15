@@ -16,17 +16,13 @@ public class PuzzleInContainer : Puzzle
         {
             SearchEvent_ContainerFront_UseKey,
             new SequentialElement(
-                new If(  // If 객체를 SequentialElement로 래핑
-                    () => ItemManager.HasItem(ContainerFullKey),  // 열쇠 보유 여부 확인
+                new MonoDialogue("문이 굳게 잠겨 있다. 열쇠가 없으면 열 수 없을 것 같아."),
+                new If(() => ItemManager.HasItem(ContainerFullKey),  // 열쇠 보유 여부 확인
                     new SequentialElement(  // 열쇠가 있을 때 실행할 시나리오
-                        new Dialogue(
-                            "Mono",
-                            new List<Line>
-                            {
-                                new Line("떨리는 손으로 열쇠를 꽂아 돌렸다."),
-                                new Line("‘철컥’"),
-                            },
-                            afterPanelDown: true
+                        new ItemDemand(
+                            ContainerFullKey,
+                            new PuzzlePlaceTransition("ContainerInside"),
+                            null
                         )
                     ),
                     new SequentialElement(  // 열쇠가 없을 때 실행할 시나리오

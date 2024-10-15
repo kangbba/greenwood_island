@@ -18,10 +18,15 @@ public class ItemGain : Element
         ItemManager.AddItem(_itemID, GameDataManager.CurrentStorySavedData);
         Debug.Log($"아이템 '{_itemID}'이(가) 추가되었습니다.");
         // 인벤토리 창 열기 및 닫히기 대기
-        yield return CoroutineUtils.StartCoroutine(UIManager.PopupCanvas.OpenInventoryViewModeCoroutine(() =>
-        {
-            Debug.Log("인벤토리 창 닫힘 이후 실행되는 코드");
-        }));
+        // 인벤토리 창 열기
+        ItemInventoryWindow itemInventory = UIManager.PopupCanvas.ShowItemInventoryWindow(
+            ItemInventoryWindow.InventoryMode.ViewMode
+        );
+
+        // 인벤토리 창이 닫힐 때까지 대기
+        yield return new WaitUntil(() => itemInventory.IsExitBtnClicked);
+
+        GameObject.Destroy(itemInventory.gameObject);
 
     }
 

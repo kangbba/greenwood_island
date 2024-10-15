@@ -12,30 +12,32 @@ public enum PuzzleMode
 }
 public abstract class Puzzle : MonoBehaviour
 {
+    public abstract Dictionary<string, SequentialElement> EventDictionary {get; }
+
     [SerializeField] private PuzzlePlace _initialPlace;
     [SerializeField] private Button _enterSearchModeBtn;
     [SerializeField] private Button _exitSearchModeBtn;
     [SerializeField] private Button _moveParentPlaceBtn;
     [SerializeField] private Transform _btnParent;
 
+    private PuzzleMode _currentPuzzleMode;
+
     public bool IsCleared { get; set; }
     private List<PuzzlePlace> _allPlaces;
     private PuzzlePlace _currentPlace;
     private bool _isMoving = false;
 
-    public abstract EventData EventData { get; set; }
     public Transform BtnParent { get => _btnParent;  }
+    public PuzzleMode CurrentPuzzleMode { get => _currentPuzzleMode;  }
 
     private void Awake()
     {
         _allPlaces = GetComponentsInChildren<PuzzlePlace>().ToList();
 
-        _exitSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Move, 0f));
-        _enterSearchModeBtn.onClick.AddListener(() => SetModeUI(PuzzleMode.Search, 0f));
+        _exitSearchModeBtn.onClick.AddListener(() => SetPuzzleMode(PuzzleMode.Move, 0f));
+        _enterSearchModeBtn.onClick.AddListener(() => SetPuzzleMode(PuzzleMode.Search, 0f));
         _moveParentPlaceBtn.onClick.AddListener(MoveParentPlace);
     }
-
-
     public void Init()
     {
         foreach (var place in _allPlaces)
@@ -45,8 +47,9 @@ public abstract class Puzzle : MonoBehaviour
         MovePuzzlePlace(_initialPlace.PlaceID);
     }
 
-    public void SetModeUI(PuzzleMode puzzleMode, float duration)
+    public void SetPuzzleMode(PuzzleMode puzzleMode, float duration)
     {
+        _currentPuzzleMode = puzzleMode;
         switch (puzzleMode)
         {
             case PuzzleMode.Waiting:
@@ -113,12 +116,14 @@ public abstract class Puzzle : MonoBehaviour
         _isMoving = true;
         _currentPlace = place;
 
-        HideAllPuzzlePlaceZones(0f);
-        SetButtonVisibility(false, false, false, 0f);
+        SetPuzzleMode(PuzzleMode.Waiting, 0f);
         new PlaceTransitionWithSwipe(placeID, .5f, ImageUtils.SwipeMode.OnlyFade).Execute();
         yield return new WaitForSeconds(.5f);
+        
+        Debug.Log("Try to visit");
+        yield return _currentPlace.TryToVisitRoutine();
 
-        SetModeUI(PuzzleMode.Move, .5f);
+        SetPuzzleMode(PuzzleMode.Move, .5f);
         yield return new WaitForSeconds(.5f);
 
         _isMoving = false;
@@ -128,5 +133,8 @@ public abstract class Puzzle : MonoBehaviour
     public PuzzlePlace GetPlace(string placeID)
     {
         return _allPlaces.Find(place => place.PlaceID == placeID);
+    }
+    public SequentialElement GetEvent(string eventID){
+        return EventDictionary.GetValueOrDefault(eventID);
     }
 }

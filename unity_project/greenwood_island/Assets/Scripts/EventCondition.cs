@@ -6,6 +6,8 @@ public class EventCondition
     public enum ConditionType
     {
         HasItem,
+        ItemDemand,
+        Choice,
     }
 
     public ConditionType Type;      // 조건의 유형

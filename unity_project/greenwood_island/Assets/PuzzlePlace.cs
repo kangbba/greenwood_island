@@ -13,7 +13,6 @@ public class PuzzlePlace : MonoBehaviour
 
     [SerializeField] private string _enterEventID;
     [SerializeField] private List<EventCondition> _unlockConditions;
-    [SerializeField] private string _successEventID;
     [SerializeField] private string _failureEventID;
 
     private Puzzle _parentPuzzle;
@@ -89,11 +88,11 @@ public class PuzzlePlace : MonoBehaviour
             yield break;
         }
 
+        Debug.Log($"[PuzzlePlace] 방문 횟수 : {_visitCount}");
+        if(!IsVisited){
+            yield return ExecuteEvent(_enterEventID);
+        }
         _visitCount++;
-
-        yield return ExecuteEvent(_successEventID);
-        yield return _parentPuzzle.MovePuzzlePlaceRoutine(PlaceID);
-        yield return ExecuteEvent(_enterEventID);
     }
 
     private IEnumerator ExecuteEvent(string eventID)
@@ -104,10 +103,10 @@ public class PuzzlePlace : MonoBehaviour
             yield break;
         }
 
-        var eventElement = _parentPuzzle.EventData.GetEvent(eventID);
+        var eventElement = _parentPuzzle.GetEvent(eventID);
         if (eventElement != null)
         {
-            yield return eventElement.ExecuteRoutine();
+            yield return StartCoroutine(eventElement.ExecuteRoutine());
         }
     }
 

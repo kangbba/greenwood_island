@@ -50,19 +50,21 @@ public class EventTriggerZone : MonoBehaviour
     // 이벤트 시도 루틴
     public IEnumerator TryTriggerEventRoutine()
     {
+        PuzzleMode currentPuzzleMode = _parentPuzzle.CurrentPuzzleMode;
         _clickCount++;
         Debug.Log($"[EventTriggerZone] 클릭 횟수: {_clickCount}");
-
+        _parentPuzzle.SetPuzzleMode(PuzzleMode.Waiting, 0f);
         if (!CheckConditions())
         {
             yield return ExecuteEvent(_failureEventID);
+            _parentPuzzle.SetPuzzleMode(currentPuzzleMode, 0f);
             yield break;
         }
-        _successCount++;
-        Debug.Log($"[EventTriggerZone] 성공 횟수: {_clickCount}");
 
-        yield return _reward.ExecuteRoutine();  // 보상 실행
+        yield return StartCoroutine(_reward.ExecuteRoutine(_parentPuzzle));  // 보상 실행
+        _successCount++;
         _isRewardCleared = true;
+        _parentPuzzle.SetPuzzleMode(currentPuzzleMode, 0f);
         Debug.Log($"[EventTriggerZone] 보상 클리어 여부 : {_isRewardCleared}");
     }
 
@@ -90,10 +92,11 @@ public class EventTriggerZone : MonoBehaviour
             yield break;
         }
 
-        var eventElement = _parentPuzzle.EventData.GetEvent(eventID);
+
+        var eventElement = _parentPuzzle.GetEvent(eventID);
         if (eventElement != null)
         {
-            yield return eventElement.ExecuteRoutine();
+            yield return StartCoroutine(eventElement.ExecuteRoutine());
             Debug.Log($"[EventTriggerZone] 이벤트 '{eventID}' 실행 완료.");
         }
         else

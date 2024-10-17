@@ -74,11 +74,12 @@ public class DialoguePlayer : MonoBehaviour
         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
     }
 
-    public void SetCharacterText(string s, Color c)
+    public void SetCharacterText(string s, Color characterColor)
     {   
         _characterText.SetText(s);
-        _characterText.color = c;
-        _characterTextBackground.color = c.ModifiedAlpha(.4f);
+        _characterText.color = characterColor;
+        Color characterTextBackgroundColor = string.IsNullOrEmpty(s) ? Color.clear :  Color.Lerp(characterColor, Color.black, .5f).ModifiedAlpha(_lineTextBackground.color.a);
+        _characterTextBackground.color = characterTextBackgroundColor;
     }
 
     public void CompleteCurSentence()

@@ -901,9 +901,9 @@ RectTransform:
   - {fileID: 2525234269010718670}
   - {fileID: 4419745472331630398}
   - {fileID: 3891367941212639498}
-  - {fileID: 4671285805064078274}
   - {fileID: 2192009518512517959}
   - {fileID: 3085912677868022688}
+  - {fileID: 4671285805064078274}
   - {fileID: 3341124787636597306}
   - {fileID: 4929910903919943192}
   - {fileID: 914554460441102422}
@@ -1831,30 +1831,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7380796889554545349}
     m_Modifications:
-    - target: {fileID: 626076651636630678, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: m_Color.a
-      value: 0.32941177
-      objectReference: {fileID: 0}
-    - target: {fileID: 1834777046501537508, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: m_Color.a
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3457843126404693851, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: m_Name
-      value: UpperGradation
-      objectReference: {fileID: 0}
     - target: {fileID: 3722084975736058391, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: m_Name
       value: DialoguePlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 6180948334447252998, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: m_Color.a
-      value: 0.29803923
-      objectReference: {fileID: 0}
-    - target: {fileID: 6758782680214195644, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: _canvasGroup
-      value: 
-      objectReference: {fileID: 184179452392487492}
     - target: {fileID: 8219515785612320796, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1935,20 +1915,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8410435596152251663, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 240.00002
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
---- !u!225 &184179452392487492 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 6506748226271867384, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
-  m_PrefabInstance: {fileID: 6395897853324151740}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &364455377748297216 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6758782680214195644, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}

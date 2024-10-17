@@ -22,6 +22,8 @@ public class CharacterEnter : Element
         this._anchorType = anchorType;  // 앵커 타입 설정
     }
 
+    public string CharacterID { get => _characterID; }
+
     public override void ExecuteInstantly()
     {
         _duration = 0;

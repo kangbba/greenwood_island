@@ -58,6 +58,8 @@ public class Character : MonoBehaviour
     [SerializeField] private string _characterName;  // 캐릭터 이름 (예: "Kate", "Lisa")
     [SerializeField] private RectTransform _rectTr;
     private RectMask2D _rectMask;
+    private bool _isJumping = false;  // 점프 중복 방지 플래그
+
 
     // 감정 목록 (각 캐릭터의 감정을 관리)
     [SerializeField] private List<CharacterEmotion> _emotionsList;
@@ -72,7 +74,34 @@ public class Character : MonoBehaviour
         AllEmotionsFadeOut(0f);
         Show(EmotionType.Happy, AnchorType.Bottom, false, 0f, Ease.Linear);
     }
+    public void Jump(float jumpHeight, float duration)
+    {
+        // 중복 방지 플래그 설정
+        if(_isJumping){
+            Debug.LogWarning("점프중 점프 호출");
+            return;
+        }
+        _isJumping = true;
 
+        // 기존 트윈 종료
+        _rectTr.DOKill();
+
+        // 원래의 localPosition
+        Vector3 originalPos = _rectTr.localPosition;
+
+        // localPosition.y를 jumpHeight만큼 증가시키고 다시 원래 위치로 돌아오는 커스텀 점프 애니메이션
+        _rectTr.DOLocalMoveY(originalPos.y + jumpHeight, duration / 2)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                _rectTr.DOLocalMoveY(originalPos.y, duration / 2).SetEase(Ease.InQuad)
+                    .OnComplete(() =>
+                    {
+                        // 점프 완료 후 플래그 해제
+                        _isJumping = false;
+                    });
+            });
+    }
     // 모든 감정 비활성화
     public void AllEmotionsFadeOut(float duration)
     {

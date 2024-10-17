@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FXManager : SingletonManager<FXManager>
 {
-    private Dictionary<string, List<GameObject>> _activeFXs = new Dictionary<string, List<GameObject>>(); // 활성화된 FX들
+    private Dictionary<string, GameObject> _activeFXs = new Dictionary<string, GameObject>(); // 활성화된 FX들
 
     // 특정 FX를 스폰하는 메서드
     public GameObject SpawnFX(string fxID, Vector3 localPos)
@@ -14,43 +14,50 @@ public class FXManager : SingletonManager<FXManager>
 
         if (fxPrefab == null)
         {
-            Debug.LogError($"FX Prefab '{fxID}' could not be loaded from story  or shared resources.");
+            Debug.LogError($"FX Prefab '{fxID}' could not be loaded from story or shared resources.");
             return null;
+        }
+
+        // 이미 활성화된 FX가 있을 경우 제거 후 새로 생성
+        if (_activeFXs.ContainsKey(fxID))
+        {
+            DestroyFX(_activeFXs[fxID]);
         }
 
         // 로드된 프리팹을 인스턴스화하여 위치 설정
         GameObject fxInstance = Object.Instantiate(fxPrefab, UIManager.SystemCanvas.FXLayer);
         fxInstance.transform.localPosition = localPos;
 
-        // 활성화된 FX 리스트에 추가
-        if (!_activeFXs.ContainsKey(fxID))
-        {
-            _activeFXs[fxID] = new List<GameObject>();
-        }
-        _activeFXs[fxID].Add(fxInstance);
+        // 활성화된 FX에 추가
+        _activeFXs[fxID] = fxInstance;
 
         return fxInstance;
     }
 
-    // 특정 FX ID에 대한 활성화된 FX 리스트 반환
-    public List<GameObject> GetActiveFXs(string fxID)
+    // 특정 FX ID에 대한 활성화된 FX 반환
+    public GameObject GetActiveFX(string fxID)
     {
-        if (_activeFXs.TryGetValue(fxID, out List<GameObject> activeFXList))
+        if (_activeFXs.TryGetValue(fxID, out GameObject activeFX))
         {
-            return activeFXList;
+            return activeFX;
         }
-        return new List<GameObject>();
+        return null;
     }
 
     // 특정 FX 인스턴스를 파괴하는 메서드
     public void DestroyFX(GameObject fxInstance)
     {
-        foreach (var fxList in _activeFXs.Values)
+        if (fxInstance != null)
         {
-            if (fxList.Contains(fxInstance))
+            Object.Destroy(fxInstance);
+        }
+
+        // FX 리스트에서 제거
+        foreach (var fxID in _activeFXs.Keys)
+        {
+            if (_activeFXs[fxID] == fxInstance)
             {
-                fxList.Remove(fxInstance);
-                Object.Destroy(fxInstance);
+                _activeFXs.Remove(fxID);
                 break;
             }
         }
@@ -75,9 +82,9 @@ public class FXManager : SingletonManager<FXManager>
     // 모든 FX를 페이드 아웃하고 제거하는 메서드
     public void FadeOutAndDestroyAllFX(float duration)
     {
-        foreach (var fxList in _activeFXs.Values)
+        foreach (var fxInstance in _activeFXs.Values)
         {
-            foreach (var fxInstance in fxList)
+            if (fxInstance != null)
             {
                 FadeAndDestroyFX(fxInstance, duration); // 개별 FX를 페이드 아웃 후 제거
             }

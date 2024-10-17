@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -108,8 +109,10 @@ public abstract class Puzzle : MonoBehaviour
 
     public IEnumerator MovePuzzlePlaceRoutine(string placeID)
     {
-        if (_isMoving) yield break;
-
+        if (_isMoving) {
+            Debug.LogWarning("Moving중 다른 moving이 호출됨");
+            yield break;
+        }
         var place = GetPlace(placeID);
         if (place == null) yield break;
 
@@ -117,14 +120,15 @@ public abstract class Puzzle : MonoBehaviour
         _currentPlace = place;
 
         SetPuzzleMode(PuzzleMode.Waiting, 0f);
+        new VignetteEnter(Color.grey.ModifiedAlpha(.5f), .5f).Execute();
         new PlaceTransitionWithSwipe(placeID, .5f, ImageUtils.SwipeMode.OnlyFade).Execute();
         yield return new WaitForSeconds(.5f);
-        
+        new PlaceEffect(PlaceEffect.EffectType.PulseInfinite, 10f, .008f).Execute();
         Debug.Log("Try to visit");
         yield return _currentPlace.TryToVisitRoutine();
 
-        SetPuzzleMode(PuzzleMode.Move, .5f);
-        yield return new WaitForSeconds(.5f);
+        SetPuzzleMode(PuzzleMode.Move, .2f);
+        yield return new WaitForSeconds(.2f);
 
         _isMoving = false;
     }

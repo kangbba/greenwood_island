@@ -71,6 +71,7 @@ public class Dialogue : Element
             
             if(activeCharacter != null)
             {
+                activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
                 activeCharacter.ChangeEmotion(line.EmotionType, line.EmotionIndex);
             }
 
@@ -90,11 +91,7 @@ public class Dialogue : Element
                 }
             );
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0) && !UIManager.PopupCanvas.IsPoppedUp);
-            if (activeCharacter != null)
-            {
-                activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
-            }
-            yield return new WaitForSeconds(.1f);
+            yield return null;
         }
         if(_fadeout){
             Debug.Log("다이얼로그 내림");
@@ -103,7 +100,6 @@ public class Dialogue : Element
         }
         else{
             dialoguePlayer.ClearCharacterText();
-            yield return new WaitForSeconds(.2f);
         }
     }
 }

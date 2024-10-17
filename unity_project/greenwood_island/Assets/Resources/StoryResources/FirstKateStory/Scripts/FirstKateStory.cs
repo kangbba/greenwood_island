@@ -7,13 +7,14 @@ public class FirstKateStory : Story
     public override List<Element> UpdateElements => new List<Element> {
 
         new Intertitle("한달 후"),
-        new PlaceTransition(
-            "BakeryFront", 
-            1f
-        ),
-        new PlaceScale(Vector2.one * 1.1f, 1f),
         new SFXEnter("BirdChirp1", 1f, true, 1f),
         new SFXEnter("BirdChirpLong1", 1f, true, 3f),
+        new PlaceTransition(
+            "BakeryFront", 
+            1f,
+            Color.black,
+            new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 2f, 1.1f)
+        ),
         new Dialogue(
             "Mono",
             new List<Line>
@@ -26,7 +27,6 @@ public class FirstKateStory : Story
             },
             fadeout : true
         ),
-        new DialoguePanelClear(),
 
         new SFXsClear(),
 
@@ -122,7 +122,6 @@ public class FirstKateStory : Story
             },
             fadeout : true
         ),
-        new DialoguePanelClear(),
         new ImaginationClear(1f),
         new Dialogue(
             "Ryan",
@@ -180,9 +179,9 @@ public class FirstKateStory : Story
                 new Line("건강이 안 좋으셔서 한 달 넘게 문을 닫으셨다가 최근에 다시 매장을 여셨어."),
                 new Line("마을 사람들이 다들 걱정할 정도로 열심히 사시는 분인데, 요즘은 어딘가 조금 달라졌다고 해야 할까..."),
                 new Line("내가 가는 김에 너도 같이 갈래? 너도 한 번쯤 만나뵈면 좋을 거야. 커피도 맛있고, 그분 이야기도 흥미로울 거야."),
-            }
+            },
+            fadeout : true
         ),
-        new DialoguePanelClear(),
         // 선택지를 통해 라이언의 반응을 유도
         new ChoiceSet(
             question : "어떻게 한다 ...",
@@ -247,31 +246,43 @@ public class FirstKateStory : Story
             new ScreenOverlayFilmClear()
         ),
         new PlaceRestore(),
-        new CharacterEnter("Kate", EmotionType.Happy, 0.5f) ,
-        _userActionPhase
+
+        new CharacterAwait(
+             new CharacterEnter("Kate", EmotionType.Happy, 0.5f)
+        ),
+        new Dialogue(
+            "Kate", 
+            new List<Line> 
+            {
+                new Line("갈 준비 다 됐어?"),
+                new Line("그럼, 가자!")
+            },
+            fadeout : true
+        )
+       
    };
     
-   private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(
-        GameDataManager.CurrentStorySavedData,
-        "useraction1",
-        new Dictionary<UserActionType, SequentialElement>
-        {
-            {
-                UserActionType.Talking, 
-                new SequentialElement(
-                    new Dialogue(
-                        "Kate", 
-                        new List<Line> 
-                        {
-                            new Line("갈 준비 다 됐어?"),
-                            new Line("그럼, 가자!")
-                        }
-                    )
-                )
-            }
-        },
-        UserActionWindow.AnchorType.TopLeft,
-        new Vector2(80, -450)
-    );
+//    private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(
+//         GameDataManager.CurrentStorySavedData,
+//         "useraction1",
+//         new Dictionary<UserActionType, SequentialElement>
+//         {
+//             {
+//                 UserActionType.Talking, 
+//                 new SequentialElement(
+//                     new Dialogue(
+//                         "Kate", 
+//                         new List<Line> 
+//                         {
+//                             new Line("갈 준비 다 됐어?"),
+//                             new Line("그럼, 가자!")
+//                         }
+//                     )
+//                 )
+//             }
+//         },
+//         UserActionWindow.AnchorType.TopLeft,
+//         new Vector2(80, -450)
+//     );
 
 }

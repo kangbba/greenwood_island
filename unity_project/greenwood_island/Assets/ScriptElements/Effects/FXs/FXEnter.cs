@@ -5,21 +5,18 @@ public class FXEnter : Element
 {
     private string _fxID; // FX의 ID
     private Vector3 _localPosition; // 로컬 포지션을 직접 사용
-    private float _duration;
 
     // _localPosition의 기본값을 Vector3.zero로 설정
-    public FXEnter(string fxID, float duration, Vector3 localPosition = default)
+    public FXEnter(string fxID, Vector3 localPosition = default)
     {
         _fxID = fxID;
         _localPosition = localPosition == default ? Vector3.zero : localPosition; // 기본값을 Vector3.zero로 설정
-        _duration = duration;
     }
+
     public override void ExecuteInstantly()
     {
-        _duration = 0;
         Execute();
     }
-    
 
     public override IEnumerator ExecuteRoutine()
     {
@@ -29,9 +26,8 @@ public class FXEnter : Element
         if (fxInstance != null)
         {
             fxInstance.transform.localPosition = _localPosition; // 로컬 포지션 설정
-
-            // Animator 자동 재생 및 duration 대기
-            yield return new WaitForSeconds(_duration);
         }
+
+        yield return null; // 즉시 실행 후 반환
     }
 }

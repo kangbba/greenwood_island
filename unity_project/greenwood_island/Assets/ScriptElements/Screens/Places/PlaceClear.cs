@@ -32,7 +32,7 @@ public class PlaceClear : Element
         // 활성화된 장소 이미지가 없으면 경고 출력하고 중단
         if (currentPlaceImage == null)
         {
-            Debug.LogWarning("No active place to clear.");
+            Debug.Log("No active place to clear.");
             yield break;
         }
 

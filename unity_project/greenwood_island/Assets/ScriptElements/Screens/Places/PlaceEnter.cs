@@ -48,5 +48,6 @@ public class PlaceEnter : Element
 
         // 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(_duration);
+        yield return new WaitForEndOfFrame();
     }
 }

@@ -76,7 +76,6 @@ public class StoryManager : SingletonManager<StoryManager>
             _currentElementIndex = i;
             Element element = _currentStory.UpdateElements[i];
             yield return element.ExecuteRoutine();
-            Debug.Log("스토리 끝");
         }
     }
 }

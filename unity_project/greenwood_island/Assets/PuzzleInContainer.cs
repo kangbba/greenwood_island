@@ -20,7 +20,7 @@ public class PuzzleInContainer : Puzzle
                         new Line("이대로 가만히 있어도 달라질 건 없을 것이다."),
                         new Line("주변을 살펴보자. 혹시 무언가 알 수 있을지도 몰라.")
                     },
-                    afterPanelDown: true
+                    fadeout: true
                 )
             )
         },
@@ -37,7 +37,7 @@ public class PuzzleInContainer : Puzzle
                         new Line("이런 깊은 산속에 왜 이런 게 있는 거지...?"),
                         new Line("안에 뭔가 있을지도 모른다.")
                     },
-                    afterPanelDown: true
+                    fadeout: true
                 )
             )
         },
@@ -91,7 +91,7 @@ public class PuzzleInContainer : Puzzle
                         new Line("어...? 저기 뭔가 반짝이는 게 보인다."),
                         new Line("풀숲을 헤치자, 녹슨 열쇠가 드러난다."),
                     },
-                    afterPanelDown: true
+                    fadeout: true
                 ),
                 new ChoiceSet(
                     "주워 볼까?",
@@ -123,7 +123,7 @@ public class PuzzleInContainer : Puzzle
                         new Line("시간이 멈춰버린 방 같다... 누가, 왜 이런 곳에서 살았던 걸까?"),
                         new Line("뭔가 더 찾아볼 수 있을지도 모른다.")
                     },
-                    afterPanelDown: true
+                    fadeout: true
                 )
             )
         },

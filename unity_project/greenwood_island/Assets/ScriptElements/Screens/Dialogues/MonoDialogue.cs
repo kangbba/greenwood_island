@@ -17,6 +17,6 @@ public class MonoDialogue : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        yield return CoroutineUtils.StartCoroutine(new Dialogue("Mono", new Line(_sentence), afterPanelDown : true).ExecuteRoutine());
+        yield return CoroutineUtils.StartCoroutine(new Dialogue("Mono", new Line(_sentence), fadeout : true).ExecuteRoutine());
     }
 }

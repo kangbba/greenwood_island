@@ -25,25 +25,23 @@ public class DialoguePlayer : MonoBehaviour
 
     [SerializeField] private CanvasGroup _canvasGroup;
 
-    
-    private bool _isOn = true;
     private EDialogueState _dialogueState = EDialogueState.NotStarted;
 
     public bool CanCompleteInstantly { get; set; } = true; // 즉시 완료 가능 여부를 설정하는 옵션
     public EDialogueState DialogueState => _dialogueState;
 
-    public bool IsOn { get => _isOn; }
-
-    private void Start()
+    private void Awake()
     {
-        ShowUp(false, 0f);
+        FadeOutPanel(0f);
     }
 
+#if UNITY_EDITOR
     private void Update(){
         if(Input.GetKeyDown(KeyCode.Space)){
             CompleteCurSentence();
         }
     }
+#endif
     public void ClearDialogueText(){
         _dialogueText.ClearText();
     }
@@ -51,27 +49,19 @@ public class DialoguePlayer : MonoBehaviour
 
         SetCharacterText("", Color.black);
     }
-    public void ShowCharacterTextBackground(bool show, float duration, Color c)
-    {
-        // _lineTextBackground의 alpha 값으로 페이드 타겟 설정
-        float targetAlpha = show ? _lineTextBackground.color.a : 0f;
-
-        // _characterTextBackground의 페이드 처리
-        _characterTextBackground.DOColor(c.ModifiedAlpha(targetAlpha), duration);
-    }
-
+  
    // CanvasGroup을 페이드 아웃하는 메서드
-    public void FadeInDialogueText(float duration)
+    public void FadeInPanel(float duration)
     {
-        _dialogueText.FadeIn(duration);
+        _canvasGroup.blocksRaycasts = true;
+        _canvasGroup.DOFade(1f, duration);
     }
-    public void FadeOutDialogueText(float duration)
+    public void FadeOutPanel(float duration)
     {
-        _dialogueText.FadeOut(duration);
+        _canvasGroup.blocksRaycasts = false;
+        _canvasGroup.DOFade(0f, duration);
     }
-    public void SetCharacterTextClor(Color targetColor, float duration){
-        _characterText.DOColor(targetColor, duration);
-    }
+
     public IEnumerator ShowLineRoutine(Line line, float speed, System.Action OnLineStarted, System.Action OnLineComplete)
     {
         _dialogueText.InitText(line.Sentence);
@@ -85,10 +75,10 @@ public class DialoguePlayer : MonoBehaviour
     }
 
     public void SetCharacterText(string s, Color c)
-    {
+    {   
         _characterText.SetText(s);
-        bool showCharacterTextBackground = !string.IsNullOrEmpty(s);
-        ShowCharacterTextBackground(showCharacterTextBackground, .1f, c);
+        _characterText.color = c;
+        _characterTextBackground.color = c.ModifiedAlpha(.4f);
     }
 
     public void CompleteCurSentence()
@@ -128,20 +118,5 @@ public class DialoguePlayer : MonoBehaviour
 
     private void UpdateDialogueGuidePosition()
     {
-    }
-
-    public void ShowUp(bool show, float duration)
-    {
-        if(_isOn == show){
-            return;
-        }
-        _isOn = show;
-        float offScreenY = -500;
-        Vector2 targetPos = show ? Vector2.zero : new Vector2(0, offScreenY);
-        _panelRectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutQuad);
-    }
-    public void ShowAlpha(bool show, float duration)
-    {
-        _canvasGroup.DOFade(show ? 1f : 0f, duration).SetEase(Ease.OutQuad);
     }
 }

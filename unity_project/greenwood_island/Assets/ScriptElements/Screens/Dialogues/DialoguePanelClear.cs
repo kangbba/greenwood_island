@@ -25,11 +25,8 @@ public class DialoguePanelClear : Element
         {
             Debug.LogWarning("Dialogue :: dialoguePlayer is null");
             yield break;
-        }
-        dialoguePlayer.gameObject.SetActive(true);
-
-        // DialoguePlayer가 활성화되어 있으면 _duration 시간 동안 ShowUp(false) 실행
-        dialoguePlayer.ShowUp(false, _duration);
+        } // DialoguePlayer가 활성화되어 있으면 _duration 시간 동안 ShowUp(false) 실행
+        dialoguePlayer.FadeOutPanel(_duration);
         yield return new WaitForSeconds(_duration);
     }
 }

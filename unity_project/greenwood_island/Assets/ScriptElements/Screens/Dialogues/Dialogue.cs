@@ -6,33 +6,27 @@ public class Dialogue : Element
 {
     private string _characterID; // 캐릭터 이름
     private List<Line> _lines;
-    private bool _afterPanelDown;
+    private bool _fadeout;
 
-    public Dialogue(string characterID, Line line, bool afterPanelDown = false)
+    public Dialogue(string characterID, Line line, bool fadeout = false)
     {
         this._characterID = characterID;
         this._lines = new List<Line> { line };
-        _afterPanelDown = afterPanelDown;
+        _fadeout = fadeout;
     }
 
-    public Dialogue(string characterID, List<Line> lines, bool afterPanelDown = false)
+    public Dialogue(string characterID, List<Line> lines, bool fadeout = false)
     {
         this._characterID = characterID;
         this._lines = lines;
-        _afterPanelDown = afterPanelDown;
+        _fadeout = fadeout;
     }
     public string CharacterID => _characterID;
     public List<Line> Lines => _lines;
 
     public override void ExecuteInstantly()
     {
-        DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;
-
-        if (dialoguePlayer == null)
-        {
-            return;
-        }
-        dialoguePlayer.SetCharacterTextClor(Color.clear, 0f);
+       
     }
 
     public override IEnumerator ExecuteRoutine()
@@ -55,59 +49,60 @@ public class Dialogue : Element
         }
 
         //캐릭터 텍스트
-        dialoguePlayer.ClearCharacterText();
-        string characterStr = characterData != null ? characterData.CharacterName_Ko : "";
-        Color characterStrColor = characterData != null ? characterData.CharacterColor : Color.clear;
-        dialoguePlayer.SetCharacterText(characterStr, Color.Lerp(characterStrColor, Color.black, .85f));
-        dialoguePlayer.SetCharacterTextClor(Color.clear, 0f);
+        if(characterData == null){
+            dialoguePlayer.ClearCharacterText();
+        }
+        else{
+            string characterStr = characterData.CharacterName_Ko;
+            Color characterStrColor = characterData.CharacterColor;
+            dialoguePlayer.SetCharacterText(characterStr, characterStrColor);
+        }
 
         //다이얼로그 텍스트
         dialoguePlayer.ClearDialogueText();
-        if(!dialoguePlayer.IsOn){
-            dialoguePlayer.ShowUp(true, .5f);
-            yield return new WaitForSeconds(.5f);
-        }
+        dialoguePlayer.FadeInPanel(.5f);
+        yield return new WaitForSeconds(.5f);
         // 대화 진행
         for (int i = 0; i < _lines.Count; i++)
         {
-            dialoguePlayer.ShowAlpha(true, .1f);
-            dialoguePlayer.SetCharacterTextClor(characterStrColor, .1f);
-            yield return new WaitForSeconds(.1f);
             Line line = _lines[i];
             EmotionType emotionType = line.EmotionType;
             int emotionIndex = line.EmotionIndex;
             
-            if(activeCharacter != null){
+            if(activeCharacter != null)
+            {
                 activeCharacter.ChangeEmotion(line.EmotionType, line.EmotionIndex);
             }
 
             // ShowLineRoutine에 콜백 추가
             yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeed, 
-            () =>{
-                if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
-                {
-                    activeCharacter.CurrentEmotion.StartTalking();  // 텍스트 표시가 완료되면 말하기 중지
+                OnLineStarted : () =>{
+                    if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
+                    {
+                        activeCharacter.CurrentEmotion.StartTalking();  // 텍스트 표시가 완료되면 말하기 중지
+                    }
+                },
+                OnLineComplete : () =>{
+                    if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
+                    {
+                        activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
+                    }
                 }
-            },
-            () =>{
-                if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
-                {
-                    activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
-                }
-            });
+            );
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0) && !UIManager.PopupCanvas.IsPoppedUp);
             if (activeCharacter != null)
             {
                 activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
             }
+            yield return new WaitForSeconds(.1f);
         }
-        if(_afterPanelDown){
+        if(_fadeout){
             Debug.Log("다이얼로그 내림");
-            new DialoguePanelClear(1f).Execute();
-            yield return new WaitForSeconds(1f);
+            dialoguePlayer.FadeOutPanel(.25f);
+            yield return new WaitForSeconds(.25f);
         }
         else{
-            dialoguePlayer.SetCharacterTextClor(Color.clear, .2f);
+            dialoguePlayer.ClearCharacterText();
             yield return new WaitForSeconds(.2f);
         }
     }

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterID: Mono
   _characterName_Ko: 
-  _characterColor: {r: 1, g: 1, b: 1, a: 0}
+  _characterColor: {r: 0, g: 0, b: 0, a: 0}

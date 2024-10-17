@@ -6,7 +6,7 @@ public class WeirdCloud : Story
 
     public override List<Element> UpdateElements => new List<Element> {
         new ScreenOverlayFilm(Color.black),
-        new PlaceTransitionWithOverlayColor(
+        new PlaceTransition(
             "SeasideWalkway",
             1f,
             Color.black

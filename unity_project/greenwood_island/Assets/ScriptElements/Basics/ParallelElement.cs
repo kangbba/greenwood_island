@@ -9,15 +9,17 @@ public class ParallelElement : Element
     // 생성자를 통해 여러 Element를 받을 수 있도록 설정
     public ParallelElement(params Element[] elements)
     {
+        // null인 요소를 제거한 리스트로 초기화
         _elements = new List<Element>(elements);
+        _elements.RemoveAll(element => element == null); // null인 요소를 제거
     }
 
     public override void ExecuteInstantly()
     {
-        // 초기 완료 여부 리스트를 false로 초기화
-        for (int i = 0; i < _elements.Count; i++)
+        // 각 Element의 ExecuteInstantly를 실행
+        foreach (var element in _elements)
         {
-            _elements[i].ExecuteInstantly();
+            element.ExecuteInstantly();
         }
     }
 

@@ -1831,9 +1831,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7380796889554545349}
     m_Modifications:
+    - target: {fileID: 626076651636630678, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
+      propertyPath: m_Color.a
+      value: 0.32941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834777046501537508, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
+      propertyPath: m_Color.a
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3457843126404693851, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
+      propertyPath: m_Name
+      value: UpperGradation
+      objectReference: {fileID: 0}
     - target: {fileID: 3722084975736058391, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: m_Name
       value: DialoguePlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6180948334447252998, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
+      propertyPath: m_Color.a
+      value: 0.29803923
       objectReference: {fileID: 0}
     - target: {fileID: 6758782680214195644, guid: d731ea259d4024e628a00c55a973fb2c, type: 3}
       propertyPath: _canvasGroup

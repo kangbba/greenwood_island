@@ -31,7 +31,7 @@ public class EventResult
                 break;
 
             case ResultType.ItemLose:
-                yield return new ItemGain(Parameter).ExecuteRoutine();
+                yield return new ItemLose(Parameter).ExecuteRoutine();
                 break;
 
             default:

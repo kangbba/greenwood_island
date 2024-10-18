@@ -38,7 +38,7 @@ public class CharacterAwait : Element
             Vector2 mousePosition = Input.mousePosition;
 
             // 캐릭터와 마우스 간의 거리 계산
-            float distance = Vector2.Distance(mousePosition, activeCharacter.transform.position.ModifiedY(0));
+            float distance = Vector2.Distance(mousePosition, activeCharacter.transform.position);
             Debug.Log(mousePosition +"/" + activeCharacter.transform.position);
             // 캐릭터와의 거리가 detectionRadius 안에 있으면 Talk 모드로 전환
             if (distance <= _detectionRadius)

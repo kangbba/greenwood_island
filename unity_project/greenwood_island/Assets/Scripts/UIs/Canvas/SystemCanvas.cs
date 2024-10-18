@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class SystemCanvas : MonoBehaviour
 {
     [SerializeField] private Transform _placeLayer;
-    [SerializeField] private Image _placeOverlayFilm;
+    [SerializeField] private Image _placeOverlayFilmLayer;
     [SerializeField] private Transform _characterLayer;
     [SerializeField] private Transform _imaginationLayer;
     [SerializeField] private TextMeshProUGUI _intertitleText;
@@ -35,7 +35,7 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private Button _inventoryBtn;
 
     public Transform PlaceLayer { get => _placeLayer; }
-    public Image PlaceOverlayFilm { get => _placeOverlayFilm;  }
+    public Image PlaceOverlayFilmLayer { get => _placeOverlayFilmLayer;  }
     public Transform CharacterLayer { get => _characterLayer; }
     public Transform ImaginationLayer { get => _imaginationLayer; }
     public TextMeshProUGUI IntertitleText { get => _intertitleText; }

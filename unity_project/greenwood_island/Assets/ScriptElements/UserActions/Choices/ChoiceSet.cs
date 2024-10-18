@@ -70,7 +70,6 @@ public class ChoiceSet : Element
             // 유효하지 않은 선택 시 대체 동작이나 기본 행동 추가 가능
         }
 
-        choiceUI.FadeOutAndDestroy(1f);
-        yield return new WaitForSeconds(1f);
+        choiceUI.FadeOutAndDestroy(0f);
     }
 }

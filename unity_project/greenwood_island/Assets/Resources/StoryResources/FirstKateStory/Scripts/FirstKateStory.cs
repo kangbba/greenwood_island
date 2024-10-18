@@ -10,8 +10,7 @@ public class FirstKateStory : Story
         new SFXEnter("BirdChirp1", 1f, true, 1f),
         new SFXEnter("BirdChirpLong1", 1f, true, 3f),
         new PlaceTransition(
-            "BakeryFront", 
-            1f,
+            new PlaceEnter("BakeryFront"),
             Color.black,
             new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 2f, 1.1f)
         ),
@@ -22,16 +21,16 @@ public class FirstKateStory : Story
                 new Line("그린우드에 온 지 벌써 한 달이 지났다."),
                 new Line("태풍 속에 도착했던 첫날이 엊그제 같은데, 지금은 날씨도 맑고, 섬은 평화롭기만 하다."),
                 new Line("새소리, 따뜻한 햇살, 그리고 케이트의 빵 냄새가 섬을 가득 채운다."),
-                new Line("케이트는 오늘도 빵집 앞에서 바쁘게 진열대를 정리하고 있다."),
-                new Line("그 열정은 언제 봐도 대단하다."),
+                new Line("케이트는 오늘도 빵집 앞에서 분주하게 진열대를 정리하고 있다."),
+                new Line("그녀의 에너지는 정말 대단하다.")
             },
-            fadeout : true
+            fadeout: true
         ),
 
         new SFXsClear(),
 
         new PlaceTransitionWithSwipe(
-            "BakeryInside", 
+            "BakeryInside",
             1f,
             SwipeMode.SwipeLeft
         ),
@@ -46,7 +45,7 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("라이언! 또 왔네? 빵 냄새가 그렇게 좋아?")
+                new Line("라이언! 또 왔네? 오늘도 빵 냄새 맡고 왔구나?"),
             }
         ),
 
@@ -54,9 +53,9 @@ public class FirstKateStory : Story
             "Mono",
             new List<Line>
             {
-                new Line("케이트, 그녀는 이 마을에서 작은 베이커리를 운영하고 있다."),
-                new Line("내가 마을에 도착하자마자 말을 걸어주며 마을에 적응하는데 도움을 주었다."),
-                new Line("작은 베이커리이지만 그 맛은 훌륭하다. 마을 사람들도 이곳을 참 좋아한다."),
+                new Line("케이트, 이 마을에서 작은 베이커리를 운영하며 늘 활기차고 긍정적이다."),
+                new Line("내가 처음 도착했을 때부터 먼저 다가와서 마을 생활에 적응하도록 도와주었다."),
+                new Line("그녀의 빵은 작지만, 그 맛은 마을 사람들 사이에서 인기가 많다."),
             }
         ),
 
@@ -64,7 +63,7 @@ public class FirstKateStory : Story
             "Ryan",
             new List<Line>
             {
-                new Line("응, 네 빵 냄새는 진짜 못 참겠어. 너 오늘도 새벽부터 일어났지?")
+                new Line("응, 네 빵 냄새는 도저히 못 참겠더라. 오늘도 새벽부터 일했지?")
             }
         ),
 
@@ -72,22 +71,22 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("맞아, 오늘은 날씨가 좀 따뜻해서 발효 시간을 조절했어. 온도가 높으면 반죽이 더 빨리 부풀거든. 그때마다 다르게 해야 해.", 0),
+                new Line("당연하지! 오늘은 날씨가 따뜻해서 발효 시간이 조금 짧았어. 빵을 만들 때 날씨에 따라 발효도 달라지니까 매번 다르게 신경 써야 해.", 0),
             }
         ),
         new Dialogue(
             "Ryan",
             new List<Line>
             {
-                new Line("발효... 그냥 빵 굽는 게 전부가 아니었구나?"),
+                new Line("발효... 빵 굽는 게 단순한 게 아니구나.")
             }
         ),
         new Dialogue(
             "Mono",
             new List<Line>
             {
-                new Line("매번 다른 날씨에 따라 조절해야 한다니, 생각보다 더 섬세한 일이었다."),
-                new Line("케이트는 이런 작은 디테일까지 다 신경 쓰고 있구나."),
+                new Line("날씨에 따라 모든 게 달라지다니, 생각보다 훨씬 세심한 일이었다."),
+                new Line("케이트는 이 모든 걸 꼼꼼하게 챙기고 있다.")
             }
         ),
 
@@ -95,7 +94,7 @@ public class FirstKateStory : Story
             "Ryan",
             new List<Line>
             {
-                new Line("그럼 오늘 빵은 또 다른 맛이겠네? 매번 먹을 때마다 기대돼."),
+                new Line("오늘 빵은 또 어떤 맛일지 기대되네.")
             }
         ),
 
@@ -103,9 +102,9 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("당연하지. 오늘은 빵 속이 더 폭신폭신하고 부드럽게 만들어보려고 조금 더 시간을 들였어. 먹으면 네가 바로 알 거야."),
+                new Line("기대해도 좋아! 오늘은 특별히 속을 더 부드럽게 만들었어. 먹어보면 바로 알 거야.")
             },
-            fadeout : true
+            fadeout: true
         ),
         new ImaginationEnter(
             "Bread"
@@ -115,19 +114,18 @@ public class FirstKateStory : Story
             "Mono",
             new List<Line>
             {
-                new Line("그녀가 내미는 빵은 언제나 특별하다."),
-                new Line("화려하지 않고 소박하지만, 말로는 설명 할 수 없는, 뭔가 더 깊은 게 있다."),
-                new Line("한 입 베어 물 때마다 입안 가득 퍼지는 폭신한 식감이 마음을 편안하게 해주는 듯 하다."),
-                new Line("아마 케이트의 열정과 정성이 담겨 있어서 그런 거겠지."),
+                new Line("그녀가 내미는 빵은 늘 특별하다."),
+                new Line("소박하지만 설명할 수 없는 깊이가 있다."),
+                new Line("한 입 베어 물 때마다 퍼지는 폭신한 식감은 마치 케이트의 정성스런 마음이 담겨 있는 듯하다.")
             },
-            fadeout : true
+            fadeout: true
         ),
         new ImaginationClear(1f),
         new Dialogue(
             "Ryan",
             new List<Line>
             {
-                new Line("확실히... 진짜 부드럽네. 네가 왜 이 빵을 그렇게 자랑하는지 알겠어."),
+                new Line("정말 부드럽다... 네가 왜 이 빵을 자랑하는지 알겠어.")
             }
         ),
 
@@ -135,7 +133,7 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("그럼 자주 와. 너도 맛있게 먹는 거 보면 나도 기분 좋거든."),
+                new Line("그치? 자주 와! 네가 맛있게 먹으면 나도 더 기분 좋거든.")
             }
         ),
 
@@ -143,146 +141,206 @@ public class FirstKateStory : Story
             "Mono",
             new List<Line>
             {
-                new Line("케이트와 나누는 이런 대화가 요즘 나에게는 가장 소중한 시간이다."),
-                new Line("평범한 일상 속에서 느껴지는 작은 행복이 이곳에 나를 묶어두는 것 같다."),
+                new Line("케이트와 나누는 이런 대화가 요즘 나에게 가장 소중한 시간이다."),
+                new Line("평범한 일상 속에서 느껴지는 작은 행복이 이곳에 나를 묶어두는 것 같다.")
             }
         ),
-
-        // 케이트가 조셉 할아버지에 대한 이야기를 꺼내는 부분
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("아, 맞다. 조셉 할아버지께 빵을 가져다 드리려고 해, 요즘은 직접 오시기 힘들어 보이셔서 말이야."),
-                new Line("며칠 전에도 빵을 가져다드렸어. 근데... 요새 몸이 많이 안 좋아 보이시더라구."),
-            }
-        ),
-
-        // 라이언의 독백으로 조셉 할아버지에 대한 기억을 떠올리는 장면
         new Dialogue(
             "Mono",
             new List<Line>
             {
-                new Line("조셉 할아버지... 어렴풋하게 들은 기억이 있다."),
-                new Line("마을 사람들 사이에서 종종 이름이 오갔다. 해안가에 있는 카페 주인이라던가..."),
-                new Line("건강이 좋지 않다는 소리도 어딘가에서 들었던 것 같다."),
-                new Line("그가 이 마을에서 중요한 인물이라는 건 알겠지만, 정작 얼굴은 한 번도 본 적이 없다."),
+                new Line("빵을 굽는 것도, 매일 반복되는 평화로운 일상도 어딘가 섬세한 조율이 필요했다."),
+                new Line("케이트의 정성스러운 손길이 느껴지는 이 빵은, 그린우드 섬의 작은 행복을 상징하는 것 같았다.")
             }
         ),
+        
+        new AllCharactersClear(),
 
-        // 케이트가 조셉을 소개하며 라이언을 설득하는 대사
+        // 빵집에서 나와 섬 마을을 걷는 장면
+        new PlaceTransition(
+            new PlaceEnter("TownFruitStore"),
+            Color.black,
+            new PlaceEffect(PlaceEffect.EffectType.FadeIn, 2f, 1.1f)
+        ),
+        
         new Dialogue(
-            "Kate",
+            "Mono",
             new List<Line>
             {
-                new Line("해안가에서 카페 씨브리즈라는 카페를 운영하시는 분이야."),
-                new Line("건강이 안 좋으셔서 한 달 넘게 문을 닫으셨다가 최근에 다시 매장을 여셨어."),
-                new Line("마을 사람들이 다들 걱정할 정도로 열심히 사시는 분인데, 요즘은 어딘가 조금 달라졌다고 해야 할까..."),
-                new Line("내가 가는 김에 너도 같이 갈래? 너도 한 번쯤 만나뵈면 좋을 거야. 커피도 맛있고, 그분 이야기도 흥미로울 거야."),
-            },
-            fadeout : true
-        ),
-        // 선택지를 통해 라이언의 반응을 유도
-        new ChoiceSet(
-            question : "어떻게 한다 ...",
-            choices : new List<ChoiceContent>
-            {
-                new ChoiceContent(
-                    "귀찮은데… 다음에 가면 안 될까?",
-                    new SequentialElement(
-                        new Dialogue("Ryan", new List<Line>
-                        {
-                            new Line("귀찮은데… 다음에 가면 안 될까?"),
-                        }),
-                        new Dialogue("Kate", new List<Line>
-                        {
-                            new Line("사실 할아버지가 요즘 사람을 잘 안 만나려 하셔서, 나 혼자 가면 괜히 더 불편해하실 것 같아."),
-                            new Line("네가 같이 가면 이야기도 나누시고, 기분도 조금 나아지실 거야. 건강도 안 좋으신데 요즘 너무 외로워 보이셔."),
-                            new Line("라이언, 나랑 같이 가주면 안 될까? 네가 가면 할아버지도 좀 웃으실 것 같아."),
-                        }),
-                        new Dialogue("Ryan", new List<Line>
-                        {
-                            new Line("그래... 알았어. 그러면 같이 가지."),
-                        })
-                    )
-                ),
-                new ChoiceContent(
-                    "좋아, 어디 한번 같이 가보자.",
-                    new SequentialElement(
-                        new Dialogue("Ryan", new List<Line>
-                        {
-                            new Line("좋아, 어디 한번 같이 가보자."),
-                        }),
-                        new Dialogue("Kate", new List<Line>
-                        {
-                            new Line("정말 고마워, 라이언! 할아버지가 요즘 예전 같지 않으셔서 걱정이 많았어."),
-                            new Line("네가 같이 가면 할아버지께도 큰 힘이 될 거야. 가서 커피 한 잔 하면서 이런저런 얘기도 나눠보자."),
-                        }),
-                        new Dialogue("Ryan", new List<Line>
-                        {
-                            new Line("조셉 할아버지가 어떤 분인지 직접 만나보면 더 잘 알겠지."),
-                        })
-                    )
-                )
+                new Line("섬 마을은 여전히 고요하다."),
+                new Line("햇살이 부드럽게 비치는 골목길을 걸으며, 나는 섬의 고즈넉한 풍경에 점점 익숙해져 가는 나를 느낀다."),
+                new Line("삶의 속도는 천천히 흐르고, 마을 사람들은 조용히 제 할 일을 한다."),
+                new Line("처음에는 이 느림이 답답했지만, 이제는 이곳이 나름의 리듬을 가지고 있다는 걸 알게 됐다."),
             }
         ),
-        new Dialogue("Kate", new List<Line>
-        {
-            new Line("정말? 라이언이라면 그렇게 말해 줄 줄 알았다구!"),
-            new Line("그럼 이따 마을 입구에서 보자!"),
-        }),
-        new Dialogue("Mono", new List<Line>
-        {
-            new Line("케이트는 이 마을에서 처음 나를 맞아준 사람이고, 지금까지 항상 내 편이 되어줬다. 그녀의 말이라면 믿어도 되겠지."),
-            new Line("그 사람은 어떤 사람일까?"),
-        }),
-        new DialoguePanelClear(),
-        new SFXsClear(1f),
-        new ScreenOverlayFilm(Color.white, 1f),
-        new AllCharactersClear(0f),
-        new PlaceEnter("BakeryFront"),
-        new ParallelElement(
-            new PlaceMove(new Vector2(-100, 0)),
-            new ScreenOverlayFilmClear()
-        ),
-        new PlaceRestore(),
 
-        new CharacterAwait(
-             new CharacterEnter("Kate", EmotionType.Happy, 0.5f)
+        // 주민들과 가벼운 인사를 나누는 장면
+        new CharacterEnter(
+            "OldMan",
+            EmotionType.Neutral,
+            .5f,
+            0
         ),
         new Dialogue(
-            "Kate", 
-            new List<Line> 
+            "OldMan",
+            new List<Line>
             {
-                new Line("갈 준비 다 됐어?"),
-                new Line("그럼, 가자!")
-            },
-            fadeout : true
-        )
-       
-   };
-    
-//    private UserActionPhaseEnter _userActionPhase = new UserActionPhaseEnter(
-//         GameDataManager.CurrentStorySavedData,
-//         "useraction1",
-//         new Dictionary<UserActionType, SequentialElement>
-//         {
-//             {
-//                 UserActionType.Talking, 
-//                 new SequentialElement(
-//                     new Dialogue(
-//                         "Kate", 
-//                         new List<Line> 
-//                         {
-//                             new Line("갈 준비 다 됐어?"),
-//                             new Line("그럼, 가자!")
-//                         }
-//                     )
-//                 )
-//             }
-//         },
-//         UserActionWindow.AnchorType.TopLeft,
-//         new Vector2(80, -450)
-//     );
+                new Line("안녕하세요, 라이언 씨. 오늘도 사진 찍으러 가는 길인가요?")
+            }
+        ),
 
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("네, 어르신. 날씨가 좋아서 좋은 사진이 나올 것 같아요."),
+            }
+        ),
+
+        new Dialogue(
+            "Mono",
+            new List<Line>
+            {
+                new Line("이곳 사람들은 내가 사진을 찍으러 다니는 걸 모두 알고 있다."),
+                new Line("마을은 작고, 사람들끼리 금방 소문이 돈다. 이런 점이 때론 부담스럽기도 하지만..."),
+                new Line("그래도 이렇게 편안하게 인사를 건네는 모습은 싫지 않다."),
+            }
+        ),
+
+        // 조셉 아저씨와의 우연한 만남
+        new PlaceTransition(
+            new PlaceEnter("VillageBench"),
+            Color.clear,
+            new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 2f, 1.05f)
+        ),
+        
+        new CharacterEnter(
+            "Joseph",
+            EmotionType.Happy,
+            1f,
+            0
+        ),
+        
+        new Dialogue(
+        "Mono",
+        new List<Line>
+            {
+                new Line("저기 벤치에 앉아 계신 분은... 조셉 할아버지다."),
+                new Line("카페 씨브리즈의 주인이라는 이야기를 들은 적이 있다."),
+                new Line("한동안 몸이 좋지 않으셨다고 들었는데, 이제는 이렇게 밖에 나와 계시는구나.")
+            }
+        ),
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("안녕하세요, 조셉 할아버지. 여기서 쉬고 계시네요?")
+            }
+        ),
+        new Dialogue(
+            "Joseph",
+            new List<Line>
+            {
+                new Line("어, 라이언... 가끔은 이렇게 나와야지. 집에만 있으면 사람 미쳐."),
+                new Line("햇빛이 좋으니 바람도 맞고, 생각도 좀 정리할 겸 나왔지.")
+            }
+        ),
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("이제는 상태가 좀 나아지신 건가요?")
+            }
+        ),
+        new Dialogue(
+            "Joseph",
+            new List<Line>
+            {
+                new Line("음... 뭐, 그냥 그런 대로야. 나이 들면 원래 이런 거 아니겠어?"),
+                new Line("요즘은 그저 하루하루를 천천히 보낸다네. 섬도 그렇고, 나도 그렇고...")
+            }
+        ),
+        
+        new Dialogue(
+            "Mono",
+            new List<Line>
+            {
+                new Line("조셉 할아버지는 느릿하게 말을 잇는다."),
+                new Line("그의 말 속에 섬의 시간과 같은 느긋함이 묻어난다.")
+            }
+        ),
+        
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("카페 다시 여셨다고 들었어요. 시간 날 때 커피 마시러 꼭 갈게요."),
+            }
+        ),
+
+        new Dialogue(
+            "Joseph",
+            new List<Line>
+            {
+                new Line("그래, 언제든지. 손님이 많지는 않지만 그게 또 괜찮아."),
+                new Line("그린우드는 원래 한적한 곳이거든. 그런 게 좋을 때도 있고."),
+            }
+        ),
+        
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그렇죠. 저도 이 섬의 조용한 분위기가 좋아요. 도시와는 완전히 다르니까."),
+            }
+        ),
+
+        new Dialogue(
+            "Joseph",
+            new List<Line>
+            {
+                new Line("맞아, 도시는 너무 빨라. 이 섬은 좀... 다르지."),
+                new Line("그런데 말이야, 아무리 천천히 흘러도 결국 바람이라는 게 언제 불지 모르거든."),
+                new Line("뭐, 그건 나이 든 사람의 쓸데없는 걱정일 뿐일지도 모르겠지만.")
+            }
+        ),
+
+        new Dialogue(
+            "Mono",
+            new List<Line>
+            {
+                new Line("할아버지의 말은 그저 평범한 일상의 대화 같았다."),
+                new Line("하지만 그가 덧붙인 마지막 말에서 어쩐지 묘한 기운을 느꼈다."),
+                new Line("섬의 조용함 속에 감춰진 무언가가 있을지도 모른다는 생각이, 잠시 스쳐 지나갔다."),
+            }
+        ),
+        
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("음, 할아버지 말씀이 맞을지도 모르죠. 아무리 평온해 보여도 언제든 변할 수 있으니까요."),
+            }
+        ),
+        
+        new Dialogue(
+            "Joseph",
+            new List<Line>
+            {
+                new Line("허허, 뭐 그렇지."),
+                new Line("하여튼 천천히 쉬면서 와. 커피는 준비해두겠네.")
+            }
+        ),
+        
+        new Dialogue(
+            "Mono",
+            new List<Line>
+            {
+                new Line("조셉 할아버지와의 짧은 대화는 다시 일상 속으로 흘러갔다."),
+                new Line("이 섬에서의 삶은 천천히, 그리고 조용하게 계속된다. 하지만..."),
+                new Line("나는 섬의 고요함 이면에 더 많은 이야기가 있을지도 모른다는 생각을 떨칠 수 없었다.")
+            }
+        ),
+
+    };
 }

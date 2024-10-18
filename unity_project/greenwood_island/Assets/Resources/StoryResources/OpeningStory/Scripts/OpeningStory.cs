@@ -5,36 +5,57 @@ using DG.Tweening;
 
 public class OpeningStory : Story
 {
+    Color darkSkyColor = ColorUtils.CustomColor("86D8FF");
     // 스토리의 메인 업데이트 부분
     public override List<Element> UpdateElements => new List<Element>
     {
-        new PlaceEnter("Storm", targetColor : ColorUtils.CustomColor("86D8FF"), duration: 0f), // 장소 색상, 크기 및 위치를 즉시 설정
         new ImaginationEnter("Black", 0f),
         new Intertitle("이 이야기는 허구이며,\n실제 인물, 장소, 사건과는 무관합니다.", 1, 3, 1),
-        new ImaginationClear(1f),
+        new ImaginationClear(.5f),
+        new ParallelElement(
+            new PlaceTransition(
+                new PlaceEnter(
+                    "Storm",
+                    initialColor : darkSkyColor
+                ),
+                Color.black,
+                new List<PlaceEffect>(){
+                    new PlaceEffect(
+                        PlaceEffect.EffectType.ZoomIn,
+                        2f,
+                        1.1f
+                    ),
+                }
+            )
+        ),
 
 
         new ParallelElement(
-            new SequentialElement(
-                new SFXEnter("Thunder1", 0.25f, false, 0f)
-            ),
-            new PlaceOverlayFilm(Color.black.ModifiedAlpha(0.76f), 1f),
-            new PlaceOverlayFilmClear(.1f)
+            new SFXEnter("Thunder1", 0.25f, false, 0f),
+            new PlaceColor(Color.white, .1f),
+            new PlaceShake()
         ),
+        new PlaceColor(darkSkyColor, .2f),
         new Delay(3f),
         new ParallelElement(
             new SFXEnter("Thunder2", 0.15f, false, 0f),
             new PlaceColor(Color.white, .15f, Ease.OutElastic), // 장소 색상 조정
             new PlaceShake()
         ),
-        new SFXEnter("Wind1", 0.15f, true, 0f),
-        new SFXEnter("Thunder1", 0.15f, true, 5f),
-        
-        new PlaceRestore(Vector2.one, Vector2.zero, Color.white, 0.3f, Ease.OutQuad), // 복구 작업
+        new ParallelElement(
+            new PlaceRestore(Vector2.one, Vector2.zero, Color.white, 0.3f, Ease.OutQuad), // 복구 작업
+            new SFXEnter("Wind1", 0.15f, true, 0f),
+            new SFXEnter("Thunder1", 0.15f, true, 5f)
+        ),
 
-        new PlaceEnter("FerryInside", localScale : Vector2.one * 1.2f), // 장소를 가운데에 배치
-        new PlaceScale(Vector2.one * 1.5f, 3f, Ease.OutQuad), // 크기 조정
-        new PlaceMove(Vector2.right * 300, 3f, Ease.OutQuad),
+        new PlaceTransition(
+            new PlaceEnter("FerryInside", initialLocalScale : Vector2.one * 1.2f),
+            Color.black,
+            new List<PlaceEffect>(){
+                new PlaceEffect(PlaceEffect.EffectType.ShowLeftward, 1f, 200),
+                new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 1f, 1.5f)
+            }
+        ),
 
         // 라디오의 불길한 소리
         new Dialogue(

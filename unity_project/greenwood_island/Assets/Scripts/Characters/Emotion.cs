@@ -65,7 +65,6 @@ public class Emotion : MonoBehaviour
     // 말하기 시작/중지 함수
     public void StartTalking()
     {
-        Debug.Log("start talking");
         _isTalking = true;
     }
 

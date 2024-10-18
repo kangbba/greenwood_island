@@ -9,35 +9,39 @@ using UnityEngine.UI;
 /// </summary>
 public class PlaceTransition : Element
 {
-    private string _newPlaceID; // 새로운 장소 ID
-    private float _duration; // 전환 지속 시간
-    private Ease _easeType; // 이징 타입
-    private Color _overlayColor; // 오버레이 색상
+    private PlaceEnter _placeEnter; // 새로운 장소 ID
     private List<PlaceEffect> _placeEffects; // 여러 PlaceEffect를 받는 리스트
+    private Color _overlayColor; // 오버레이 색상
+    private Ease _easeType; // 이징 타입
+    private float _enterOverlayDuration; // 진입 시 오버레이 지속 시간
+    private float _exitOverlayDuration; // 종료 시 오버레이 지속 시간
 
     // 다중 PlaceEffect 생성자
-    public PlaceTransition(string newPlaceID, float duration, Color overlayColor, List<PlaceEffect> placeEffects = null, Ease easeType = Ease.OutQuad)
+    public PlaceTransition(PlaceEnter placeEnter, Color overlayColor, List<PlaceEffect> placeEffects = null, float enterOverlayDuration = 1f, float exitOverlayDuration = 1f, Ease easeType = Ease.OutQuad)
     {
-        _newPlaceID = newPlaceID;
-        _duration = duration;
-        _overlayColor = overlayColor == default ? Color.black : overlayColor; // 기본값은 Color.black
-        _easeType = easeType;
+        _placeEnter = placeEnter;
         _placeEffects = placeEffects ?? new List<PlaceEffect>(); // placeEffects가 null이면 빈 리스트 할당
+        _overlayColor = overlayColor == default ? Color.black : overlayColor; // 기본값은 Color.black
+        _enterOverlayDuration = enterOverlayDuration; // 기본값 1초
+        _exitOverlayDuration = exitOverlayDuration; // 기본값 1초
+        _easeType = easeType;
     }
 
     // 단일 PlaceEffect 생성자
-    public PlaceTransition(string newPlaceID, float duration, Color overlayColor, PlaceEffect placeEffect, Ease easeType = Ease.OutQuad)
+    public PlaceTransition(PlaceEnter placeEnter, Color overlayColor, PlaceEffect placeEffect, float enterOverlayDuration = 1f, float exitOverlayDuration = 1f, Ease easeType = Ease.OutQuad)
     {
-        _newPlaceID = newPlaceID;
-        _duration = duration;
-        _overlayColor = overlayColor == default ? Color.black : overlayColor; // 기본값은 Color.black
-        _easeType = easeType;
+        _placeEnter = placeEnter;
         _placeEffects = (placeEffect != null) ? new List<PlaceEffect> { placeEffect } : new List<PlaceEffect>(); // 단일 PlaceEffect를 리스트에 담아 초기화
+        _overlayColor = overlayColor == default ? Color.black : overlayColor; // 기본값은 Color.black
+        _enterOverlayDuration = enterOverlayDuration; // 기본값 1초
+        _exitOverlayDuration = exitOverlayDuration; // 기본값 1초
+        _easeType = easeType;
     }
 
     public override void ExecuteInstantly()
     {
-        _duration = 0; // 즉시 실행
+        _enterOverlayDuration = 0;
+        _exitOverlayDuration = 0;
         Execute();
     }
 
@@ -46,11 +50,12 @@ public class PlaceTransition : Element
         // 현재 활성화된 장소 이미지 가져오기
         Image previousPlace = PlaceManager.Instance.CurrentPlaceImage;
 
-        // 오버레이 생성
-        yield return CoroutineUtils.StartCoroutine(new ScreenOverlayFilm(_overlayColor, _duration / 2f, _easeType).ExecuteRoutine());
+        // 오버레이 생성 (진입 시)
+        yield return CoroutineUtils.StartCoroutine(new ScreenOverlayFilm(_overlayColor, _enterOverlayDuration, _easeType).ExecuteRoutine());
 
         // 새로운 장소 생성
-        new PlaceEnter(_newPlaceID, 0f).Execute();
+        _placeEnter.Execute();
+
         // 이전 장소 제거
         if (previousPlace != null)
         {
@@ -58,7 +63,7 @@ public class PlaceTransition : Element
         }
 
         // 여러 PlaceEffect를 처리하는 ParallelElement 생성
-        List<Element> effectElements = new List<Element> { new ScreenOverlayFilmClear(_duration / 2f, _easeType) };
+        List<Element> effectElements = new List<Element> { new ScreenOverlayFilmClear(_exitOverlayDuration, _easeType) };
         Debug.Log(_placeEffects.Count);
         foreach (var effect in _placeEffects)
         {

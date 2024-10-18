@@ -8,26 +8,24 @@ using DG.Tweening;
 public class PlaceEnter : Element
 {
     private string _placeID;       // 장소의 이미지 ID
-    private Vector2 _anchoredPos;  // 앵커 위치
-    private Vector2 _localScale;   // 스케일
-    private Color _targetColor;    // 페이드 인 목표 색상
-    private float _duration;       // 페이드 인 지속 시간
+    private Color _initialColor;   // 페이드 인 초기 색상
+    private Vector2 _initialLocalPos;  // 초기 로컬 위치
+    private Vector2 _initialLocalScale; // 초기 스케일
     private Ease _easeType;        // 페이드 인 애니메이션 이징 타입
 
-    // 생성자: 장소 ID, 앵커 위치, 스케일, 색상, 지속 시간, 이징 타입을 받아서 초기화
-    public PlaceEnter(string placeID, float duration = 1f, Vector2 anchoredPos = default, Vector2 localScale = default, Color targetColor = default, Ease easeType = Ease.OutQuad)
+    // 생성자: 장소 ID, 초기 색상, 초기 로컬 위치, 초기 스케일, 이징 타입을 받아서 초기화
+    public PlaceEnter(string placeID, Color initialColor = default, Vector2 initialLocalPos = default, Vector2 initialLocalScale = default, Ease easeType = Ease.OutQuad)
     {
         _placeID = placeID;
-        _duration = duration;
-        _anchoredPos = anchoredPos == default ? Vector2.zero : anchoredPos;
-        _localScale = localScale == default ? Vector2.one : localScale;
-        _targetColor = targetColor == default ? Color.white : targetColor;
+        _initialColor = initialColor == default ? Color.white : initialColor;
+        _initialLocalPos = initialLocalPos == default ? Vector2.zero : initialLocalPos;
+        _initialLocalScale = initialLocalScale == default ? Vector2.one : initialLocalScale;
         _easeType = easeType;
     }
 
+
     public override void ExecuteInstantly()
     {
-        _duration = 0;
         Execute();
     }
 
@@ -42,12 +40,11 @@ public class PlaceEnter : Element
         PlaceManager.Instance.CreatePlace(_placeID);
 
         // PlaceColor를 이용해 페이드 인 애니메이션 적용
-        new PlaceColor(_targetColor, _duration, _easeType).Execute();
-        new PlaceMove(_anchoredPos, _duration, _easeType).Execute();
-        new PlaceScale(_localScale, _duration, _easeType).Execute();
+        new PlaceColor(_initialColor, 0f, _easeType).Execute();
+        new PlaceMove(_initialLocalPos, 0f, _easeType).Execute();
+        new PlaceScale(_initialLocalScale, 0f, _easeType).Execute();
 
         // 애니메이션이 끝날 때까지 기다림
-        yield return new WaitForSeconds(_duration);
-        yield return new WaitForEndOfFrame();
+        yield break;
     }
 }

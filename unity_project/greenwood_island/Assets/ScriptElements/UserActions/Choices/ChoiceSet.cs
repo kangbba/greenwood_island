@@ -42,7 +42,7 @@ public class ChoiceSet : Element
     public override IEnumerator ExecuteRoutine()
     {
         // 질문 출력
-        yield return CoroutineUtils.StartCoroutine(new Dialogue("Mono", new Line(_question, playSpeed: 2400), true).ExecuteRoutine());
+        yield return CoroutineUtils.StartCoroutine(new Dialogue("Mono", new Line(_question, playSpeedMutliplier: 2f), true).ExecuteRoutine());
 
         ChoiceUI choiceUI = UIManager.SystemCanvas.InstantiateChoiceUI();
         choiceUI.Init(_choiceContents);

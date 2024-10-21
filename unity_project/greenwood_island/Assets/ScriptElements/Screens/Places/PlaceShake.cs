@@ -12,7 +12,7 @@ public class PlaceShake : Element
     private int _vibrato;
     private float _randomness;
 
-    public PlaceShake(float duration = 1f, float strength = 40f, int vibrato = 10, float randomness = 5) 
+    public PlaceShake(float duration = 1f, float strength = 20f, int vibrato = 10, float randomness = 5) 
     {
         _duration = duration;
         _strength = strength;

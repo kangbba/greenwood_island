@@ -141,25 +141,24 @@ public class Emotion : MonoBehaviour
         _openedEyesImg.gameObject.SetActive(b);  
     }
 
-    // 감정 활성화/비활성화 함수
-    public void Activate(bool b, float duration)
-    {
+    public void FadeInThenActivate(float duration){
 
-        _isActivated = b;
+        _isActivated = true;
         StartBlink();  // 눈 깜박임 시작
-        if (b)
+        _canvasGroup.alpha = 0f;
+        _canvasGroup.DOFade(1f, duration).SetEase(Ease.Linear).OnStart(() =>
         {
-            _canvasGroup.DOFade(1f, duration).SetEase(Ease.Linear).OnStart(() =>
-            {
-            });
-        }
-        else
+        });
+    }
+
+    public void FadeOutAndDestroy(float duration){
+        _isActivated = false;
+        StopTalking(); 
+        _canvasGroup.DOFade(0f, duration).SetEase(Ease.Linear).OnComplete(() =>
         {
-            StopTalking();  // 말하기 중지
-            _canvasGroup.DOFade(0f, duration).SetEase(Ease.Linear).OnComplete(() =>
-            {
-            });
-        }
+            StopBlink();  
+            Destroy(gameObject);
+        });
     }
 
 }

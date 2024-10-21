@@ -8,6 +8,7 @@ public class EventCondition
         HasItem,
         ItemDemand,
         Choice,
+        VisitedMoreThanOnce,
     }
 
     public ConditionType Type;      // 조건의 유형
@@ -20,6 +21,8 @@ public class EventCondition
         {
             case ConditionType.HasItem:
                 return ItemManager.HasItem(Parameter);
+            case ConditionType.VisitedMoreThanOnce:
+                return PuzzleManager.Instance.CurrentPuzzle.GetPlace(Parameter).IsVisited; 
             default:
                 return false;
         }

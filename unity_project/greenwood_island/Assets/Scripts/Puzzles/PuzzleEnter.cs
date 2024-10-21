@@ -25,6 +25,9 @@ public class PuzzleEnter : Element
     public override IEnumerator ExecuteRoutine()
     {
         // PlaceManager 초기화 호출
+        
+        new DialoguePanelClear().Execute();
+        
         PuzzleManager.Instance.Init(_puzzleID);
 
         Debug.Log($"PuzzleEnter 실행: {_puzzleID}");

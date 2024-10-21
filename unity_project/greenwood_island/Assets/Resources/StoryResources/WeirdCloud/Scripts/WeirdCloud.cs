@@ -16,9 +16,8 @@ public class WeirdCloud : Story
 
         new CharacterEnter(
             "Kate",
-            EmotionType.Happy,
-            .5f,
-            0
+            EmotionType.ArmCrossed_Smile,
+            .5f
         ),
 
         new Dialogue(

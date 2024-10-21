@@ -66,27 +66,22 @@ public class Dialogue : Element
         for (int i = 0; i < _lines.Count; i++)
         {
             Line line = _lines[i];
-            EmotionType emotionType = line.EmotionType;
-            int emotionIndex = line.EmotionIndex;
             
             if(activeCharacter != null)
             {
-                activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
-                activeCharacter.ChangeEmotion(line.EmotionType, line.EmotionIndex);
+                activeCharacter.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
             }
-
-            // ShowLineRoutine에 콜백 추가
-            yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeed, 
+            yield return dialoguePlayer.ShowLineRoutine(line, line.PlaySpeedMultiplier * 1200, 
                 OnLineStarted : () =>{
-                    if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
+                    if (activeCharacter != null)
                     {
-                        activeCharacter.CurrentEmotion.StartTalking();  // 텍스트 표시가 완료되면 말하기 중지
+                        activeCharacter.StartTalking();  // 텍스트 표시가 완료되면 말하기 중지
                     }
                 },
                 OnLineComplete : () =>{
-                    if (activeCharacter != null && activeCharacter.CurrentEmotion != null)
+                    if (activeCharacter != null)
                     {
-                        activeCharacter.CurrentEmotion.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
+                        activeCharacter.StopTalking();  // 텍스트 표시가 완료되면 말하기 중지
                     }
                 }
             );

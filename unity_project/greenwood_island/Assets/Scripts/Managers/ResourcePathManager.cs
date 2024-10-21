@@ -11,6 +11,7 @@ public enum ResourceType
     Imagination,
     StoryData,
     Puzzle,
+    EmotionPrefab
 }
 
 public static class ResourcePathManager
@@ -102,7 +103,10 @@ public static class ResourcePathManager
             case ResourceType.Puzzle:
                 resourcePath = $"{basicFolderPath}/Puzzles/{resourceID}";
                 break;
-                
+            
+            case ResourceType.EmotionPrefab:
+                resourcePath = $"{basicFolderPath}/Emotions/{resourceID}";
+                break;
                 
             default:
                 Debug.LogWarning($"Unknown resource type: {resourceType}");

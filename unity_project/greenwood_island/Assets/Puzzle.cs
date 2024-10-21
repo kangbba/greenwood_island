@@ -113,19 +113,24 @@ public abstract class Puzzle : MonoBehaviour
             Debug.LogWarning("Moving중 다른 moving이 호출됨");
             yield break;
         }
-        var place = GetPlace(placeID);
-        if (place == null) yield break;
+        var targetPlace = GetPlace(placeID);
+        if (targetPlace == null) yield break;
 
         _isMoving = true;
-        _currentPlace = place;
 
         SetPuzzleMode(PuzzleMode.Waiting, 0f);
+        if(_currentPlace != null){
+            yield return _currentPlace.TryToExitRoutine();
+        }
+        _currentPlace = targetPlace;
+
         new VignetteEnter(Color.grey.ModifiedAlpha(.5f), .5f).Execute();
+        
         new PlaceTransitionWithSwipe(placeID, .5f, ImageUtils.SwipeMode.OnlyFade).Execute();
         yield return new WaitForSeconds(.5f);
         new PlaceEffect(PlaceEffect.EffectType.PulseInfinite, 10f, .008f).Execute();
         Debug.Log("Try to visit");
-        yield return _currentPlace.TryToVisitRoutine();
+        yield return _currentPlace.TryToEnterRoutine();
 
         SetPuzzleMode(PuzzleMode.Move, .2f);
         yield return new WaitForSeconds(.2f);

@@ -12,6 +12,7 @@ public class PuzzlePlace : MonoBehaviour
     public string PlaceID => gameObject.name;
 
     [SerializeField] private string _enterEventID;
+    [SerializeField] private string _exitEventID;
     [SerializeField] private List<EventCondition> _unlockConditions;
     [SerializeField] private string _failureEventID;
 
@@ -50,6 +51,9 @@ public class PuzzlePlace : MonoBehaviour
             }
         }
 
+        _enterEventID = $"{name}Enter";
+        _exitEventID = $"{name}Exit";
+
         Debug.Log($"[PuzzlePlace] '{PlaceID}'에 {_eventTriggerZones.Count}개의 이벤트 트리거 존이 할당되었습니다.");
     }
 
@@ -80,7 +84,7 @@ public class PuzzlePlace : MonoBehaviour
         Debug.Log($"{PlaceID}의 부모가 {parentPlace.PlaceID}로 설정되었습니다.");
     }
 
-    public IEnumerator TryToVisitRoutine()
+    public IEnumerator TryToEnterRoutine()
     {
         if (!CheckUnlockConditions())
         {
@@ -89,10 +93,15 @@ public class PuzzlePlace : MonoBehaviour
         }
 
         Debug.Log($"[PuzzlePlace] 방문 횟수 : {_visitCount}");
-        if(!IsVisited){
-            yield return ExecuteEvent(_enterEventID);
-        }
+        // if(!IsVisited){
+        //     yield return ExecuteEvent(_enterEventID);
+        // }
         _visitCount++;
+        yield return ExecuteEvent(_enterEventID);
+    }
+    public IEnumerator TryToExitRoutine()
+    {
+        yield return ExecuteEvent(_exitEventID);
     }
 
     private IEnumerator ExecuteEvent(string eventID)

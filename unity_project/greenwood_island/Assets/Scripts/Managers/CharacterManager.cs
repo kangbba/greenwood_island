@@ -41,9 +41,7 @@ public class CharacterManager : SingletonManager<CharacterManager>
         // 캐릭터를 인스턴스화
         GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.SystemCanvas.CharacterLayer);
         Character character = characterObject.GetComponent<Character>();
-        character.Init();
-        character.ChangeEmotion(initialEmotionType, duration);
-        character.Show(initialEmotionType, Character.AnchorType.Bottom, true, duration, Ease.OutQuad);
+        character.Init(characterID, initialEmotionType);
         // 캐릭터 등록
         _instantiatedCharacters.Add(characterID, character);
 
@@ -120,12 +118,13 @@ public class CharacterManager : SingletonManager<CharacterManager>
     }
 
     // 캐릭터 파괴 함수
-    public void DestroyCharacter(string characterID)
+    public void FadeoutThenDestroyCharacter(string characterID, float duration)
     {
         if (_instantiatedCharacters.TryGetValue(characterID, out Character character))
         {
-            Object.Destroy(character.gameObject);
+            character.FadeOutAndDestroy(duration);
             _instantiatedCharacters.Remove(characterID);
+            Debug.Log($"Character Destroyed {characterID} -> POOL : {_instantiatedCharacters.Count}");
         }
         else
         {
@@ -134,11 +133,11 @@ public class CharacterManager : SingletonManager<CharacterManager>
     }
 
     // 모든 캐릭터 파괴 함수
-    public void DestroyAllCharacters()
+    public void FadeoutThenDestroyAllCharacters(float duration)
     {
         foreach (var character in _instantiatedCharacters.Values)
         {
-            Object.Destroy(character.gameObject);
+            character.FadeOutAndDestroy(duration);
         }
         _instantiatedCharacters.Clear();
     }

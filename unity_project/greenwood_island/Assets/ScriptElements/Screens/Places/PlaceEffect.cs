@@ -63,9 +63,9 @@ public class PlaceEffect : Element
 
             case EffectType.ScaleBounce:
                 _currentPlaceImage.transform
-                    .DOScale(Vector3.one * (1f + _strength), _duration / 3)
+                    .DOScale(Vector3.one * (1f + _strength), _duration / 2)
                     .SetEase(Ease.OutBounce)
-                    .OnComplete(() => _currentPlaceImage.transform.DOScale(Vector3.one, _duration / 3)); // 빠르게 커졌다가 원래 크기로 돌아옴
+                    .OnComplete(() => _currentPlaceImage.transform.DOScale(Vector3.one, _duration / 2)); // 빠르게 커졌다가 원래 크기로 돌아옴
                 break;
 
             case EffectType.FadeIn:

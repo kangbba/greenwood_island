@@ -28,7 +28,7 @@ public class PuzzleManager : SingletonManager<PuzzleManager>
 
     public void Init(string puzzleID)
     {
-        string resourcePath = ResourcePathManager.GetSharedResourcePath(puzzleID, ResourceType.Puzzle);
+        string resourcePath = ResourcePathManager.GetCurrentStoryResourcePath(puzzleID, ResourceType.Puzzle);
         _puzzlePrefabToSpawnTest = Resources.Load<Puzzle>(resourcePath);
         if (_puzzlePrefabToSpawnTest == null)
         {

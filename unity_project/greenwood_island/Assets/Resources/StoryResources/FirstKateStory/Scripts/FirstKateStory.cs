@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static ImageUtils;
-
 public class FirstKateStory : Story
 {
     public override List<Element> UpdateElements => new List<Element> {
@@ -37,15 +36,15 @@ public class FirstKateStory : Story
 
         new CharacterEnter(
             "Kate",
-            EmotionType.Happy,
-            .5f,
-            0
+            EmotionType.ArmCrossed_Smile,
+            .5f
         ),
+        
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("라이언! 또 왔네? 오늘도 빵 냄새 맡고 왔구나?"),
+                new Line("라이언! 또 빵 냄새에 이끌렸지? 네 코는 진짜 정확하단 말이야!"),
             }
         ),
 
@@ -63,30 +62,34 @@ public class FirstKateStory : Story
             "Ryan",
             new List<Line>
             {
-                new Line("응, 네 빵 냄새는 도저히 못 참겠더라. 오늘도 새벽부터 일했지?")
+                new Line("응, 네 빵 냄새는 정말 참을 수가 없어. 오늘도 새벽부터 일했지?")
             }
         ),
 
+        new EmotionChange("Kate", EmotionType.ArmCrossed_YeahRight),
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("당연하지! 오늘은 날씨가 따뜻해서 발효 시간이 조금 짧았어. 빵을 만들 때 날씨에 따라 발효도 달라지니까 매번 다르게 신경 써야 해.", 0),
+                new Line("당연하지! 오늘은 날씨가 따뜻해서 발효도 잘 됐어. 그래서 더 맛있을걸?"),
+                new Line("너라면 바로 알아볼 거지?")
             }
         ),
+
         new Dialogue(
             "Ryan",
             new List<Line>
             {
-                new Line("발효... 빵 굽는 게 단순한 게 아니구나.")
+                new Line("발효... 그게 이렇게 중요한 줄은 몰랐네. 네가 신경 쓰는 만큼, 빵이 완벽할 수밖에 없겠어.")
             }
         ),
+
         new Dialogue(
             "Mono",
             new List<Line>
             {
-                new Line("날씨에 따라 모든 게 달라지다니, 생각보다 훨씬 세심한 일이었다."),
-                new Line("케이트는 이 모든 걸 꼼꼼하게 챙기고 있다.")
+                new Line("날씨에 따라 빵이 달라지다니, 생각보다 훨씬 섬세한 일이었다."),
+                new Line("케이트는 그 모든 걸 완벽하게 신경 쓰고 있다.")
             }
         ),
 
@@ -94,17 +97,21 @@ public class FirstKateStory : Story
             "Ryan",
             new List<Line>
             {
-                new Line("오늘 빵은 또 어떤 맛일지 기대되네.")
+                new Line("오늘 빵은 또 어떤 맛일지 궁금하네.")
             }
         ),
 
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("기대해도 좋아! 오늘은 특별히 속을 더 부드럽게 만들었어. 먹어보면 바로 알 거야.")
-            },
-            fadeout: true
+        new EmotionChange("Kate", EmotionType.ArmCrossed_Energetic),
+        new ParallelElement(
+            new PlaceShake(.3f),
+            new Dialogue(
+                "Kate",
+                new List<Line>
+                {
+                    new Line("기대해도 좋아! 오늘은 특별히 속을 더 부드럽게 만들었어. 정말 한 번 먹어보면 그 차이를 알 거야."),
+                },
+                fadeout: true
+            )
         ),
         new ImaginationEnter(
             "Bread"
@@ -114,9 +121,9 @@ public class FirstKateStory : Story
             "Mono",
             new List<Line>
             {
-                new Line("그녀가 내미는 빵은 늘 특별하다."),
-                new Line("소박하지만 설명할 수 없는 깊이가 있다."),
-                new Line("한 입 베어 물 때마다 퍼지는 폭신한 식감은 마치 케이트의 정성스런 마음이 담겨 있는 듯하다.")
+                new Line("케이트가 내민 빵은 언제나 특별하다."),
+                new Line("소박하지만 설명할 수 없는 깊이가 느껴진다."),
+                new Line("한 입 베어 물 때마다 퍼지는 폭신한 식감은 마치 그녀의 정성이 그대로 녹아 있는 듯하다.")
             },
             fadeout: true
         ),
@@ -128,12 +135,47 @@ public class FirstKateStory : Story
                 new Line("정말 부드럽다... 네가 왜 이 빵을 자랑하는지 알겠어.")
             }
         ),
+        new EmotionChange("Kate", EmotionType.ArmCrossed_Smile),
 
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("그치? 자주 와! 네가 맛있게 먹으면 나도 더 기분 좋거든.")
+                new Line("그치? 자주 와. 네가 맛있게 먹으면 나도 더 힘이 나거든!"),
+            }
+        ),
+
+        // 추가된 대화
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("빵도 맛있지만, 네 베이커리 안은 항상 좋은 냄새로 가득 차 있네. 여긴 아침에 제일 바쁘지?")
+            }
+        ),
+        new EmotionChange("Kate", EmotionType.OneHandRaised_Shy),
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("맞아. 아침이면 사람들이 빵 사러 몰려오거든. 정신없이 바빠! 특히 애들이 좋아하는 초콜릿 크루아상은 눈 깜짝할 사이에 동나."),
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("크루아상이라... 그럼 내일은 그거 한 번 먹어봐야겠네. 그렇게 인기 많으면 내가 늦기 전에 서둘러야겠어.")
+            }
+        ),
+        new EmotionChange("Kate", EmotionType.ArmCrossed_YeahRight),
+
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("응, 네가 또 늦잠 자면 못 살지도 몰라!"),
             }
         ),
 
@@ -141,206 +183,157 @@ public class FirstKateStory : Story
             "Mono",
             new List<Line>
             {
-                new Line("케이트와 나누는 이런 대화가 요즘 나에게 가장 소중한 시간이다."),
-                new Line("평범한 일상 속에서 느껴지는 작은 행복이 이곳에 나를 묶어두는 것 같다.")
+                new Line("케이트와 나누는 이런 대화는 일상적이지만, 어쩐지 편안하고 기분 좋은 여운을 남긴다."),
+                new Line("마을에서 특별한 일은 많지 않지만, 이런 작은 순간들이 쌓여 지금의 나를 채워 주고 있었다.")
             }
         ),
+
+        new EmotionChange("Kate", EmotionType.ArmCrossed_Energetic),
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("참, 어제 마을 축제 얘기 들었어? 이번엔 좀 크게 준비한다던데.")
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("아, 축제 얘긴 들었는데 자세히는 몰라. 뭐하는 축제야?")
+            }
+        ),
+
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("1년에 한 번 하는 수확제 같은 거야. 마을 사람들이 다 모여서 먹고 즐기고, 공연도 하고. 작은 마을이라도 이런 행사는 빠질 수 없지!"),
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그렇구나. 그럼 나도 한 번 가봐야겠네. 사진 찍을 만한 장면도 많을 것 같고.")
+            }
+        ),
+
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("그래! 좋은 사진 많이 찍어서 나중에 나도 보여줘. 다 같이 즐기면 좋잖아!"),
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그래, 축제도 기대되지만 아직 마을을 제대로 다 둘러보진 못했어. 이 작은 골목길들도 참 매력 있더라.")
+            }
+        ),
+
+        new EmotionChange("Kate", EmotionType.ArmCrossed_Smile),
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("맞아, 이 골목들 사이사이에 숨은 가게들이 꽤 많아. 생각보다 작은 곳들이 많아서 그냥 지나치기 쉽거든."),
+                new Line("여기서 빵 사서 저기 시장 쪽으로 가면 더 재밌는 걸 많이 볼 수 있을 거야.")
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("시장 쪽? 아, 거긴 한 번도 안 가봤네. 어떤 곳인데?")
+            }
+        ),
+
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("주로 현지 사람들이 직접 키운 채소나 과일을 파는 작은 시장인데, 거기서 나는 냄새가 정말 좋아."),
+                new Line("특히 토요일이 되면 사람들이 모여서 꽤 활기차지. 그쪽에 가면 작은 카페도 몇 군데 있고, 구경할 것 많아.")
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그렇구나. 그럼 오늘은 그쪽으로 가볼까. 아직도 내가 못 본 곳이 이렇게 많다니, 생각보다 마을이 넓네.")
+            }
+        ),
+
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("넓진 않은데, 골목이 많아서 숨은 곳들이 많아. 아, 그리고 거기서 만나는 사람들하고도 얘기 좀 해봐."),
+                new Line("조셉 할아버지나 리사 같은 사람들이랑 인사해두면 좋아. 다들 친절하니까."),
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("조셉 할아버지는 들어본 것 같고, 리사는 누구야?")
+            }
+        ),
+
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("리사? 그녀는 도서관 사서야. 늘 책에 둘러싸여 지내지."),
+                new Line("사람들하고 말하는 걸 별로 좋아하지 않지만, 책과는 금방 친해지지. 도서관에서 일하는 모습은 정말 진지하고 집중력이 대단해."),
+                new Line("그쪽으로 가면 도서관 한번 들러봐. 아마 조용히 책을 정리하고 있을 거야.")
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("도서관 사서라... 책을 좋아하는 사람이구나. 근데 그럼 나랑은 별로 할 얘기가 없을지도 모르겠네.")
+            }
+        ),
+
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("아, 그런 생각 안 해도 돼. 리사는 낯을 많이 가리긴 하지만, 책 얘기를 하면 금방 눈이 반짝일걸."),
+                new Line("그쪽에 가서 마을에 대해 물어보면, 흥미로운 이야기도 들을 수 있을 거야. 한번 가봐.")
+            }
+        ),
+
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그럼 나중에 꼭 들러봐야겠네. 도서관이라, 재밌겠어."),
+            }
+        ),
+
         new Dialogue(
             "Mono",
             new List<Line>
             {
-                new Line("빵을 굽는 것도, 매일 반복되는 평화로운 일상도 어딘가 섬세한 조율이 필요했다."),
-                new Line("케이트의 정성스러운 손길이 느껴지는 이 빵은, 그린우드 섬의 작은 행복을 상징하는 것 같았다.")
+                new Line("케이트의 말을 들으니, 아직 내가 가보지 못한 곳들이 많다는 걸 다시 한 번 깨달았다."),
+                new Line("마을 시장과 도서관... 이곳을 더 알아가면, 이 섬의 매력을 더 느낄 수 있을지도 모른다."),
+                new Line("오늘은 마을을 천천히 둘러봐야겠다.")
             }
         ),
-        
+
         new AllCharactersClear(),
-
-        // 빵집에서 나와 섬 마을을 걷는 장면
-        new PlaceTransition(
-            new PlaceEnter("TownFruitStore"),
-            Color.black,
-            new PlaceEffect(PlaceEffect.EffectType.FadeIn, 2f, 1.1f)
-        ),
-        
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("섬 마을은 여전히 고요하다."),
-                new Line("햇살이 부드럽게 비치는 골목길을 걸으며, 나는 섬의 고즈넉한 풍경에 점점 익숙해져 가는 나를 느낀다."),
-                new Line("삶의 속도는 천천히 흐르고, 마을 사람들은 조용히 제 할 일을 한다."),
-                new Line("처음에는 이 느림이 답답했지만, 이제는 이곳이 나름의 리듬을 가지고 있다는 걸 알게 됐다."),
-            }
-        ),
-
-        // 주민들과 가벼운 인사를 나누는 장면
-        new CharacterEnter(
-            "OldMan",
-            EmotionType.Neutral,
-            .5f,
-            0
-        ),
-        new Dialogue(
-            "OldMan",
-            new List<Line>
-            {
-                new Line("안녕하세요, 라이언 씨. 오늘도 사진 찍으러 가는 길인가요?")
-            }
-        ),
-
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("네, 어르신. 날씨가 좋아서 좋은 사진이 나올 것 같아요."),
-            }
-        ),
-
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("이곳 사람들은 내가 사진을 찍으러 다니는 걸 모두 알고 있다."),
-                new Line("마을은 작고, 사람들끼리 금방 소문이 돈다. 이런 점이 때론 부담스럽기도 하지만..."),
-                new Line("그래도 이렇게 편안하게 인사를 건네는 모습은 싫지 않다."),
-            }
-        ),
-
-        // 조셉 아저씨와의 우연한 만남
-        new PlaceTransition(
-            new PlaceEnter("VillageBench"),
-            Color.clear,
-            new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 2f, 1.05f)
-        ),
-        
-        new CharacterEnter(
-            "Joseph",
-            EmotionType.Happy,
-            1f,
-            0
-        ),
-        
-        new Dialogue(
-        "Mono",
-        new List<Line>
-            {
-                new Line("저기 벤치에 앉아 계신 분은... 조셉 할아버지다."),
-                new Line("카페 씨브리즈의 주인이라는 이야기를 들은 적이 있다."),
-                new Line("한동안 몸이 좋지 않으셨다고 들었는데, 이제는 이렇게 밖에 나와 계시는구나.")
-            }
-        ),
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("안녕하세요, 조셉 할아버지. 여기서 쉬고 계시네요?")
-            }
-        ),
-        new Dialogue(
-            "Joseph",
-            new List<Line>
-            {
-                new Line("어, 라이언... 가끔은 이렇게 나와야지. 집에만 있으면 사람 미쳐."),
-                new Line("햇빛이 좋으니 바람도 맞고, 생각도 좀 정리할 겸 나왔지.")
-            }
-        ),
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("이제는 상태가 좀 나아지신 건가요?")
-            }
-        ),
-        new Dialogue(
-            "Joseph",
-            new List<Line>
-            {
-                new Line("음... 뭐, 그냥 그런 대로야. 나이 들면 원래 이런 거 아니겠어?"),
-                new Line("요즘은 그저 하루하루를 천천히 보낸다네. 섬도 그렇고, 나도 그렇고...")
-            }
-        ),
-        
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("조셉 할아버지는 느릿하게 말을 잇는다."),
-                new Line("그의 말 속에 섬의 시간과 같은 느긋함이 묻어난다.")
-            }
-        ),
-        
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("카페 다시 여셨다고 들었어요. 시간 날 때 커피 마시러 꼭 갈게요."),
-            }
-        ),
-
-        new Dialogue(
-            "Joseph",
-            new List<Line>
-            {
-                new Line("그래, 언제든지. 손님이 많지는 않지만 그게 또 괜찮아."),
-                new Line("그린우드는 원래 한적한 곳이거든. 그런 게 좋을 때도 있고."),
-            }
-        ),
-        
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("그렇죠. 저도 이 섬의 조용한 분위기가 좋아요. 도시와는 완전히 다르니까."),
-            }
-        ),
-
-        new Dialogue(
-            "Joseph",
-            new List<Line>
-            {
-                new Line("맞아, 도시는 너무 빨라. 이 섬은 좀... 다르지."),
-                new Line("그런데 말이야, 아무리 천천히 흘러도 결국 바람이라는 게 언제 불지 모르거든."),
-                new Line("뭐, 그건 나이 든 사람의 쓸데없는 걱정일 뿐일지도 모르겠지만.")
-            }
-        ),
-
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("할아버지의 말은 그저 평범한 일상의 대화 같았다."),
-                new Line("하지만 그가 덧붙인 마지막 말에서 어쩐지 묘한 기운을 느꼈다."),
-                new Line("섬의 조용함 속에 감춰진 무언가가 있을지도 모른다는 생각이, 잠시 스쳐 지나갔다."),
-            }
-        ),
-        
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("음, 할아버지 말씀이 맞을지도 모르죠. 아무리 평온해 보여도 언제든 변할 수 있으니까요."),
-            }
-        ),
-        
-        new Dialogue(
-            "Joseph",
-            new List<Line>
-            {
-                new Line("허허, 뭐 그렇지."),
-                new Line("하여튼 천천히 쉬면서 와. 커피는 준비해두겠네.")
-            }
-        ),
-        
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("조셉 할아버지와의 짧은 대화는 다시 일상 속으로 흘러갔다."),
-                new Line("이 섬에서의 삶은 천천히, 그리고 조용하게 계속된다. 하지만..."),
-                new Line("나는 섬의 고요함 이면에 더 많은 이야기가 있을지도 모른다는 생각을 떨칠 수 없었다.")
-            }
-        ),
-
     };
 }

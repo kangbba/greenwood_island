@@ -12,189 +12,184 @@ public class PuzzleInTown : Puzzle
         {
             "TownFruitStoreFrontEnter",
             new SequentialElement(
-                new Dialogue(
-                    "FruitSeller",
-                    new List<Line>
-                    {
-                        new Line("쌉니다! 싸요! 여기 과일 싱싱한 거 한 번 보세요! 오늘 딴 제일 신선한 거예요!"),
-                        new Line("어이, 거기 지나가는 양반! 안 사도 좋으니까 구경이라도 해보라고~!"),
-                        new Line("...젊은이, 못 보던 얼굴인데? 여기 처음 와 본 건가?")
-                    }
-                ),
-
-                new Dialogue(
-                    "Ryan",
-                    new List<Line>
-                    {
-                        new Line("하하하... 오늘 처음 와봤어요. 여긴는 엄청 활기차네요. 과일이 정말 신선해 보이네요."),
-                    }
-                ),
-
-                new Dialogue(
-                    "FruitSeller",
-                    new List<Line>
-                    {
-                        new Line("그럼! 이 동네에서 내가 제일 신선한 과일을 판다니까!"),
-                        new Line("올해도 농사가 잘됐거든. 전부 다 아말리안님 덕분이야."),
-                        new Line("그분이 날씨를 항상 좋게 만들어주셔서 농사짓기가 아주 편해. 덕분에 과일 맛도 끝내주지."),
-                        new Line("이 과일은 아말리안님께 바치는 과일 중에서도 제일 좋은 거라니까!"),
-                        new Line("한번 먹어봐. 한입 베어 물면 다른 데 과일은 생각도 안 날 걸?")
-                    }
-                ),
-                new Dialogue(
-                    "Mono",
-                    new List<Line>
-                    {
-                        new Line("아말리안님...?"),
-                        new Line("누구일까? 마을 사람들한테 꽤 중요한 인물인 것 같은데."),
+                new SnapchatEnter(
+                    characterEnters:
+                    new List<CharacterEnter>(){
+                        new CharacterEnter(
+                            "FruitSeller",
+                            EmotionType.Default,
+                            .5f
+                        )
                     },
-                    fadeout: true
+                    dialogues:
+                    new List<Dialogue>(){
+                        new Dialogue(
+                            "FruitSeller",
+                            new List<Line>
+                            {
+                                new Line("쌉니다! 싸요! 여기 과일 싱싱한 거 한 번 보세요! 오늘 딴 제일 신선한 거예요!"),
+                                new Line("어이, 거기 지나가는 양반! 안 사도 좋으니까 구경이라도 해보라고~!"),
+                                new Line("...젊은이, 못 보던 얼굴인데? 여기 처음 와 본 건가?")
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Ryan",
+                            new List<Line>
+                            {
+                                new Line("하하하... 오늘 처음 와봤어요. 여긴는 엄청 활기차네요. 과일이 정말 신선해 보이네요."),
+                            }
+                        ),
+
+                        new Dialogue(
+                            "FruitSeller",
+                            new List<Line>
+                            {
+                                new Line("그럼! 이 동네에서 내가 제일 신선한 과일을 판다니까!"),
+                                new Line("올해도 농사가 잘됐거든. 전부 다 아말리안님 덕분이야."),
+                                new Line("그분이 날씨를 항상 좋게 만들어주셔서 농사짓기가 아주 편해. 덕분에 과일 맛도 끝내주지."),
+                                new Line("이 과일은 아말리안님께 바치는 과일 중에서도 제일 좋은 거라니까!"),
+                                new Line("한번 먹어봐. 한입 베어 물면 다른 데 과일은 생각도 안 날 걸?")
+                            }
+                        ),
+                        new Dialogue(
+                            "Mono",
+                            new List<Line>
+                            {
+                                new Line("아말리안님...?"),
+                                new Line("누구일까? 마을 사람들한테 꽤 중요한 인물인 것 같은데."),
+                            },
+                            fadeout: true
+                        )
+                    }
+                    
                 )
             )
         },
         {
             "Town3Enter",
             new SequentialElement(
-                new ParallelElement(
-                    new CharacterEnter(
-                        "Kid1",
-                        EmotionType.Default,
-                        .33f
-                    ),
-                    new CharacterEnter(
-                        "Kid2",
-                        EmotionType.Default,
-                        .66f
-                    )
-                ),
-                new Dialogue(
-                    "Kid1",
-                    new List<Line>
-                    {
-                        new Line("잡아봐! 이번엔 내가 절대 안 잡힐 거야!"),
-                        new Line("이 골목은 내가 다 알아! 너 절대 못 따라올걸?"),
-                    }
-                ),
-                
-                new Dialogue(
-                    "Kid2",
-                    new List<Line>
-                    {
-                        new Line("흐흐! 이번엔 내가 더 빨라! 너 못 잡을 거야!"),
-                        new Line("준비됐지? 자, 술래잡기 시작!")
-                    }
-                ),
-
-                new Dialogue(
-                    "Kid1",
-                    new List<Line>
-                    {
-                        new Line("잠깐만, 저기 누가 오고 있어!"),
-                        new Line("...어? 형아, 못 보던 얼굴인데! 여긴 처음 온 거지?"),
-                    }
-                ),
-
-                new Dialogue(
-                    "Ryan",
-                    new List<Line>
-                    {
-                        new Line("하하, 맞아. 오늘 처음 왔어. 너희들 술래잡기 하고 있었구나."),
-                    }
-                ),
-
-                new Dialogue(
-                    "Kid2",
-                    new List<Line>
-                    {
-                        new Line("맞아! 형아도 같이 놀래? 우리가 술래잡기 엄청 잘해!"),
-                        new Line("여긴 골목이 좁아서 달아나기 딱 좋거든!")
-                    }
-                ),
-
-                new Dialogue(
-                    "Ryan",
-                    new List<Line>
-                    {
-                        new Line("근데 여긴 좀 위험해 보이는데, 이렇게 좁은 골목에서 뛰다가 다치지 않겠어?")
-                    }
-                ),
-
-                new Dialogue(
-                    "Kid1",
-                    new List<Line>
-                    {
-                        new Line("에이~ 우리 여긴 늘 안전해! 아무도 다친 적 없거든."),
-                        new Line("엄마가 여기선 걱정하지 말라고 했어. 아말리안님 덕분이래!")
-                    }
-                ),
-
-                new Dialogue(
-                    "Kid2",
-                    new List<Line>
-                    {
-                        new Line("맞아! 아말리안님이 우리 마을을 지켜주셔서 여기선 걱정 없어!"),
-                    }
-                ),
-                new ChoiceSet(
-                    "아말리안이 누군지에 대해 물어볼까?",
-                    new List<ChoiceContent>(){
-                        new ChoiceContent(
-                            "물어본다.", 
-                            new SequentialElement(
-                                new Dialogue(
-                                    "Ryan",
-                                    new List<Line>
-                                    {
-                                        new Line("아말리안님? 그분이 누구야?")
-                                    }
-                                ),
-
-                                new Dialogue(
-                                    "Kid1",
-                                    new List<Line>
-                                    {
-                                        new Line("음, 나도 한 번도 못 봤어!"),
-                                        new Line("엄마가 말했는데, 아말리안님이 계셔서 우리가 이렇게 안전하게 놀 수 있대."),
-                                        new Line("형아도 아말리안님 덕분에 안전한 거야!"),
-                                    }
-                                ),
-
-                                new Dialogue(
-                                    "Kid2",
-                                    new List<Line>
-                                    {
-                                        new Line("맞아! 아말리안님이 있으니까 마을이 항상 평화롭고 안전해! 술래잡기도 걱정 없어!"),
-                                        new Line("엄마가 그러는데, 아말리안님은 엄청 멋진 옷을 입고 계신대! 빛나는 옷이라나?"),
-                                        new Line("나도 꼭 한 번 보고 싶어!")
-                                    }
-                                ),
-                                new Dialogue(
-                                    "Mono",
-                                    new List<Line>
-                                    {
-                                        new Line("아이들은 역시 순수하다. 부모님 말만 듣고도 그렇게 믿고 있구나."),
-                                        new Line("나도 저런 시절이 있었지..."),
-                                    }
-                                )
-                            )
+                new SnapchatEnter(
+                    characterEnters:
+                    new List<CharacterEnter>(){
+                        new CharacterEnter(
+                            "Kid1",
+                            EmotionType.Default,
+                            .33f
                         ),
-                        new ChoiceContent(
-                            "물어보지 않는다.", 
-                            new SequentialElement(
-                                new Dialogue(
-                                    "Mono",
-                                    new List<Line>
-                                    {
-                                        new Line("아말리안이 누군지는 몰라도, 마을의 두터운 신뢰를 받고 있는 것 같다."),
-                                    },
-                                    fadeout: true
-                                )
-                            )
+                        new CharacterEnter(
+                            "Kid2",
+                            EmotionType.Default,
+                            .66f
+                        )
+                    },
+
+                    dialogues :
+                    new List<Dialogue>(){
+                        new Dialogue(
+                            "Kid1",
+                            new List<Line>
+                            {
+                                new Line("잡아봐! 이번엔 내가 절대 안 잡힐 거야!"),
+                                new Line("이 골목은 내가 다 알아! 너 절대 못 따라올걸?"),
+                            }
+                        ),
+                        new Dialogue(
+                            "Kid2",
+                            new List<Line>
+                            {
+                                new Line("흐흐! 이번엔 내가 더 빨라! 너 못 잡을 거야!"),
+                                new Line("준비됐지? 자, 술래잡기 시작!")
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Kid1",
+                            new List<Line>
+                            {
+                                new Line("잠깐만, 저기 누가 오고 있어!"),
+                                new Line("...어? 형아, 못 보던 얼굴인데! 여긴 처음 온 거지?"),
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Ryan",
+                            new List<Line>
+                            {
+                                new Line("하하, 맞아. 오늘 처음 왔어. 너희들 술래잡기 하고 있었구나."),
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Kid2",
+                            new List<Line>
+                            {
+                                new Line("맞아! 형아도 같이 놀래? 우리가 술래잡기 엄청 잘해!"),
+                                new Line("여긴 골목이 좁아서 달아나기 딱 좋거든!")
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Ryan",
+                            new List<Line>
+                            {
+                                new Line("근데 여긴 좀 위험해 보이는데, 이렇게 좁은 골목에서 뛰다가 다치지 않겠어?")
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Kid1",
+                            new List<Line>
+                            {
+                                new Line("에이~ 우리 여긴 늘 안전해! 아무도 다친 적 없거든."),
+                                new Line("엄마가 여기선 걱정하지 말라고 했어. 아말리안님 덕분이래!")
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Kid2",
+                            new List<Line>
+                            {
+                                new Line("맞아! 아말리안님이 우리 마을을 지켜주셔서 여기선 걱정 없어!"),
+                            }
+                        ),
+                        new Dialogue(
+                            "Ryan",
+                            new List<Line>
+                            {
+                                new Line("아말리안님? 그분이 누구야?")
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Kid1",
+                            new List<Line>
+                            {
+                                new Line("음, 나도 한 번도 못 봤어!"),
+                                new Line("엄마가 말했는데, 아말리안님이 계셔서 우리가 이렇게 안전하게 놀 수 있대."),
+                                new Line("형아도 아말리안님 덕분에 안전한 거야!"),
+                            }
+                        ),
+
+                        new Dialogue(
+                            "Kid2",
+                            new List<Line>
+                            {
+                                new Line("맞아! 아말리안님이 있으니까 마을이 항상 평화롭고 안전해! 술래잡기도 걱정 없어!"),
+                                new Line("엄마가 그러는데, 아말리안님은 엄청 멋진 옷을 입고 계신대! 빛나는 옷이라나?"),
+                                new Line("나도 꼭 한 번 보고 싶어!")
+                            }
+                        ),
+                        new Dialogue(
+                            "Mono",
+                            new List<Line>
+                            {
+                                new Line("아이들은 역시 순수하다. 부모님 말만 듣고도 그렇게 믿고 있구나."),
+                                new Line("나도 저런 시절이 있었지..."),
+                            }
                         )
                     }
-
                 )
-                
             )
         },
         {

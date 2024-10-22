@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
         ImaginationManager.Initialize();
         UIManager.Initialize();
         PuzzleManager.Initialize();
+        DialogueManager.Initialize();
 
         StartCoroutine(DelayStart(GameDataManager.CurrentStorySavedData));
 

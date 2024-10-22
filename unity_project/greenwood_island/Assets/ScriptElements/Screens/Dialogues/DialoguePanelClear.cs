@@ -19,14 +19,7 @@ public class DialoguePanelClear : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;
-
-        if (dialoguePlayer == null)
-        {
-            Debug.LogWarning("Dialogue :: dialoguePlayer is null");
-            yield break;
-        } // DialoguePlayer가 활성화되어 있으면 _duration 시간 동안 ShowUp(false) 실행
-        dialoguePlayer.FadeOutPanel(_duration);
+        DialogueManager.Instance.FadeOutDialoguePlayer(_duration);
         yield return new WaitForSeconds(_duration);
     }
 }

@@ -31,8 +31,7 @@ public class Dialogue : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        DialoguePlayer dialoguePlayer = UIManager.SystemCanvas.DialoguePlayer;
-
+        DialoguePlayer dialoguePlayer = DialogueManager.Instance.GetOrCreateDialoguePlayer(false, false);
         if (dialoguePlayer == null)
         {
             Debug.LogWarning("Dialogue :: dialoguePlayer is null");
@@ -44,15 +43,12 @@ public class Dialogue : Element
 
         Character activeCharacter = CharacterManager.Instance.GetActiveCharacter(_characterID);
         CharacterData characterData =  CharacterManager.Instance.GetCharacterData(_characterID);
-        if(characterData != null){
-            Debug.Log(characterData.CharacterID);
-        }
-
         //캐릭터 텍스트
         if(characterData == null){
             dialoguePlayer.ClearCharacterText();
         }
         else{
+            Debug.Log(characterData.CharacterID);
             string characterStr = characterData.CharacterName_Ko;
             Color characterStrColor = characterData.CharacterColor;
             dialoguePlayer.SetCharacterText(characterStr, characterStrColor);

@@ -10,14 +10,16 @@ public class CharacterEnter : Element
     private float _duration;
 
     // 생성자에서 EmotionType과 AnchorType을 받도록 수정
-    public CharacterEnter(string characterID, EmotionType initialEmotionType, float screenPeroneX)
+    public CharacterEnter(string characterID, EmotionType initialEmotionType, float screenPeroneX, float duration = .5f)
     {
         this._characterID = characterID;
         this._initialEmotionType = initialEmotionType; // 초기 감정을 enum으로 설정
         this._screenPeroneX = screenPeroneX;
+        _duration = duration;
     }
 
     public string CharacterID { get => _characterID; }
+    public float Duration { get => _duration; }
 
     public override void ExecuteInstantly()
     {
@@ -27,7 +29,6 @@ public class CharacterEnter : Element
 
     public override IEnumerator ExecuteRoutine()
     {
-        _duration = .5f;
         // 캐릭터 생성 및 위치 설정
         Character character = CharacterManager.Instance.CreateCharacter(_characterID, _initialEmotionType, _duration, _screenPeroneX);
         if (character == null)

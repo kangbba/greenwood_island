@@ -5,14 +5,6 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public enum EDialogueState
-{
-    NotStarted,    // 대화가 시작되지 않은 상태
-    Typing,        // 현재 텍스트가 타이핑되고 있는 상태
-    Waiting,       // 타이핑이 끝나고, 대기 중인 상태
-    Finished       // 모든 대화가 끝난 상태
-}
-
 public class DialoguePlayer : MonoBehaviour
 {
     [SerializeField] private bool _showDebug;
@@ -21,18 +13,19 @@ public class DialoguePlayer : MonoBehaviour
     [SerializeField] private Image _characterTextBackground;
     [SerializeField] private TextMeshProUGUI _characterText;
     [SerializeField] private TextDisplayer _dialogueText;
-    [SerializeField] private DialogueGuide _dialogueGuide;  // DialogueGuide 참조
 
     [SerializeField] private CanvasGroup _canvasGroup;
 
-    private EDialogueState _dialogueState = EDialogueState.NotStarted;
 
     public bool CanCompleteInstantly { get; set; } = true; // 즉시 완료 가능 여부를 설정하는 옵션
-    public EDialogueState DialogueState => _dialogueState;
 
-    private void Awake()
-    {
+    private void Awake(){
+        ClearCharacterText();
+        ClearDialogueText();
         FadeOutPanel(0f);
+    }
+    public void Init(){
+
     }
 
 #if UNITY_EDITOR
@@ -76,6 +69,10 @@ public class DialoguePlayer : MonoBehaviour
 
     public void SetCharacterText(string s, Color characterColor)
     {   
+        if(_characterText == null){
+            Debug.Log("_characterText is null");
+            return;
+        }
         _characterText.SetText(s);
         _characterText.color = characterColor;
         Color characterTextBackgroundColor = string.IsNullOrEmpty(s) ? Color.clear :  Color.Lerp(characterColor, Color.black, .5f).ModifiedAlpha(_lineTextBackground.color.a);
@@ -87,37 +84,4 @@ public class DialoguePlayer : MonoBehaviour
         _dialogueText.SetAllCompleted();
     }
 
-    public void SetState(EDialogueState newState)
-    {
-        if (_dialogueState == newState)
-        {
-            return; // 중복된 상태로 전환하지 않음
-        }
-
-        _dialogueState = newState;
-
-        // 상태 전환에 따른 작업 수행
-        switch (newState)
-        {
-            case EDialogueState.Typing:
-                _dialogueGuide.SetState(GuideState.Hidden);
-                break;
-            case EDialogueState.Waiting:
-                UpdateDialogueGuidePosition();
-                _dialogueGuide.SetState(GuideState.Ongoing);
-                break;
-            case EDialogueState.Finished:
-                UpdateDialogueGuidePosition();
-                _dialogueGuide.SetState(GuideState.Ended);
-                break;
-            case EDialogueState.NotStarted:
-                _dialogueGuide.SetState(GuideState.Hidden);
-                break;
-        }
-    }
-    
-
-    private void UpdateDialogueGuidePosition()
-    {
-    }
 }

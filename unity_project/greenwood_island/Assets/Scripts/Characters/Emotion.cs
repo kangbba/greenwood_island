@@ -11,7 +11,9 @@ public class Emotion : MonoBehaviour
     [SerializeField] private Image[] _mouthImages;      // 말할 때 입 모양 이미지 배열
     [SerializeField] private RectTransform _rectTr;      
 
+    private Image Img => GetComponent<Image>();
 
+    private Vector2 _initialScale;
     private Vector2[] _mouthImgInitialScales;
     private Vector2 _blinkIntervalRange = new Vector2(2f, 5f); // 눈 깜박임 간격
     private Vector2 _talkIntervalRange = new Vector2(.05f, .25f); // 말하는 간격
@@ -27,6 +29,7 @@ public class Emotion : MonoBehaviour
 
     private void Awake(){
         
+        _initialScale = transform.localScale;
         _mouthImgInitialScales = new Vector2[_mouthImages.Length];
 
         for (int i = 0; i < _mouthImages.Length; i++)
@@ -35,6 +38,24 @@ public class Emotion : MonoBehaviour
             {
                 _mouthImgInitialScales[i] = _mouthImages[i].transform.localScale;
             }
+        }
+    }
+
+    
+    // 하이라이트 처리 함수
+    public void Highlight(bool highlight, float duration)
+    {   
+        if (highlight)
+        {
+            // 하이라이트 적용: 원래 색상으로 복원
+            Img.DOColor(Color.white, duration);
+            transform.DOScale(_initialScale * 1.2f, duration); // 크기 1.2배
+        }
+        else
+        {
+            // 하이라이트 해제: 회색으로 전환
+            Img.DOColor(Color.gray, duration);
+            transform.DOScale(_initialScale, duration); // 크기 1.2배
         }
     }
     private void Update()

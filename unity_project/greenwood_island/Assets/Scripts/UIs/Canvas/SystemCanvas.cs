@@ -13,7 +13,7 @@ public class SystemCanvas : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _intertitleText;
     [SerializeField] private Transform _fxLayer;
     [SerializeField] private Transform _puzzleUILayer;
-    [SerializeField] private DialoguePlayer _dialoguePlayer;
+    [SerializeField] private Transform _dialoguePlayerLayer;
     [SerializeField] private Transform _cutInLayer;
     [SerializeField] private Transform _userActionWindowLayer;
     [SerializeField] private Transform _choiceUILayer;
@@ -41,7 +41,7 @@ public class SystemCanvas : MonoBehaviour
     public TextMeshProUGUI IntertitleText { get => _intertitleText; }
     public Transform FXLayer { get => _fxLayer;  }
     public Transform PuzzleUILayer { get => _puzzleUILayer; }
-    public DialoguePlayer DialoguePlayer { get => _dialoguePlayer; }
+    public Transform DialoguePlayerLayer { get => _dialoguePlayerLayer; }
     public Transform CutInLayer { get => _cutInLayer; }
     public Transform UserActionWindowLayer { get => _userActionWindowLayer; }
     public Transform ChoiceUILayer { get => _choiceUILayer;  }

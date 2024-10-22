@@ -35,6 +35,13 @@ public class Character : MonoBehaviour
 
     private Emotion _currentEmotion;
 
+    public void Highlight(bool b, float duration){
+        if(_currentEmotion == null){
+            Debug.LogWarning("_currentEmotion is null");
+            return;
+        }
+        _currentEmotion.Highlight(b, duration);
+    }
     public void Init(string characterID, EmotionType initialEmotionType)
     {
         // 감정 데이터를 초기화

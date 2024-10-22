@@ -168,7 +168,7 @@ public abstract class Puzzle : MonoBehaviour
             Debug.LogWarning($"[EventTriggerZone] 이벤트 '{eventID}'를 찾을 수 없습니다.");
             yield break;
         }
-        new PlaceOverlayFilm(Color.black.ModifiedAlpha(.3f)).Execute();
+        new PlaceOverlayFilm(Color.black.ModifiedAlpha(.6f)).Execute();
         yield return new WaitForSeconds(.3f);
 
         yield return StartCoroutine(eventElement.ExecuteRoutine());

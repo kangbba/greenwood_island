@@ -33,9 +33,8 @@ public class PuzzleEnter : Element
         Debug.Log($"PuzzleEnter 실행: {_puzzleID}");
 
         yield return CoroutineUtils.StartCoroutine(PuzzleManager.Instance.WaitUntilPuzzleCleared());
-        Debug.Log($"Puzzle {_puzzleID} 완료!");
 
-        // 코루틴 종료
-        yield return null;
+        PuzzleManager.Instance.DestroyCurrentPuzzle();
+        Debug.Log($"Puzzle {_puzzleID} 완료!");
     }
 }

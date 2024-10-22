@@ -126,6 +126,9 @@ public class Emotion : MonoBehaviour
     {
         for (int i = 0; i < _mouthImages.Length; i++)
         {
+            if(_mouthImages[i] == null){
+                continue;
+            }
             _mouthImages[i].transform.localScale = _mouthImgInitialScales[i] * scale;
             _mouthImages[i].gameObject.SetActive(i == index); // 인덱스가 일치하면 활성화, 아니면 비활성화
         }
@@ -135,7 +138,6 @@ public class Emotion : MonoBehaviour
     private void SetOpenEyes(bool b)
     {
         if(_openedEyesImg == null){
-            Debug.LogWarning("opened eyes img is null");
             return;
         }
         _openedEyesImg.gameObject.SetActive(b);  

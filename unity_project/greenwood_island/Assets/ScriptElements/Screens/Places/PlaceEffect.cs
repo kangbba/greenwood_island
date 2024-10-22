@@ -19,7 +19,8 @@ public class PlaceEffect : Element
         ScaleBounce,
         FadeIn,
         FadeOut,
-        Vignette
+        Vignette,
+        Restore
     }
 
     private EffectType _effectType;
@@ -106,6 +107,12 @@ public class PlaceEffect : Element
 
             case EffectType.ShowDownward:
                 _currentPlaceImage.transform.DOMoveY(_currentPlaceImage.transform.position.y + _strength, _duration).SetEase(_easeType);
+                break;
+
+            case EffectType.Restore:
+                _currentPlaceImage.FadeImage(Color.white, _duration, _easeType);
+                _currentPlaceImage.ScaleImage(Vector3.one, _duration, _easeType);
+                _currentPlaceImage.MoveImage(Vector2.zero, _duration, _easeType);
                 break;
         }
 

@@ -14,6 +14,7 @@ public enum PuzzleMode
 public abstract class Puzzle : MonoBehaviour
 {
     public abstract Dictionary<string, SequentialElement> EventDictionary {get; }
+    private List<string> _clearedEventKeys = new List<string>();
 
     [SerializeField] private PuzzlePlace _initialPlace;
     [SerializeField] private Button _enterSearchModeBtn;
@@ -23,9 +24,9 @@ public abstract class Puzzle : MonoBehaviour
 
     private PuzzleMode _currentPuzzleMode;
 
-    public bool IsCleared { get; set; }
+    public abstract bool GetIsPuzzleCleared();
     private List<PuzzlePlace> _allPlaces;
-    private PuzzlePlace _currentPlace;
+    protected PuzzlePlace _currentPlace;
     private bool _isMoving = false;
 
     public Transform BtnParent { get => _btnParent;  }
@@ -41,6 +42,7 @@ public abstract class Puzzle : MonoBehaviour
     }
     public void Init()
     {
+        _clearedEventKeys.Clear();
         foreach (var place in _allPlaces)
         {
             place.InitPuzzlePlace(this);
@@ -119,22 +121,26 @@ public abstract class Puzzle : MonoBehaviour
         _isMoving = true;
 
         SetPuzzleMode(PuzzleMode.Waiting, 0f);
+
         if(_currentPlace != null){
             yield return _currentPlace.TryToExitRoutine();
         }
         _currentPlace = targetPlace;
 
-        new VignetteEnter(Color.grey.ModifiedAlpha(.5f), .5f).Execute();
-        
         new PlaceTransitionWithSwipe(placeID, .5f, ImageUtils.SwipeMode.OnlyFade).Execute();
         yield return new WaitForSeconds(.5f);
-        new PlaceEffect(PlaceEffect.EffectType.PulseInfinite, 10f, .008f).Execute();
-        Debug.Log("Try to visit");
-        yield return _currentPlace.TryToEnterRoutine();
 
-        SetPuzzleMode(PuzzleMode.Move, .2f);
-        yield return new WaitForSeconds(.2f);
 
+        if(GetIsPuzzleCleared()){
+            Debug.Log("퍼즐 cleared상태 이므로 out");
+        }
+        else{
+            Debug.Log("Try to visit");
+            yield return _currentPlace.TryToEnterRoutine();
+            SetPuzzleMode(PuzzleMode.Move, .2f);
+            yield return new WaitForSeconds(.2f);
+        }
+        
         _isMoving = false;
     }
 
@@ -145,5 +151,53 @@ public abstract class Puzzle : MonoBehaviour
     }
     public SequentialElement GetEvent(string eventID){
         return EventDictionary.GetValueOrDefault(eventID);
+    }
+
+    public IEnumerator ExecuteEvent(string eventID)
+    {
+        if (string.IsNullOrEmpty(eventID))
+        {
+            Debug.LogWarning($"[PuzzlePlace] 이벤트 ID가 비어 있습니다.");
+            yield break;
+        }
+
+        var eventElement = GetEvent(eventID);
+
+        if(eventElement == null){
+
+            Debug.LogWarning($"[EventTriggerZone] 이벤트 '{eventID}'를 찾을 수 없습니다.");
+            yield break;
+        }
+        new PlaceOverlayFilm(Color.black.ModifiedAlpha(.3f)).Execute();
+        yield return new WaitForSeconds(.3f);
+
+        yield return StartCoroutine(eventElement.ExecuteRoutine());
+
+        if(!IsEventCleared(eventID)){
+            Debug.Log($"{eventID} 의 이벤트는 완료된것으로 등록되었음");
+            SetEventCleared(eventID, true);
+        }
+
+        new AllCharactersClear(.3f).Execute();
+        new PlaceOverlayFilmClear(.3f).Execute();
+        new DialoguePanelClear(.3f).Execute();
+        yield return new WaitForSeconds(.3f);
+    }
+
+    public bool IsEventCleared(string eventID){
+        return _clearedEventKeys.Contains(eventID);
+    }
+
+    public void SetEventCleared(string eventID, bool setClear){
+        if(setClear){
+            if(!_clearedEventKeys.Contains(eventID)){
+                _clearedEventKeys.Add(eventID);
+            }
+        }
+        else{
+            if(_clearedEventKeys.Contains(eventID)){
+                _clearedEventKeys.Remove(eventID);
+            }
+        }
     }
 }

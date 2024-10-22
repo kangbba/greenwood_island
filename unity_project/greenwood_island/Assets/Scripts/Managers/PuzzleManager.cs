@@ -47,6 +47,10 @@ public class PuzzleManager : SingletonManager<PuzzleManager>
         LoadButtonPrefabs();  // 버튼 프리팹 로드
         Debug.Log("Puzzle 프리팹이 인스턴스화되었습니다.");
     }   
+    public void DestroyCurrentPuzzle(){
+        Destroy(_currentPuzzle.gameObject);
+        _currentPuzzle = null;
+    }
     // ResourcePathManager를 이용해 버튼 프리팹을 로드하는 메서드
     private void LoadButtonPrefabs()
     {
@@ -73,7 +77,7 @@ public class PuzzleManager : SingletonManager<PuzzleManager>
     public IEnumerator WaitUntilPuzzleCleared()
     {
         // PlaceManager.Instance.CurrentPuzzle.IsCleared가 true가 될 때까지 대기
-        while(!_currentPuzzle.IsCleared){
+        while(!_currentPuzzle.GetIsPuzzleCleared()){
             yield return null;
         }
         Destroy(_currentPuzzle.gameObject);

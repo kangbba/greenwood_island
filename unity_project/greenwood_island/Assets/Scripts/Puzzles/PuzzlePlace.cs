@@ -18,9 +18,8 @@ public class PuzzlePlace : MonoBehaviour
 
     private Puzzle _parentPuzzle;
     private PuzzlePlace _parentPlace;
-    private int _visitCount = 0;
-
-    public bool IsVisited => _visitCount > 0;
+    private bool _isVisited = false;
+    public bool IsVisited => _isVisited;
     public PuzzlePlace ParentPlace => _parentPlace;
 
     private void Awake()
@@ -88,35 +87,18 @@ public class PuzzlePlace : MonoBehaviour
     {
         if (!CheckUnlockConditions())
         {
-            yield return ExecuteEvent(_failureEventID);
+            yield return _parentPuzzle.ExecuteEvent(_failureEventID);
             yield break;
         }
 
-        Debug.Log($"[PuzzlePlace] 방문 횟수 : {_visitCount}");
-        // if(!IsVisited){
-        //     yield return ExecuteEvent(_enterEventID);
-        // }
-        _visitCount++;
-        yield return ExecuteEvent(_enterEventID);
+        if(!_isVisited){
+            _isVisited = true;
+            yield return _parentPuzzle.ExecuteEvent(_enterEventID);
+        }
     }
     public IEnumerator TryToExitRoutine()
     {
-        yield return ExecuteEvent(_exitEventID);
-    }
-
-    private IEnumerator ExecuteEvent(string eventID)
-    {
-        if (string.IsNullOrEmpty(eventID))
-        {
-            Debug.LogWarning($"[PuzzlePlace] 이벤트 ID가 비어 있습니다.");
-            yield break;
-        }
-
-        var eventElement = _parentPuzzle.GetEvent(eventID);
-        if (eventElement != null)
-        {
-            yield return StartCoroutine(eventElement.ExecuteRoutine());
-        }
+        yield return _parentPuzzle.ExecuteEvent(_exitEventID);
     }
 
     public bool CheckUnlockConditions()

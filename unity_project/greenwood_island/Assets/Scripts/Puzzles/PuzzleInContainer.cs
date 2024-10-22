@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 public class PuzzleInContainer : Puzzle
 {
+    public override bool GetIsPuzzleCleared()
+    {
+        return ItemManager.HasItem("ContainerKey");
+    }
     public override Dictionary<string, SequentialElement> EventDictionary => 
     new Dictionary<string, SequentialElement>()
     {

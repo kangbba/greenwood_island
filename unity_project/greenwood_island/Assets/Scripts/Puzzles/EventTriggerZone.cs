@@ -56,7 +56,7 @@ public class EventTriggerZone : MonoBehaviour
         _parentPuzzle.SetPuzzleMode(PuzzleMode.Waiting, 0f);
         if (!CheckConditions())
         {
-            yield return ExecuteEvent(_failureEventID);
+            yield return _parentPuzzle.ExecuteEvent(_failureEventID);
             _parentPuzzle.SetPuzzleMode(currentPuzzleMode, 0f);
             yield break;
         }
@@ -81,28 +81,6 @@ public class EventTriggerZone : MonoBehaviour
         }
         Debug.Log("[EventTriggerZone] 모든 조건 충족.");
         return true;
-    }
-
-    // 이벤트 실행 루틴
-    private IEnumerator ExecuteEvent(string eventID)
-    {
-        if (string.IsNullOrEmpty(eventID))
-        {
-            Debug.LogWarning("[EventTriggerZone] 이벤트 ID가 설정되지 않았습니다.");
-            yield break;
-        }
-
-
-        var eventElement = _parentPuzzle.GetEvent(eventID);
-        if (eventElement != null)
-        {
-            yield return StartCoroutine(eventElement.ExecuteRoutine());
-            Debug.Log($"[EventTriggerZone] 이벤트 '{eventID}' 실행 완료.");
-        }
-        else
-        {
-            Debug.LogWarning($"[EventTriggerZone] 이벤트 '{eventID}'를 찾을 수 없습니다.");
-        }
     }
 
     // 모드에 따른 버튼 아이콘 및 가시성 업데이트

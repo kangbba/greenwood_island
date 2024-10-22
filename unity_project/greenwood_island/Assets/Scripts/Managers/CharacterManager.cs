@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class CharacterManager : SingletonManager<CharacterManager>
 {
+
+    private const string CHARACTER_PREFAB_PATH = "CharacterManager/CharacterPrefab";
     private Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>(); // 인스턴스화된 캐릭터
     private Dictionary<string, CharacterData> _characterDataCache = new Dictionary<string, CharacterData>(); // 캐릭터 데이터 캐시
 
@@ -19,14 +21,12 @@ public class CharacterManager : SingletonManager<CharacterManager>
             return _instantiatedCharacters[characterID];
         }
 
-        // 캐릭터 프리팹 경로 설정 및 로드
-        string path = ResourcePathManager.GetSharedResourcePath(characterID, ResourceType.Character); // 경로 가져오기
-        GameObject characterPrefab = Resources.Load<GameObject>(path);
+        GameObject characterPrefab = Resources.Load<GameObject>(CHARACTER_PREFAB_PATH);
 
         // 프리팹을 찾지 못했을 경우
         if (characterPrefab == null)
         {
-            Debug.LogError($"Character prefab with ID '{characterID}' not found at path '{path}'.");
+            Debug.LogError($"Character prefab with ID '{characterID}' not found at path '{CHARACTER_PREFAB_PATH}'.");
             return null;
         }
 
@@ -60,7 +60,7 @@ public class CharacterManager : SingletonManager<CharacterManager>
         }
 
         // 캐릭터 데이터 경로 설정 및 로드
-        string path = $"SharedResources/CharacterDatas/CharacterData_{characterID}";
+        string path = $"CharacterManager/CharacterDatas/{characterID}";
         characterData = Resources.Load<CharacterData>(path);
 
         if (characterData == null)

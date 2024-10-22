@@ -7,11 +7,9 @@ public enum ResourceType
     SFX,
     Place,
     Story,
-    Character,
     Imagination,
     StoryData,
     Puzzle,
-    EmotionPrefab
 }
 
 public static class ResourcePathManager
@@ -88,10 +86,6 @@ public static class ResourcePathManager
                 resourcePath = $"{basicFolderPath}/Scripts/{resourceID}";
                 break;
 
-            case ResourceType.Character:
-                resourcePath = $"{basicFolderPath}/Characters/{resourceID}";
-                break;
-
             case ResourceType.Imagination:
                 resourcePath = $"{basicFolderPath}/Imaginations/{resourceID}";
                 break;
@@ -102,10 +96,6 @@ public static class ResourcePathManager
 
             case ResourceType.Puzzle:
                 resourcePath = $"{basicFolderPath}/Puzzles/{resourceID}";
-                break;
-            
-            case ResourceType.EmotionPrefab:
-                resourcePath = $"{basicFolderPath}/Emotions/{resourceID}";
                 break;
                 
             default:

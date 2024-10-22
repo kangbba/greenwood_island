@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public enum EmotionType
 {
+    Default,
     ArmCrossed_Smile,
     ArmCrossed_Energetic,
     ArmCrossed_YeahRight,           
@@ -25,7 +26,7 @@ public class EmotionData
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] private string _characterID;  // 캐릭터 이름 (예: "Kate", "Lisa")
+    private string _characterID;  // 캐릭터 이름 (예: "Kate", "Lisa")
     private bool _isJumping = false;  // 점프 중복 방지 플래그
 
 
@@ -43,10 +44,8 @@ public class Character : MonoBehaviour
         foreach (EmotionType emotionType in Enum.GetValues(typeof(EmotionType)))
         {
             // ResourceID는 characterID와 emotionType을 조합하여 생성
-            string resourceID = $"{characterID}/{emotionType.ToString()}";
-
             // 경로 생성: characterID/EmotionType 경로에 해당하는 프리팹을 불러옴
-            string resourcePath = ResourcePathManager.GetSharedResourcePath(resourceID, ResourceType.EmotionPrefab);
+            string resourcePath = $"CharacterManager/Emotions/{characterID}/{emotionType.ToString()}";
             Emotion emotionPrefab = Resources.Load<Emotion>(resourcePath);
 
             if (emotionPrefab != null)

@@ -242,8 +242,7 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("맞아, 이 골목들 사이사이에 숨은 가게들이 꽤 많아. 생각보다 작은 곳들이 많아서 그냥 지나치기 쉽거든."),
-                new Line("여기서 빵 사서 저기 시장 쪽으로 가면 더 재밌는 걸 많이 볼 수 있을 거야.")
+                new Line("맞아, 마을 중심으로 가면 더 많은 사람들을 만날 수 있을 거야. 특히 분수대 주변이 가장 활기차지."),
             }
         ),
 
@@ -251,7 +250,7 @@ public class FirstKateStory : Story
             "Ryan",
             new List<Line>
             {
-                new Line("시장 쪽? 아, 거긴 한 번도 안 가봤네. 어떤 곳인데?")
+                new Line("분수대? 거긴 어떤 곳이야?")
             }
         ),
 
@@ -259,8 +258,7 @@ public class FirstKateStory : Story
             "Kate",
             new List<Line>
             {
-                new Line("주로 현지 사람들이 직접 키운 채소나 과일을 파는 작은 시장인데, 거기서 나는 냄새가 정말 좋아."),
-                new Line("특히 토요일이 되면 사람들이 모여서 꽤 활기차지. 그쪽에 가면 작은 카페도 몇 군데 있고, 구경할 것 많아.")
+                new Line("마을 중심이야. 사람들이 자주 모이는 곳이라 산책하거나 이야기를 나누기 좋지. 넌 사진 찍을 만한 장면도 많을 거야."),
             }
         ),
 
@@ -268,59 +266,16 @@ public class FirstKateStory : Story
             "Ryan",
             new List<Line>
             {
-                new Line("그렇구나. 그럼 오늘은 그쪽으로 가볼까. 아직도 내가 못 본 곳이 이렇게 많다니, 생각보다 마을이 넓네.")
+                new Line("그렇구나. 그럼 오늘은 그쪽으로 가봐야겠다. 아직도 내가 못 본 곳이 많네.")
             }
         ),
 
+        new EmotionChange("Kate", EmotionType.ArmCrossed_YeahRight),
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("넓진 않은데, 골목이 많아서 숨은 곳들이 많아. 아, 그리고 거기서 만나는 사람들하고도 얘기 좀 해봐."),
-                new Line("조셉 할아버지나 리사 같은 사람들이랑 인사해두면 좋아. 다들 친절하니까."),
-            }
-        ),
-
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("조셉 할아버지는 들어본 것 같고, 리사는 누구야?")
-            }
-        ),
-
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("리사? 그녀는 도서관 사서야. 늘 책에 둘러싸여 지내지."),
-                new Line("사람들하고 말하는 걸 별로 좋아하지 않지만, 책과는 금방 친해지지. 도서관에서 일하는 모습은 정말 진지하고 집중력이 대단해."),
-                new Line("그쪽으로 가면 도서관 한번 들러봐. 아마 조용히 책을 정리하고 있을 거야.")
-            }
-        ),
-
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("도서관 사서라... 책을 좋아하는 사람이구나. 근데 그럼 나랑은 별로 할 얘기가 없을지도 모르겠네.")
-            }
-        ),
-
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("아, 그런 생각 안 해도 돼. 리사는 낯을 많이 가리긴 하지만, 책 얘기를 하면 금방 눈이 반짝일걸."),
-                new Line("그쪽에 가서 마을에 대해 물어보면, 흥미로운 이야기도 들을 수 있을 거야. 한번 가봐.")
-            }
-        ),
-
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("그럼 나중에 꼭 들러봐야겠네. 도서관이라, 재밌겠어."),
+                new Line("천천히 둘러봐. 분수대 근처에서 마을 사람들도 자주 마주칠 거야."),
             }
         ),
 
@@ -329,7 +284,7 @@ public class FirstKateStory : Story
             new List<Line>
             {
                 new Line("케이트의 말을 들으니, 아직 내가 가보지 못한 곳들이 많다는 걸 다시 한 번 깨달았다."),
-                new Line("마을 시장과 도서관... 이곳을 더 알아가면, 이 섬의 매력을 더 느낄 수 있을지도 모른다."),
+                new Line("마을 중심 분수대... 그곳에서 더 많은 사람들을 만나고, 이 섬의 분위기를 더 알아갈 수 있을지도 모른다."),
                 new Line("오늘은 마을을 천천히 둘러봐야겠다.")
             }
         ),

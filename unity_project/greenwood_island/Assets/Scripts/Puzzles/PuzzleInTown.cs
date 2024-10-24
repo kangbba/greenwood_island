@@ -16,15 +16,15 @@ public class PuzzleInTown : Puzzle
                     characterEnters:
                     new List<CharacterEnter>(){
                         new CharacterEnter(
-                            "FruitSeller",
-                            EmotionType.Default,
+                            "Merchant1",
+                            CommonEmotionID.Default,
                             .5f
                         )
                     },
                     dialogues:
                     new List<Dialogue>(){
                         new Dialogue(
-                            "FruitSeller",
+                            "Merchant1",
                             new List<Line>
                             {
                                 new Line("쌉니다! 싸요! 여기 과일 싱싱한 거 한 번 보세요! 오늘 딴 제일 신선한 거예요!"),
@@ -42,7 +42,7 @@ public class PuzzleInTown : Puzzle
                         ),
 
                         new Dialogue(
-                            "FruitSeller",
+                            "Merchant1",
                             new List<Line>
                             {
                                 new Line("그럼! 이 동네에서 내가 제일 신선한 과일을 판다니까!"),
@@ -74,12 +74,12 @@ public class PuzzleInTown : Puzzle
                     new List<CharacterEnter>(){
                         new CharacterEnter(
                             "Kid1",
-                            EmotionType.Default,
+                            CommonEmotionID.Default,
                             .33f
                         ),
                         new CharacterEnter(
                             "Kid2",
-                            EmotionType.Default,
+                            CommonEmotionID.Default,
                             .66f
                         )
                     },
@@ -243,7 +243,7 @@ public class PuzzleInTown : Puzzle
                 // 아말리안님의 등장
                 new CharacterEnter(
                     "Amalian",
-                    EmotionType.Default,
+                    AmalianEmotionID.HandsTogether_Smile,
                     .5f
                 ),
 
@@ -276,6 +276,13 @@ public class PuzzleInTown : Puzzle
                         new Line("분명 다른 세계에서 온 사람처럼 느껴져. 마을 사람들은 그녀를 이렇게까지 존경하는데, 도대체 무슨 일을 해왔던 걸까?")
                     }
                 ),
+                
+                // 아말리안님의 등장
+                new EmotionChange(
+                    "Amalian",
+                    AmalianEmotionID.HandsTogether_Satisfied,
+                    .5f
+                ),
 
                 new Dialogue(
                     "Amalian",
@@ -293,7 +300,7 @@ public class PuzzleInTown : Puzzle
                 // 엘드라와의 대화 시작
                 new CharacterEnter(
                     "Eldra",
-                    EmotionType.Default,
+                    CommonEmotionID.Default,
                     .66f
                 ),
 
@@ -340,6 +347,13 @@ public class PuzzleInTown : Puzzle
                     }
                 ),
 
+                // 아말리안님의 등장
+                new EmotionChange(
+                    "Amalian",
+                    AmalianEmotionID.HandsTogether_Smile,
+                    .5f
+                ),
+
                 // 아말리안의 시찰 지시
                 new Dialogue(
                     "Amalian",
@@ -384,7 +398,7 @@ public class PuzzleInTown : Puzzle
             new SequentialElement(
                 new CharacterEnter(
                     "Kate",
-                    EmotionType.ArmCrossed_Smile,
+                    KateEmotionID.ArmCrossed_Smile,
                     .5f
                 ),
                 new Dialogue(

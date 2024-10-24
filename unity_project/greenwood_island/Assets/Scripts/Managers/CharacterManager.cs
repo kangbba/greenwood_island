@@ -7,13 +7,14 @@ public class CharacterManager : SingletonManager<CharacterManager>
 {
 
     private const string CHARACTER_PREFAB_PATH = "CharacterManager/CharacterPrefab";
+    
     private Dictionary<string, Character> _instantiatedCharacters = new Dictionary<string, Character>(); // 인스턴스화된 캐릭터
     private Dictionary<string, CharacterData> _characterDataCache = new Dictionary<string, CharacterData>(); // 캐릭터 데이터 캐시
 
     public Dictionary<string, Character> InstantiatedCharacters => _instantiatedCharacters;
 
     // 캐릭터 프리팹을 로드하여 인스턴스화하는 함수
-    public Character CreateCharacter(string characterID, EmotionType initialEmotionType, float duration, float screenPeroneX)
+    public Character CreateCharacter(string characterID, string initialCommonEmotionID, float screenPeroneX)
     {
         if (IsExist(characterID))
         {
@@ -41,7 +42,7 @@ public class CharacterManager : SingletonManager<CharacterManager>
         // 캐릭터를 인스턴스화
         GameObject characterObject = Object.Instantiate(characterPrefab, UIManager.SystemCanvas.CharacterLayer);
         Character character = characterObject.GetComponent<Character>();
-        character.Init(characterID, initialEmotionType);
+        character.Init(characterID, initialCommonEmotionID);
         // 캐릭터 등록
         _instantiatedCharacters.Add(characterID, character);
 

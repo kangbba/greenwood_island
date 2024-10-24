@@ -8,7 +8,6 @@
 //         new PlaceTransition(Color.white, 1f, "CafeSeabreezeFront",  null, 1f,  true),
 //         new CharacterEnter(
 //             "Kate",
-//             EmotionType.Happy,
 //             .5f,
 //             0
 //         ),

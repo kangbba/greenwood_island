@@ -5,7 +5,7 @@ public class MonoDialogue : Element
 {
     private string _sentence;
 
-    // 생성자에서 emotionID 대신 EmotionType을 받도록 수정
+    // 생성자에서 emotionID 대신 CommonEmotionID.을 받도록 수정
     public MonoDialogue(string sentence)
     {
         _sentence = sentence;

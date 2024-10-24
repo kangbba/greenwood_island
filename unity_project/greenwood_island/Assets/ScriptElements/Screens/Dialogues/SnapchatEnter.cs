@@ -45,6 +45,7 @@ public class SnapchatEnter : Element
             Debug.LogWarning("DialoguePlayer is null");
             yield break;
         }
+        yield return new PlaceOverlayFilm(Color.black.ModifiedAlpha(.6f), 1f).ExecuteRoutine();
 
         List<Element> elements = new List<Element>();
         // 캐릭터들을 등장시킴
@@ -102,5 +103,6 @@ public class SnapchatEnter : Element
 
         DialogueManager.Instance.FadeOutAndDestroy(1f);
         yield return new WaitForSeconds(1f);
+        yield return new PlaceOverlayFilmClear(1f).ExecuteRoutine();
     }
 }

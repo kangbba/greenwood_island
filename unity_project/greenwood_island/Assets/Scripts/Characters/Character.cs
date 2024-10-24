@@ -4,9 +4,8 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public enum EmotionType
+public enum KateEmotionID
 {
-    Default,
     ArmCrossed_Smile,
     ArmCrossed_Energetic,
     ArmCrossed_YeahRight,           
@@ -14,16 +13,14 @@ public enum EmotionType
     ArmCrossed_Angry,  
     OneHandRaised_Shy,  
 }
-
-
-// 캐릭터의 감정을 관리하는 클래스
-[Serializable]
-public class EmotionData
-{
-    public EmotionType emotionType;   // 감정의 enum (예: EmotionType.Smile)
-    public Emotion emotionPrefab;           // 실제 Emotion 객체
+public enum CommonEmotionID{
+    Default,
 }
-
+public enum AmalianEmotionID
+{
+    HandsTogether_Smile,
+    HandsTogether_Satisfied,
+}
 public class Character : MonoBehaviour
 {
     private string _characterID;  // 캐릭터 이름 (예: "Kate", "Lisa")
@@ -31,7 +28,7 @@ public class Character : MonoBehaviour
 
 
     // 감정 목록 (각 캐릭터의 감정을 관리)
-    private List<EmotionData> _emotionDatas;
+    private Dictionary<string, Emotion> _emotionDictionary;
 
     private Emotion _currentEmotion;
 
@@ -42,38 +39,33 @@ public class Character : MonoBehaviour
         }
         _currentEmotion.Highlight(b, duration);
     }
-    public void Init(string characterID, EmotionType initialEmotionType)
+    
+    public void Init(string characterID, string initialEmotionID)
     {
         // 감정 데이터를 초기화
-        _emotionDatas = new List<EmotionData>();
+        _emotionDictionary = new Dictionary<string, Emotion>();
 
-        // EmotionType에 해당하는 프리팹들을 로드하여 EmotionData 리스트에 추가
-        foreach (EmotionType emotionType in Enum.GetValues(typeof(EmotionType)))
+        // 해당 폴더에 있는 모든 Emotion 프리팹 로드
+        string resourceFolderPath = $"CharacterManager/Emotions/{characterID}";
+        Emotion[] emotionPrefabs = Resources.LoadAll<Emotion>(resourceFolderPath);
+
+        // 불러온 Emotion 프리팹들을 순회하여 딕셔너리에 추가
+        foreach (Emotion emotionPrefab in emotionPrefabs)
         {
-            // ResourceID는 characterID와 emotionType을 조합하여 생성
-            // 경로 생성: characterID/EmotionType 경로에 해당하는 프리팹을 불러옴
-            string resourcePath = $"CharacterManager/Emotions/{characterID}/{emotionType.ToString()}";
-            Emotion emotionPrefab = Resources.Load<Emotion>(resourcePath);
+            string emotionID = emotionPrefab.name; // Emotion 프리팹의 이름을 emotionID로 사용
+            _emotionDictionary[emotionID] = emotionPrefab; // 딕셔너리에 저장
+        }
 
-            if (emotionPrefab != null)
-            {
-                // EmotionData 생성 및 리스트에 추가
-                var emotionData = new EmotionData
-                {
-                    emotionType = emotionType,
-                    emotionPrefab = emotionPrefab
-                };
-                _emotionDatas.Add(emotionData);
-            }
-            else
-            {
-                Debug.LogWarning($"Emotion prefab not found at path: {resourcePath}");
-            }
+        if (_emotionDictionary.Count == 0)
+        {
+            Debug.LogWarning($"No Emotion prefabs found in path: {resourceFolderPath}");
         }
 
         _characterID = characterID;
-        ChangeEmotion(initialEmotionType);
+        ChangeEmotion(initialEmotionID); // 전달된 emotionID로 변경
     }
+
+
     public void Jump(float jumpHeight, float duration)
     {
         // 중복 방지 플래그 설정
@@ -103,7 +95,7 @@ public class Character : MonoBehaviour
             });
     }
     // 감정 변경 함수
-    public void ChangeEmotion(EmotionType? emotionType, float fadeDuration = .3f)
+    public void ChangeEmotion(string emotionID, float fadeDuration = .3f)
     {
         // 현재 활성화된 감정을 비활성화
         if (_currentEmotion != null)
@@ -111,27 +103,20 @@ public class Character : MonoBehaviour
             _currentEmotion.FadeOutAndDestroy(fadeDuration);
         }
 
-        // 현재 감정을 emotionType을 기반으로 찾기
-        var emotionData = GetEmotionData(emotionType);
-        // 새로운 감정을 활성화
-        var emotion = GameObject.Instantiate(emotionData.emotionPrefab.gameObject, transform).GetComponent<Emotion>();
-        _currentEmotion = emotion;
-        _currentEmotion.FadeInThenActivate(fadeDuration);
+        // 딕셔너리에서 emotionID를 기반으로 감정 프리팹을 찾기
+        if (_emotionDictionary.TryGetValue(emotionID, out Emotion emotionPrefab))
+        {
+            // 새로운 감정을 활성화
+            var emotion = GameObject.Instantiate(emotionPrefab.gameObject, transform).GetComponent<Emotion>();
+            _currentEmotion = emotion;
+            _currentEmotion.FadeInThenActivate(fadeDuration);
+        }
+        else
+        {
+            Debug.LogWarning($"Emotion ID {emotionID} not found in the dictionary.");
+        }
     }
 
-    // 특정 감정을 emotionType으로 찾는 함수
-    private EmotionData GetEmotionData(EmotionType? emotionType)
-    {
-        foreach (var characterEmotion in _emotionDatas)
-        {
-            if (characterEmotion.emotionType == emotionType)
-            {
-                return characterEmotion;
-            }
-        }
-        Debug.LogWarning($"Emotion '{emotionType}' not found for character '{_characterID}'");
-        return null;
-    }
     public void FadeOutAndDestroy(float duration){
         _currentEmotion.FadeOutAndDestroy(duration);
         Destroy(gameObject, duration);

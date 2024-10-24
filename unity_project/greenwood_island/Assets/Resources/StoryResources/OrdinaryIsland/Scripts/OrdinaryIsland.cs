@@ -15,7 +15,7 @@ public class OrdinaryIsland : Story
                 "TownOpenField1"), 
                 Color.black, 
                 new List<PlaceEffect>(){
-                    new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 4f, 1.2f),
+                    new PlaceEffect(PlaceEffect.EffectType.ScaleZoom, duration : 4f, strength : 1.2f),
                     new PlaceEffect(PlaceEffect.EffectType.ShowLeftward, 3f, 150),
                 }
             ),
@@ -85,7 +85,7 @@ public class OrdinaryIsland : Story
         }),
         new PlaceTransition(
             new PlaceEnter("TownOpenField2"), Color.black, new List<PlaceEffect>(){
-                    new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 4f, 1.2f),
+                    new PlaceEffect(PlaceEffect.EffectType.ScaleBounce, duration : 4f, strength : 1.2f),
                     new PlaceEffect(PlaceEffect.EffectType.ShowRightward, 3f, 150),
                 }),
 

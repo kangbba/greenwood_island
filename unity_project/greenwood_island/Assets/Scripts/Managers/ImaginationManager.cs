@@ -11,6 +11,9 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
     public Image CurrentImaginationImage { get => _currentImaginationImage; }
     public Image PreviousImaginationImage { get => _previousImaginationImage; }
 
+    private void Awake(){
+        _invertColorMaterial = Resources.Load<Material>("ImaginationManager/InvertColorMat");
+    }
     // 상상 이미지를 생성하는 메서드
     public Image CreateImagination(string imaginationID)
     {
@@ -38,8 +41,6 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
     }
 
     // 색상 반전 효과를 적용하는 메서드
-    // 색상 반전 효과를 적용하는 메서드
-    // 색상 반전 효과를 적용하는 메서드
     public void InvertColorEffect(bool isInverted)
     {
         if (_currentImaginationImage == null)
@@ -51,16 +52,8 @@ public class ImaginationManager : SingletonManager<ImaginationManager>
         // _invertColorMaterial이 로드되지 않았으면 로드 (Lazy Loading)
         if (_invertColorMaterial == null)
         {
-            _invertColorMaterial = Resources.Load<Material>("ImaginationManager/InvertColorMat");
-            if (_invertColorMaterial == null)
-            {
-                Debug.LogError("InvertColorMat not found in Resources.");
-                return;
-            }
-            else
-            {
-                Debug.Log("_invertColorMaterial successfully loaded.");
-            }
+            Debug.LogError("InvertColorMat not found in Resources.");
+            return;
         }
 
         // 반전 효과 적용

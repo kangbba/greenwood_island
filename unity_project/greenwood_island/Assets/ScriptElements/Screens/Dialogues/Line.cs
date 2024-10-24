@@ -5,7 +5,7 @@ public class Line
     private string _sentence;
     private float _playSpeedMutliplier;
 
-    // 생성자에서 emotionID 대신 EmotionType을 받도록 수정
+    // 생성자에서 emotionID 대신 CommonEmotionID.을 받도록 수정
     public Line(string sentence, float playSpeedMutliplier = 1)
     {
         this._sentence = sentence;

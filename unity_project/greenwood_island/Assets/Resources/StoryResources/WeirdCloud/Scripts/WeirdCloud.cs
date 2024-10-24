@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class WeirdCloud : Story
 {
-    public override List<Element> UpdateElements => new List<Element> {
+    public override List<Element> UpdateElements => new List<Element>
+    {
         new ScreenOverlayFilm(Color.black),
         new PlaceTransition(
             new PlaceEnter("SeasideWalkway"),
             Color.black,
-            new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 1f, 1.1f)
+            new PlaceEffect(PlaceEffect.EffectType.ScaleZoom, duration: 1f, strength: 1.1f)
         ),
         new SFXEnter("Waves", 1, true, 2),
 
@@ -16,7 +17,7 @@ public class WeirdCloud : Story
 
         new CharacterEnter(
             "Kate",
-            EmotionType.ArmCrossed_Smile,
+            KateEmotionID.ArmCrossed_Smile,
             .5f
         ),
 
@@ -25,7 +26,7 @@ public class WeirdCloud : Story
             new List<Line>
             {
                 new Line("여긴 처음 걸어보네. 마을에 온 지 한 달도 넘었는데, 해변가 쪽은 처음이야."),
-                new Line("날씨가 좋다 싶으면 태풍이 한 번씩 불어와서… 뭐랄까, 날씨 운이 없었다고 해야 하나?")
+                new Line("날씨가 좋다 싶으면 태풍이 한 번씩 불어와서... 뭐랄까, 날씨 운이 없었다고 해야 하나?")
             }
         ),
 
@@ -33,8 +34,8 @@ public class WeirdCloud : Story
             "Kate",
             new List<Line>
             {
-                new Line("그러게. 근데 말이야, 이런 한적한 곳이 난 오히려 좋더라. 마을 중심은 너무 복잡하거든."),
-                new Line("여기서 바람 쐬면 머리도 맑아지고, 뭔가 힘이 나는 기분이랄까? 어때, 시원하지?")
+                new Line("그럴 수 있지. 섬의 날씨는 마음대로야. 익숙해질 거야, 조금만 있으면."),
+                new Line("그래도 여긴 좋은 곳이야. 사람들한테서 떨어져서 바람도 시원하고, 머리도 맑아지니까.")
             }
         ),
 
@@ -42,19 +43,23 @@ public class WeirdCloud : Story
             "Mono",
             new List<Line>
             {
-                new Line("케이트의 말대로 바닷바람이 가슴 속 깊이 스며든다. 머리가 맑아지는 느낌."),
-                new Line("파도 소리가 멀리서 들리고, 고요한 길이 부드럽게 이어진다."),
-                new Line("왜 이제야 이곳에 와봤을까 싶다."),
-                new Line("한 달 전엔 상상도 못 했던 평온함이 이젠 익숙해졌다.")
+                new Line("바닷바람이 케이트 말대로 머릿속을 맑게 만든다. 파도 소리가 멀리서 들리고, 고요한 길이 부드럽게 이어진다."),
+                new Line("왜 이제야 이곳에 와봤을까 싶다. 한 달 전엔 상상도 못 했던 평온함이 이제는 익숙해졌다.")
             }
         ),
 
+
+        new EmotionChange(
+            "Kate",
+            KateEmotionID.ArmCrossed_YeahRight,
+            .5f
+        ),
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("사실, 어릴 때는 이 섬이 답답했어. 작은 마을에 사람도 똑같고, 변화가 없는 게 싫었거든."),
-                new Line("근데, 한편으론… 이제는 그런 게 오히려 마음을 편하게 해. 나만의 공간 같달까?")
+                new Line("어릴 땐 이 섬이 답답했어. 아무 변화도 없고, 매일 똑같은 얼굴들... 여길 벗어나고 싶었던 적이 많았지."),
+                new Line("한때는 정말 떠나려고 했어. 새로운 곳, 다른 사람들이 있는 곳으로 가고 싶었거든.")
             }
         ),
 
@@ -62,33 +67,110 @@ public class WeirdCloud : Story
             "Ryan",
             new List<Line>
             {
-                new Line("그럴 수도 있지. 섬이 크지도 않고, 변화도 적으니까. 그래서 떠나고 싶었던 거야?")
+                new Line("떠났다가 결국 돌아온 거야?")
             }
+        ),
+
+        new EmotionChange(
+            "Kate",
+            KateEmotionID.ArmCrossed_Smile,
+            .5f
         ),
 
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("응, 한창 사춘기 때는 도시로 나가고 싶었어. 새로운 사람들, 새로운 경험들… 그게 그리웠거든."),
-                new Line("근데 결국엔 다시 여기로 돌아왔지. 왜냐면… 글쎄, 여기가 내 집이니까.")
+                new Line("떠나보려고 했어. 하지만... 쉽지 않더라고."),
+                new Line("사춘기 땐 모든 게 나를 억누르는 것처럼 느껴졌지. 하지만... 글쎄, 시간이 지나면서 마음이 바뀌더라."),
+                new Line("결국 돌아왔지. 여기가 내 집이니까. 떠나려 했던 것도 다 지나간 일이야.")
             }
         ),
 
+        // 가족 이야기를 꺼내는 라이언
         new Dialogue(
             "Ryan",
             new List<Line>
             {
-                new Line("그래도 가끔은 떠나고 싶은 마음이 들지 않아?")
+                new Line("참, 나도 한 달 후면 돌아갈 준비해야겠더라. 가족들이 기다리고 있으니까."),
+                new Line("난 잠깐 이곳에서 기록만 남기고 다시 돌아갈 예정이야.")
             }
+        ),
+
+        new EmotionChange(
+            "Kate",
+            KateEmotionID.ArmCrossed_Sad,
+            .5f
         ),
 
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("당연하지! 가끔은 새로운 게 필요하잖아. 근데, 떠나도 결국엔 여기가 나를 받아줄 거란 걸 아니까 괜찮아."),
-                new Line("여기서 나만의 방식으로 살아가는 게 나쁘진 않아. 너도 느끼고 있지 않아?")
+                new Line("가족들이 기다리고 있구나... 그럼, 돌아가는 게 맞겠네."),
+                new Line("멀리서 너를 기다리는 사람이 있다는 건 좋은 일이야. 기회가 왔을 때 가야지.")
+            }
+        ),
+
+        // 케이트가 애매하게 대답하는 장면
+        new Dialogue(
+            "Mono",
+            new List<Line>
+            {
+                new Line("케이트가 말을 돌리는 듯한 느낌이 들었다. 뭔가 망설이는 듯한...")
+            }
+        ),
+
+        // 라이언이 케이트의 가족 이야기를 꺼냄
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("근데, 케이트. 너는 가족들이 이 마을 사람이야?")
+            }
+        ),
+
+        new EmotionChange(
+            "Kate",
+            KateEmotionID.ArmCrossed_Sad,
+            .5f
+        ),
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("음... 뭐, 그런 셈이지."),
+            }
+        ),
+        new EmotionChange(
+            "Kate",
+            KateEmotionID.ArmCrossed_Smile,
+            .5f
+        ),
+        new Dialogue(
+            "Kate",
+            new List<Line>
+            {
+                new Line("하지만, 그 얘긴 나중에 하자. 지금은 바람이 정말 좋잖아?")
+            }
+        ),
+        // 케이트가 미묘하게 반응을 피하는 장면
+        new Dialogue(
+            "Mono",
+            new List<Line>
+            {
+                new Line("케이트가 살짝 피하는 듯한 말투였다. 정확히는 모르겠지만, 가족 이야기가 불편한 건가?"),
+                new Line("아니면 그저 오래된 이야기일 뿐인가... 잘 모르겠다. 그냥 넘어가는 게 나을지도.")
+            }
+        ),
+
+        // 라이언이 장단 맞추며 대화 전환
+        new Dialogue(
+            "Ryan",
+            new List<Line>
+            {
+                new Line("그래, 맞아. 바람이 정말 시원하네."),
+                new Line("뭐, 나도 가족 생각은 나중에 하자. 여기가 너무 좋아서 잠시 잊고 싶어지네.")
             }
         ),
 
@@ -96,36 +178,12 @@ public class WeirdCloud : Story
             "Mono",
             new List<Line>
             {
-                new Line("케이트는 이곳에 대한 확신을 가지고 있다. 그 확신이 그녀를 더욱 강하게 만드는 것 같다."),
-                new Line("나 역시 이 섬에서 뭔가를 찾고 있는지도 모르겠다.")
+                new Line("대화를 돌리는 케이트의 태도가 조금 이상하긴 하지만, 깊게 생각할 필요는 없겠지."),
+                new Line("그냥 지나가는 이야기였겠지. 어차피 난 곧 돌아갈 테니까.")
             }
         ),
 
-        new Dialogue(
-            "Ryan",
-            new List<Line>
-            {
-                new Line("네가 여기에 남는다는 게 이해돼. 이곳은 변하지 않아서 오히려 안정감을 주는 것 같아.")
-            }
-        ),
-
-        new Dialogue(
-            "Kate",
-            new List<Line>
-            {
-                new Line("맞아! 변하지 않는 게 좋은 때도 있어. 물론, 때때로 떠나 새로운 경험을 쌓는 것도 필요하지만."),
-                new Line("근데 말야, 언제든 돌아와도 이곳은 그대로 있어줄 거란 확신이 있는 게 참 좋더라고.")
-            }
-        ),
-
-        new Dialogue(
-            "Mono",
-            new List<Line>
-            {
-                new Line("케이트는 확고하게 이 섬에 뿌리를 내리고 있다. 나 역시 이 섬이 주는 평온함을 부정할 수 없다.")
-            }
-        ),
-
+        // 구름에 대한 대화가 시작되는 부분
         new Dialogue(
             "Mono",
             new List<Line>
@@ -162,8 +220,8 @@ public class WeirdCloud : Story
                     "Kate",
                     new List<Line>
                     {
-                        new Line("섬에 오래 있으면 저런 구름도 익숙해질 거야."),
-                        new Line("이 섬에는 자연스럽고 신비로운 게 많아. 그런 풍경들을 계속 보다 보면, 마음이 편안해지지.")
+                        new Line("섬에 오래 있으면 저런 풍경도 자연스러워져."),
+                        new Line("이 섬은 그런 신비한 순간들이 많아. 보면 볼수록 평온해지는 것 같아.")
                     }
                 ),
 
@@ -171,23 +229,22 @@ public class WeirdCloud : Story
                     "Mono",
                     new List<Line>
                     {
-                        new Line("그 구름에서 눈을 뗄 수 없었다. 바람이 불어도 미동도 없는 구름… 그 고요함이 신비로웠다.")
+                        new Line("구름에서 눈을 뗄 수 없었다. 바람이 불어도 움직이지 않는 구름... 그 고요함이 기이하게 느껴졌다."),
+                        new Line("케이트의 말처럼, 이 섬엔 뭔가 말로 설명할 수 없는 게 있는 것 같다.")
                     },
                     fadeout : true
                 )
             )
         ),
 
+        new ImaginationClear(1f),
 
-        new ImaginationClear(
-            1f
-        ),
-
+        // 이후의 카페 도착 부분
         new Dialogue(
             "Kate",
             new List<Line>
             {
-                new Line("저기야! 저기가 카페 씨브리즈야!")
+                new Line("저기야! 저기가 카페 씨브리즈야!"),
             },
             fadeout : true
         ),
@@ -225,5 +282,4 @@ public class WeirdCloud : Story
             }
         )
     };
-
 }

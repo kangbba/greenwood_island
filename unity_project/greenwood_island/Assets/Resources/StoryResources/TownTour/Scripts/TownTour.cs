@@ -16,6 +16,8 @@ public class TownTour : Story
                 new Line("케이트!"),
             }
         ),
+
+        new ImaginationEnter("BakeryInsideKitchen"),
         
         // 빵집 내부를 관찰하는 라이언의 독백
         new Dialogue(

@@ -49,7 +49,7 @@ public class Emotion : MonoBehaviour
         {
             // 하이라이트 적용: 원래 색상으로 복원
             Img.DOColor(Color.white, duration);
-            transform.DOScale(_initialScale * 1.2f, duration); // 크기 1.2배
+            transform.DOScale(_initialScale * 1.1f, duration); // 크기 1.2배
         }
         else
         {

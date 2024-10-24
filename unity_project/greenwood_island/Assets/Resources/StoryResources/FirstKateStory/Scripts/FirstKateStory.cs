@@ -11,7 +11,7 @@ public class FirstKateStory : Story
         new PlaceTransition(
             new PlaceEnter("BakeryFront"),
             Color.black,
-            new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 2f, 1.1f)
+            new PlaceEffect(PlaceEffect.EffectType.ScaleZoom, duration : 2f, strength : 1.1f)
         ),
         new Dialogue(
             "Mono",
@@ -36,7 +36,7 @@ public class FirstKateStory : Story
 
         new CharacterEnter(
             "Kate",
-            EmotionType.ArmCrossed_Smile,
+            KateEmotionID.ArmCrossed_Smile,
             .5f
         ),
         
@@ -66,7 +66,7 @@ public class FirstKateStory : Story
             }
         ),
 
-        new EmotionChange("Kate", EmotionType.ArmCrossed_YeahRight),
+        new EmotionChange("Kate", KateEmotionID.ArmCrossed_YeahRight),
         new Dialogue(
             "Kate",
             new List<Line>
@@ -101,7 +101,7 @@ public class FirstKateStory : Story
             }
         ),
 
-        new EmotionChange("Kate", EmotionType.ArmCrossed_Energetic),
+        new EmotionChange("Kate", KateEmotionID.ArmCrossed_Energetic),
         new ParallelElement(
             new PlaceShake(.3f),
             new Dialogue(
@@ -135,7 +135,7 @@ public class FirstKateStory : Story
                 new Line("정말 부드럽다... 네가 왜 이 빵을 자랑하는지 알겠어.")
             }
         ),
-        new EmotionChange("Kate", EmotionType.ArmCrossed_Smile),
+        new EmotionChange("Kate", KateEmotionID.ArmCrossed_Smile),
 
         new Dialogue(
             "Kate",
@@ -153,7 +153,7 @@ public class FirstKateStory : Story
                 new Line("빵도 맛있지만, 네 베이커리 안은 항상 좋은 냄새로 가득 차 있네. 여긴 아침에 제일 바쁘지?")
             }
         ),
-        new EmotionChange("Kate", EmotionType.OneHandRaised_Shy),
+        new EmotionChange("Kate", KateEmotionID.OneHandRaised_Shy),
         new Dialogue(
             "Kate",
             new List<Line>
@@ -169,7 +169,7 @@ public class FirstKateStory : Story
                 new Line("크루아상이라... 그럼 내일은 그거 한 번 먹어봐야겠네. 그렇게 인기 많으면 내가 늦기 전에 서둘러야겠어.")
             }
         ),
-        new EmotionChange("Kate", EmotionType.ArmCrossed_YeahRight),
+        new EmotionChange("Kate", KateEmotionID.ArmCrossed_YeahRight),
 
         new Dialogue(
             "Kate",
@@ -188,7 +188,7 @@ public class FirstKateStory : Story
             }
         ),
 
-        new EmotionChange("Kate", EmotionType.ArmCrossed_Energetic),
+        new EmotionChange("Kate", KateEmotionID.ArmCrossed_Energetic),
         new Dialogue(
             "Kate",
             new List<Line>
@@ -237,7 +237,7 @@ public class FirstKateStory : Story
             }
         ),
 
-        new EmotionChange("Kate", EmotionType.ArmCrossed_Smile),
+        new EmotionChange("Kate", KateEmotionID.ArmCrossed_Smile),
         new Dialogue(
             "Kate",
             new List<Line>
@@ -270,7 +270,7 @@ public class FirstKateStory : Story
             }
         ),
 
-        new EmotionChange("Kate", EmotionType.ArmCrossed_YeahRight),
+        new EmotionChange("Kate", KateEmotionID.ArmCrossed_YeahRight),
         new Dialogue(
             "Kate",
             new List<Line>

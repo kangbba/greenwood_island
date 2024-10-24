@@ -16,7 +16,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
             return _currentDialoguePlayer;
         }
 
-        if(recreate){
+        if(recreate && _currentDialoguePlayer != null){
             Destroy(_currentDialoguePlayer.gameObject);
         }
 

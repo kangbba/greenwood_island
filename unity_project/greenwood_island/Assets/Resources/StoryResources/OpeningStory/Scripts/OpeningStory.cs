@@ -21,7 +21,7 @@ public class OpeningStory : Story
                 Color.black,
                 new List<PlaceEffect>(){
                     new PlaceEffect(
-                        PlaceEffect.EffectType.ZoomIn,
+                        PlaceEffect.EffectType.ScaleZoom,
                         2f,
                         1.1f
                     ),
@@ -53,7 +53,7 @@ public class OpeningStory : Story
             Color.black,
             new List<PlaceEffect>(){
                 new PlaceEffect(PlaceEffect.EffectType.ShowLeftward, 1f, 200),
-                new PlaceEffect(PlaceEffect.EffectType.ZoomIn, 1f, 1.5f)
+                new PlaceEffect(PlaceEffect.EffectType.ScaleBounce, duration : 1f, strength : 1.5f)
             }
         ),
 

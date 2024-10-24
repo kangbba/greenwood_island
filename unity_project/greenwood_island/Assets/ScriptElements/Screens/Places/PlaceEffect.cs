@@ -8,19 +8,20 @@ public class PlaceEffect : Element
     public enum EffectType
     {
         Shake,
-        ZoomIn,
-        ZoomOut,
+        ScaleZoom,
         ShowRightward,
         ShowLeftward,
         ShowUpward,
         ShowDownward,
+        MoveRestore,
         PulseInfinite,
         PulseOnce,
         ScaleBounce,
+        ScaleRestore,
         FadeIn,
         FadeOut,
         Vignette,
-        Restore
+        RestoreAll
     }
 
     private EffectType _effectType;
@@ -85,14 +86,9 @@ public class PlaceEffect : Element
                 _currentPlaceImage.ShakeImage(_duration, _strength);
                 break;
 
-            case EffectType.ZoomIn:
+            case EffectType.ScaleZoom:
                 _currentPlaceImage.ScaleImage(Vector3.one * _strength, _duration, _easeType);
                 break;
-
-            case EffectType.ZoomOut:
-                _currentPlaceImage.ScaleImage(Vector3.one * _strength, _duration, _easeType);
-                break;
-
             case EffectType.ShowRightward:
                 _currentPlaceImage.transform.DOMoveX(_currentPlaceImage.transform.position.x - _strength, _duration).SetEase(_easeType);
                 break;
@@ -109,7 +105,14 @@ public class PlaceEffect : Element
                 _currentPlaceImage.transform.DOMoveY(_currentPlaceImage.transform.position.y + _strength, _duration).SetEase(_easeType);
                 break;
 
-            case EffectType.Restore:
+            case EffectType.MoveRestore:
+                _currentPlaceImage.MoveImage(Vector2.zero, _duration, _easeType);
+                break;
+            case EffectType.ScaleRestore:
+                _currentPlaceImage.ScaleImage(Vector3.one, _duration, _easeType);
+                break;
+
+            case EffectType.RestoreAll:
                 _currentPlaceImage.FadeImage(Color.white, _duration, _easeType);
                 _currentPlaceImage.ScaleImage(Vector3.one, _duration, _easeType);
                 _currentPlaceImage.MoveImage(Vector2.zero, _duration, _easeType);

@@ -18,7 +18,6 @@ public class SFXEnter : Element
     }
     public override void ExecuteInstantly()
     {
-        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

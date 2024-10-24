@@ -54,7 +54,7 @@ public class EventTriggerZone : MonoBehaviour
         _clickCount++;
         Debug.Log($"[EventTriggerZone] 클릭 횟수: {_clickCount}");
         _parentPuzzle.SetPuzzleMode(PuzzleMode.Waiting, 0f);
-        if (!CheckConditions())
+        if (!PuzzleManager.CheckEventConditionAllMet(_conditions))
         {
             yield return _parentPuzzle.ExecuteEvent(_failureEventID);
             _parentPuzzle.SetPuzzleMode(currentPuzzleMode, 0f);
@@ -68,20 +68,6 @@ public class EventTriggerZone : MonoBehaviour
         Debug.Log($"[EventTriggerZone] 보상 클리어 여부 : {_isRewardCleared}");
     }
 
-    // 조건 검사
-    private bool CheckConditions()
-    {
-        foreach (var condition in _conditions)
-        {
-            if (!condition.IsConditionMet())
-            {
-                Debug.LogWarning($"[EventTriggerZone] 조건 미충족: {condition}");
-                return false;
-            }
-        }
-        Debug.Log("[EventTriggerZone] 모든 조건 충족.");
-        return true;
-    }
 
     // 모드에 따른 버튼 아이콘 및 가시성 업데이트
     private void ShowButton(bool b, float duration)

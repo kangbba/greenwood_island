@@ -44,7 +44,7 @@ public class ImaginationInvertEffect : Element
         ImaginationManager.Instance.InvertColorEffect(_isInverted);
 
         // 필요한 경우 효과 적용 후 추가 작업 가능
-        yield return null;
+        yield return new WaitForSeconds(.1f);
 
         Debug.Log($"ImaginationInvertEffect :: 반전 효과 완료");
     }

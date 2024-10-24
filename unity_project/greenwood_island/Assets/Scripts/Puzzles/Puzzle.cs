@@ -11,37 +11,54 @@ public enum PuzzleMode
     Move = 1,     // 이동 모드
     Search = 2    // 검색 모드
 }
-public abstract class Puzzle : MonoBehaviour
+public class Puzzle : MonoBehaviour
 {
-    public abstract Dictionary<string, SequentialElement> EventDictionary {get; }
     private List<string> _clearedEventKeys = new List<string>();
 
+    [SerializeField] private PuzzleDocument _puzzleDocument;
     [SerializeField] private PuzzlePlace _initialPlace;
-    [SerializeField] private Button _enterSearchModeBtn;
-    [SerializeField] private Button _exitSearchModeBtn;
-    [SerializeField] private Button _moveParentPlaceBtn;
-    [SerializeField] private Transform _btnParent;
+    [SerializeField] private List<EventCondition> _clearEventConditions;
+
+    public bool GetIsPuzzleCleared(){
+        return PuzzleManager.CheckEventConditionAllMet(_clearEventConditions);
+    }
+    private Button _enterSearchModeBtn;
+    private Button _exitSearchModeBtn;
+    private Button _moveParentPlaceBtn;
+    private Transform _btnParent;
+    private Transform _bottomPanelParent;
 
     private PuzzleMode _currentPuzzleMode;
 
-    public abstract bool GetIsPuzzleCleared();
     private List<PuzzlePlace> _allPlaces;
-    protected PuzzlePlace _currentPlace;
+    private PuzzlePlace _currentPlace;
     private bool _isMoving = false;
 
     public Transform BtnParent { get => _btnParent;  }
     public PuzzleMode CurrentPuzzleMode { get => _currentPuzzleMode;  }
+    public PuzzlePlace CurrentPlace { get => _currentPlace; }
 
     private void Awake()
     {
         _allPlaces = GetComponentsInChildren<PuzzlePlace>().ToList();
 
-        _exitSearchModeBtn.onClick.AddListener(() => SetPuzzleMode(PuzzleMode.Move, 0f));
-        _enterSearchModeBtn.onClick.AddListener(() => SetPuzzleMode(PuzzleMode.Search, 0f));
-        _moveParentPlaceBtn.onClick.AddListener(MoveParentPlace);
     }
-    public void Init()
+    public void Init(Button enterSearchModeBtnPrefab, Button exitSearchModeBtnPrefab, Button moveParentPlaceBtnPrefab)
     {
+        _btnParent = new GameObject("BtnParent").transform;
+        _btnParent.SetParent(transform);
+
+        _bottomPanelParent = new GameObject("BottomPanelParent").transform;
+        _bottomPanelParent.SetParent(transform);
+
+        _enterSearchModeBtn = Instantiate(enterSearchModeBtnPrefab, _bottomPanelParent);
+        _exitSearchModeBtn = Instantiate(exitSearchModeBtnPrefab, _bottomPanelParent);
+        _moveParentPlaceBtn = Instantiate(moveParentPlaceBtnPrefab, _bottomPanelParent);
+
+        _enterSearchModeBtn.onClick.AddListener(() => SetPuzzleMode(PuzzleMode.Search, 0f));
+        _exitSearchModeBtn.onClick.AddListener(() => SetPuzzleMode(PuzzleMode.Move, 0f));
+        _moveParentPlaceBtn.onClick.AddListener(MoveParentPlace);
+
         _clearedEventKeys.Clear();
         foreach (var place in _allPlaces)
         {
@@ -150,7 +167,7 @@ public abstract class Puzzle : MonoBehaviour
         return _allPlaces.Find(place => place.PlaceID == placeID);
     }
     public SequentialElement GetEvent(string eventID){
-        return EventDictionary.GetValueOrDefault(eventID);
+        return _puzzleDocument.EventDictionary.GetValueOrDefault(eventID);
     }
 
     public IEnumerator ExecuteEvent(string eventID)

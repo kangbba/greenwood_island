@@ -7,6 +7,7 @@ public class SFXManager : SingletonManager<SFXManager>
 {
     // 람다식으로 현재 실행 중인 스토리 이름을 자동으로 가져옴
 
+    private Dictionary<string, List<AudioSource>> _activeBGMs = new Dictionary<string, List<AudioSource>>(); // 활성화된 SFX들
     private Dictionary<string, List<AudioSource>> _activeSFXs = new Dictionary<string, List<AudioSource>>(); // 활성화된 SFX들
     private Dictionary<AudioSource, Coroutine> _activeLoops = new Dictionary<AudioSource, Coroutine>(); // 활성화된 루프 코루틴들
 
@@ -14,6 +15,34 @@ public class SFXManager : SingletonManager<SFXManager>
     public void PlaySFXOnce(string sfxID, float volume)
     {
         CoroutineUtils.StartCoroutine(PlaySFXOnceCoroutine(sfxID, volume));
+    }
+
+    public void PlayBGM(string bgmID, float volume){
+        
+        AudioClip sfxClip = LoadSFXClip(bgmID);
+        if (sfxClip == null)
+        {
+            Debug.LogError($"SFX Clip '{bgmID}' could not be loaded from storyme or shared resources.");
+            return;
+        }
+
+        // 새로운 GameObject를 생성하여 AudioSource 추가
+        GameObject audioObject = new GameObject($"SFX_{bgmID}");
+        audioObject.transform.parent = UIManager.SystemCanvas.SFXLayer;
+        audioObject.transform.localPosition = Vector2.zero;
+
+        // AudioSource 컴포넌트를 추가하고 설정
+        AudioSource audioSource = audioObject.AddComponent<AudioSource>();
+        audioSource.volume = volume; // 볼륨 설정
+        audioSource.clip = sfxClip;
+        audioSource.loop = true; // 반복 재생 없음
+        audioSource.Play(); // 오디오 재생
+
+        if (!_activeBGMs.ContainsKey(bgmID))
+        {
+            _activeBGMs[bgmID] = new List<AudioSource>();
+        }
+        _activeBGMs[bgmID].Add(audioSource);
     }
 
     // 특정 SFX ID의 오디오 클립 단일 재생 코루틴 메서드
@@ -155,6 +184,22 @@ public class SFXManager : SingletonManager<SFXManager>
             }
         }
         _activeSFXs.Clear();
+    }
+
+    // 모든 SFX를 페이드 아웃하고 제거하는 메서드
+    public void FadeOutAndDestroyAllBGM(float duration)
+    {
+        foreach (var bgmList in _activeBGMs.Values)
+        {
+            foreach (var audioSource in bgmList)
+            {
+                if (audioSource != null)
+                {
+                    FadeOutAndDestroy(audioSource, duration); // 개별 오디오 소스를 페이드 아웃 후 제거
+                }
+            }
+        }
+        _activeBGMs.Clear();
     }
 
     // 특정 AudioSource에 대한 SFX 제거

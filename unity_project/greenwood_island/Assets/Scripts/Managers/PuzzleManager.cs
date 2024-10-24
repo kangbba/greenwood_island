@@ -8,9 +8,14 @@ using DG.Tweening;
 
 public class PuzzleManager : SingletonManager<PuzzleManager>
 {
-    private Puzzle _puzzlePrefabToSpawnTest;  // 생성할 Puzzle 프리팹
+    private Puzzle _puzzlePrefabToSpawn;  // 생성할 Puzzle 프리팹
     private Puzzle _currentPuzzle;  // 현재 활성화된 Puzzle 인스턴스
     public Puzzle CurrentPuzzle { get => _currentPuzzle; }
+
+    // 버튼 프리팹들 (Button 타입)
+    private Button _enterSearchModeBtnPrefab;
+    private Button _exitSearchModeBtnPrefab;
+    private Button _moveParentPlaceBtnPrefab;
 
     // DesignedIconBtn 타입의 버튼 프리팹
     private DesignedIconButton _moveBtn;
@@ -29,31 +34,50 @@ public class PuzzleManager : SingletonManager<PuzzleManager>
     public void Init(string puzzleID)
     {
         string resourcePath = ResourcePathManager.GetCurrentStoryResourcePath(puzzleID, ResourceType.Puzzle);
-        _puzzlePrefabToSpawnTest = Resources.Load<Puzzle>(resourcePath);
-        if (_puzzlePrefabToSpawnTest == null)
+        _puzzlePrefabToSpawn = Resources.Load<Puzzle>(resourcePath);
+        if (_puzzlePrefabToSpawn == null)
         {
             Debug.LogError("Puzzle Prefab이 설정되지 않았습니다!");
             return;
         }
+        LoadButtonPrefabs();  // 버튼 프리팹 로드
 
         // Puzzle 프리팹 인스턴스화
-        _currentPuzzle = Instantiate(_puzzlePrefabToSpawnTest, UIManager.SystemCanvas.PuzzleUILayer);
+        _currentPuzzle = Instantiate(_puzzlePrefabToSpawn, UIManager.SystemCanvas.PuzzleUILayer);
 
         // 위치 초기화 (원하는 위치에 맞게 조정)
         _currentPuzzle.transform.localPosition = Vector3.zero;
         _currentPuzzle.transform.localScale = Vector3.one;
-        _currentPuzzle.Init();
+        _currentPuzzle.Init(_enterSearchModeBtnPrefab, _exitSearchModeBtnPrefab, _moveParentPlaceBtnPrefab);
 
-        LoadButtonPrefabs();  // 버튼 프리팹 로드
         Debug.Log("Puzzle 프리팹이 인스턴스화되었습니다.");
     }   
     public void DestroyCurrentPuzzle(){
         Destroy(_currentPuzzle.gameObject);
         _currentPuzzle = null;
     }
+   
+    // 조건 검사
+    public static bool CheckEventConditionAllMet(List<EventCondition> eventConditions)
+    {
+        foreach (var condition in eventConditions)
+        {
+            if (!condition.IsConditionMet())
+            {
+                Debug.LogWarning($"[EventTriggerZone] 조건 미충족: {condition}");
+                return false;
+            }
+        }
+        Debug.Log("[EventTriggerZone] 모든 조건 충족.");
+        return true;
+    }
     // ResourcePathManager를 이용해 버튼 프리팹을 로드하는 메서드
     private void LoadButtonPrefabs()
     {
+        _enterSearchModeBtnPrefab = Resources.Load<Button>($"{ResourcesFolderPath}/BottomBtnPrefab_SearchMode");
+        _exitSearchModeBtnPrefab = Resources.Load<Button>($"{ResourcesFolderPath}/BottomBtnPrefab_ExitSearchMode");
+        _moveParentPlaceBtnPrefab = Resources.Load<Button>($"{ResourcesFolderPath}/BottomBtnPrefab_GoParentPlace");
+
         _moveBtn = LoadButtonPrefab("EventZoneBtnPrefab_Move");
         _transparentBtn = LoadButtonPrefab("EventZoneBtnPrefab_Transparent");
         _discoveredBtn = LoadButtonPrefab("EventZoneBtnPrefab_Discovered");

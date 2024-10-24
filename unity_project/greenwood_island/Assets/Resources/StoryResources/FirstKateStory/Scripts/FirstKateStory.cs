@@ -8,6 +8,7 @@ public class FirstKateStory : Story
         new Intertitle("한달 후"),
         new SFXEnter("BirdChirp1", 1f, true, 1f),
         new SFXEnter("BirdChirpLong1", 1f, true, 3f),
+        new BGMEnter("BGM_DancingDaisies", 1),
         new PlaceTransition(
             new PlaceEnter("BakeryFront"),
             Color.black,
@@ -116,7 +117,6 @@ public class FirstKateStory : Story
         new ImaginationEnter(
             "Bread"
         ),
-        new SFXsClear(),
         new Dialogue(
             "Mono",
             new List<Line>

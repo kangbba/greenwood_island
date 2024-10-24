@@ -14,8 +14,6 @@ public class SFXsClear : Element
 
     public override void ExecuteInstantly()
     {
-        _fadeDuration = 0;
-        Execute();
     }
 
     public override IEnumerator ExecuteRoutine()

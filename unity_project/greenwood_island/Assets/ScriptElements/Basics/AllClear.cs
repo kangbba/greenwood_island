@@ -23,15 +23,17 @@ public class AllClear : Element
     {
         ParallelElement parallelElement = 
         new ParallelElement(
-            new FXsClear(1f),
-            new SFXsClear(1f),
-            new PlaceClear(1f),
-            new LetterboxClear(1f),
-            new ImaginationClear(1f),
-            new AllCharactersClear(1f),
-            new DialoguePanelClear(1f),
-            new PlaceOverlayFilmClear(1f),
-            new ScreenOverlayFilmClear(1f, isBlackClear : false)
+            new FXsClear(_duration),
+            new SFXsClear(_duration),
+            new BGMsClear(_duration),
+            new VignetteExit(_duration),
+            new PlaceClear(_duration),
+            new LetterboxClear(_duration),
+            new ImaginationClear(_duration),
+            new AllCharactersClear(_duration),
+            new DialoguePanelClear(_duration),
+            new PlaceOverlayFilmClear(_duration),
+            new ScreenOverlayFilmClear(_duration, isBlackClear : false)
         );
         parallelElement.Execute();
         yield return new WaitForSeconds(_duration);
